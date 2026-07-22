@@ -97,6 +97,17 @@
       "size": 6,
       "spacing": 6,
       "animation": "bounce"
+    },
+    "badge": {
+      "position": "top-right",
+      "offsetX": -6,          
+      "offsetY": -6,          
+      "size": 20,              
+      "fontSize": 11,          
+      "backgroundColor": "#dc2626",
+      "textColor": "#ffffff",
+      "borderWidth": 2,
+      "borderColor": "#ffffff"
     }
   },
 

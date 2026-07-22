@@ -69,8 +69,8 @@
   const widgetContainer = document.createElement('div');
   widgetContainer.id = 'zotly-widget-embed';
   widgetContainer.setAttribute('x-data', '{ openContactWidget: false }');
-  widgetContainer.setAttribute('@toggle-contact-widget.window', 'openContactWidget = !openContactWidget');
-  widgetContainer.setAttribute('@close-contact-widget.window', 'openContactWidget = false');
+  widgetContainer.setAttribute('@toggle-contact-widget.window', 'openContactWidget = !openContactWidget; $store.chat.panelOpen = openContactWidget; if (openContactWidget) { $store.chat.unreadCount = 0; }');
+  widgetContainer.setAttribute('@close-contact-widget.window', 'openContactWidget = false; $store.chat.panelOpen = false;');
 
   widgetContainer.innerHTML = `
     <!-- Pop-up Chat V2 Widget Overlay -->
@@ -624,6 +624,11 @@
         <div aria-hidden class="pointer-events-none absolute inset-0" :style="{ borderRadius: 'inherit', boxShadow: \`0 0 0 \${settings.outlineRing.width || 3}px \${hexToRgba(settings.outlineRing.color || '#22d3ee', settings.outlineRing.opacity || 0.4)}\` }">
         </div>
       </template>
+
+      <!-- UNREAD NOTIFICATION BADGE -->
+      <template x-if="$store.chat.unreadCount > 0">
+        <div :style="getBadgeStyle()" x-text="$store.chat.unreadCount"></div>
+      </template>
     </div>
   `;
 
@@ -709,6 +714,69 @@
         return {
           animation: `idleFloat ${this.settings.idleAnim.duration || 3200}ms ease-in-out infinite`
         };
+      },
+      getBadgeStyle() {
+        if (!this.settings || !this.settings.badge) {
+          return {
+            position: 'absolute',
+            top: '-6px',
+            right: '-6px',
+            backgroundColor: '#dc2626',
+            color: '#ffffff',
+            fontSize: '11px',
+            lineHeight: '1',
+            minWidth: '20px',
+            height: '20px',
+            border: '2px solid #ffffff',
+            borderRadius: '9999px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: '700',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
+            zIndex: 50
+          };
+        }
+        
+        const b = this.settings.badge;
+        const pos = b.position || 'top-right';
+        const offsetX = b.offsetX !== undefined ? b.offsetX : -6;
+        const offsetY = b.offsetY !== undefined ? b.offsetY : -6;
+        const size = b.size || 20;
+        
+        const style = {
+          position: 'absolute',
+          backgroundColor: b.backgroundColor || '#dc2626',
+          color: b.textColor || '#ffffff',
+          fontSize: (b.fontSize || 11) + 'px',
+          lineHeight: '1',
+          minWidth: size + 'px',
+          height: size + 'px',
+          border: `${b.borderWidth !== undefined ? b.borderWidth : 2}px solid ${b.borderColor || '#ffffff'}`,
+          borderRadius: '9999px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontWeight: '700',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
+          zIndex: 50
+        };
+        
+        if (pos === 'top-left') {
+          style.top = offsetY + 'px';
+          style.left = offsetX + 'px';
+        } else if (pos === 'bottom-right') {
+          style.bottom = offsetY + 'px';
+          style.right = offsetX + 'px';
+        } else if (pos === 'bottom-left') {
+          style.bottom = offsetY + 'px';
+          style.left = offsetX + 'px';
+        } else {
+          style.top = offsetY + 'px';
+          style.right = offsetX + 'px';
+        }
+        
+        return style;
       },
       getNeonStyle() {
         if (!this.settings || !this.settings.neon || !this.settings.neon.enabled) return {};
@@ -944,6 +1012,8 @@
       Alpine.store('chat', {
         state: 'active',
         isExpanded: false,
+        panelOpen: false,
+        unreadCount: 0,
         clientName: (chatConfig && chatConfig.clientName) ? chatConfig.clientName : 'Zotly Support',
         agentName: initialAgentName,
         agentsOnline: true,
@@ -987,6 +1057,9 @@
               this.typingName = '';
               this.messages.push({ key: 'msg_' + Date.now(), senderType: 'AGENT', senderName: this.agentName || 'Sarah', body: "Thanks! I'm checking that right now...", created: new Date().toISOString() });
               this.scrollDown();
+              if (!this.panelOpen) {
+                this.unreadCount++;
+              }
             }, 1800);
           }
         },
