@@ -1,6 +1,9 @@
 {
   "clientId": "amber",
   "clientName": "Vortex Studio Amber",
+
+  "//_bubble_section": "--- FLOATING BUBBLE TRIGGER BUTTON ---",
+
   "bubble": {
     "useWebsiteTheme": true,
     "width": 50,
@@ -11,7 +14,7 @@
     "gradientAngle": 135,
     "gradientStops": [
       { "color": "#d97706", "pos": 0 },
-      { "color": "#8b5cf6", "pos": 100 }
+      { "color": "#ea580c", "pos": 100 }
     ],
     "backgroundOverlayType": "image",
     "backgroundImageUrl": "https://static.vecteezy.com/system/resources/previews/047/656/219/non_2x/abstract-logo-design-for-any-corporate-brand-business-company-vector.jpg",
@@ -19,7 +22,7 @@
     "backgroundImageOpacity": 0.25,
     "backgroundBlendMode": "normal",
     "border": { "width": 0, "color": "#d97706", "style": "solid" },
-    "outlineRing": { "enabled": true, "width": 3, "color": "#8b5cf6", "opacity": 0.4 },
+    "outlineRing": { "enabled": true, "width": 3, "color": "#ea580c", "opacity": 0.4 },
     "boxShadowBlur": 20,
     "boxShadowSpread": 0,
     "boxShadowOffsetX": 0,
@@ -27,14 +30,23 @@
     "boxShadowOpacity": 0.25,
     "dots": { "color": "#F8FAFC", "size": 6, "spacing": 6, "animation": "bounce" }
   },
+
+  "//_chatcontactv2_section": "--- CHAT WINDOW LAYOUT AND THEME ---",
+
   "chatcontactv2": {
-    "useWebsiteTheme": true,
+    "useWebsiteTheme": false,
     "clientName": "Vortex Studio Support",
     "agentName": "Alex (Vortex)",
     "accentColor": "#d97706",
+
+    "//_dimensions": "Dimensions of the chat widget window",
+
     "widgetWidth": 400,
     "widgetHeight": 950,
     "expandedWidth": 550,
+
+    "//_borders_and_shadows": "Styles for widget card borders and shadow values",
+
     "widgetBorderRadius": 28,
     "widgetShadow": true,
     "widgetShadowBlur": 20,
@@ -45,6 +57,9 @@
     "modernUi": true,
     "typingIndicator": true,
     "attachmentsEnabled": true,
+
+    "//_header_styling": "Top title header colors, sizes, padding, and borders",
+
     "headerBg": "#f4f4f5",
     "headerTextColor": "#18181b",
     "headerBorderColor": "rgba(0,0,0,0.08)",
@@ -53,46 +68,81 @@
     "headerSubtitleFontSize": "11px",
     "headerAvatarBg": "#e4e4e7",
     "headerAvatarColor": "#18181b",
+
+    "//_close_chat": "Close chat popup in header",
+
+    "endChatConfirmMessage": "Are you sure you want to end this chat session?",
+    "endChatConfirmLabel": "End chat",
+    "endChatCancelLabel": "Cancel",
+    "modalCardBg": "#ffffff",
+    "modalMessageColor": "#101828",
+    "modalBorderRadius": 28,
+    "endChatConfirmBg": "#d97706",
+    "endChatConfirmTextColor": "#ffffff",
+    "endChatCancelBg": "#ffffff",
+    "endChatCancelTextColor": "#667085",
+    "endChatCancelBorderColor": "#e9ecf1",
+
+    "//_chat_body_styling": "Chat screen backdrop color",
+
     "bodyBg": "#f4f4f5",
-    "visitorBubbleBg": "#fbbf24",
-    "visitorBubbleColor": "#1c1917",
+
+    "//_visitor_bubbles": "Text size, color, background, and padding for visitor messages",
+
+    "visitorBubbleBg": "#d97706",
+    "visitorBubbleColor": "#ffffff",
     "visitorBubbleFontSize": "14px",
     "visitorBubblePadding": "10px 14px",
     "visitorBubbleBorderRadius": "16px",
+
+    "//_agent_bubbles": "Text size, color, background, and padding for agent messages",
+
     "agentBubbleBg": "#ffffff",
-    "agentBubbleColor": "#1c1917",
-    "agentBubbleBorderColor": "#e4e4e7",
+    "agentBubbleColor": "#111827",
+    "agentBubbleBorderColor": "#d1d5db",
     "agentBubbleFontSize": "14px",
     "agentBubblePadding": "10px 14px",
     "agentBubbleBorderRadius": "16px",
-    "agentAvatarBg": "#1e293b",
+
+    "//_agent_avatar": "Agent avatar icon initials backing color and profile picture image override",
+
+    "agentAvatarBg": "#d97706",
     "agentAvatarColor": "#ffffff",
     "agentAvatarUrl": "",
+
+    "//_composer_input_box": "Background, text, border focus color, and spacing of the bottom message box",
+
     "inputBg": "#ffffff",
-    "inputPlaceholderColor": "#a1a1aa",
-"inputFocusBorderColor": "#fbbf24",
-"inputFocusShadow": "0 0 0 2px rgba(251, 191, 36, 0.15)",
-    "inputTextColor": "#27272a",
-    "inputBorderColor": "#e4e4e7",
+    "inputTextColor": "#18181b",
+    "inputPlaceholderColor": "#6b7280",
+    "inputBorderColor": "#d1d5db",
+    "inputFocusBorderColor": "#d97706",
+    "inputFocusShadow": "0 0 0 3px rgba(217,119,6,0.15)",
     "inputBorderRadius": "9999px",
     "inputPadding": "6px 8px",
     "inputMargin": "12px 16px",
     "textareaFontSize": "14px",
+
+    "//_composer_buttons": "Colors and icons for attachment, emoji, and send buttons",
+
     "attachButtonBg": "#ffffff",
-    "attachButtonColor": "#27272a",
-    "emojiButtonColor": "#27272a",
+    "attachButtonColor": "#6b7280",
+    "emojiButtonColor": "#6b7280",
     "sendButtonBgActive": "#d97706",
     "sendButtonColorActive": "#ffffff",
-    "sendButtonBgInactive": "#e4e4e7",
-    "sendButtonColorInactive": "#a1a1aa",
+    "sendButtonBgInactive": "#e5e7eb",
+    "sendButtonColorInactive": "#9ca3af",
     "sendIconType": "arrow",
-    "footerBg": "#f4f4f5",
-    "footerTextColor": "#a1a1aa",
-    "footerFontSize": "10px",
+
+    "//_footer_branding": "Powered By branding row, link alignment, and logo SVG config",
+
+    "footerBg": "#f9fafb",
+    "footerTextColor": "#6b7280",
+    "footerFontSize": "12px",
     "footerPaddingBottom": "16px",
-    "poweredByText": "text.com",
-    "poweredByLink": "https://text.com",
-    "poweredByColor": "#ef4444",
-    "poweredByLogo": "<svg viewBox=\"0 0 24 24\" width=\"12\" height=\"12\" fill=\"currentColor\" style=\"color:#ef4444;margin-right:2px;\"><rect width=\"24\" height=\"24\" rx=\"4\"/></svg>"
+    "poweredByText": "zotly",
+    "poweredByLink": "",
+    "poweredByColor": "#d97706",
+    "poweredByLogo": ""
   }
 }

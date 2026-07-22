@@ -509,11 +509,26 @@
         <div class="reconnecting" x-show="$store.chat.reconnecting" x-cloak>Reconnecting…</div>
 
         <div class="modal-overlay" x-show="$store.chat.confirmBox" x-cloak @click.self="$store.chat.confirmBox = null">
-          <div class="modal-card" role="alertdialog" aria-modal="true" :aria-label="$store.chat.confirmBox && $store.chat.confirmBox.message">
-            <p class="modal-message" x-text="$store.chat.confirmBox && $store.chat.confirmBox.message"></p>
+          <div class="modal-card" role="alertdialog" aria-modal="true" :aria-label="$store.chat.confirmBox && $store.chat.confirmBox.message"
+               :style="{
+                 background: $store.chatcontactv2.modalCardBg || '#ffffff',
+                 borderRadius: ($store.chatcontactv2.modalBorderRadius || 16) + 'px'
+               }">
+            <p class="modal-message" :style="{ color: $store.chatcontactv2.modalMessageColor || '#101828' }" x-text="$store.chat.confirmBox && $store.chat.confirmBox.message"></p>
             <div class="modal-actions">
-              <button type="button" class="btn-ghost" @click="$store.chat.confirmBox = null">Cancel</button>
-              <button type="button" class="btn-confirm" @click="$store.chat.confirmResolve()" x-text="($store.chat.confirmBox && $store.chat.confirmBox.confirmLabel) || 'Confirm'"></button>
+              <button type="button" class="btn-ghost" @click="$store.chat.confirmBox = null" 
+                      :style="{
+                        background: $store.chatcontactv2.endChatCancelBg || 'var(--cw-surface)',
+                        color: $store.chatcontactv2.endChatCancelTextColor || 'var(--cw-muted)',
+                        borderColor: $store.chatcontactv2.endChatCancelBorderColor || 'var(--cw-border)'
+                      }"
+                      x-text="$store.chat.confirmBox && $store.chat.confirmBox.cancelLabel || 'Cancel'"></button>
+              <button type="button" class="btn-confirm" @click="$store.chat.confirmResolve()" 
+                      :style="{
+                        background: $store.chatcontactv2.endChatConfirmBg || 'var(--cw-grad)',
+                        color: $store.chatcontactv2.endChatConfirmTextColor || '#ffffff'
+                      }"
+                      x-text="($store.chat.confirmBox && $store.chat.confirmBox.confirmLabel) || 'Confirm'"></button>
             </div>
           </div>
         </div>
@@ -798,6 +813,20 @@
     if (chatConfig && Object.keys(chatConfig).length > 0) {
       if (chatConfig.useWebsiteTheme === true) {
         chatConfig.accentColor = theme.primary;
+        chatConfig.visitorBubbleBg = theme.primary;
+        chatConfig.visitorBubbleColor = '#ffffff';
+        chatConfig.headerBg = theme.primary;
+        chatConfig.headerTextColor = '#ffffff';
+        chatConfig.headerAvatarBg = 'rgba(255,255,255,0.2)';
+        chatConfig.headerAvatarColor = '#ffffff';
+        chatConfig.agentAvatarBg = theme.primary;
+        chatConfig.agentAvatarColor = '#ffffff';
+        chatConfig.inputFocusBorderColor = theme.primary;
+        chatConfig.inputFocusShadow = `0 0 0 2px ${theme.primary}26`; // 15% opacity tint
+        chatConfig.sendButtonBgActive = theme.primary;
+        chatConfig.poweredByColor = theme.primary;
+        chatConfig.endChatConfirmBg = theme.primary;
+        chatConfig.endChatConfirmTextColor = '#ffffff';
       }
       Object.assign(Alpine.store('chatcontactv2'), chatConfig);
     }
@@ -854,7 +883,12 @@
           }
         },
         askEndChat() {
-          this.confirmBox = { message: 'Are you sure you want to end this chat session?', confirmLabel: 'End chat' };
+          const config = Alpine.store('chatcontactv2');
+          this.confirmBox = { 
+            message: config.endChatConfirmMessage || 'Are you sure you want to end this chat session?', 
+            confirmLabel: config.endChatConfirmLabel || 'End chat',
+            cancelLabel: config.endChatCancelLabel || 'Cancel'
+          };
           this.confirmResolve = () => { this.state = 'closed'; this.confirmBox = null; };
         },
         startNew() {
