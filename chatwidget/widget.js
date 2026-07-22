@@ -359,22 +359,24 @@
               </template>
             </div>
 
-<div
-  class="composer"
-  x-show="$store.chat.state === 'active'"
-  :style="{
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    padding: $store.chatcontactv2.inputPadding || '6px 8px',
-    margin: $store.chatcontactv2.inputMargin || '12px 16px',
-    background: $store.chatcontactv2.inputBg || '#f4f4f5',
-    borderRadius: $store.chatcontactv2.inputBorderRadius || '9999px',
-    border: '1px solid ' + ($store.chatcontactv2?.inputBorderColor ?? '#e4e4e7'),
-    boxShadow: 'none',
-    boxSizing: 'border-box'
-  }"
->
+            <div class="composer" x-data="{ focused: false }" x-show="$store.chat.state === 'active'" :style="{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: $store.chatcontactv2.inputPadding || '6px 8px',
+              margin: $store.chatcontactv2.inputMargin || '12px 16px',
+              background: $store.chatcontactv2.inputBg || '#f4f4f5',
+              borderRadius: $store.chatcontactv2.inputBorderRadius || '9999px',
+              border: focused 
+                ? ('1px solid ' + ($store.chatcontactv2.inputFocusBorderColor || $store.chatcontactv2.accentColor || '#0b5fff')) 
+                : ('1px solid ' + ($store.chatcontactv2.inputBorderColor || '#e4e4e7')),
+              boxShadow: focused 
+                ? ($store.chatcontactv2.inputFocusShadow || '0 0 0 2px rgba(11, 95, 255, 0.1)') 
+                : 'none',
+              boxSizing: 'border-box',
+              transition: 'all 0.2s ease'
+            }">
+              <style x-text="'.composer textarea::placeholder { color: ' + ($store.chatcontactv2.inputPlaceholderColor || '#a1a1aa') + ' !important; }'"></style>
               <input type="file" id="cw-embed-file" class="file-input" accept="image/png,image/jpeg,image/gif,image/webp" @change="$store.chat.uploadImage($event.target)" style="display: none;" />
               
               <!-- Plus Attachment Button -->
@@ -399,7 +401,7 @@
               </button>
 
               <!-- Textarea input field -->
-              <textarea rows="1" maxlength="4000" placeholder="Write a message…" aria-label="Message" x-model="$store.chat.draft" @input="$store.chat.notifyTyping(); $el.style.height = 'auto'; $el.style.height = Math.min($el.scrollHeight, 120) + 'px'" @keydown.enter.prevent="$store.chat.send()" :style="{
+              <textarea rows="1" maxlength="4000" placeholder="Write a message…" aria-label="Message" x-model="$store.chat.draft" @input="$store.chat.notifyTyping(); $el.style.height = 'auto'; $el.style.height = Math.min($el.scrollHeight, 120) + 'px'" @keydown.enter.prevent="$store.chat.send()" @focus="focused = true" @blur="focused = false" :style="{
                 flex: '1',
                 border: 'none',
                 resize: 'none',

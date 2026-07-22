@@ -1,6 +1,9 @@
 {
   "clientId": "emerald",
   "clientName": "EcoSphere Emerald",
+  
+  "//_bubble_section": "--- FLOATING BUBBLE TRIGGER BUTTON ---",
+
   "bubble": {
     "useWebsiteTheme": true,
     "width": 50,
@@ -27,14 +30,23 @@
     "boxShadowOpacity": 0.25,
     "dots": { "color": "#F8FAFC", "size": 6, "spacing": 6, "animation": "bounce" }
   },
+  
+  "//_chatcontactv2_section": "--- CHAT WINDOW LAYOUT AND THEME ---",
+
   "chatcontactv2": {
     "useWebsiteTheme": true,
     "clientName": "EcoSphere Support",
     "agentName": "Sarah (Eco)",
     "accentColor": "#059669",
+    
+    "//_dimensions": "Dimensions of the chat widget window",
+
     "widgetWidth": 400,
     "widgetHeight": 950,
     "expandedWidth": 550,
+    
+    "//_borders_and_shadows": "Styles for widget card borders and shadow values",
+
     "widgetBorderRadius": 28,
     "widgetShadow": true,
     "widgetShadowBlur": 20,
@@ -45,6 +57,9 @@
     "modernUi": true,
     "typingIndicator": true,
     "attachmentsEnabled": true,
+    
+    "//_header_styling": "Top title header colors, sizes, padding, and borders",
+
     "headerBg": "#f4f4f5",
     "headerTextColor": "#18181b",
     "headerBorderColor": "rgba(0,0,0,0.08)",
@@ -53,36 +68,60 @@
     "headerSubtitleFontSize": "11px",
     "headerAvatarBg": "#e4e4e7",
     "headerAvatarColor": "#18181b",
+    
+    "//_chat_body_styling": "Chat screen backdrop color",
+
     "bodyBg": "#f4f4f5",
+    
+    "//_visitor_bubbles": "Text size, color, background, and padding for visitor messages",
+
     "visitorBubbleBg": "#059669",
     "visitorBubbleColor": "#ffffff",
     "visitorBubbleFontSize": "14px",
     "visitorBubblePadding": "10px 14px",
     "visitorBubbleBorderRadius": "16px",
+    
+    "//_agent_bubbles": "Text size, color, background, and padding for agent messages",
+
     "agentBubbleBg": "#ffffff",
-    "agentBubbleColor": "#1c1917",
+    "agentBubbleColor": "#1c1717",
     "agentBubbleBorderColor": "#e4e4e7",
     "agentBubbleFontSize": "14px",
     "agentBubblePadding": "10px 14px",
     "agentBubbleBorderRadius": "16px",
+    
+    "//_agent_avatar": "Agent avatar icon initials backing color and profile picture image override",
+
     "agentAvatarBg": "#059669",
     "agentAvatarColor": "#ffffff",
     "agentAvatarUrl": "",
+    
+    "//_composer_input_box": "Background, text, border focus color, and spacing of the bottom message box",
+
     "inputBg": "#ffffff",
     "inputTextColor": "#18181b",
-"inputBorderColor": "#c4c4cc",
+    "inputPlaceholderColor": "#18181b",
+    "inputBorderColor": "#c4c4cc",
+    "inputFocusBorderColor": "#fbbf24",
+    "inputFocusShadow": "0 0 0 2px rgba(251, 191, 36, 0.15)",
     "inputBorderRadius": "9999px",
     "inputPadding": "6px 8px",
     "inputMargin": "12px 16px",
     "textareaFontSize": "14px",
+    
+    "//_composer_buttons": "Colors and icons for attachment, emoji, and send buttons",
+
     "attachButtonBg": "#ffffff",
-    "attachButtonColor": "#71717a",
-    "emojiButtonColor": "#71717a",
+    "attachButtonColor": "#63636b",
+    "emojiButtonColor": "#63636b",
     "sendButtonBgActive": "#059669",
     "sendButtonColorActive": "#ffffff",
     "sendButtonBgInactive": "#e4e4e7",
     "sendButtonColorInactive": "#a1a1aa",
     "sendIconType": "arrow",
+    
+    "//_footer_branding": "Powered By branding row, link alignment, and logo SVG config",
+
     "footerBg": "#f4f4f5",
     "footerTextColor": "#a1a1aa",
     "footerFontSize": "12px",
