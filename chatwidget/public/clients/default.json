@@ -1,0 +1,50 @@
+{
+  "clientId": "default",
+  "clientName": "Zotly Default Client",
+  "bubble": {
+    "useWebsiteTheme": true,
+    "width": 50,
+    "height": 50,
+    "borderRadius": { "tl": 50, "tr": 50, "bl": 50, "br": 50 },
+    "backgroundColor": "#0b5fff",
+    "gradientType": "linear",
+    "gradientAngle": 135,
+    "gradientStops": [
+      { "color": "#0b5fff", "pos": 0 },
+      { "color": "#22D3EE", "pos": 100 }
+    ],
+    "backgroundOverlayType": "image",
+    "backgroundImageUrl": "https://static.vecteezy.com/system/resources/previews/047/656/219/non_2x/abstract-logo-design-for-any-corporate-brand-business-company-vector.jpg",
+    "backgroundImageSize": "contain",
+    "backgroundImageOpacity": 0.25,
+    "backgroundBlendMode": "normal",
+    "border": { "width": 0, "color": "#0b5fff", "style": "solid" },
+    "outlineRing": { "enabled": true, "width": 3, "color": "#22D3EE", "opacity": 0.4 },
+    "boxShadowBlur": 20,
+    "boxShadowSpread": 0,
+    "boxShadowOffsetX": 0,
+    "boxShadowOffsetY": 8,
+    "boxShadowOpacity": 0.25,
+    "dots": { "color": "#F8FAFC", "size": 6, "spacing": 6, "animation": "bounce" }
+  },
+  "chatcontactv2": {
+    "useWebsiteTheme": true,
+    "clientName": "Zotly Support",
+    "agentName": "Sarah",
+    "accentColor": "#0b5fff",
+    "widgetWidth": 350,
+    "widgetHeight": 550,
+    "expandedWidth": 480,
+    "expandedHeight": 580,
+    "widgetBorderRadius": 16,
+    "widgetShadow": true,
+    "widgetShadowBlur": 20,
+    "widgetShadowColor": "rgba(0,0,0,0.15)",
+    "widgetBorderEnabled": true,
+    "widgetBorderWidth": 1,
+    "widgetBorderColor": "#e5e7eb",
+    "modernUi": true,
+    "typingIndicator": true,
+    "attachmentsEnabled": true
+  }
+}

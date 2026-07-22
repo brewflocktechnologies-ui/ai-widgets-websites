@@ -1,0 +1,50 @@
+{
+  "clientId": "amber",
+  "clientName": "Vortex Studio Amber",
+  "bubble": {
+    "useWebsiteTheme": true,
+    "width": 50,
+    "height": 50,
+    "borderRadius": { "tl": 50, "tr": 50, "bl": 50, "br": 50 },
+    "backgroundColor": "#d97706",
+    "gradientType": "linear",
+    "gradientAngle": 135,
+    "gradientStops": [
+      { "color": "#d97706", "pos": 0 },
+      { "color": "#8b5cf6", "pos": 100 }
+    ],
+    "backgroundOverlayType": "image",
+    "backgroundImageUrl": "https://static.vecteezy.com/system/resources/previews/047/656/219/non_2x/abstract-logo-design-for-any-corporate-brand-business-company-vector.jpg",
+    "backgroundImageSize": "contain",
+    "backgroundImageOpacity": 0.25,
+    "backgroundBlendMode": "normal",
+    "border": { "width": 0, "color": "#d97706", "style": "solid" },
+    "outlineRing": { "enabled": true, "width": 3, "color": "#8b5cf6", "opacity": 0.4 },
+    "boxShadowBlur": 20,
+    "boxShadowSpread": 0,
+    "boxShadowOffsetX": 0,
+    "boxShadowOffsetY": 8,
+    "boxShadowOpacity": 0.25,
+    "dots": { "color": "#F8FAFC", "size": 6, "spacing": 6, "animation": "bounce" }
+  },
+  "chatcontactv2": {
+    "useWebsiteTheme": true,
+    "clientName": "Vortex Studio Support",
+    "agentName": "Alex (Vortex)",
+    "accentColor": "#d97706",
+    "widgetWidth": 350,
+    "widgetHeight": 550,
+    "expandedWidth": 480,
+    "expandedHeight": 580,
+    "widgetBorderRadius": 16,
+    "widgetShadow": true,
+    "widgetShadowBlur": 20,
+    "widgetShadowColor": "rgba(0,0,0,0.15)",
+    "widgetBorderEnabled": true,
+    "widgetBorderWidth": 1,
+    "widgetBorderColor": "#e5e7eb",
+    "modernUi": true,
+    "typingIndicator": true,
+    "attachmentsEnabled": true
+  }
+}
