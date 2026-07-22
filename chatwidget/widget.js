@@ -553,14 +553,16 @@
       x-transition:leave="transition ease-in duration-200"
       x-transition:leave-start="opacity-100 scale-100"
       x-transition:leave-end="opacity-0 scale-50"
-      class="fixed bottom-3 right-4 z-40 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg select-none"
+      class="fixed bottom-3 right-4 z-40 flex items-center justify-center cursor-pointer select-none"
       :style="{
-        width: settings.width + 'px',
-        height: settings.height + 'px',
-        borderRadius: \`\${settings.borderRadius.tl}px \${settings.borderRadius.tr}px \${settings.borderRadius.br}px \${settings.borderRadius.bl}px\`,
+        width: (settings.width || 50) + 'px',
+        height: (settings.height || 50) + 'px',
+        borderRadius: getBorderRadius(),
         background: getCompositeBackground(),
-        backgroundBlendMode: settings.backgroundBlendMode,
+        backgroundBlendMode: settings.backgroundBlendMode || 'normal',
         boxShadow: [getBoxShadow(), getInnerShadow()].filter(Boolean).join(', '),
+        transform: hovered ? 'scale(' + (settings.hoverScale !== undefined ? settings.hoverScale : 1.05) + ')' : 'scale(1.0)',
+        transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background 0.3s ease',
         transformStyle: 'preserve-3d',
         ...getBorderStyle(),
         ...(settings.glass && settings.glass.enabled ? getGlassStyle() : {}),
@@ -570,39 +572,56 @@
 
       <style x-text="cssKeyframes()"></style>
 
-      <!-- SHOW IMAGE: Only when useWebsiteTheme is false -->
-      <template x-if="!settings.useWebsiteTheme && settings.backgroundOverlayType === 'image' && settings.backgroundImageUrl">
+      <!-- SHOW OVERLAY IMAGE -->
+      <template x-if="settings.backgroundOverlayType === 'image' && settings.backgroundImageUrl">
         <div class="absolute inset-0 pointer-events-none" :style="{
             backgroundImage: \`url(\${settings.backgroundImageUrl})\`,
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
-            backgroundSize: settings.backgroundImageSize,
-            opacity: settings.backgroundImageOpacity,
-            mixBlendMode: settings.backgroundBlendMode,
+            backgroundSize: settings.backgroundImageSize || 'contain',
+            opacity: settings.backgroundImageOpacity || 0.25,
+            mixBlendMode: settings.backgroundBlendMode || 'normal',
             borderRadius: 'inherit'
           }"></div>
       </template>
 
+      <!-- SHOW LUCIDE OVERLAY ICON -->
+      <template x-if="settings.backgroundOverlayType === 'lucide' && settings.backgroundLucideIcon">
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none" :style="{
+            color: settings.backgroundLucideColor || '#FFFFFF',
+            opacity: settings.backgroundLucideOpacity || 0.2,
+            mixBlendMode: settings.backgroundBlendMode || 'normal'
+          }">
+          <template x-if="settings.backgroundLucideIcon === 'Star'">
+            <svg viewBox="0 0 24 24" :width="settings.backgroundLucideSize || 24" :height="settings.backgroundLucideSize || 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </template>
+          <template x-if="settings.backgroundLucideIcon === 'Heart'">
+            <svg viewBox="0 0 24 24" :width="settings.backgroundLucideSize || 24" :height="settings.backgroundLucideSize || 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </template>
+        </div>
+      </template>
+
       <!-- SHOW CHAT ICON: Hides when hovering (if dots are enabled) -->
-      <template x-if="settings.useWebsiteTheme && !(settings.dots && hovered)">
+      <template x-if="!(settings.dots && settings.dots.animation && settings.dots.animation !== 'none' && hovered)">
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none text-white">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
           </svg>
         </div>
       </template>
 
       <!-- SHOW DOTS ON HOVER -->
-      <template x-if="settings.dots && hovered">
-        <div class="absolute flex z-10" :style="{ gap: \`\${settings.dots.spacing}px\` }">
+      <template x-if="settings.dots && settings.dots.animation && settings.dots.animation !== 'none' && hovered">
+        <div class="absolute flex z-10" :style="{ gap: \`\${settings.dots.spacing || 6}px\` }">
           <template x-for="i in [0, 1, 2]">
-            <span class="rounded-full" :style="{ width: \`\${settings.dots.size}px\`, height: \`\${settings.dots.size}px\`, backgroundColor: settings.dots.color, animation: settings.dots.animation === 'bounce' ? \`dotBounce 1.2s cubic-bezier(.2,.8,.2,1) \${i * 0.12}s infinite\` : settings.dots.animation === 'pulse' ? \`dotPulse 1.4s cubic-bezier(.2,.8,.2,1) \${i * 0.1}s infinite\` : 'none' }"></span>
+            <span class="rounded-full" :style="{ width: \`\${settings.dots.size || 6}px\`, height: \`\${settings.dots.size || 6}px\`, backgroundColor: settings.dots.color || '#FFFFFF', animation: settings.dots.animation === 'bounce' ? \`dotBounce 1.2s cubic-bezier(.2,.8,.2,1) \${i * 0.12}s infinite\` : settings.dots.animation === 'pulse' ? \`dotPulse 1.4s cubic-bezier(.2,.8,.2,1) \${i * 0.1}s infinite\` : 'none' }"></span>
           </template>
         </div>
       </template>
 
+      <!-- OUTLINE RING -->
       <template x-if="settings.outlineRing && settings.outlineRing.enabled">
-        <div aria-hidden class="pointer-events-none absolute inset-0" :style="{ borderRadius: 'inherit', boxShadow: \`0 0 0 \${settings.outlineRing.width}px \${hexToRgba(settings.outlineRing.color, settings.outlineRing.opacity)}\` }">
+        <div aria-hidden class="pointer-events-none absolute inset-0" :style="{ borderRadius: 'inherit', boxShadow: \`0 0 0 \${settings.outlineRing.width || 3}px \${hexToRgba(settings.outlineRing.color || '#22d3ee', settings.outlineRing.opacity || 0.4)}\` }">
         </div>
       </template>
     </div>
@@ -615,65 +634,98 @@
     return {
       settings: initialSettings,
       hovered: false,
-      // 1. Updated hexToRgba to safely handle non-hex variables just in case
       hexToRgba(hex, alpha) {
         if (!hex) return '';
         if (hex.startsWith('#')) {
           const v = hex.replace('#', '');
           const bigint = parseInt(v.length === 3 ? v.split('').map(c => c + c).join('') : v, 16);
           if (!isNaN(bigint)) {
-            return `rgba(${(bigint >> 16) & 255},${(bigint >> 8) & 255},${bigint & 255},${alpha})`;
+            return `rgba(${(bigint >> 16) & 255},${(bigint >> 8) & 255},${bigint & 255},${alpha !== undefined ? alpha : 1})`;
           }
         }
-        return hex; // Fallback if a named color or var() is pulled from CSS
+        return hex;
       },
       cssKeyframes() {
         if (!this.settings) return '';
+        const amp = (this.settings.idleAnim && this.settings.idleAnim.amplitude) ? this.settings.idleAnim.amplitude : 6;
         return `
           @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
           @keyframes popIn { 0% { transform: scale(.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
           @keyframes slideUp { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-          @keyframes idleFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-${this.settings.idleAnim ? this.settings.idleAnim.amplitude : 6}px); } }
+          @keyframes idleFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-${amp}px); } }
           @keyframes dotBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
           @keyframes dotPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
         `;
       },
+      getBorderRadius() {
+        if (!this.settings || !this.settings.borderRadius) return '50%';
+        if (typeof this.settings.borderRadius === 'number') {
+          return `${this.settings.borderRadius}px`;
+        }
+        if (typeof this.settings.borderRadius === 'object') {
+          const { tl = 50, tr = 50, br = 50, bl = 50 } = this.settings.borderRadius;
+          return `${tl}px ${tr}px ${br}px ${bl}px`;
+        }
+        return '50%';
+      },
       getGradient() {
-        if (!this.settings || this.settings.gradientType === 'none') return '';
-
+        if (!this.settings || !this.settings.gradientType || this.settings.gradientType === 'none') return '';
         const stopsArray = this.settings.gradientStops || [];
-        // Fix: If no stops are defined in the JSON, fallback to the solid background color
         if (stopsArray.length === 0) return this.settings.backgroundColor || '#0b5fff';
-
         const stops = stopsArray.map(s => `${s.color} ${s.pos}%`).join(', ');
+        if (this.settings.gradientType === 'radial') {
+          return `radial-gradient(circle, ${stops})`;
+        }
         return `linear-gradient(${this.settings.gradientAngle || 135}deg, ${stops})`;
       },
       getBoxShadow() {
         if (!this.settings) return '';
-        const { boxShadowOffsetX, boxShadowOffsetY, boxShadowBlur, boxShadowSpread, boxShadowOpacity } = this.settings;
-        return `${boxShadowOffsetX || 0}px ${boxShadowOffsetY || 8}px ${boxShadowBlur || 20}px ${boxShadowSpread || 0}px rgba(0,0,0,${boxShadowOpacity || 0.25})`;
+        const { boxShadowOffsetX = 0, boxShadowOffsetY = 8, boxShadowBlur = 20, boxShadowSpread = 0, boxShadowOpacity = 0.25 } = this.settings;
+        return `${boxShadowOffsetX}px ${boxShadowOffsetY}px ${boxShadowBlur}px ${boxShadowSpread}px rgba(0,0,0,${boxShadowOpacity})`;
       },
       getInnerShadow() {
         if (!this.settings || !this.settings.innerShadow || !this.settings.innerShadow.enabled) return '';
-        return `inset 0 6px ${this.settings.innerShadow.blur}px rgba(0,0,0,${this.settings.innerShadow.opacity})`;
+        return `inset 0 6px ${this.settings.innerShadow.blur || 12}px rgba(0,0,0,${this.settings.innerShadow.opacity || 0.25})`;
       },
       getCompositeBackground() {
         if (!this.settings) return '#0b5fff';
+        if (this.settings.useWebsiteTheme) return this.settings.backgroundColor || '#0b5fff';
         return (this.settings.gradientType && this.settings.gradientType !== 'none')
           ? this.getGradient()
           : (this.settings.backgroundColor || '#0b5fff');
       },
       getBorderStyle() {
         if (!this.settings) return {};
+        const b = this.settings.border;
+        if (!b) return {};
         return {
-          borderWidth: `${this.settings.border ? this.settings.border.width : 0}px`,
-          borderStyle: this.settings.border ? this.settings.border.style : 'solid',
-          borderColor: this.settings.border ? this.settings.border.color : 'transparent'
+          borderWidth: `${b.width || 0}px`,
+          borderStyle: b.style || 'solid',
+          borderColor: b.color || 'transparent'
         };
       },
-      getEntryAnimStyle() { return {}; },
-      getNeonStyle() { return {}; },
-      getGlassStyle() { return {}; }
+      getEntryAnimStyle() {
+        if (!this.settings || !this.settings.idleAnim || !this.settings.idleAnim.enabled || this.settings.idleAnim.type === 'none' || this.hovered) return {};
+        return {
+          animation: `idleFloat ${this.settings.idleAnim.duration || 3200}ms ease-in-out infinite`
+        };
+      },
+      getNeonStyle() {
+        if (!this.settings || !this.settings.neon || !this.settings.neon.enabled) return {};
+        const color = this.settings.neon.color || '#22d3ee';
+        const intensity = this.settings.neon.intensity || 0.8;
+        return {
+          boxShadow: `0 0 ${20 * intensity}px ${color}, inset 0 0 ${10 * intensity}px ${color}`
+        };
+      },
+      getGlassStyle() {
+        if (!this.settings || !this.settings.glass || !this.settings.glass.enabled) return {};
+        return {
+          backdropFilter: `blur(${this.settings.glass.blur || 10}px)`,
+          WebkitBackdropFilter: `blur(${this.settings.glass.blur || 10}px)`,
+          backgroundColor: `rgba(255, 255, 255, ${this.settings.glass.bgOpacity || 0.3})`
+        };
+      }
     };
   };
 
