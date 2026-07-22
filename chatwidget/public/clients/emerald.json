@@ -6,8 +6,8 @@
 
   "bubble": {
     "useWebsiteTheme": true,
-    "width": 50,
-    "height": 50,
+    "width": 60,
+    "height": 60,
     "borderRadius": { "tl": 50, "tr": 50, "bl": 50, "br": 50 },
     "backgroundColor": "#059669",
     "gradientType": "linear",
@@ -22,12 +22,12 @@
     "backgroundImageOpacity": 0.25,
     "backgroundBlendMode": "normal",
     "border": { "width": 0, "color": "#059669", "style": "solid" },
-    "outlineRing": { "enabled": true, "width": 3, "color": "#0d9488", "opacity": 0.4 },
-    "boxShadowBlur": 20,
+    "outlineRing": { "enabled": true, "width": 0, "color": "#0d9488", "opacity": 0.4 },
+    "boxShadowBlur": 0,
     "boxShadowSpread": 0,
     "boxShadowOffsetX": 0,
-    "boxShadowOffsetY": 8,
-    "boxShadowOpacity": 0.25,
+    "boxShadowOffsetY": 0,
+    "boxShadowOpacity": 0,
     "dots": { "color": "#F8FAFC", "size": 6, "spacing": 6, "animation": "bounce" }
   },
   

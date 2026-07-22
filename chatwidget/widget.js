@@ -75,21 +75,21 @@
   widgetContainer.innerHTML = `
     <!-- Pop-up Chat V2 Widget Overlay -->
     <div x-show="openContactWidget"
-      x-transition:enter="transition ease-out duration-250"
-      x-transition:enter-start="opacity-0 translate-y-4 scale-95"
-      x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-      x-transition:leave="transition ease-in duration-150"
-      x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-      x-transition:leave-end="opacity-0 translate-y-4 scale-95"
-      class="fixed bottom-6 right-6 z-50 flex flex-col transition-all duration-300 pointer-events-auto zotly-widget-panel-wrapper"
+      x-transition:enter="transition ease-out duration-300 origin-bottom-right"
+      x-transition:enter-start="opacity-0 scale-50 translate-y-8"
+      x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+      x-transition:leave="transition ease-in duration-200 origin-bottom-right"
+      x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+      x-transition:leave-end="opacity-0 scale-50 translate-y-8"
+      class="fixed bottom-3 right-4 z-50 flex flex-col transition-all duration-300 pointer-events-auto zotly-widget-panel-wrapper"
       :style="{
         width: $store.chat.isExpanded ? ($store.chatcontactv2.expandedWidth ? $store.chatcontactv2.expandedWidth + 'px' : '480px') : ($store.chatcontactv2.widgetWidth ? $store.chatcontactv2.widgetWidth + 'px' : '350px'),
         height: $store.chatcontactv2.widgetHeight ? $store.chatcontactv2.widgetHeight + 'px' : '550px',
-        maxWidth: 'calc(100vw - 48px)',
-        maxHeight: 'calc(100vh - 48px)',
+        maxWidth: 'calc(100vw - 32px)',
+        maxHeight: 'calc(100vh - 32px)',
         position: 'fixed',
-        bottom: '24px',
-        right: '24px'
+        bottom: '12px',
+        right: '16px'
       }" style="display: none;">
       
       <div class="panel flex flex-col relative w-full h-full overflow-hidden"
@@ -390,8 +390,8 @@
               <input type="file" id="cw-embed-file" class="file-input" accept="image/png,image/jpeg,image/gif,image/webp" @change="$store.chat.uploadImage($event.target)" style="display: none;" />
               
               <!-- Plus Attachment Button -->
-              <button type="button" aria-label="Attach" title="Attach" x-show="$store.chat.flag('attachments.enabled', true)" :disabled="$store.chat.uploading" @click="$store.chat.attachOpen = !$store.chat.attachOpen; $store.chat.emojiOpen = false" :style="{
-                display: 'flex',
+              <button type="button" class="attach-btn" aria-label="Attach" title="Attach" x-show="$store.chat.flag('attachments.enabled', true)" :disabled="$store.chat.uploading" @click="$store.chat.attachOpen = !$store.chat.attachOpen; $store.chat.emojiOpen = false" :style="{
+                display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: '30px',
@@ -399,16 +399,15 @@
                 borderRadius: '50%',
                 border: 'none',
                 padding: '0',
+                margin: '0',
+                lineHeight: '0',
+                boxSizing: 'border-box',
                 background: $store.chatcontactv2.attachButtonBg || '#ffffff',
                 color: $store.chatcontactv2.attachButtonColor || '#71717a',
                 cursor: 'pointer',
                 flexShrink: '0',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-              }">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
-                  <path d="M12 5v14M5 12h14" />
-                </svg>
-              </button>
+              }"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="display: block; margin: auto;"><path d="M8 3.5v9M3.5 8h9" /></svg></button>
 
               <!-- Textarea input field -->
               <textarea rows="1" maxlength="4000" placeholder="Write a message…" aria-label="Message" x-model="$store.chat.draft" @input="$store.chat.notifyTyping(); $el.style.height = 'auto'; $el.style.height = Math.min($el.scrollHeight, 120) + 'px'" @keydown.enter.prevent="$store.chat.send()" @focus="focused = true" @blur="focused = false" :style="{
@@ -548,7 +547,13 @@
     <!-- Floating Bubble Widget Trigger -->
     <div x-show="!openContactWidget" x-data='window.previewBubbleController(Alpine.store("bubble"))'
       @click="$dispatch('toggle-contact-widget')"
-      class="fixed bottom-6 right-6 z-40 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg select-none"
+      x-transition:enter="transition ease-out duration-300 delay-100"
+      x-transition:enter-start="opacity-0 scale-50"
+      x-transition:enter-end="opacity-100 scale-100"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="opacity-100 scale-100"
+      x-transition:leave-end="opacity-0 scale-50"
+      class="fixed bottom-3 right-4 z-40 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg select-none"
       :style="{
         width: settings.width + 'px',
         height: settings.height + 'px',
@@ -861,19 +866,6 @@
             activeConfig.endChatCancelBg = 'var(--cw-surface)';
             activeConfig.endChatCancelTextColor = 'var(--cw-muted)';
             activeConfig.endChatCancelBorderColor = 'var(--cw-border)';
-          } else {
-            // Delete light overrides to allow custom elements from JSON or standard fallbacks
-            delete activeConfig.bodyBg;
-            delete activeConfig.inputBg;
-            delete activeConfig.agentBubbleBg;
-            delete activeConfig.agentBubbleColor;
-            delete activeConfig.agentBubbleBorderColor;
-            delete activeConfig.footerBg;
-            delete activeConfig.footerTextColor;
-            delete activeConfig.inputTextColor;
-            delete activeConfig.inputBorderColor;
-            delete activeConfig.attachButtonBg;
-            delete activeConfig.attachButtonColor;
           }
         }
 
@@ -948,8 +940,8 @@
         },
         askEndChat() {
           const config = Alpine.store('chatcontactv2');
-          this.confirmBox = { 
-            message: config.endChatConfirmMessage || 'Are you sure you want to end this chat session?', 
+          this.confirmBox = {
+            message: config.endChatConfirmMessage || 'Are you sure you want to end this chat session?',
             confirmLabel: config.endChatConfirmLabel || 'End chat',
             cancelLabel: config.endChatCancelLabel || 'Cancel'
           };

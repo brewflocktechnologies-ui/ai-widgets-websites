@@ -34,7 +34,7 @@
   "//_chatcontactv2_section": "--- CHAT WINDOW LAYOUT AND THEME ---",
 
   "chatcontactv2": {
-    "useWebsiteTheme": false,
+    "useWebsiteTheme": true,
     "clientName": "Vortex Studio Support",
     "agentName": "Alex (Vortex)",
     "accentColor": "#d97706",
