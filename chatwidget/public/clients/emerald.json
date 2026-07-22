@@ -34,7 +34,7 @@
   "//_chatcontactv2_section": "--- CHAT WINDOW LAYOUT AND THEME ---",
 
   "chatcontactv2": {
-    "useWebsiteTheme": false,
+    "useWebsiteTheme": true,
     "clientName": "EcoSphere Support",
     "agentName": "Sarah (Eco)",
     "accentColor": "#059669",
@@ -51,7 +51,7 @@
     "widgetShadow": true,
     "widgetShadowBlur": 20,
     "widgetShadowColor": "rgba(0,0,0,0.15)",
-    "widgetBorderEnabled": true,
+    "widgetBorderEnabled": false,
     "widgetBorderWidth": 1,
     "widgetBorderColor": "#e5e7eb",
     "modernUi": true,
@@ -114,7 +114,7 @@
 
     "inputBg": "#ffffff",
     "inputTextColor": "#18181b",
-    "inputPlaceholderColor": "#6b7280",
+    "inputPlaceholderColor": "#4b5563",
     "inputBorderColor": "#d1d5db",
     "inputFocusBorderColor": "#2563eb",
     "inputFocusShadow": "0 0 0 3px rgba(37, 99, 235, 0.15)",

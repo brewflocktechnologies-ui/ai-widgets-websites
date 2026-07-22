@@ -97,7 +97,7 @@
           boxShadow: $store.chatcontactv2.widgetShadow ? \`0 0 \${$store.chatcontactv2.widgetShadowBlur || 20}px \${$store.chatcontactv2.widgetShadowColor || 'rgba(0,0,0,0.15)'}\` : 'none',
           border: $store.chatcontactv2.widgetBorderEnabled ? \`\${$store.chatcontactv2.widgetBorderWidth || 1}px solid \${$store.chatcontactv2.widgetBorderColor || '#e5e7eb'}\` : 'none',
           borderRadius: \`\${$store.chatcontactv2.widgetBorderRadius || 16}px\`,
-          background: $store.chatcontactv2.bodyBg || '#ffffff',
+          background: $store.chatcontactv2.bodyBg || 'var(--cw-bg)',
           '--cw-accent': $store.chatcontactv2.accentColor || '#0b5fff',
           isolation: 'isolate',
           transform: 'translateZ(0)'
@@ -114,15 +114,25 @@
         }">
           <!-- Left side: Expand button, Brand Avatar & Text -->
           <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
-            <!-- Expand Button -->
-            <button type="button" class="icon-btn" aria-label="Expand chat"
+            <!-- Expand / Collapse Button -->
+            <button type="button" class="icon-btn" :aria-label="$store.chat.isExpanded ? 'Collapse chat' : 'Expand chat'"
                     :style="{ color: $store.chatcontactv2.headerTextColor || '#fff', opacity: '0.7' }"
                     x-show="$store.chat.flag('widget.modernUi', true)"
                     @click="$store.chat.toggleExpand()">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-                   stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-              </svg>
+              <!-- Collapse Icon (diagonal arrows pointing inwards) when expanded -->
+              <template x-if="$store.chat.isExpanded">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                     stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7" />
+                </svg>
+              </template>
+              <!-- Expand Icon (diagonal arrows pointing outwards) when collapsed -->
+              <template x-if="!$store.chat.isExpanded">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                     stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                </svg>
+              </template>
             </button>
 
             <!-- Brand Avatar -->
@@ -196,7 +206,7 @@
           </button>
         </div>
 
-        <div class="panel-body" id="panel-body">
+        <div class="panel-body" id="panel-body" :style="{ background: $store.chatcontactv2.bodyBg || 'var(--cw-bg)' }">
           <div class="center-note" x-show="$store.chat.state === 'boot'">
             <div class="spinner" aria-hidden="true"></div>
             <p>Connecting…</p>
@@ -261,7 +271,7 @@
           </div>
 
           <div class="chat" x-show="$store.chat.state === 'active' || $store.chat.state === 'closed'">
-            <div class="messages" x-ref="messages" :style="{ background: $store.chatcontactv2.bodyBg || '#ffffff' }">
+            <div class="messages" x-ref="messages" :style="{ background: $store.chatcontactv2.bodyBg || 'var(--cw-bg)' }">
               <template x-for="(m, i) in $store.chat.messages" :key="m.key">
                 <div>
                   <div class="day-divider" x-show="$store.chat.dividerBefore(i)" x-text="$store.chat.dayLabel(m)"></div>
@@ -365,11 +375,11 @@
               gap: '6px',
               padding: $store.chatcontactv2.inputPadding || '6px 8px',
               margin: $store.chatcontactv2.inputMargin || '12px 16px',
-              background: $store.chatcontactv2.inputBg || '#f4f4f5',
+              background: $store.chatcontactv2.inputBg || 'var(--cw-surface)',
               borderRadius: $store.chatcontactv2.inputBorderRadius || '9999px',
               border: focused 
                 ? ('1px solid ' + ($store.chatcontactv2.inputFocusBorderColor || $store.chatcontactv2.accentColor || '#0b5fff')) 
-                : ('1px solid ' + ($store.chatcontactv2.inputBorderColor || '#e4e4e7')),
+                : ('1px solid ' + ($store.chatcontactv2.inputBorderColor || 'var(--cw-border)')),
               boxShadow: focused 
                 ? ($store.chatcontactv2.inputFocusShadow || '0 0 0 2px rgba(11, 95, 255, 0.1)') 
                 : 'none',
@@ -407,7 +417,7 @@
                 resize: 'none',
                 padding: '6px 12px',
                 background: 'transparent',
-                color: $store.chatcontactv2.inputTextColor || '#18181b',
+                color: $store.chatcontactv2.inputTextColor || 'var(--cw-ink)',
                 outline: 'none',
                 fontSize: $store.chatcontactv2.textareaFontSize || '14px',
                 fontFamily: 'inherit',
@@ -488,7 +498,7 @@
                    style="display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; align-items: center !important; justify-content: center !important; gap: 4px !important; font-family: inherit !important; width: 100% !important; background: transparent !important; text-align: center !important;"
                    :style="{
                      fontSize: $store.chatcontactv2.footerFontSize || '10px',
-                     color: $store.chatcontactv2.footerTextColor || '#a1a1aa'
+                     color: $store.chatcontactv2.footerTextColor || 'var(--cw-muted)'
                    }">
                 <span>Powered by</span> 
                 <template x-if="$store.chatcontactv2.poweredByLogo">
@@ -811,24 +821,78 @@
     }
 
     if (chatConfig && Object.keys(chatConfig).length > 0) {
-      if (chatConfig.useWebsiteTheme === true) {
-        chatConfig.accentColor = theme.primary;
-        chatConfig.visitorBubbleBg = theme.primary;
-        chatConfig.visitorBubbleColor = '#ffffff';
-        chatConfig.headerBg = theme.primary;
-        chatConfig.headerTextColor = '#ffffff';
-        chatConfig.headerAvatarBg = 'rgba(255,255,255,0.2)';
-        chatConfig.headerAvatarColor = '#ffffff';
-        chatConfig.agentAvatarBg = theme.primary;
-        chatConfig.agentAvatarColor = '#ffffff';
-        chatConfig.inputFocusBorderColor = theme.primary;
-        chatConfig.inputFocusShadow = `0 0 0 2px ${theme.primary}26`; // 15% opacity tint
-        chatConfig.sendButtonBgActive = theme.primary;
-        chatConfig.poweredByColor = theme.primary;
-        chatConfig.endChatConfirmBg = theme.primary;
-        chatConfig.endChatConfirmTextColor = '#ffffff';
-      }
-      Object.assign(Alpine.store('chatcontactv2'), chatConfig);
+      const applyTheme = () => {
+        const isDark = document.documentElement.classList.contains('dark');
+        const activeConfig = JSON.parse(JSON.stringify(chatConfig));
+
+        if (activeConfig.useWebsiteTheme === true) {
+          activeConfig.accentColor = theme.primary;
+          activeConfig.visitorBubbleBg = theme.primary;
+          activeConfig.visitorBubbleColor = '#ffffff';
+          activeConfig.headerBg = theme.primary;
+          activeConfig.headerTextColor = '#ffffff';
+          activeConfig.headerAvatarBg = 'rgba(255,255,255,0.2)';
+          activeConfig.headerAvatarColor = '#ffffff';
+          activeConfig.agentAvatarBg = theme.primary;
+          activeConfig.agentAvatarColor = '#ffffff';
+          activeConfig.inputFocusBorderColor = theme.primary;
+          activeConfig.inputFocusShadow = `0 0 0 2px ${theme.primary}26`; // 15% opacity tint
+          activeConfig.sendButtonBgActive = theme.primary;
+          activeConfig.poweredByColor = theme.primary;
+          activeConfig.endChatConfirmBg = theme.primary;
+          activeConfig.endChatConfirmTextColor = '#ffffff';
+
+          if (isDark) {
+            // Under browser dark mode, point styles directly to native dark CSS custom variables
+            activeConfig.bodyBg = 'var(--cw-bg)';
+            activeConfig.inputBg = 'var(--cw-surface)';
+            activeConfig.agentBubbleBg = 'var(--cw-surface)';
+            activeConfig.agentBubbleColor = 'var(--cw-ink)';
+            activeConfig.agentBubbleBorderColor = 'var(--cw-border)';
+            activeConfig.footerBg = 'var(--cw-bg)';
+            activeConfig.footerTextColor = 'var(--cw-muted)';
+            activeConfig.inputTextColor = 'var(--cw-ink)';
+            activeConfig.inputBorderColor = 'var(--cw-border)';
+            activeConfig.attachButtonBg = 'var(--cw-surface)';
+            activeConfig.attachButtonColor = 'var(--cw-muted)';
+            activeConfig.emojiButtonColor = 'var(--cw-muted)';
+            activeConfig.modalCardBg = 'var(--cw-surface)';
+            activeConfig.modalMessageColor = 'var(--cw-ink)';
+            activeConfig.endChatCancelBg = 'var(--cw-surface)';
+            activeConfig.endChatCancelTextColor = 'var(--cw-muted)';
+            activeConfig.endChatCancelBorderColor = 'var(--cw-border)';
+          } else {
+            // Delete light overrides to allow custom elements from JSON or standard fallbacks
+            delete activeConfig.bodyBg;
+            delete activeConfig.inputBg;
+            delete activeConfig.agentBubbleBg;
+            delete activeConfig.agentBubbleColor;
+            delete activeConfig.agentBubbleBorderColor;
+            delete activeConfig.footerBg;
+            delete activeConfig.footerTextColor;
+            delete activeConfig.inputTextColor;
+            delete activeConfig.inputBorderColor;
+            delete activeConfig.attachButtonBg;
+            delete activeConfig.attachButtonColor;
+          }
+        }
+
+        // Apply dark overrides from JSON if configured and browser is in dark mode
+        if (isDark && chatConfig.dark && Object.keys(chatConfig.dark).length > 0) {
+          Object.assign(activeConfig, chatConfig.dark);
+        }
+
+        Object.assign(Alpine.store('chatcontactv2'), activeConfig);
+      };
+
+      // Initial apply
+      applyTheme();
+
+      // Listen for browser class changes to dynamically toggle light/dark styles
+      const observer = new MutationObserver(() => {
+        applyTheme();
+      });
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
     }
 
     if (!Alpine.store('chat')) {

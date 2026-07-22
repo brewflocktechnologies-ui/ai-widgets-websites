@@ -26,6 +26,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
@@ -37,14 +38,14 @@
     }
   </script>
 
-  <!-- Single Script Import for Chat Widget (automatically consumes --primary-color, --secondary-color & font) -->
+  <!-- Single Script Import for Chat Widget (fetches JSON config based on data-client-id="amber") -->
   <script src="../chatwidget/widget.js" data-client-id="amber" defer></script>
 </head>
 
-<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col justify-between selection:bg-primary selection:text-zinc-950">
+<body class="bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 min-h-screen flex flex-col justify-between selection:bg-primary selection:text-zinc-950 transition-colors duration-300">
 
   <!-- Header -->
-  <header class="border-b border-primary/30 bg-zinc-900/60 backdrop-blur-md sticky top-0 z-30">
+  <header class="border-b border-slate-200 dark:border-primary/30 bg-white/80 dark:bg-zinc-900/60 backdrop-blur-md sticky top-0 z-30 transition-colors duration-300">
     <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center font-black text-zinc-950 shadow-lg shadow-primary/20">
@@ -54,29 +55,45 @@
           VORTEX.STUDIO
         </span>
       </div>
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-600 dark:text-zinc-400">
         <a href="#" class="hover:text-primary transition-colors">Creations</a>
         <a href="#" class="hover:text-primary transition-colors">Agency</a>
         <a href="#" class="hover:text-primary transition-colors">Showcase</a>
       </nav>
-      <button class="bg-primary hover:opacity-90 text-zinc-950 font-bold text-sm px-5 py-2.5 rounded-xl shadow-md shadow-primary/20 transition-all hover:scale-105 active:scale-95">
-        Start Project
-      </button>
+
+      <!-- Right Header Actions: Theme Toggle & CTA -->
+      <div class="flex items-center gap-4">
+        <!-- Light / Dark Mode Toggle Button -->
+        <button id="theme-toggle" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition-all active:scale-95 shadow-sm border border-slate-200 dark:border-zinc-800" aria-label="Toggle theme">
+          <!-- Sun icon (for dark mode) -->
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464a1 1 0 101.414-1.414l-.707-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" />
+          </svg>
+          <!-- Moon icon (for light mode) -->
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+          </svg>
+        </button>
+
+        <button class="bg-primary hover:opacity-90 text-zinc-950 font-bold text-sm px-5 py-2.5 rounded-xl shadow-md shadow-primary/20 transition-all hover:scale-105 active:scale-95">
+          Start Project
+        </button>
+      </div>
     </div>
   </header>
 
   <!-- Hero Section -->
   <main class="max-w-6xl mx-auto px-6 py-20 flex-1 flex flex-col justify-center items-center text-center relative">
-    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900 border border-primary/40 text-primary text-xs font-mono uppercase tracking-widest mb-8">
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 border border-slate-200 dark:bg-zinc-905 dark:bg-zinc-900 dark:border-primary/40 text-primary text-xs font-mono uppercase tracking-widest mb-8 transition-colors duration-300">
       <span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
       Website 2: Space Grotesk Font & CSS Variables (--primary-color / --secondary-color)
     </div>
 
-    <h1 class="text-5xl md:text-7xl font-bold tracking-tight max-w-4xl text-zinc-100 leading-tight">
+    <h1 class="text-5xl md:text-7xl font-bold tracking-tight max-w-4xl text-zinc-900 dark:text-zinc-100 leading-tight">
       Next-Gen Interactive Digital <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Experiences</span>
     </h1>
 
-    <p class="text-zinc-400 text-lg md:text-xl max-w-2xl mt-6 leading-relaxed">
+    <p class="text-zinc-600 dark:text-zinc-400 text-lg md:text-xl max-w-2xl mt-6 leading-relaxed">
       Crafting high-impact motion websites, 3D web applications, and real-time customer engagement pipelines.
     </p>
 
@@ -84,38 +101,68 @@
       <button class="bg-primary hover:opacity-90 text-zinc-950 font-bold px-8 py-4 rounded-xl shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5">
         Launch Studio
       </button>
-      <button class="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 font-semibold px-8 py-4 rounded-xl transition-all">
+      <button class="bg-white hover:bg-slate-50 border border-slate-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:border-zinc-800 text-zinc-800 dark:text-zinc-300 font-semibold px-8 py-4 rounded-xl transition-all shadow-sm">
         View Portfolio
       </button>
     </div>
 
     <!-- Features Grid -->
     <div class="grid md:grid-cols-3 gap-6 mt-20 text-left w-full">
-      <div class="p-6 rounded-2xl bg-zinc-900/60 border border-primary/20 hover:border-primary/40 transition-all">
-        <div class="w-12 h-12 rounded-xl bg-zinc-800 text-primary flex items-center justify-center text-xl mb-4">🎨</div>
-        <h3 class="text-lg font-bold text-zinc-100">Space Grotesk Font</h3>
-        <p class="text-sm text-zinc-400 mt-2">The widget automatically inherits 'Space Grotesk' from the HTML parent body.</p>
+      <div class="p-6 rounded-2xl bg-white border border-slate-200 dark:bg-zinc-900/60 dark:border-primary/20 hover:border-primary/40 transition-all shadow-sm dark:shadow-none">
+        <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-zinc-800 text-primary flex items-center justify-center text-xl mb-4">🎨</div>
+        <h3 class="text-lg font-bold text-zinc-900 dark:text-zinc-100">Space Grotesk Font</h3>
+        <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-2">The widget automatically inherits 'Space Grotesk' from the HTML parent body.</p>
       </div>
 
-      <div class="p-6 rounded-2xl bg-zinc-900/60 border border-primary/20 hover:border-primary/40 transition-all">
-        <div class="w-12 h-12 rounded-xl bg-zinc-800 text-secondary flex items-center justify-center text-xl mb-4">⚡</div>
-        <h3 class="text-lg font-bold text-zinc-100">--primary-color & --secondary-color</h3>
-        <p class="text-sm text-zinc-400 mt-2">HTML layout and Chat V2 widget consume CSS variables directly.</p>
+      <div class="p-6 rounded-2xl bg-white border border-slate-200 dark:bg-zinc-900/60 dark:border-primary/20 hover:border-primary/40 transition-all shadow-sm dark:shadow-none">
+        <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-zinc-800 text-secondary flex items-center justify-center text-xl mb-4">⚡</div>
+        <h3 class="text-lg font-bold text-zinc-900 dark:text-zinc-100">--primary-color & --secondary-color</h3>
+        <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-2">HTML layout and Chat V2 widget consume CSS variables directly.</p>
       </div>
 
-      <div class="p-6 rounded-2xl bg-zinc-900/60 border border-primary/20 hover:border-primary/40 transition-all">
-        <div class="w-12 h-12 rounded-xl bg-zinc-800 text-primary flex items-center justify-center text-xl mb-4">💬</div>
-        <h3 class="text-lg font-bold text-zinc-100">Automatic Theme Consumption</h3>
-        <p class="text-sm text-zinc-400 mt-2">Simply place `<script src="widget.js" defer></script>` on any site!</p>
+      <div class="p-6 rounded-2xl bg-white border border-slate-200 dark:bg-zinc-900/60 dark:border-primary/20 hover:border-primary/40 transition-all shadow-sm dark:shadow-none">
+        <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-zinc-800 text-primary flex items-center justify-center text-xl mb-4">💬</div>
+        <h3 class="text-lg font-bold text-zinc-900 dark:text-zinc-100">Automatic Theme Consumption</h3>
+        <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-2">Simply place `&lt;script src="widget.js" data-client-id="amber" defer&gt;&lt;/script&gt;` on any site!</p>
       </div>
     </div>
   </main>
 
   <!-- Footer -->
-  <footer class="border-t border-zinc-900 bg-zinc-950 py-8 text-center text-xs text-zinc-500">
+  <footer class="border-t border-slate-200 dark:border-zinc-900 bg-slate-100 dark:bg-zinc-950 py-8 text-center text-xs text-zinc-500 transition-colors duration-300">
     © 2026 Vortex Studio. Driven 100% by --primary-color and --secondary-color CSS variables.
   </footer>
 
+  <!-- Light / Dark Mode Toggle Script -->
+  <script>
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+
+    // On page load, set the initial theme based on system preference or local storage
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+      themeToggleLightIcon.classList.remove('hidden');
+    } else {
+      document.documentElement.classList.remove('dark');
+      themeToggleDarkIcon.classList.remove('hidden');
+    }
+
+    themeToggleBtn.addEventListener('click', function() {
+      // Toggle theme icons
+      themeToggleLightIcon.classList.toggle('hidden');
+      themeToggleDarkIcon.classList.toggle('hidden');
+
+      // Toggle dark mode class on HTML document
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('color-theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('color-theme', 'dark');
+      }
+    });
+  </script>
 </body>
 
 </html>
