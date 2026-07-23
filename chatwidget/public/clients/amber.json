@@ -149,6 +149,16 @@
     "headerAvatarBg": "#e4e4e7",
     "headerAvatarColor": "#18181b",
 
+    "//_active_dot": "Online status indicator shown on the avatar",
+
+    "activeDot": {
+      "color": "#22c55e",
+      "animate": true,
+      "borderWidth": 0,
+      "borderColor": "transparent",
+      "size": 8
+    },
+  
     "//_close_chat": "Close chat popup in header",
 
     "endChatConfirmMessage": "Are you sure you want to end this chat session?",
@@ -224,5 +234,45 @@
     "poweredByLink": "",
     "poweredByColor": "#d97706",
     "poweredByLogo": ""
+  },
+    "chatbar": {
+    "enabled": false,
+    "useWebsiteTheme": true,
+    "text": "Chat with us",
+    "bgColor": "#d97706",
+    "textColor": "#ffffff",
+    "textSize": 14,
+    "letterSpacing": 0,
+    "gradientEnabled": false,
+    "gradientStops": [
+      {
+        "color": "#d97706",
+        "pos": 0
+      },
+      {
+        "color": "#a855f7",
+        "pos": 100
+      }
+    ],
+    "gradientType": "linear",
+    "gradientAngle": 90,
+    "iconType": "lucide",
+    "iconColor": "#ffffff",
+    "lucideIcon": "MessageCircle",
+    "iconImageUrl": "",
+    "iconFit": "contain",
+    "iconOpacity": 1,
+    "iconBlend": "normal",
+    "iconWidth": 20,
+    "iconHeight": 20,
+    "width": 255,
+    "height": 40,
+    "borderRadius": {
+      "tl": 20,
+      "tr": 20,
+      "bl": 20,
+      "br": 20
+    },
+    "shadow": true
   }
 }

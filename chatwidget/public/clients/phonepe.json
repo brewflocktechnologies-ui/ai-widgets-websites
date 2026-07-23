@@ -1,0 +1,105 @@
+{
+  "clientId": "phonepe",
+  "clientName": "PhonePe Business Support",
+  "bubble": {
+    "useWebsiteTheme": false,
+    "width": 60,
+    "height": 60,
+    "borderRadius": {
+      "tl": 50,
+      "tr": 50,
+      "bl": 50,
+      "br": 50
+    },
+    "backgroundColor": "#5f259f",
+    "gradientType": "none",
+    "backgroundOverlayType": "none",
+    "backgroundImageUrl": "",
+    "border": {
+      "width": 0,
+      "color": "#5f259f",
+      "style": "solid"
+    },
+    "outlineRing": {
+      "enabled": true,
+      "width": 3,
+      "color": "#a855f7",
+      "opacity": 0.4
+    },
+    "boxShadowBlur": 20,
+    "boxShadowSpread": 0,
+    "boxShadowOffsetX": 0,
+    "boxShadowOffsetY": 8,
+    "boxShadowOpacity": 0.25,
+    "dots": {
+      "color": "#F8FAFC",
+      "size": 6,
+      "spacing": 6,
+      "animation": "none"
+    },
+    "badge": {
+      "position": "top-right",
+      "offsetX": -6,
+      "offsetY": -6,
+      "size": 20,
+      "fontSize": 11,
+      "backgroundColor": "#dc2626",
+      "textColor": "#ffffff",
+      "borderWidth": 2,
+      "borderColor": "#ffffff"
+    }
+  },
+  "chatcontactv2": {
+    "useWebsiteTheme": false,
+    "clientName": "PhonePe Support",
+    "agentName": "Sarah",
+    "accentColor": "#5f259f",
+    "widgetWidth": 350,
+    "widgetHeight": 550,
+    "expandedWidth": 480,
+    "expandedHeight": 580,
+    "widgetBorderRadius": 16,
+    "widgetShadow": true,
+    "widgetShadowBlur": 20,
+    "widgetShadowColor": "rgba(0,0,0,0.15)",
+    "widgetBorderEnabled": true,
+    "widgetBorderWidth": 1,
+    "widgetBorderColor": "#e5e7eb",
+    "modernUi": true,
+    "typingIndicator": true,
+    "attachmentsEnabled": true,
+    "activeDot": {
+      "color": "#22c55e",
+      "animate": true,
+      "borderWidth": 0,
+      "borderColor": "transparent",
+      "size": 8
+    }
+  },
+  "chatbar": {
+    "enabled": true,
+    "layout": "card",
+    "text": "Questions about PhonePe\nfor business?",
+    "bgColor": "#5f259f",
+    "textColor": "#ffffff",
+    "textSize": 16,
+    "letterSpacing": 0,
+    "gradientEnabled": false,
+    "iconType": "lucide",
+    "iconColor": "#ffffff",
+    "lucideIcon": "Sparkles",
+    "iconImageUrl": "",
+    "iconFit": "contain",
+    "iconOpacity": 1,
+    "iconBlend": "normal",
+    "iconWidth": 28,
+    "iconHeight": 28,
+    "width": 240,
+    "height": 220,
+    "borderRadius": { "tl": 16, "tr": 16, "bl": 16, "br": 16 },
+    "shadow": true,
+    "buttonText": "Chat Now",
+    "buttonBg": "#ffffff",
+    "buttonTextColor": "#5f259f"
+  }
+}

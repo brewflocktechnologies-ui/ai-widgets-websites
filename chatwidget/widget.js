@@ -36,6 +36,20 @@
       #zotly-widget-embed, #zotly-widget-embed *, .panel, .panel * {
         font-family: inherit !important;
       }
+      @keyframes statusPulse {
+        0% {
+          transform: scale(0.9);
+          opacity: 0.65;
+        }
+        50% {
+          transform: scale(1.6);
+          opacity: 0.3;
+        }
+        100% {
+          transform: scale(2.4);
+          opacity: 0;
+        }
+      }
     `;
     document.head.appendChild(styleRule);
   }
@@ -142,7 +156,24 @@
                    color: $store.chatcontactv2.headerAvatarColor || ($store.chatcontactv2.headerTextColor || '#fff')
                  }">
               <span x-text="($store.chat.clientName || $store.chatcontactv2.clientName || 'S').charAt(0)"></span>
-              <span style="position: absolute; bottom: 0; right: 0; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; border: 1.5px solid #ffffff;"></span>
+              <div style="position: absolute; bottom: 0; right: 0; display: flex; align-items: center; justify-content: center;"
+                   :style="{
+                     width: ($store.chatcontactv2.activeDot?.size !== undefined ? $store.chatcontactv2.activeDot.size : 8) + 'px',
+                     height: ($store.chatcontactv2.activeDot?.size !== undefined ? $store.chatcontactv2.activeDot.size : 8) + 'px'
+                   }">
+                <!-- Pulsing Outer Ping Ring -->
+                <span x-show="!$store.chatcontactv2.activeDot || $store.chatcontactv2.activeDot.animate !== false"
+                      style="position: absolute; width: 100%; height: 100%; border-radius: 50%; opacity: 0.6; pointer-events: none; animation: statusPulse 1.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;"
+                      :style="{
+                        backgroundColor: $store.chatcontactv2.activeDot?.color || '#22c55e'
+                      }"></span>
+                <!-- Solid Inner Core Dot -->
+                <span style="position: absolute; width: 100%; height: 100%; border-radius: 50%;"
+                      :style="{
+                        backgroundColor: $store.chatcontactv2.activeDot?.color || '#22c55e',
+                        border: ($store.chatcontactv2.activeDot?.borderWidth !== undefined ? $store.chatcontactv2.activeDot.borderWidth : 0) + 'px solid ' + ($store.chatcontactv2.activeDot?.borderColor || 'transparent')
+                      }"></span>
+              </div>
             </div>
 
             <!-- Brand Title & Subtitle -->
@@ -545,7 +576,7 @@
     </div>
 
     <!-- Floating Bubble Widget Trigger -->
-    <div x-show="!openContactWidget" x-data='window.previewBubbleController(Alpine.store("bubble"))'
+    <div x-show="!openContactWidget && !$store.chatbar.enabled" x-data='window.previewBubbleController(Alpine.store("bubble"))'
       @click="$dispatch('toggle-contact-widget')"
       x-transition:enter="transition ease-out duration-300 delay-100"
       x-transition:enter-start="opacity-0 scale-50"
@@ -630,6 +661,133 @@
         <div :style="getBadgeStyle()" x-text="$store.chat.unreadCount"></div>
       </template>
     </div>
+
+    <!-- Chat Bar Widget Trigger -->
+    <div x-show="!openContactWidget && $store.chatbar.enabled" x-data='window.chatbarPreviewController(Alpine.store("chatbar"))'
+      @click="$dispatch('toggle-contact-widget')"
+      x-transition:enter="transition ease-out duration-300 delay-100"
+      x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+      x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+      x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+      class="fixed bottom-3 right-4 z-40 flex cursor-pointer select-none transition-all duration-200"
+      @mouseenter="hovered = true" @mouseleave="hovered = false"
+      :style="{
+        width: (settings.width || (settings.layout === 'card' ? 240 : 255)) + 'px',
+        height: (settings.height || (settings.layout === 'card' ? 220 : 40)) + 'px',
+        background: getBackgroundStyle(),
+        color: settings.textColor || '#ffffff',
+        borderRadius: getBorderRadius(),
+        boxShadow: settings.shadow ? '0 4px 16px rgba(0,0,0,0.15)' : 'none',
+        padding: settings.layout === 'card' ? '24px 16px' : '0 16px',
+        transform: hovered ? 'scale(1.02)' : 'scale(1.0)',
+        flexDirection: settings.layout === 'card' ? 'column' : 'row',
+        alignItems: 'center',
+        justifyContent: settings.layout === 'card' ? 'center' : 'space-between',
+        gap: settings.layout === 'card' ? '14px' : '0'
+      }">
+      
+      <!-- CARD LAYOUT (Vertical) -->
+      <template x-if="settings.layout === 'card'">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; width: 100%; height: 100%;">
+          <!-- Sparkles / Icon -->
+          <div style="display: flex; align-items: center; justify-content: center; position: relative;">
+            <template x-if="settings.iconType === 'lucide'">
+              <div :style="{ color: settings.iconColor || '#ffffff', opacity: hovered ? 1 : 0.85, display: 'flex' }">
+                <template x-if="settings.lucideIcon === 'Sparkles'">
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 28" :height="settings.iconHeight || 28" fill="currentColor" stroke="none">
+                    <path d="M12 4.5c0 3.5 3 6.5 6.5 6.5-3.5 0-6.5 3-6.5 6.5 0-3.5-3-6.5-6.5-6.5 3.5 0 6.5-3 6.5-6.5z"/>
+                    <path d="M18.5 4c0 1.2.8 2 2 2-1.2 0-2 .8-2 2 0-1.2-.8-2-2-2 1.2 0 2-.8 2-2z"/>
+                  </svg>
+                </template>
+                <template x-if="settings.lucideIcon === 'MessageCircle' || !settings.lucideIcon">
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 24" :height="settings.iconHeight || 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                  </svg>
+                </template>
+              </div>
+            </template>
+            <template x-if="settings.iconType === 'image' && settings.iconImageUrl">
+              <img :src="settings.iconImageUrl" alt="icon" class="rounded"
+                :style="{ objectFit: settings.iconFit || 'contain', opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : 1, width: (settings.iconWidth || 24) + 'px', height: (settings.iconHeight || 24) + 'px', mixBlendMode: settings.iconBlend || 'normal' }" />
+            </template>
+          </div>
+
+          <!-- Main Text -->
+          <span style="font-weight: 700; line-height: 1.35; white-space: pre-line; text-align: center;"
+            :style="{ fontSize: (settings.textSize || 16) + 'px', letterSpacing: (settings.letterSpacing || 0) + 'px' }"
+            x-text="settings.text || 'Questions about PayPal?'"></span>
+
+          <!-- Pill styled button -->
+          <div style="background-color: #ffffff; color: #003087; font-weight: 700; border-radius: 9999px; display: flex; align-items: center; justify-content: center; padding: 10px 24px; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 85%;"
+               :style="{
+                 backgroundColor: settings.buttonBg || '#ffffff',
+                 color: settings.buttonTextColor || settings.bgColor || '#003087'
+               }">
+            <span x-text="settings.buttonText || 'Chat Now'"></span>
+          </div>
+
+          <!-- Unread Badge on Card layout -->
+          <template x-if="$store.chat.unreadCount > 0">
+            <span style="position: absolute; top: -6px; right: -6px; background-color: #dc2626; color: #ffffff; font-weight: 700; border-radius: 9999px; display: flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; font-size: 11px; border: 2px solid #ffffff; z-index: 50; box-shadow: 0 2px 5px rgba(0,0,0,0.15);"
+                  x-text="$store.chat.unreadCount"></span>
+          </template>
+        </div>
+      </template>
+
+      <!-- BAR LAYOUT (Horizontal) -->
+      <template x-if="settings.layout !== 'card'">
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; height: 100%;">
+          <span style="font-weight: 600;"
+            :style="{ fontSize: (settings.textSize || 14) + 'px', letterSpacing: (settings.letterSpacing || 0) + 'px' }"
+            x-text="settings.text || 'Chat with us'"></span>
+          
+          <!-- Icon Container -->
+          <div style="display: flex; align-items: center; justify-content: center; position: relative;">
+            <!-- Lucide Icon Option -->
+            <template x-if="settings.iconType === 'lucide'">
+              <div :style="{ color: settings.iconColor || '#ffffff', opacity: hovered ? 1 : 0.8, display: 'flex' }">
+                <template x-if="settings.lucideIcon === 'MessageCircle' || !settings.lucideIcon">
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                  </svg>
+                </template>
+                <template x-if="settings.lucideIcon === 'MessageSquare'">
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </template>
+                <template x-if="settings.lucideIcon === 'Send'">
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </template>
+                <template x-if="settings.lucideIcon === 'HelpCircle'">
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                </template>
+              </div>
+            </template>
+            
+            <!-- Image Icon Option -->
+            <template x-if="settings.iconType === 'image' && settings.iconImageUrl">
+              <img :src="settings.iconImageUrl" alt="icon" class="rounded"
+                :style="{ objectFit: settings.iconFit || 'contain', opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : 1, width: (settings.iconWidth || 20) + 'px', height: (settings.iconHeight || 20) + 'px', mixBlendMode: settings.iconBlend || 'normal' }" />
+            </template>
+
+            <!-- Unread Badge inside Chatbar -->
+            <template x-if="$store.chat.unreadCount > 0">
+              <span style="position: absolute; top: -10px; right: -10px; background-color: #dc2626; color: #ffffff; font-weight: 700; border-radius: 9999px; display: flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; font-size: 10px; border: 1.5px solid #ffffff; z-index: 50; box-shadow: 0 1px 3px rgba(0,0,0,0.15);"
+                    x-text="$store.chat.unreadCount"></span>
+            </template>
+          </div>
+        </div>
+      </template>
   `;
 
   document.body.appendChild(widgetContainer);
@@ -797,6 +955,41 @@
     };
   };
 
+  window.chatbarPreviewController = function (initialSettings) {
+    return {
+      settings: initialSettings,
+      hovered: false,
+      getBackgroundStyle() {
+        if (!this.settings) return '#007bff';
+        if (this.settings.useWebsiteTheme) {
+          const chatConfig = Alpine.store('chatcontactv2');
+          return chatConfig.accentColor || '#0b5fff';
+        }
+        if (!this.settings.gradientEnabled) return this.settings.bgColor || '#007bff';
+        const stopsArray = this.settings.gradientStops || [];
+        if (stopsArray.length === 0) return this.settings.bgColor || '#007bff';
+        const stops = stopsArray.map(s => `${s.color} ${s.pos}%`).join(', ');
+        switch (this.settings.gradientType) {
+          case 'linear': return `linear-gradient(${this.settings.gradientAngle || 90}deg, ${stops})`;
+          case 'radial': return `radial-gradient(circle, ${stops})`;
+          case 'conic': return `conic-gradient(from ${this.settings.gradientAngle || 90}deg, ${stops})`;
+          default: return this.settings.bgColor || '#007bff';
+        }
+      },
+      getBorderRadius() {
+        if (!this.settings || !this.settings.borderRadius) return '20px';
+        if (typeof this.settings.borderRadius === 'number') {
+          return `${this.settings.borderRadius}px`;
+        }
+        if (typeof this.settings.borderRadius === 'object') {
+          const { tl = 20, tr = 20, br = 20, bl = 20 } = this.settings.borderRadius;
+          return `${tl}px ${tr}px ${br}px ${bl}px`;
+        }
+        return '20px';
+      }
+    };
+  };
+
   /* ==========================================================================
      CLIENT IDENTIFICATION SERVICE
      --------------------------------------------------------------------------
@@ -868,7 +1061,8 @@
         console.log(`[Zotly Widget] Successfully loaded configuration for client "${clientId}"`);
         return {
           bubbleConfig: data.bubble || {},
-          chatConfig: data.chatcontactv2 || data.chat || {}
+          chatConfig: data.chatcontactv2 || data.chat || {},
+          chatbarConfig: data.chatbar || {}
         };
       } else {
         console.warn(`[Zotly Widget] Client config file not found or failed to load (Status ${res.status}). Falling back to default settings.`);
@@ -877,24 +1071,27 @@
       console.warn(`[Zotly Widget] Network error trying to fetch client config:`, e);
     }
 
-    // Strategy 2: Fallback to root public default JSON files (bubble.json & chatcontactv2.json)
+    // Strategy 2: Fallback to root public default JSON files (bubble.json, chatcontactv2.json, chatbar.json)
     const defaultBubbleUrl = `${baseUrl}public/bubble.json`;
     const defaultChatUrl = `${baseUrl}public/chatcontactv2.json`;
-    console.log(`[Zotly Widget] Fetching default configurations from: "${defaultBubbleUrl}" & "${defaultChatUrl}"`);
+    const defaultChatbarUrl = `${baseUrl}public/chatbar.json`;
+    console.log(`[Zotly Widget] Fetching default configurations from: "${defaultBubbleUrl}" & "${defaultChatUrl}" & "${defaultChatbarUrl}"`);
     try {
-      const [bubbleRes, chatRes] = await Promise.allSettled([
+      const [bubbleRes, chatRes, chatbarRes] = await Promise.allSettled([
         fetch(defaultBubbleUrl).then(r => r.ok ? r.json() : {}),
-        fetch(defaultChatUrl).then(r => r.ok ? r.json() : {})
+        fetch(defaultChatUrl).then(r => r.ok ? r.json() : {}),
+        fetch(defaultChatbarUrl).then(r => r.ok ? r.json() : {})
       ]);
 
       const bubbleConfig = bubbleRes.status === 'fulfilled' ? bubbleRes.value : {};
       const chatConfig = chatRes.status === 'fulfilled' ? chatRes.value : {};
+      const chatbarConfig = chatbarRes.status === 'fulfilled' ? chatbarRes.value : {};
 
       console.log(`[Zotly Widget] Fallback default configurations loaded.`);
-      return { bubbleConfig, chatConfig };
+      return { bubbleConfig, chatConfig, chatbarConfig };
     } catch (e) {
       console.error(`[Zotly Widget] Critical error loading default configurations:`, e);
-      return { bubbleConfig: {}, chatConfig: {} };
+      return { bubbleConfig: {}, chatConfig: {}, chatbarConfig: {} };
     }
   }
 
@@ -931,8 +1128,19 @@
       });
     }
 
+    if (!Alpine.store('chatbar')) {
+      Alpine.store('chatbar', {
+        enabled: false,
+        useWebsiteTheme: true,
+        text: "Chat with us", bgColor: theme.primary || "#0b5fff", textColor: "#ffffff", textSize: 14, letterSpacing: 0, gradientEnabled: false,
+        gradientStops: [{ color: theme.primary || "#0b5fff", pos: 0 }, { color: theme.secondary || "#22D3EE", pos: 100 }], gradientType: "linear", gradientAngle: 90,
+        iconType: "lucide", iconColor: "#ffffff", lucideIcon: "MessageCircle", iconImageUrl: "", iconFit: "contain", iconOpacity: 1,
+        iconBlend: "normal", iconWidth: 20, iconHeight: 20, width: 255, height: 40, shadow: true, borderRadius: { tl: 20, tr: 20, bl: 20, br: 20 }
+      });
+    }
+
     // Fetch and apply client-specific configuration
-    const { bubbleConfig, chatConfig } = await fetchClientConfig(clientId);
+    const { bubbleConfig, chatConfig, chatbarConfig } = await fetchClientConfig(clientId);
 
     if (bubbleConfig && Object.keys(bubbleConfig).length > 0) {
       if (bubbleConfig.useWebsiteTheme === true) {
@@ -943,6 +1151,10 @@
         }
       }
       Object.assign(Alpine.store('bubble'), bubbleConfig);
+    }
+
+    if (chatbarConfig && Object.keys(chatbarConfig).length > 0) {
+      Object.assign(Alpine.store('chatbar'), chatbarConfig);
     }
 
     if (chatConfig && Object.keys(chatConfig).length > 0) {
