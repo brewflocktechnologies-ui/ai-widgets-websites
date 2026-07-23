@@ -230,13 +230,13 @@
     "footerTextColor": "#6b7280",
     "footerFontSize": "12px",
     "footerPaddingBottom": "16px",
-    "poweredByText": "zotly",
+    "poweredByText": "vainateya.ai",
     "poweredByLink": "",
     "poweredByColor": "#2563eb",
     "poweredByLogo": ""
   },
     "chatbar": {
-    "enabled": false,
+    "enabled": true,
     "useWebsiteTheme": true,
     "text": "Chat with us",
     "bgColor": "#059669",

@@ -13,13 +13,44 @@
     },
     "backgroundColor": "#5f259f",
     "gradientType": "none",
+    "gradientAngle": 135,
+    "gradientStops": [
+      {
+        "color": "#5f259f",
+        "pos": 0
+      },
+      {
+        "color": "#a855f7",
+        "pos": 100
+      }
+    ],
     "backgroundOverlayType": "none",
+    "backgroundLucideColor": "#FFFFFF",
+    "backgroundLucideSize": 24,
+    "backgroundLucideOpacity": 0.2,
+    "backgroundLucideIcon": "Star",
     "backgroundImageUrl": "",
+    "backgroundImageSize": "contain",
+    "backgroundImageOpacity": 0.25,
+    "backgroundBlendMode": "normal",
     "border": {
       "width": 0,
       "color": "#5f259f",
       "style": "solid"
     },
+    "borderGradientEnabled": false,
+    "borderGradientAngle": 90,
+    "borderGradientStops": [
+      {
+        "color": "#a855f7",
+        "pos": 0
+      },
+      {
+        "color": "#c084fc",
+        "pos": 100
+      }
+    ],
+    "borderOffsetAnim": false,
     "outlineRing": {
       "enabled": true,
       "width": 3,
@@ -30,7 +61,34 @@
     "boxShadowSpread": 0,
     "boxShadowOffsetX": 0,
     "boxShadowOffsetY": 8,
-    "boxShadowOpacity": 0.25,
+    "boxShadowOpacity": 0,
+    "innerShadow": {
+      "enabled": true,
+      "blur": 12,
+      "opacity": 0.25
+    },
+    "glass": {
+      "enabled": false,
+      "blur": 10,
+      "bgOpacity": 0.3
+    },
+    "neon": {
+      "enabled": false,
+      "color": "#a855f7",
+      "intensity": 0.8
+    },
+    "animation": {
+      "type": "fadeIn",
+      "duration": 350,
+      "delay": 0
+    },
+    "hoverScale": 1,
+    "idleAnim": {
+      "enabled": true,
+      "type": "none",
+      "amplitude": 6,
+      "duration": 3200
+    },
     "dots": {
       "color": "#F8FAFC",
       "size": 6,
@@ -54,10 +112,9 @@
     "clientName": "PhonePe Support",
     "agentName": "Sarah",
     "accentColor": "#5f259f",
-    "widgetWidth": 350,
-    "widgetHeight": 550,
-    "expandedWidth": 480,
-    "expandedHeight": 580,
+    "widgetWidth": 400,
+    "widgetHeight": 950,
+    "expandedWidth": 550,
     "widgetBorderRadius": 16,
     "widgetShadow": true,
     "widgetShadowBlur": 20,
@@ -68,6 +125,66 @@
     "modernUi": true,
     "typingIndicator": true,
     "attachmentsEnabled": true,
+    "headerBg": "#5f259f",
+    "headerTextColor": "#ffffff",
+    "headerBorderColor": "rgba(255,255,255,0.08)",
+    "headerPadding": "14px 16px",
+    "headerTitleFontSize": "14px",
+    "headerSubtitleFontSize": "11px",
+    "headerAvatarBg": "rgba(255,255,255,0.2)",
+    "headerAvatarColor": "#ffffff",
+    "bodyBg": "#f4f4f5",
+    "visitorBubbleBg": "#5f259f",
+    "visitorBubbleColor": "#ffffff",
+    "visitorBubbleFontSize": "14px",
+    "visitorBubblePadding": "10px 14px",
+    "visitorBubbleBorderRadius": "16px",
+    "agentBubbleBg": "#ffffff",
+    "agentBubbleColor": "#1c1917",
+    "agentBubbleBorderColor": "#e4e4e7",
+    "agentBubbleFontSize": "14px",
+    "agentBubblePadding": "10px 14px",
+    "agentBubbleBorderRadius": "16px",
+    "agentAvatarBg": "#5f259f",
+    "agentAvatarColor": "#ffffff",
+    "agentAvatarUrl": "",
+    "inputBg": "#ffffff",
+    "inputTextColor": "#18181b",
+    "inputPlaceholderColor": "#a1a1aa",
+    "inputBorderColor": "#e4e4e7",
+    "inputFocusBorderColor": "#5f259f",
+    "inputFocusShadow": "0 0 0 2px rgba(95, 37, 159, 0.15)",
+    "inputBorderRadius": "9999px",
+    "inputPadding": "6px 8px",
+    "inputMargin": "12px 16px",
+    "textareaFontSize": "14px",
+    "attachButtonBg": "#ffffff",
+    "attachButtonColor": "#71717a",
+    "emojiButtonColor": "#71717a",
+    "sendButtonBgActive": "#5f259f",
+    "sendButtonColorActive": "#ffffff",
+    "sendButtonBgInactive": "#e4e4e7",
+    "sendButtonColorInactive": "#a1a1aa",
+    "sendIconType": "arrow",
+    "footerBg": "#f4f4f5",
+    "footerTextColor": "#a1a1aa",
+    "footerFontSize": "10px",
+    "footerPaddingBottom": "16px",
+    "endChatConfirmMessage": "Are you sure you want to end this chat session?",
+    "endChatConfirmLabel": "End chat",
+    "endChatCancelLabel": "Cancel",
+    "modalCardBg": "#ffffff",
+    "modalMessageColor": "#101828",
+    "modalBorderRadius": 16,
+    "endChatConfirmBg": "#5f259f",
+    "endChatConfirmTextColor": "#ffffff",
+    "endChatCancelBg": "#ffffff",
+    "endChatCancelTextColor": "#667085",
+    "endChatCancelBorderColor": "#e9ecf1",
+    "poweredByText": "vainateya.ai",
+    "poweredByLink": "",
+    "poweredByColor": "#5f259f",
+    "poweredByLogo": "",
     "activeDot": {
       "color": "#22c55e",
       "animate": true,
@@ -85,6 +202,18 @@
     "textSize": 16,
     "letterSpacing": 0,
     "gradientEnabled": false,
+    "gradientStops": [
+      {
+        "color": "#5f259f",
+        "pos": 0
+      },
+      {
+        "color": "#a855f7",
+        "pos": 100
+      }
+    ],
+    "gradientType": "linear",
+    "gradientAngle": 90,
     "iconType": "lucide",
     "iconColor": "#ffffff",
     "lucideIcon": "Sparkles",
@@ -96,7 +225,12 @@
     "iconHeight": 28,
     "width": 240,
     "height": 220,
-    "borderRadius": { "tl": 16, "tr": 16, "bl": 16, "br": 16 },
+    "borderRadius": {
+      "tl": 16,
+      "tr": 16,
+      "bl": 16,
+      "br": 16
+    },
     "shadow": true,
     "buttonText": "Chat Now",
     "buttonBg": "#ffffff",
