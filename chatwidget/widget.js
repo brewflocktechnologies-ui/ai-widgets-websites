@@ -95,35 +95,48 @@
       x-transition:leave="transition ease-in duration-200 origin-bottom-right"
       x-transition:leave-start="opacity-100 scale-100 translate-y-0"
       x-transition:leave-end="opacity-0 scale-50 translate-y-8"
-      class="fixed bottom-3 right-4 z-50 flex flex-col transition-all duration-300 pointer-events-auto zotly-widget-panel-wrapper"
+      class="fixed z-50 flex flex-col transition-all duration-300 pointer-events-auto zotly-widget-panel-wrapper"
       :style="{
+        boxSizing: 'border-box',
         width: $store.chat.isExpanded ? ($store.chatcontactv2.expandedWidth ? $store.chatcontactv2.expandedWidth + 'px' : '480px') : ($store.chatcontactv2.widgetWidth ? $store.chatcontactv2.widgetWidth + 'px' : '350px'),
         height: $store.chatcontactv2.widgetHeight ? $store.chatcontactv2.widgetHeight + 'px' : '550px',
         maxWidth: 'calc(100vw - 32px)',
         maxHeight: (function() {
-          let offset = 12;
+          const defaultBottom = $store.chatbar.enabled
+            ? ($store.chatbar.offsetBottom !== undefined ? $store.chatbar.offsetBottom : 12)
+            : ($store.bubble.offsetBottom !== undefined ? $store.bubble.offsetBottom : 12);
+          let offset = defaultBottom;
           if ($store.chatbar.enabled && !$store.chatbar.hideOnOpen) {
             const h = $store.chatbar.height || ($store.chatbar.layout === 'card' ? 220 : 40);
-            offset = 24 + h;
+            const gap = $store.chatbar.stackGap !== undefined ? $store.chatbar.stackGap : 12;
+            offset = defaultBottom + h + gap;
           } else if (!$store.chatbar.enabled && !$store.bubble.hideOnOpen) {
             const h = $store.bubble.height || 50;
-            offset = 24 + h;
+            const gap = $store.bubble.stackGap !== undefined ? $store.bubble.stackGap : 12;
+            offset = defaultBottom + h + gap;
           }
           return 'calc(100vh - ' + (offset + 24) + 'px)';
         })(),
         position: 'fixed',
         bottom: (function() {
+          const defaultBottom = $store.chatbar.enabled
+            ? ($store.chatbar.offsetBottom !== undefined ? $store.chatbar.offsetBottom : 12)
+            : ($store.bubble.offsetBottom !== undefined ? $store.bubble.offsetBottom : 12);
           if ($store.chatbar.enabled && !$store.chatbar.hideOnOpen) {
             const h = $store.chatbar.height || ($store.chatbar.layout === 'card' ? 220 : 40);
-            return (24 + h) + 'px';
+            const gap = $store.chatbar.stackGap !== undefined ? $store.chatbar.stackGap : 12;
+            return (defaultBottom + h + gap) + 'px';
           }
           if (!$store.chatbar.enabled && !$store.bubble.hideOnOpen) {
             const h = $store.bubble.height || 50;
-            return (24 + h) + 'px';
+            const gap = $store.bubble.stackGap !== undefined ? $store.bubble.stackGap : 12;
+            return (defaultBottom + h + gap) + 'px';
           }
-          return '12px';
+          return defaultBottom + 'px';
         })(),
-        right: '16px'
+        right: ($store.chatbar.enabled
+          ? ($store.chatbar.offsetRight !== undefined ? $store.chatbar.offsetRight : 16)
+          : ($store.bubble.offsetRight !== undefined ? $store.bubble.offsetRight : 16)) + 'px'
       }" style="display: none;">
       
       <div class="panel flex flex-col relative w-full h-full overflow-hidden"
@@ -604,10 +617,13 @@
       x-transition:leave="transition ease-in duration-200"
       x-transition:leave-start="opacity-100 scale-100"
       x-transition:leave-end="opacity-0 scale-50"
-      class="fixed bottom-3 right-4 z-40 flex items-center justify-center cursor-pointer select-none"
+      class="fixed z-40 flex items-center justify-center cursor-pointer select-none"
       :style="{
+        boxSizing: 'border-box',
         width: (settings.width || 50) + 'px',
         height: (settings.height || 50) + 'px',
+        bottom: (settings.offsetBottom !== undefined ? settings.offsetBottom : 12) + 'px',
+        right: (settings.offsetRight !== undefined ? settings.offsetRight : 16) + 'px',
         borderRadius: getBorderRadius(),
         background: getCompositeBackground(),
         backgroundBlendMode: settings.backgroundBlendMode || 'normal',
@@ -698,26 +714,31 @@
       x-transition:leave="transition ease-in duration-200"
       x-transition:leave-start="opacity-100 scale-100 translate-y-0"
       x-transition:leave-end="opacity-0 scale-95 translate-y-2"
-      class="fixed bottom-3 right-4 z-40 flex cursor-pointer select-none transition-all duration-200"
+      class="fixed z-40 flex cursor-pointer select-none transition-all duration-200"
       @mouseenter="hovered = true" @mouseleave="hovered = false"
       :style="{
+        boxSizing: 'border-box',
         width: (settings.width || (settings.layout === 'card' ? 240 : 255)) + 'px',
         height: (settings.height || (settings.layout === 'card' ? 220 : 40)) + 'px',
+        bottom: (settings.offsetBottom !== undefined ? settings.offsetBottom : 12) + 'px',
+        right: (settings.offsetRight !== undefined ? settings.offsetRight : 16) + 'px',
         background: getBackgroundStyle(),
         color: settings.textColor || '#ffffff',
         borderRadius: getBorderRadius(),
         boxShadow: settings.shadow ? '0 4px 16px rgba(0,0,0,0.15)' : 'none',
-        padding: settings.layout === 'card' ? '24px 16px' : '0 16px',
+        padding: settings.padding !== undefined ? settings.padding : (settings.layout === 'card' ? '24px 16px' : '0 16px'),
         transform: hovered ? 'scale(1.02)' : 'scale(1.0)',
         flexDirection: settings.layout === 'card' ? 'column' : 'row',
         alignItems: 'center',
-        justifyContent: settings.layout === 'card' ? 'center' : 'space-between',
-        gap: settings.layout === 'card' ? '14px' : '0'
+        justifyContent: settings.layout === 'card' ? 'space-between' : 'space-between',
+        gap: settings.gap !== undefined ? (settings.gap + 'px') : (settings.layout === 'card' ? '14px' : '0')
       }">
       
       <!-- CARD LAYOUT (Vertical) -->
       <template x-if="settings.layout === 'card'">
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; width: 100%; height: 100%;">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; width: 100%; height: 100%; box-sizing: border-box; padding: 0;"
+             :style="{ gap: (settings.gap !== undefined ? settings.gap : 14) + 'px' }">
+          
           <!-- Sparkles / Icon -->
           <div style="display: flex; align-items: center; justify-content: center; position: relative;">
             <template x-if="settings.iconType === 'lucide'">

@@ -222,8 +222,8 @@
     "iconFit": "contain",
     "iconOpacity": 1,
     "iconBlend": "normal",
-    "iconWidth": 70,
-    "iconHeight": 70,
+    "iconWidth": 60,
+    "iconHeight": 60,
     "width": 240,
     "height": 220,
     "borderRadius": {
@@ -236,6 +236,11 @@
     "buttonText": "Chat Now",
     "buttonBg": "#ffffff",
     "buttonTextColor": "#5f259f",
-    "hideOnOpen": true
+    "hideOnOpen": true,
+    "offsetBottom": 20,
+    "offsetRight": 160,
+    "stackGap": 0,
+    "padding": "24px 16px",
+    "gap": 12
   }
 }

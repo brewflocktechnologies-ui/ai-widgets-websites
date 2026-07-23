@@ -236,6 +236,11 @@
     "buttonText": "Chat Now",
     "buttonBg": "#ffffff",
     "buttonTextColor": "#4285F4",
-    "hideOnOpen": false
+       "hideOnOpen": true,
+    "offsetBottom": 12,
+    "offsetRight": 16,
+    "stackGap": 12,
+    "padding": "0px 16px",
+    "gap": 0
   }
 }
