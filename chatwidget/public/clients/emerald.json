@@ -108,7 +108,8 @@
       "textColor": "#ffffff",
       "borderWidth": 2,
       "borderColor": "#ffffff"
-    }
+    },
+    "hideOnOpen": true
   },
   
   "//_chatcontactv2_section": "--- CHAT WINDOW LAYOUT AND THEME ---",
@@ -262,6 +263,7 @@
     "width": 255,
     "height": 40,
     "borderRadius": { "tl": 20, "tr": 20, "bl": 20, "br": 20 },
-    "shadow": true
+    "shadow": true,
+    "hideOnOpen": true
   }
 }

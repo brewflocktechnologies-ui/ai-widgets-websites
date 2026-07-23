@@ -100,9 +100,29 @@
         width: $store.chat.isExpanded ? ($store.chatcontactv2.expandedWidth ? $store.chatcontactv2.expandedWidth + 'px' : '480px') : ($store.chatcontactv2.widgetWidth ? $store.chatcontactv2.widgetWidth + 'px' : '350px'),
         height: $store.chatcontactv2.widgetHeight ? $store.chatcontactv2.widgetHeight + 'px' : '550px',
         maxWidth: 'calc(100vw - 32px)',
-        maxHeight: 'calc(100vh - 32px)',
+        maxHeight: (function() {
+          let offset = 12;
+          if ($store.chatbar.enabled && !$store.chatbar.hideOnOpen) {
+            const h = $store.chatbar.height || ($store.chatbar.layout === 'card' ? 220 : 40);
+            offset = 24 + h;
+          } else if (!$store.chatbar.enabled && !$store.bubble.hideOnOpen) {
+            const h = $store.bubble.height || 50;
+            offset = 24 + h;
+          }
+          return 'calc(100vh - ' + (offset + 24) + 'px)';
+        })(),
         position: 'fixed',
-        bottom: '12px',
+        bottom: (function() {
+          if ($store.chatbar.enabled && !$store.chatbar.hideOnOpen) {
+            const h = $store.chatbar.height || ($store.chatbar.layout === 'card' ? 220 : 40);
+            return (24 + h) + 'px';
+          }
+          if (!$store.chatbar.enabled && !$store.bubble.hideOnOpen) {
+            const h = $store.bubble.height || 50;
+            return (24 + h) + 'px';
+          }
+          return '12px';
+        })(),
         right: '16px'
       }" style="display: none;">
       
@@ -576,7 +596,7 @@
     </div>
 
     <!-- Floating Bubble Widget Trigger -->
-    <div x-show="!openContactWidget && !$store.chatbar.enabled" x-data='window.previewBubbleController(Alpine.store("bubble"))'
+    <div x-show="(!$store.bubble.hideOnOpen || !openContactWidget) && !$store.chatbar.enabled" x-data='window.previewBubbleController(Alpine.store("bubble"))'
       @click="$dispatch('toggle-contact-widget')"
       x-transition:enter="transition ease-out duration-300 delay-100"
       x-transition:enter-start="opacity-0 scale-50"
@@ -592,7 +612,7 @@
         background: getCompositeBackground(),
         backgroundBlendMode: settings.backgroundBlendMode || 'normal',
         boxShadow: [getBoxShadow(), getInnerShadow()].filter(Boolean).join(', '),
-        transform: hovered ? 'scale(' + (settings.hoverScale !== undefined ? settings.hoverScale : 1.05) + ')' : 'scale(1.0)',
+        transform: (hovered && !openContactWidget) ? 'scale(' + (settings.hoverScale !== undefined ? settings.hoverScale : 1.05) + ')' : 'scale(1.0)',
         transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background 0.3s ease',
         transformStyle: 'preserve-3d',
         ...getBorderStyle(),
@@ -633,16 +653,23 @@
       </template>
 
       <!-- SHOW CHAT ICON: Hides when hovering (if dots are enabled) -->
-      <template x-if="!(settings.dots && settings.dots.animation && settings.dots.animation !== 'none' && hovered)">
+      <template x-if="!(settings.dots && settings.dots.animation && settings.dots.animation !== 'none' && hovered && !openContactWidget)">
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none text-white">
-          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
+          <template x-if="openContactWidget">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </template>
+          <template x-if="!openContactWidget">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </template>
         </div>
       </template>
 
       <!-- SHOW DOTS ON HOVER -->
-      <template x-if="settings.dots && settings.dots.animation && settings.dots.animation !== 'none' && hovered">
+      <template x-if="settings.dots && settings.dots.animation && settings.dots.animation !== 'none' && hovered && !openContactWidget">
         <div class="absolute flex z-10" :style="{ gap: \`\${settings.dots.spacing || 6}px\` }">
           <template x-for="i in [0, 1, 2]">
             <span class="rounded-full" :style="{ width: \`\${settings.dots.size || 6}px\`, height: \`\${settings.dots.size || 6}px\`, backgroundColor: settings.dots.color || '#FFFFFF', animation: settings.dots.animation === 'bounce' ? \`dotBounce 1.2s cubic-bezier(.2,.8,.2,1) \${i * 0.12}s infinite\` : settings.dots.animation === 'pulse' ? \`dotPulse 1.4s cubic-bezier(.2,.8,.2,1) \${i * 0.1}s infinite\` : 'none' }"></span>
@@ -663,7 +690,7 @@
     </div>
 
     <!-- Chat Bar Widget Trigger -->
-    <div x-show="!openContactWidget && $store.chatbar.enabled" x-data='window.chatbarPreviewController(Alpine.store("chatbar"))'
+    <div x-show="(!$store.chatbar.hideOnOpen || !openContactWidget) && $store.chatbar.enabled" x-data='window.chatbarPreviewController(Alpine.store("chatbar"))'
       @click="$dispatch('toggle-contact-widget')"
       x-transition:enter="transition ease-out duration-300 delay-100"
       x-transition:enter-start="opacity-0 scale-95 translate-y-2"
@@ -868,7 +895,8 @@
         };
       },
       getEntryAnimStyle() {
-        if (!this.settings || !this.settings.idleAnim || !this.settings.idleAnim.enabled || this.settings.idleAnim.type === 'none' || this.hovered) return {};
+        const panelOpen = window.Alpine ? Alpine.store('chat').panelOpen : false;
+        if (!this.settings || !this.settings.idleAnim || !this.settings.idleAnim.enabled || this.settings.idleAnim.type === 'none' || this.hovered || panelOpen) return {};
         return {
           animation: `idleFloat ${this.settings.idleAnim.duration || 3200}ms ease-in-out infinite`
         };
@@ -1112,7 +1140,8 @@
         border: { width: 0, color: theme.primary || '#0b5fff', style: 'solid' },
         outlineRing: { enabled: true, width: 3, color: theme.secondary || '#22D3EE', opacity: 0.4 },
         boxShadowBlur: 20, boxShadowSpread: 0, boxShadowOffsetX: 0, boxShadowOffsetY: 8, boxShadowOpacity: 0.25,
-        dots: { color: '#F8FAFC', size: 6, spacing: 6, animation: 'bounce' }
+        dots: { color: '#F8FAFC', size: 6, spacing: 6, animation: 'bounce' },
+        hideOnOpen: true
       });
     }
 
@@ -1135,7 +1164,8 @@
         text: "Chat with us", bgColor: theme.primary || "#0b5fff", textColor: "#ffffff", textSize: 14, letterSpacing: 0, gradientEnabled: false,
         gradientStops: [{ color: theme.primary || "#0b5fff", pos: 0 }, { color: theme.secondary || "#22D3EE", pos: 100 }], gradientType: "linear", gradientAngle: 90,
         iconType: "lucide", iconColor: "#ffffff", lucideIcon: "MessageCircle", iconImageUrl: "", iconFit: "contain", iconOpacity: 1,
-        iconBlend: "normal", iconWidth: 20, iconHeight: 20, width: 255, height: 40, shadow: true, borderRadius: { tl: 20, tr: 20, bl: 20, br: 20 }
+        iconBlend: "normal", iconWidth: 20, iconHeight: 20, width: 255, height: 40, shadow: true, borderRadius: { tl: 20, tr: 20, bl: 20, br: 20 },
+        hideOnOpen: true
       });
     }
 
@@ -1226,6 +1256,7 @@
         isExpanded: false,
         panelOpen: false,
         unreadCount: 0,
+        isMobile: window.innerWidth < 640 || window.innerHeight < 750,
         clientName: (chatConfig && chatConfig.clientName) ? chatConfig.clientName : 'Zotly Support',
         agentName: initialAgentName,
         agentsOnline: true,
@@ -1339,6 +1370,15 @@
         }
       }
     }
+
+    // Dynamic resize listener to update mobile breakpoint state
+    window.addEventListener('resize', () => {
+      const isMob = window.innerWidth < 640 || window.innerHeight < 750;
+      const chatStore = window.Alpine ? Alpine.store('chat') : null;
+      if (chatStore && chatStore.isMobile !== isMob) {
+        chatStore.isMobile = isMob;
+      }
+    });
   };
 
   // Load Alpine.js if not present

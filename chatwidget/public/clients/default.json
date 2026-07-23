@@ -108,7 +108,8 @@
       "textColor": "#ffffff",
       "borderWidth": 2,
       "borderColor": "#ffffff"
-    }
+    },
+    "hideOnOpen": true
   },
 
   "//_chatcontactv2_section": "--- CHAT WINDOW LAYOUT AND THEME ---",
@@ -266,5 +267,6 @@
     "buttonText": "Chat Now",
     "buttonBg": "#ffffff",
     "buttonTextColor": "#5f259f"
-  }
+  },
+  "hideOnOpen": true
 }

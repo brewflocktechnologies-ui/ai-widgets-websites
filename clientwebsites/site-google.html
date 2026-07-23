@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Search Demo | Custom Launcher Stacking</title>
+
+  <!-- Google Fonts: Roboto & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            outfit: ['Outfit', 'sans-serif'],
+            roboto: ['Roboto', 'sans-serif']
+          },
+          colors: {
+            googleBlue: '#4285F4',
+            googleRed: '#EA4335',
+            googleYellow: '#FBBC05',
+            googleGreen: '#34A853'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+    .logo-font {
+      font-family: 'Outfit', sans-serif;
+    }
+  </style>
+
+  <!-- Single Script Import for Chat Widget (fetches JSON config based on data-client-id="google") -->
+  <script src="../chatwidget/widget.js" data-client-id="google" defer></script>
+</head>
+
+<body class="bg-white text-gray-900 dark:bg-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col justify-between transition-colors duration-300">
+
+  <!-- Header / Navigation Bar -->
+  <header class="flex items-center justify-between px-6 py-4 text-sm text-gray-700 dark:text-zinc-300">
+    <div class="flex items-center gap-4">
+      <a href="#" class="hover:underline">About</a>
+      <a href="#" class="hover:underline">Store</a>
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="#" class="hover:underline">Gmail</a>
+      <a href="#" class="hover:underline">Images</a>
+      
+      <!-- Theme Toggle Icon -->
+      <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors" aria-label="Toggle theme">
+        <!-- Sun icon -->
+        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-googleYellow" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464a1 1 0 101.414-1.414l-.707-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" />
+        </svg>
+        <!-- Moon icon -->
+        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+        </svg>
+      </button>
+
+      <!-- Apps Icon -->
+      <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+        </svg>
+      </button>
+
+      <!-- Profile Avatar -->
+      <div class="w-8 h-8 rounded-full bg-googleBlue text-white flex items-center justify-center font-bold logo-font shadow-md">
+        G
+      </div>
+    </div>
+  </header>
+
+  <!-- Google Search Center Component -->
+  <main class="flex-1 flex flex-col items-center justify-center px-4 -mt-16">
+    <!-- Google Branded Text Logo -->
+    <div class="text-6xl md:text-8xl font-bold tracking-tight logo-font select-none mb-8 flex items-center">
+      <span class="text-googleBlue">G</span>
+      <span class="text-googleRed">o</span>
+      <span class="text-googleYellow">o</span>
+      <span class="text-googleBlue">g</span>
+      <span class="text-googleGreen">l</span>
+      <span class="text-googleRed">e</span>
+    </div>
+
+    <!-- Search Input Wrapper -->
+    <div class="w-full max-w-[584px] relative group">
+      <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+      <input type="text" placeholder="Search Google or type a URL" class="w-full h-[46px] pl-12 pr-16 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-full focus:outline-none focus:ring-1 focus:ring-googleBlue focus:border-googleBlue shadow-sm hover:shadow-md transition-shadow duration-200 text-sm" />
+      
+      <!-- Mic & Camera icons in Search box -->
+      <div class="absolute inset-y-0 right-4 flex items-center gap-3 text-gray-500">
+        <!-- Mic -->
+        <svg class="w-5 h-5 hover:text-googleBlue cursor-pointer" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+          <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+        </svg>
+        <!-- Lens -->
+        <svg class="w-5 h-5 hover:text-googleRed cursor-pointer" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Search Buttons -->
+    <div class="flex items-center gap-3 mt-8">
+      <button class="bg-gray-50 hover:bg-gray-100 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-sm text-gray-800 dark:text-zinc-200 px-4 py-2.5 rounded-md border border-transparent dark:border-zinc-800 transition-colors shadow-xs">
+        Google Search
+      </button>
+      <button class="bg-gray-50 hover:bg-gray-100 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-sm text-gray-800 dark:text-zinc-200 px-4 py-2.5 rounded-md border border-transparent dark:border-zinc-800 transition-colors shadow-xs">
+        I'm Feeling Lucky
+      </button>
+    </div>
+
+    <!-- Demo Description Card -->
+    <div class="mt-12 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 p-5 rounded-xl max-w-md text-left shadow-sm text-xs leading-relaxed">
+      <h4 class="font-bold text-googleBlue text-sm mb-1">Google Cloud Chat Integration Demo</h4>
+      <p class="text-gray-600 dark:text-zinc-400 mb-2">
+        This page demonstrates a floating bubble trigger utilizing the Google theme.
+      </p>
+      <ul class="list-disc list-inside space-y-1 text-gray-500">
+        <li>The launcher remains fully visible in the bottom-right corner when clicked.</li>
+        <li>The chat widget positions itself directly above the bubble.</li>
+        <li>Height constraints automatically scale based on screen size, preventing viewport overflow.</li>
+      </ul>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 dark:bg-zinc-950/60 border-t border-gray-200 dark:border-zinc-800 text-xs text-gray-500 transition-colors duration-300">
+    <div class="px-6 py-3 border-b border-gray-200 dark:border-zinc-800">
+      India
+    </div>
+    <div class="px-6 py-3 flex flex-wrap items-center justify-between gap-y-2">
+      <div class="flex items-center gap-6">
+        <a href="#" class="hover:underline">Advertising</a>
+        <a href="#" class="hover:underline">Business</a>
+        <a href="#" class="hover:underline">How Search works</a>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="#" class="hover:underline">Privacy</a>
+        <a href="#" class="hover:underline">Terms</a>
+        <a href="#" class="hover:underline">Settings</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Light / Dark mode toggle script -->
+  <script>
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+    function updateIcons() {
+      if (document.documentElement.classList.contains('dark')) {
+        lightIcon.classList.remove('hidden');
+        darkIcon.classList.add('hidden');
+      } else {
+        lightIcon.classList.add('hidden');
+        darkIcon.classList.remove('hidden');
+      }
+    }
+
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    updateIcons();
+
+    themeToggleBtn.addEventListener('click', function() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('color-theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('color-theme', 'dark');
+      }
+      updateIcons();
+    });
+  </script>
+
+</body>
+
+</html>
