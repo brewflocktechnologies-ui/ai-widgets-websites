@@ -255,6 +255,7 @@
     "iconColor": "#ffffff",
     "lucideIcon": "MessageCircle",
     "iconImageUrl": "",
+    "customSvg": "",
     "iconFit": "contain",
     "iconOpacity": 1,
     "iconBlend": "normal",

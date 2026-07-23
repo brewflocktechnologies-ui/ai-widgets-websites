@@ -760,6 +760,11 @@
               <img :src="settings.iconImageUrl" alt="icon" class="rounded"
                 :style="{ objectFit: settings.iconFit || 'contain', opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : 1, width: (settings.iconWidth || 24) + 'px', height: (settings.iconHeight || 24) + 'px', mixBlendMode: settings.iconBlend || 'normal' }" />
             </template>
+            <template x-if="settings.iconType === 'customSvg' && settings.customSvg">
+              <div class="custom-svg-icon"
+                   :style="{ color: settings.iconColor || '#ffffff', opacity: hovered ? 1 : 0.85, display: 'inline-flex', width: (settings.iconWidth || 28) + 'px', height: (settings.iconHeight || 28) + 'px' }"
+                   x-html="settings.customSvg"></div>
+            </template>
           </div>
 
           <!-- Main Text -->
@@ -828,6 +833,13 @@
                 :style="{ objectFit: settings.iconFit || 'contain', opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : 1, width: (settings.iconWidth || 20) + 'px', height: (settings.iconHeight || 20) + 'px', mixBlendMode: settings.iconBlend || 'normal' }" />
             </template>
 
+            <!-- Custom SVG Option -->
+            <template x-if="settings.iconType === 'customSvg' && settings.customSvg">
+              <div class="custom-svg-icon"
+                   :style="{ color: settings.iconColor || '#ffffff', opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : 1, display: 'inline-flex', width: (settings.iconWidth || 20) + 'px', height: (settings.iconHeight || 20) + 'px' }"
+                   x-html="settings.customSvg"></div>
+            </template>
+
             <!-- Unread Badge inside Chatbar -->
             <template x-if="$store.chat.unreadCount > 0">
               <span style="position: absolute; top: -10px; right: -10px; background-color: #dc2626; color: #ffffff; font-weight: 700; border-radius: 9999px; display: flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; font-size: 10px; border: 1.5px solid #ffffff; z-index: 50; box-shadow: 0 1px 3px rgba(0,0,0,0.15);"
@@ -866,6 +878,7 @@
           @keyframes idleFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-${amp}px); } }
           @keyframes dotBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
           @keyframes dotPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+          .custom-svg-icon svg { width: 100%; height: 100%; display: block; }
         `;
       },
       getBorderRadius() {
