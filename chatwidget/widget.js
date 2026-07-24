@@ -581,6 +581,81 @@
       </div>
     </div>
 
+    <!-- NEW: FLOATING GREET PREVIEW & INPUT BOX -->
+    <div x-show="(!$store.bubble.hideOnOpen || !openContactWidget) && !$store.chatbar.enabled && $store.greetWindow && $store.greetWindow.enabled && !$store.greetWindow.dismissed"
+         class="fixed z-30 flex flex-col items-end transition-all duration-300 pointer-events-none"
+         style="box-sizing: border-box;"
+         x-transition:enter="transition ease-out duration-300 delay-150"
+         x-transition:enter-start="opacity-0 translate-y-4"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 translate-y-4"
+         :style="{
+           bottom: (($store.bubble.offsetBottom !== undefined ? $store.bubble.offsetBottom : 12) + ($store.bubble.height || 60) + ($store.greetWindow.spacing || 16)) + 'px',
+           right: ($store.bubble.offsetRight !== undefined ? $store.bubble.offsetRight : 16) + 'px',
+           width: ($store.greetWindow.width || 320) + 'px',
+           gap: '12px'
+         }">
+
+      <!-- Greet Card -->
+      <div class="relative flex flex-col w-full cursor-pointer pointer-events-auto"
+           @click="$dispatch('toggle-contact-widget')"
+           :style="{
+             backgroundColor: $store.greetWindow.backgroundColor || '#ffffff',
+             borderRadius: ($store.greetWindow.borderRadius || 16) + 'px',
+             padding: $store.greetWindow.padding || '24px 20px',
+             boxShadow: $store.greetWindow.boxShadow || '0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)'
+           }">
+        
+        <button type="button" @click.stop="$store.greetWindow.dismissed = true"
+                style="position: absolute; top: 12px; right: 12px; border: none; background: transparent; width: 24px; height: 24px; cursor: pointer; color: #94a3b8; display: flex; align-items: center; justify-content: center; transition: color 0.2s;"
+                onmouseover="this.style.color='#475569'" onmouseout="this.style.color='#94a3b8'">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+
+        <div style="width: 100%; display: flex; justify-content: center; margin-bottom: 16px;" x-show="$store.greetWindow.imageUrl">
+          <img :src="$store.greetWindow.imageUrl" :style="{ height: ($store.greetWindow.imageHeight || 70) + 'px', objectFit: 'contain' }" />
+        </div>
+
+        <h3 :style="{ color: $store.greetWindow.titleColor || '#1e293b', fontSize: $store.greetWindow.titleFontSize || '15px', fontWeight: '700', lineHeight: '1.4', margin: '0 0 8px 0', letterSpacing: '-0.01em' }" x-text="$store.greetWindow.title"></h3>
+        <p :style="{ color: $store.greetWindow.descriptionColor || '#475569', fontSize: $store.greetWindow.descriptionFontSize || '14px', lineHeight: '1.5', margin: 0 }" x-text="$store.greetWindow.description"></p>
+      </div>
+
+      <!-- Quick Input Box -->
+      <div x-show="$store.greetWindow.inputBox && $store.greetWindow.inputBox.enabled"
+           class="flex items-center w-full relative pointer-events-auto"
+           :style="{
+             backgroundColor: $store.greetWindow.inputBox?.backgroundColor || '#ffffff',
+             borderRadius: ($store.greetWindow.inputBox?.borderRadius || 24) + 'px',
+             boxShadow: $store.greetWindow.inputBox?.boxShadow || '0 6px 16px rgba(0,0,0,0.12)',
+             padding: '4px 4px 4px 16px',
+             display: 'flex'
+           }">
+        <input type="text"
+               x-model="$store.chat.draft"
+               @keydown.enter="$dispatch('toggle-contact-widget'); setTimeout(() => { if($store.chat.draft) $store.chat.send(); }, 200);"
+               :placeholder="$store.greetWindow.inputBox?.placeholder || 'Write your message...'"
+               style="flex: 1; background: transparent; border: none; outline: none; width: 100%;"
+               :style="{ color: $store.greetWindow.inputBox?.textColor || '#1e293b', fontSize: '14px' }" />
+               
+<button type="button"
+        @click="$dispatch('toggle-contact-widget'); setTimeout(() => { if($store.chat.draft) $store.chat.send(); }, 200);"
+        style="display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer; transition: transform 0.2s;"
+        onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"
+        :style="{
+          backgroundColor: $store.greetWindow.inputBox?.buttonColor || '#9333EA',
+          color: $store.greetWindow.inputBox?.buttonIconColor || '#ffffff'
+        }">
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: auto;">
+    <line x1="22" y1="2" x2="11" y2="13"></line>
+    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+  </svg>
+</button>
+      </div>
+    </div>
+    <!-- END GREET PREVIEW -->
+
     <!-- Floating Bubble Widget Trigger -->
     <div x-show="(!$store.bubble.hideOnOpen || !openContactWidget) && !$store.chatbar.enabled" x-data='window.previewBubbleController(Alpine.store("bubble"))'
       @click="$dispatch('toggle-contact-widget')"
@@ -663,14 +738,14 @@
         <div :style="getBadgeStyle()" x-text="$store.chat.unreadCount"></div>
       </template>
 
-      <template x-if="settings.tooltip && settings.tooltip.enabled && !openContactWidget">
-        <div :style="getTooltipStyle()">
-          <span x-text="settings.tooltip.text || 'Chat with us'"></span>
-          <template x-if="settings.tooltip.arrowEnabled !== false">
-            <div :style="getTooltipArrowStyle()"></div>
-          </template>
-        </div>
-      </template>
+<template x-if="settings.tooltip && settings.tooltip.enabled && !openContactWidget">
+  <div :style="getTooltipStyle()">
+    <span x-text="settings.tooltip.text || 'Chat with us'"></span>
+    <template x-if="settings.tooltip.arrowEnabled !== false">
+      <div :style="getTooltipArrowStyle()"></div>
+    </template>
+  </div>
+</template>
     </div>
 
     <!-- Chat Bar Widget Trigger -->
@@ -970,7 +1045,7 @@
       const res = await fetch(clientConfigUrl);
       if (res.ok) {
         const data = await res.json();
-        return { bubbleConfig: data.bubble || {}, chatConfig: data.chatWindow || data.chat || {}, chatbarConfig: data.chatbar || {} };
+        return { bubbleConfig: data.bubble || {}, chatConfig: data.chatWindow || data.chat || {}, chatbarConfig: data.chatbar || {}, greetWindowConfig: data.greetWindow || {} };
       }
     } catch (e) { }
     
@@ -986,10 +1061,11 @@
       return { 
         bubbleConfig: bubbleRes.status === 'fulfilled' ? bubbleRes.value : {}, 
         chatConfig: chatRes.status === 'fulfilled' ? chatRes.value : {}, 
-        chatbarConfig: chatbarRes.status === 'fulfilled' ? chatbarRes.value : {} 
+        chatbarConfig: chatbarRes.status === 'fulfilled' ? chatbarRes.value : {},
+        greetWindowConfig: {}
       };
     } catch (e) {
-      return { bubbleConfig: {}, chatConfig: {}, chatbarConfig: {} };
+      return { bubbleConfig: {}, chatConfig: {}, chatbarConfig: {}, greetWindowConfig: {} };
     }
   }
 
@@ -1000,6 +1076,13 @@
     if (!Alpine.store('bubble')) {
       Alpine.store('bubble', {
         useWebsiteTheme: true, width: 50, height: 50, borderRadius: { tl: 50, tr: 50, bl: 50, br: 50 }, backgroundColor: theme.primary || '#0b5fff', gradientType: 'none', gradientStops: [{ color: theme.primary || '#0b5fff', pos: 0 }, { color: theme.secondary || '#22D3EE', pos: 100 }], backgroundOverlayType: 'image', backgroundImageUrl: '', backgroundImageSize: 'contain', backgroundImageOpacity: 0.25, backgroundBlendMode: 'normal', border: { width: 0, color: theme.primary || '#0b5fff', style: 'solid' }, outlineRing: { enabled: true, width: 3, color: theme.secondary || '#22D3EE', opacity: 0.4 }, boxShadowBlur: 20, boxShadowSpread: 0, boxShadowOffsetX: 0, boxShadowOffsetY: 8, boxShadowOpacity: 0.25, dots: { color: '#F8FAFC', size: 6, spacing: 6, animation: 'bounce' }, hideOnOpen: true, tooltip: { enabled: false, text: 'Chat with us', position: 'left', backgroundColor: '#ffffff', textColor: '#374151', fontSize: 14, borderRadius: { tl: 20, tr: 20, br: 4, bl: 20 }, padding: '8px 16px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', arrowEnabled: true, borderColor: 'transparent', borderWidth: 0 }
+      });
+    }
+
+    if (!Alpine.store('greetWindow')) {
+      Alpine.store('greetWindow', {
+        enabled: false, dismissed: false, width: 320, spacing: 16, backgroundColor: "#ffffff", borderRadius: 16, padding: "24px 20px", boxShadow: "0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)", imageUrl: "", imageHeight: 70, title: "Hi there! 👋", titleColor: "#1e293b", titleFontSize: "15px", description: "How can we help you?", descriptionColor: "#475569", descriptionFontSize: "14px",
+        inputBox: { enabled: true, placeholder: "Write your message...", backgroundColor: "#ffffff", textColor: "#1e293b", borderRadius: 24, boxShadow: "0 6px 16px rgba(0,0,0,0.12)", buttonColor: theme.primary || "#9333EA", buttonIconColor: "#ffffff" }
       });
     }
 
@@ -1017,7 +1100,7 @@
       });
     }
 
-    const { bubbleConfig, chatConfig, chatbarConfig } = await fetchClientConfig(clientId);
+    const { bubbleConfig, chatConfig, chatbarConfig, greetWindowConfig } = await fetchClientConfig(clientId);
 
     if (bubbleConfig && Object.keys(bubbleConfig).length > 0) {
       if (bubbleConfig.useWebsiteTheme === true) {
@@ -1026,6 +1109,13 @@
         if (bubbleConfig.outlineRing) { bubbleConfig.outlineRing.color = theme.secondary; }
       }
       Object.assign(Alpine.store('bubble'), bubbleConfig);
+    }
+
+    if (greetWindowConfig && Object.keys(greetWindowConfig).length > 0) {
+      if (greetWindowConfig.inputBox) {
+        greetWindowConfig.inputBox = { ...Alpine.store('greetWindow').inputBox, ...greetWindowConfig.inputBox };
+      }
+      Object.assign(Alpine.store('greetWindow'), greetWindowConfig);
     }
 
     if (chatbarConfig && Object.keys(chatbarConfig).length > 0) {
