@@ -41,6 +41,35 @@
         50% { transform: scale(1.6); opacity: 0.3; }
         100% { transform: scale(2.4); opacity: 0; }
       }
+      @keyframes zotly-wiggle {
+        0%, 100% { transform: rotate(0deg); }
+        15% { transform: rotate(-8deg); }
+        30% { transform: rotate(6deg); }
+        45% { transform: rotate(-4deg); }
+        60% { transform: rotate(3deg); }
+        75% { transform: rotate(-1deg); }
+      }
+      @keyframes zotly-pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.08); }
+      }
+      @keyframes zotly-bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+      }
+      @keyframes zotly-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-4px); }
+      }
+      @keyframes zotly-spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      .anim-zotly-wiggle { animation: zotly-wiggle 2.5s infinite ease-in-out; }
+      .anim-zotly-pulse { animation: zotly-pulse 2s infinite ease-in-out; }
+      .anim-zotly-bounce { animation: zotly-bounce 2s infinite ease-in-out; }
+      .anim-zotly-float { animation: zotly-float 3s infinite ease-in-out; }
+      .anim-zotly-spin { animation: zotly-spin 4s infinite linear; }
     `;
     document.head.appendChild(styleRule);
   }
@@ -582,7 +611,7 @@
     </div>
 
     <!-- NEW: FLOATING GREET PREVIEW & INPUT BOX -->
-    <div x-show="(!$store.bubble.hideOnOpen || !openContactWidget) && !$store.chatbar.enabled && $store.greetWindow && $store.greetWindow.enabled && !$store.greetWindow.dismissed"
+    <div x-show="(!$store.bubble.hideOnOpen || !openContactWidget) && !$store.chatbar.enabled && $store.greetWindow && $store.greetWindow.enabled && (!$store.greetWindow.dismissed || ($store.greetWindow.inputBox && $store.greetWindow.inputBox.enabled))"
          class="fixed z-30 flex flex-col items-end transition-all duration-300 pointer-events-none"
          style="box-sizing: border-box;"
          x-transition:enter="transition ease-out duration-300 delay-150"
@@ -599,23 +628,70 @@
          }">
 
       <!-- Greet Card -->
-      <div class="relative flex flex-col w-full cursor-pointer pointer-events-auto"
+      <div x-show="!$store.greetWindow.dismissed"
+           class="relative flex flex-col w-full cursor-pointer pointer-events-auto"
            @click="$dispatch('toggle-contact-widget')"
            :style="{
              backgroundColor: $store.greetWindow.backgroundColor || '#ffffff',
              borderRadius: ($store.greetWindow.borderRadius || 16) + 'px',
              padding: $store.greetWindow.padding || '24px 20px',
-             boxShadow: $store.greetWindow.boxShadow || '0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)'
+             boxShadow: ($store.greetWindow.boxShadow !== undefined && $store.greetWindow.boxShadow !== null) ? ($store.greetWindow.boxShadow || 'none') : '0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)'
            }">
         
         <button type="button" @click.stop="$store.greetWindow.dismissed = true"
-                style="position: absolute; top: 12px; right: 12px; border: none; background: transparent; width: 24px; height: 24px; cursor: pointer; color: #94a3b8; display: flex; align-items: center; justify-content: center; transition: color 0.2s;"
-                onmouseover="this.style.color='#475569'" onmouseout="this.style.color='#94a3b8'">
+                 style="position: absolute; top: 12px; right: 12px; border: none; background: transparent; width: 24px; height: 24px; cursor: pointer; color: #94a3b8; display: flex; align-items: center; justify-content: center; transition: color 0.2s;"
+                 onmouseover="this.style.color='#475569'" onmouseout="this.style.color='#94a3b8'">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
 
-        <div style="width: 100%; display: flex; justify-content: center; margin-bottom: 16px;" x-show="$store.greetWindow.imageUrl">
-          <img :src="$store.greetWindow.imageUrl" :style="{ height: ($store.greetWindow.imageHeight || 70) + 'px', objectFit: 'contain' }" />
+        <div style="width: 100%; display: flex; justify-content: center; margin-bottom: 16px;" 
+             x-show="$store.greetWindow.imageUrl || ($store.greetWindow.iconType === 'lucide' && $store.greetWindow.lucideIcon)">
+          <!-- Animated Image -->
+          <template x-if="$store.greetWindow.imageUrl">
+            <img :src="$store.greetWindow.imageUrl" 
+                 :class="$store.greetWindow.iconAnimation && $store.greetWindow.iconAnimation !== 'none' ? 'anim-zotly-' + $store.greetWindow.iconAnimation : ''"
+                 :style="{ height: ($store.greetWindow.imageHeight || 70) + 'px', objectFit: 'contain' }" />
+          </template>
+          <!-- Animated Lucide Icon -->
+          <template x-if="!$store.greetWindow.imageUrl && $store.greetWindow.iconType === 'lucide' && $store.greetWindow.lucideIcon">
+            <div :class="$store.greetWindow.iconAnimation && $store.greetWindow.iconAnimation !== 'none' ? 'anim-zotly-' + $store.greetWindow.iconAnimation : ''"
+                 :style="{
+                   width: ($store.greetWindow.iconSize || 48) + 'px',
+                   height: ($store.greetWindow.iconSize || 48) + 'px',
+                   color: $store.greetWindow.iconColor || $store.chatWindow.accentColor || '#9333EA'
+                 }">
+              <template x-if="$store.greetWindow.lucideIcon === 'Smile'">
+                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+              </template>
+              <template x-if="$store.greetWindow.lucideIcon === 'Sparkles'">
+                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z"></path><path d="M5 3l.8 1.6L7.4 5l-1.6.8L5 7.4l-.8-1.6L2.6 5l1.6-.8L5 3z"></path><path d="M19 17l.8 1.6 1.6.6-1.6.8-.8 1.6-.8-1.6-1.6-.8 1.6-.6.8-1.6z"></path></svg>
+              </template>
+              <template x-if="$store.greetWindow.lucideIcon === 'MessageCircle'">
+                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+              </template>
+              <template x-if="$store.greetWindow.lucideIcon === 'MessageSquare'">
+                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              </template>
+              <template x-if="$store.greetWindow.lucideIcon === 'HelpCircle'">
+                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              </template>
+              <template x-if="$store.greetWindow.lucideIcon === 'Star'">
+                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </template>
+              <template x-if="$store.greetWindow.lucideIcon === 'Heart'">
+                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </template>
+              <template x-if="$store.greetWindow.lucideIcon === 'Gift'">
+                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+              </template>
+              <template x-if="$store.greetWindow.lucideIcon === 'Bell'">
+                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              </template>
+              <template x-if="$store.greetWindow.lucideIcon === 'Info'">
+                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              </template>
+            </div>
+          </template>
         </div>
 
         <h3 :style="{ color: $store.greetWindow.titleColor || '#1e293b', fontSize: $store.greetWindow.titleFontSize || '15px', fontWeight: '700', lineHeight: '1.4', margin: '0 0 8px 0', letterSpacing: '-0.01em' }" x-text="$store.greetWindow.title"></h3>
@@ -623,36 +699,72 @@
       </div>
 
       <!-- Quick Input Box -->
-      <div x-show="$store.greetWindow.inputBox && $store.greetWindow.inputBox.enabled"
-           class="flex items-center w-full relative pointer-events-auto"
-           :style="{
-             backgroundColor: $store.greetWindow.inputBox?.backgroundColor || '#ffffff',
-             borderRadius: ($store.greetWindow.inputBox?.borderRadius || 24) + 'px',
-             boxShadow: $store.greetWindow.inputBox?.boxShadow || '0 6px 16px rgba(0,0,0,0.12)',
-             padding: '4px 4px 4px 16px',
-             display: 'flex'
-           }">
-        <input type="text"
-               x-model="$store.chat.draft"
-               @keydown.enter="$dispatch('toggle-contact-widget'); setTimeout(() => { if($store.chat.draft) $store.chat.send(); }, 200);"
-               :placeholder="$store.greetWindow.inputBox?.placeholder || 'Write your message...'"
-               style="flex: 1; background: transparent; border: none; outline: none; width: 100%;"
-               :style="{ color: $store.greetWindow.inputBox?.textColor || '#1e293b', fontSize: '14px' }" />
-               
-<button type="button"
-        @click="$dispatch('toggle-contact-widget'); setTimeout(() => { if($store.chat.draft) $store.chat.send(); }, 200);"
-        style="display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer; transition: transform 0.2s;"
-        onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"
-        :style="{
-          backgroundColor: $store.greetWindow.inputBox?.buttonColor || '#9333EA',
-          color: $store.greetWindow.inputBox?.buttonIconColor || '#ffffff'
-        }">
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: auto;">
-    <line x1="22" y1="2" x2="11" y2="13"></line>
-    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-  </svg>
-</button>
-      </div>
+      <template x-if="$store.greetWindow.inputBox && $store.greetWindow.inputBox.enabled && $store.greetWindow.inputBox.layout === 'separated'">
+        <div class="flex items-center w-full relative pointer-events-auto" style="display: flex; gap: 8px; width: 100%; align-items: center; background: transparent;">
+          <!-- Input Container -->
+          <div :style="{
+                 flex: 1,
+                 backgroundColor: $store.greetWindow.inputBox.backgroundColor || '#ffffff',
+                 borderRadius: ($store.greetWindow.inputBox.borderRadius || 24) + 'px',
+                 boxShadow: ($store.greetWindow.inputBox.boxShadow !== undefined && $store.greetWindow.inputBox.boxShadow !== null) ? ($store.greetWindow.inputBox.boxShadow || 'none') : '0 6px 16px rgba(0,0,0,0.12)',
+                 padding: '10px 16px',
+                 display: 'flex',
+                 alignItems: 'center'
+               }">
+            <input type="text"
+                   x-model="$store.chat.draft"
+                   @keydown.enter="$dispatch('toggle-contact-widget'); $store.chat.state = 'active'; setTimeout(() => { if($store.chat.draft) $store.chat.send(); }, 200);"
+                   :placeholder="$store.greetWindow.inputBox.placeholder || 'Write your message...'"
+                   style="flex: 1; background: transparent; border: none; outline: none; width: 100%;"
+                   :style="{ color: $store.greetWindow.inputBox.textColor || '#1e293b', fontSize: '14px' }" />
+          </div>
+          <!-- Send Button Container -->
+          <button type="button"
+                  @click="$dispatch('toggle-contact-widget'); $store.chat.state = 'active'; setTimeout(() => { if($store.chat.draft) $store.chat.send(); }, 200);"
+                  style="display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: none; cursor: pointer; transition: transform 0.2s;"
+                  onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"
+                  :style="{
+                    backgroundColor: $store.greetWindow.inputBox.buttonBgColor || $store.greetWindow.inputBox.buttonColor || '#ffffff',
+                    color: $store.greetWindow.inputBox.buttonIconColor || $store.chatWindow.accentColor || '#9333EA',
+                    borderRadius: '50%',
+                    width: ($store.greetWindow.inputBox.buttonSize || 42) + 'px',
+                    height: ($store.greetWindow.inputBox.buttonSize || 42) + 'px',
+                    boxShadow: ($store.greetWindow.inputBox.buttonBoxShadow !== undefined && $store.greetWindow.inputBox.buttonBoxShadow !== null) ? ($store.greetWindow.inputBox.buttonBoxShadow || 'none') : '0 6px 16px rgba(0,0,0,0.12)'
+                  }">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="margin-left: 2px; margin-top: 1px;"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" /></svg>
+          </button>
+        </div>
+      </template>
+
+      <template x-if="$store.greetWindow.inputBox && $store.greetWindow.inputBox.enabled && $store.greetWindow.inputBox.layout !== 'separated'">
+        <!-- Joined Quick Input Box (default) -->
+        <div class="flex items-center w-full relative pointer-events-auto"
+             :style="{
+               backgroundColor: $store.greetWindow.inputBox?.backgroundColor || '#ffffff',
+               borderRadius: ($store.greetWindow.inputBox?.borderRadius || 24) + 'px',
+               boxShadow: ($store.greetWindow.inputBox?.boxShadow !== undefined && $store.greetWindow.inputBox?.boxShadow !== null) ? ($store.greetWindow.inputBox.boxShadow || 'none') : '0 6px 16px rgba(0,0,0,0.12)',
+               padding: '4px 4px 4px 16px',
+               display: 'flex'
+             }">
+          <input type="text"
+                 x-model="$store.chat.draft"
+                 @keydown.enter="$dispatch('toggle-contact-widget'); $store.chat.state = 'active'; setTimeout(() => { if($store.chat.draft) $store.chat.send(); }, 200);"
+                 :placeholder="$store.greetWindow.inputBox?.placeholder || 'Write your message...'"
+                 style="flex: 1; background: transparent; border: none; outline: none; width: 100%;"
+                 :style="{ color: $store.greetWindow.inputBox?.textColor || '#1e293b', fontSize: '14px' }" />
+                 
+          <button type="button"
+                  @click="$dispatch('toggle-contact-widget'); $store.chat.state = 'active'; setTimeout(() => { if($store.chat.draft) $store.chat.send(); }, 200);"
+                  style="display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer; transition: transform 0.2s;"
+                  onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"
+                  :style="{
+                    backgroundColor: $store.greetWindow.inputBox?.buttonColor || '#9333EA',
+                    color: $store.greetWindow.inputBox?.buttonIconColor || '#ffffff'
+                  }">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="margin-left: 2px; margin-top: 1px;"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" /></svg>
+          </button>
+        </div>
+      </template>
     </div>
     <!-- END GREET PREVIEW -->
 
@@ -738,14 +850,14 @@
         <div :style="getBadgeStyle()" x-text="$store.chat.unreadCount"></div>
       </template>
 
-<template x-if="settings.tooltip && settings.tooltip.enabled && !openContactWidget">
-  <div :style="getTooltipStyle()">
-    <span x-text="settings.tooltip.text || 'Chat with us'"></span>
-    <template x-if="settings.tooltip.arrowEnabled !== false">
-      <div :style="getTooltipArrowStyle()"></div>
-    </template>
-  </div>
-</template>
+      <template x-if="settings.tooltip && settings.tooltip.enabled && !openContactWidget">
+        <div :style="getTooltipStyle()">
+          <span x-text="settings.tooltip.text || 'Chat with us'"></span>
+          <template x-if="settings.tooltip.arrowEnabled !== false">
+            <div :style="getTooltipArrowStyle()"></div>
+          </template>
+        </div>
+      </template>
     </div>
 
     <!-- Chat Bar Widget Trigger -->
@@ -938,9 +1050,9 @@
         const offsetX = b.offsetX !== undefined ? b.offsetX : -6;
         const offsetY = b.offsetY !== undefined ? b.offsetY : -6;
         const size = b.size || 20;
-        
+
         const style = { position: 'absolute', backgroundColor: b.backgroundColor || '#dc2626', color: b.textColor || '#ffffff', fontSize: (b.fontSize || 11) + 'px', lineHeight: '1', minWidth: size + 'px', height: size + 'px', border: `${b.borderWidth !== undefined ? b.borderWidth : 2}px solid ${b.borderColor || '#ffffff'}`, borderRadius: '9999px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', boxShadow: '0 1px 3px rgba(0,0,0,0.15)', zIndex: 50 };
-        
+
         if (pos === 'top-left') { style.top = offsetY + 'px'; style.left = offsetX + 'px'; } else if (pos === 'bottom-right') { style.bottom = offsetY + 'px'; style.right = offsetX + 'px'; } else if (pos === 'bottom-left') { style.bottom = offsetY + 'px'; style.left = offsetX + 'px'; } else { style.top = offsetY + 'px'; style.right = offsetX + 'px'; }
         return style;
       },
@@ -1048,7 +1160,7 @@
         return { bubbleConfig: data.bubble || {}, chatConfig: data.chatWindow || data.chat || {}, chatbarConfig: data.chatbar || {}, greetWindowConfig: data.greetWindow || {} };
       }
     } catch (e) { }
-    
+
     const defaultBubbleUrl = `${baseUrl}public/bubble.json`;
     const defaultChatUrl = `${baseUrl}public/chatWindow.json`;
     const defaultChatbarUrl = `${baseUrl}public/chatbar.json`;
@@ -1058,9 +1170,9 @@
         fetch(defaultChatUrl).then(r => r.ok ? r.json() : {}),
         fetch(defaultChatbarUrl).then(r => r.ok ? r.json() : {})
       ]);
-      return { 
-        bubbleConfig: bubbleRes.status === 'fulfilled' ? bubbleRes.value : {}, 
-        chatConfig: chatRes.status === 'fulfilled' ? chatRes.value : {}, 
+      return {
+        bubbleConfig: bubbleRes.status === 'fulfilled' ? bubbleRes.value : {},
+        chatConfig: chatRes.status === 'fulfilled' ? chatRes.value : {},
         chatbarConfig: chatbarRes.status === 'fulfilled' ? chatbarRes.value : {},
         greetWindowConfig: {}
       };
@@ -1081,8 +1193,8 @@
 
     if (!Alpine.store('greetWindow')) {
       Alpine.store('greetWindow', {
-        enabled: false, dismissed: false, width: 320, spacing: 16, backgroundColor: "#ffffff", borderRadius: 16, padding: "24px 20px", boxShadow: "0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)", imageUrl: "", imageHeight: 70, title: "Hi there! 👋", titleColor: "#1e293b", titleFontSize: "15px", description: "How can we help you?", descriptionColor: "#475569", descriptionFontSize: "14px",
-        inputBox: { enabled: true, placeholder: "Write your message...", backgroundColor: "#ffffff", textColor: "#1e293b", borderRadius: 24, boxShadow: "0 6px 16px rgba(0,0,0,0.12)", buttonColor: theme.primary || "#9333EA", buttonIconColor: "#ffffff" }
+        enabled: false, dismissed: false, useWebsiteTheme: false, width: 320, spacing: 16, backgroundColor: "#ffffff", borderRadius: 16, padding: "24px 20px", boxShadow: "0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)", imageUrl: "", imageHeight: 70, iconType: "", lucideIcon: "", iconSize: 48, iconColor: theme.primary || "#9333EA", iconAnimation: "none", iconAnimationDuration: "2.5s", title: "Hi there! 👋", titleColor: "#1e293b", titleFontSize: "15px", description: "How can we help you?", descriptionColor: "#475569", descriptionFontSize: "14px",
+        inputBox: { enabled: true, layout: "joined", placeholder: "Write your message...", backgroundColor: "#ffffff", textColor: "#1e293b", borderRadius: 24, boxShadow: "0 6px 16px rgba(0,0,0,0.12)", buttonColor: theme.primary || "#9333EA", buttonIconColor: "#ffffff", buttonBgColor: "", buttonBoxShadow: "", buttonSize: 42 }
       });
     }
 
@@ -1114,6 +1226,16 @@
     if (greetWindowConfig && Object.keys(greetWindowConfig).length > 0) {
       if (greetWindowConfig.inputBox) {
         greetWindowConfig.inputBox = { ...Alpine.store('greetWindow').inputBox, ...greetWindowConfig.inputBox };
+      }
+      if (greetWindowConfig.useWebsiteTheme === true) {
+        greetWindowConfig.iconColor = theme.primary;
+        if (greetWindowConfig.inputBox) {
+          if (greetWindowConfig.inputBox.layout === 'separated') {
+            greetWindowConfig.inputBox.buttonIconColor = theme.primary;
+          } else {
+            greetWindowConfig.inputBox.buttonColor = theme.primary;
+          }
+        }
       }
       Object.assign(Alpine.store('greetWindow'), greetWindowConfig);
     }
@@ -1215,7 +1337,7 @@
             const msgObj = { key: 'msg_' + Date.now(), senderType: 'VISITOR', body: text, created: new Date().toISOString(), status: 'sent' };
             this.messages.push(msgObj);
             this.draft = ''; this.emojiOpen = false; this.attachOpen = false; this.scrollDown();
-            
+
             setTimeout(() => { const idx = this.messages.findIndex(m => m.key === msgObj.key); if (idx !== -1) { this.messages[idx].status = 'delivered'; this.messages = [...this.messages]; } }, 2000);
             setTimeout(() => { const idx = this.messages.findIndex(m => m.key === msgObj.key); if (idx !== -1) { this.messages[idx].status = 'read'; this.messages = [...this.messages]; } }, 4000);
 

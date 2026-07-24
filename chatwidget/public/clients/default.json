@@ -2,6 +2,42 @@
   "clientId": "amber",
   "clientName": "Vortex Studio Amber",
 
+    "greetWindow": {
+    "enabled": false,
+    "useWebsiteTheme": true,
+    "width": 320,
+    "spacing": 16,
+    "backgroundColor": "#ffffff",
+    "borderRadius": 16,
+    "padding": "24px 20px",
+    "boxShadow": "0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)",
+    "imageUrl": "",
+    "imageHeight": 70,
+    "iconType": "lucide",
+    "lucideIcon": "Sparkles",
+    "iconSize": 52,
+    "iconColor": "#d97706",
+    "iconAnimation": "wiggle",
+    "iconAnimationDuration": "2.5s",
+    "title": "Hi there! 👋 Need help growing your business using AI?",
+    "titleColor": "#1e293b",
+    "titleFontSize": "15px",
+    "description": "Let's chat & find the right solution for you!",
+    "descriptionColor": "#475569",
+    "descriptionFontSize": "14px",
+    "inputBox": {
+      "enabled": false,
+      "layout":"separated",      
+      "placeholder": "Write your message...",
+      "backgroundColor": "#ffffff",
+      "textColor": "#1e293b",
+      "borderRadius": 24,
+      "boxShadow": "0 6px 16px rgba(0,0,0,0.12)",
+      "buttonColor": "#d97706",
+      "buttonIconColor": "#ffffff"
+    }
+  },
+
   "//_bubble_section": "--- FLOATING BUBBLE TRIGGER BUTTON ---",
 
   "bubble": {
