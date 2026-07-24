@@ -139,6 +139,11 @@
     "typingIndicator": true,
     "attachmentsEnabled": true,
 
+    "ticksEnabled": true,
+    "sentTickColor": "",
+    "deliveredTickColor": "",
+    "readTickColor": "#34B7F1",
+
     "//_header_styling": "Top title header colors, sizes, padding, and borders",
 
     "headerBg": "#f4f4f5",

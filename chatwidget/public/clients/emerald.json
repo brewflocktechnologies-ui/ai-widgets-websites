@@ -138,6 +138,12 @@
     "modernUi": true,
     "typingIndicator": true,
     "attachmentsEnabled": true,
+
+
+    "ticksEnabled": true,
+    "sentTickColor": "",
+    "deliveredTickColor": "",
+    "readTickColor": "#34b7f1",
     
     "//_header_styling": "Top title header colors, sizes, padding, and borders",
 

@@ -388,8 +388,32 @@
                       <span class="bubble-body" x-show="m.body" x-text="m.body"></span>
                       <span class="bubble-time" x-show="$store.chat.groupEnd(i)">
                         <span x-text="$store.chat.timeLabel(m)"></span>
-                        <template x-if="m.senderType === 'VISITOR' && i === $store.chat.messages.length - 1">
-                          <span style="margin-left: 4px; font-weight: 500;" :style="{ color: $store.chatcontactv2.visitorBubbleBg || 'var(--cw-accent)' }">· Read</span>
+                        <template x-if="m.senderType === 'VISITOR' && ($store.chatcontactv2.ticksEnabled !== false)">
+                          <span style="margin-left: 4px; display: inline-flex; align-items: center; vertical-align: middle;">
+                            <!-- One grey tick (sent) -->
+                            <template x-if="!m.status || m.status === 'sent'">
+                              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                                   :stroke="$store.chatcontactv2.sentTickColor || 'currentColor'"
+                                   :style="{ opacity: $store.chatcontactv2.sentTickColor ? 1 : 0.7 }">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                              </svg>
+                            </template>
+                            <!-- Two grey ticks (delivered) -->
+                            <template x-if="m.status === 'delivered'">
+                              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                                   :stroke="$store.chatcontactv2.deliveredTickColor || 'currentColor'"
+                                   :style="{ opacity: $store.chatcontactv2.deliveredTickColor ? 1 : 0.7 }">
+                                <path d="M17 6L8.5 14.5L5 11M22 6L13.5 14.5L12.5 13.5"></path>
+                              </svg>
+                            </template>
+                            <!-- Two blue ticks (read) -->
+                            <template x-if="m.status === 'read'">
+                              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                                   :stroke="$store.chatcontactv2.readTickColor || '#34b7f1'">
+                                <path d="M17 6L8.5 14.5L5 11M22 6L13.5 14.5L12.5 13.5"></path>
+                              </svg>
+                            </template>
+                          </span>
                         </template>
                       </span>
                     </div>
@@ -1300,7 +1324,7 @@
         flags: { 'widget.modernUi': true, 'chat.typingIndicator': true, 'attachments.enabled': true },
         messages: [
           { key: 'm1', senderType: 'AGENT', senderName: initialAgentName, body: 'Hi! How can I help you today?', created: new Date(Date.now() - 300000).toISOString() },
-          { key: 'm2', senderType: 'VISITOR', body: 'I need help with my order', created: new Date(Date.now() - 240000).toISOString() }
+          { key: 'm2', senderType: 'VISITOR', body: 'I need help with my order', created: new Date(Date.now() - 240000).toISOString(), status: 'read' }
         ],
         async submitPrechat(formElement) {
           const formData = new FormData(formElement);
@@ -1327,8 +1351,28 @@
         send() {
           if (this.draft && this.draft.trim()) {
             const text = this.draft.trim();
-            this.messages.push({ key: 'msg_' + Date.now(), senderType: 'VISITOR', body: text, created: new Date().toISOString() });
+            const msgObj = { key: 'msg_' + Date.now(), senderType: 'VISITOR', body: text, created: new Date().toISOString(), status: 'sent' };
+            this.messages.push(msgObj);
             this.draft = ''; this.emojiOpen = false; this.attachOpen = false; this.scrollDown();
+            
+            // 2s delivered transition (two grey ticks)
+            setTimeout(() => {
+              const idx = this.messages.findIndex(m => m.key === msgObj.key);
+              if (idx !== -1) {
+                this.messages[idx].status = 'delivered';
+                this.messages = [...this.messages];
+              }
+            }, 2000);
+
+            // 4s read transition (two blue ticks)
+            setTimeout(() => {
+              const idx = this.messages.findIndex(m => m.key === msgObj.key);
+              if (idx !== -1) {
+                this.messages[idx].status = 'read';
+                this.messages = [...this.messages];
+              }
+            }, 4000);
+
             this.typingName = this.agentName || 'Agent';
             setTimeout(() => {
               this.typingName = '';
@@ -1370,8 +1414,27 @@
         uploadImage(input) {
           if (input.files && input.files[0]) {
             const url = URL.createObjectURL(input.files[0]);
-            this.messages.push({ key: 'img_' + Date.now(), senderType: 'VISITOR', localUrl: url, attachment: true, body: '', created: new Date().toISOString() });
+            const msgObj = { key: 'img_' + Date.now(), senderType: 'VISITOR', localUrl: url, attachment: true, body: '', created: new Date().toISOString(), status: 'sent' };
+            this.messages.push(msgObj);
             this.attachOpen = false; this.scrollDown();
+
+            // 2s delivered transition
+            setTimeout(() => {
+              const idx = this.messages.findIndex(m => m.key === msgObj.key);
+              if (idx !== -1) {
+                this.messages[idx].status = 'delivered';
+                this.messages = [...this.messages];
+              }
+            }, 2000);
+
+            // 4s read transition
+            setTimeout(() => {
+              const idx = this.messages.findIndex(m => m.key === msgObj.key);
+              if (idx !== -1) {
+                this.messages[idx].status = 'read';
+                this.messages = [...this.messages];
+              }
+            }, 4000);
           }
         },
         captureScreenshot() { this.attachOpen = false; alert('Screenshot captured!'); },
