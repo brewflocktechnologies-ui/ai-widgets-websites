@@ -263,87 +263,189 @@
                   <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
               </button>
-
-              <div>
-                <!-- Stylized Top Icon (mimics violet reference logo) -->
-                <div style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 28px;">
-                  <template x-if="$store.chatWindow.welcome?.logoUrl">
-                    <img :src="$store.chatWindow.welcome?.logoUrl" style="height: 36px; object-fit: contain;" />
-                  </template>
-                  <template x-if="!$store.chatWindow.welcome?.logoUrl">
-                    <div :style="{ color: $store.chatWindow.welcome?.headerTextColor || '#ffffff' }" style="opacity: 1;">
-                      <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                      </svg>
+              <!-- Glassy Card Layout Mode -->
+              <template x-if="$store.chatWindow.welcome?.cardLayout === 'glassy'">
+                <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; width: 100%;">
+                  <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; margin-bottom: 12px;">
+                    <!-- Stylized Top Icon (mimics violet reference logo) -->
+                    <div style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 20px; flex-shrink: 0;">
+                      <template x-if="$store.chatWindow.welcome?.logoUrl">
+                        <img :src="$store.chatWindow.welcome?.logoUrl" style="height: 36px; object-fit: contain;" />
+                      </template>
+                      <template x-if="!$store.chatWindow.welcome?.logoUrl">
+                        <div :style="{ color: $store.chatWindow.welcome?.headerTextColor || '#ffffff' }" style="opacity: 1;">
+                          <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+                          </svg>
+                        </div>
+                      </template>
                     </div>
-                  </template>
-                </div>
 
-                <!-- Sleek Typography -->
-                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; text-align: left;">
-                  <h2 style="font-weight: 800; font-size: 28px; line-height: 1.15; letter-spacing: -0.02em;" 
-                      :style="{ fontSize: $store.chatWindow.welcome?.titleFontSize || '28px' }"
-                      x-text="$store.chatWindow.welcome?.title || 'Hi there! 👋 How can we help you today?'"></h2>
-                  <p style="font-size: 16px; line-height: 1.5; font-weight: 400;" 
-                     :style="{ 
-                       color: $store.chatWindow.welcome?.subtextColor || 'rgba(255,255,255,0.9)',
-                       fontSize: $store.chatWindow.welcome?.descriptionFontSize || '16px'
-                     }"
-                     x-text="$store.chatWindow.welcome?.description || 'Our support heroes are here to assist you.'"></p>
-                  
-                  <!-- Overlapping Online Avatars without Text (Cleaner) -->
-                  <div style="display: flex; align-items: center; gap: 0; margin-top: 24px;">
-                    <template x-for="(avatar, index) in ($store.chatWindow.welcome?.avatars || [])" :key="index">
-                      <img :src="avatar" 
-                           style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid; object-fit: cover; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"
+                    <!-- Glassy Container wrapping text, avatars, and button -->
+                    <div :style="{
+                           background: $store.chatWindow.welcome?.cardBg || 'rgba(255, 255, 255, 0.08)',
+                           border: $store.chatWindow.welcome?.cardBorder || '1px solid rgba(255, 255, 255, 0.15)',
+                           borderRadius: ($store.chatWindow.welcome?.cardBorderRadius || 20) + 'px',
+                           padding: $store.chatWindow.welcome?.cardPadding || '24px',
+                           backdropFilter: 'blur(' + ($store.chatWindow.welcome?.cardBlur || 8) + 'px)',
+                           boxShadow: $store.chatWindow.welcome?.cardShadow || '0 8px 32px 0 rgba(0, 0, 0, 0.08)',
+                           display: 'flex',
+                           flexDirection: 'column',
+                           gap: '24px',
+                           flex: '1',
+                           justifyContent: 'space-between'
+                         }">
+                      <!-- Sleek Typography -->
+                      <div style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
+                        <h2 style="font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; margin: 0;" 
+                            :style="{ fontSize: $store.chatWindow.welcome?.titleFontSize || '28px', color: $store.chatWindow.welcome?.headerTextColor || '#ffffff' }"
+                            x-text="$store.chatWindow.welcome?.title || 'Hi there! 👋 How can we help you today?'"></h2>
+                        <p style="font-size: 16px; line-height: 1.5; font-weight: 400; margin: 0;" 
                            :style="{ 
-                             marginLeft: index === 0 ? '0' : '-12px',
-                             borderColor: $store.chatWindow.welcome?.avatarBorderColor || 'rgba(255,255,255,0.2)',
-                             zIndex: 10 + index
-                           }" />
-                    </template>
+                             color: $store.chatWindow.welcome?.subtextColor || 'rgba(255,255,255,0.9)',
+                             fontSize: $store.chatWindow.welcome?.descriptionFontSize || '16px'
+                           }"
+                           x-text="$store.chatWindow.welcome?.description || 'Our support heroes are here to assist you.'"></p>
+                        
+                        <!-- Overlapping Online Avatars without Text (Cleaner) -->
+                        <div style="display: flex; align-items: center; gap: 0; margin-top: 16px;">
+                          <template x-for="(avatar, index) in ($store.chatWindow.welcome?.avatars || [])" :key="index">
+                            <img :src="avatar" 
+                                 style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid; object-fit: cover; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"
+                                 :style="{ 
+                                   marginLeft: index === 0 ? '0' : '-12px',
+                                   borderColor: $store.chatWindow.welcome?.avatarBorderColor || 'rgba(255,255,255,0.2)',
+                                   zIndex: 10 + index
+                                 }" />
+                          </template>
+                        </div>
+                      </div>
+
+                      <!-- Button inside Glassy Card -->
+                      <button type="button" 
+                              @click="$store.chat.startFromWelcome()"
+                              style="display: flex; align-items: center; gap: 16px; width: 100%; border: none; cursor: pointer; text-align: left; transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); margin: 0;"
+                              :style="{
+                                background: $store.chatWindow.welcome?.buttonBg || '#ffffff',
+                                color: $store.chatWindow.welcome?.buttonTextColor || '#111827',
+                                borderRadius: ($store.chatWindow.welcome?.buttonBorderRadius || 24) + 'px',
+                                padding: $store.chatWindow.welcome?.buttonPadding || '18px 24px'
+                              }"
+                              @mouseenter="$el.style.transform = 'translateY(-4px)'; $el.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';"
+                              @mouseleave="$el.style.transform = 'translateY(0)'; $el.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)';"
+                      >
+                        <div style="display: flex; align-items: center; justify-content: center; flex-shrink: 0;"
+                             :style="{ color: $store.chatWindow.welcome?.buttonIconColor || '#d97706' }">
+                          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                            <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+                          </svg>
+                        </div>
+                        <div style="display: flex; flex-direction: column; min-width: 0;">
+                          <span style="font-weight: 700; font-size: 15px; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" 
+                                :style="{ color: $store.chatWindow.welcome?.buttonTextColor || '#111827' }"
+                                x-text="$store.chatWindow.welcome?.buttonText || 'Start Conversation'"></span>
+                          <span style="font-size: 12px; font-weight: 500; opacity: 0.6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" 
+                                :style="{ color: $store.chatWindow.welcome?.buttonTextColor || '#111827' }"
+                                x-text="$store.chatWindow.welcome?.buttonSubtext || 'Typically replies in 5 minutes'"></span>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Footer outside glassy card -->
+                  <div style="display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: 500; opacity: 0.8; margin-top: auto; padding-top: 10px; flex-shrink: 0;"
+                       :style="{ color: $store.chatWindow.welcome?.subtextColor || 'rgba(255,255,255,0.9)', paddingBottom: $store.chatWindow.welcome?.footerPaddingBottom || '0px' }">
+                    <span>Powered by</span>&nbsp;
+                    <a :href="$store.chatWindow.poweredByLink || '#'" target="_blank" style="font-weight: 700; color: inherit; text-decoration: none;" x-text="$store.chatWindow.poweredByText || 'vAInatheya.ai'"></a>
                   </div>
                 </div>
-              </div>
+              </template>
 
-              <!-- Pill-shaped Start Button -->
-              <div>
-                <button type="button" 
-                        @click="$store.chat.startFromWelcome()"
-                        style="display: flex; align-items: center; gap: 16px; width: 100%; border: none; cursor: pointer; text-align: left; transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);"
-                        :style="{
-                          background: $store.chatWindow.welcome?.buttonBg || '#ffffff',
-                          color: $store.chatWindow.welcome?.buttonTextColor || '#111827',
-                          borderRadius: ($store.chatWindow.welcome?.buttonBorderRadius || 24) + 'px',
-                          padding: $store.chatWindow.welcome?.buttonPadding || '18px 24px',
-                          marginBottom: '20px'
-                        }"
-                        @mouseenter="$el.style.transform = 'translateY(-4px)'; $el.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';"
-                        @mouseleave="$el.style.transform = 'translateY(0)'; $el.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)';">
-                  <!-- Simplified Chat Icon inside button -->
-                  <div style="display: flex; align-items: center; justify-content: center; flex-shrink: 0;"
-                       :style="{ color: $store.chatWindow.welcome?.buttonIconColor || '#d97706' }">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                      <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
-                    </svg>
-                  </div>
-                  <div style="display: flex; flex-direction: column; min-width: 0;">
-                    <span style="font-weight: 700; font-size: 15px; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" 
-                          :style="{ color: $store.chatWindow.welcome?.buttonTextColor || '#111827' }"
-                          x-text="$store.chatWindow.welcome?.buttonText || 'Start Conversation'"></span>
-                    <span style="font-size: 12px; font-weight: 500; opacity: 0.6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" 
-                          :style="{ color: $store.chatWindow.welcome?.buttonTextColor || '#111827' }"
-                          x-text="$store.chatWindow.welcome?.buttonSubtext || 'Typically replies in 5 minutes'"></span>
-                  </div>
-                </button>
+              <!-- Normal Layout Mode -->
+              <template x-if="$store.chatWindow.welcome?.cardLayout !== 'glassy'">
+                <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; width: 100%;">
+                  <div>
+                    <!-- Stylized Top Icon (mimics violet reference logo) -->
+                    <div style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 28px;">
+                      <template x-if="$store.chatWindow.welcome?.logoUrl">
+                        <img :src="$store.chatWindow.welcome?.logoUrl" style="height: 36px; object-fit: contain;" />
+                      </template>
+                      <template x-if="!$store.chatWindow.welcome?.logoUrl">
+                        <div :style="{ color: $store.chatWindow.welcome?.headerTextColor || '#ffffff' }" style="opacity: 1;">
+                          <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+                          </svg>
+                        </div>
+                      </template>
+                    </div>
 
-                <!-- Clean Footer -->
-                <div style="display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: 500; opacity: 0.8;"
-                     :style="{ color: $store.chatWindow.welcome?.subtextColor || 'rgba(255,255,255,0.9)' }">
-                  <span>Powered by</span>&nbsp;
-                  <a :href="$store.chatWindow.poweredByLink || '#'" target="_blank" style="font-weight: 700; color: inherit; text-decoration: none;" x-text="$store.chatWindow.poweredByText || 'vAInatheya.ai'"></a>
+                    <!-- Sleek Typography -->
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; text-align: left;">
+                      <h2 style="font-weight: 800; font-size: 28px; line-height: 1.15; letter-spacing: -0.02em;" 
+                          :style="{ fontSize: $store.chatWindow.welcome?.titleFontSize || '28px' }"
+                          x-text="$store.chatWindow.welcome?.title || 'Hi there! 👋 How can we help you today?'"></h2>
+                      <p style="font-size: 16px; line-height: 1.5; font-weight: 400;" 
+                         :style="{ 
+                           color: $store.chatWindow.welcome?.subtextColor || 'rgba(255,255,255,0.9)',
+                           fontSize: $store.chatWindow.welcome?.descriptionFontSize || '16px'
+                         }"
+                         x-text="$store.chatWindow.welcome?.description || 'Our support heroes are here to assist you.'"></p>
+                      
+                      <!-- Overlapping Online Avatars without Text (Cleaner) -->
+                      <div style="display: flex; align-items: center; gap: 0; margin-top: 24px;">
+                        <template x-for="(avatar, index) in ($store.chatWindow.welcome?.avatars || [])" :key="index">
+                          <img :src="avatar" 
+                               style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid; object-fit: cover; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"
+                               :style="{ 
+                                 marginLeft: index === 0 ? '0' : '-12px',
+                                 borderColor: $store.chatWindow.welcome?.avatarBorderColor || 'rgba(255,255,255,0.2)',
+                                 zIndex: 10 + index
+                               }" />
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Pill-shaped Start Button -->
+                  <div>
+                    <button type="button" 
+                            @click="$store.chat.startFromWelcome()"
+                            style="display: flex; align-items: center; gap: 16px; width: 100%; border: none; cursor: pointer; text-align: left; transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);"
+                            :style="{
+                              background: $store.chatWindow.welcome?.buttonBg || '#ffffff',
+                              color: $store.chatWindow.welcome?.buttonTextColor || '#111827',
+                              borderRadius: ($store.chatWindow.welcome?.buttonBorderRadius || 24) + 'px',
+                              padding: $store.chatWindow.welcome?.buttonPadding || '18px 24px',
+                              marginBottom: '20px'
+                            }"
+                            @mouseenter="$el.style.transform = 'translateY(-4px)'; $el.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';"
+                            @mouseleave="$el.style.transform = 'translateY(0)'; $el.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)';"
+                    >
+                      <div style="display: flex; align-items: center; justify-content: center; flex-shrink: 0;"
+                           :style="{ color: $store.chatWindow.welcome?.buttonIconColor || '#d97706' }">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                          <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+                        </svg>
+                      </div>
+                      <div style="display: flex; flex-direction: column; min-width: 0;">
+                        <span style="font-weight: 700; font-size: 15px; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" 
+                              :style="{ color: $store.chatWindow.welcome?.buttonTextColor || '#111827' }"
+                              x-text="$store.chatWindow.welcome?.buttonText || 'Start Conversation'"></span>
+                        <span style="font-size: 12px; font-weight: 500; opacity: 0.6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" 
+                              :style="{ color: $store.chatWindow.welcome?.buttonTextColor || '#111827' }"
+                              x-text="$store.chatWindow.welcome?.buttonSubtext || 'Typically replies in 5 minutes'"></span>
+                      </div>
+                    </button>
+
+                  <!-- Clean Footer -->
+                  <div style="display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: 500; opacity: 0.8;"
+                       :style="{ color: $store.chatWindow.welcome?.subtextColor || 'rgba(255,255,255,0.9)', paddingBottom: $store.chatWindow.welcome?.footerPaddingBottom || '0px' }">
+                    <span>Powered by</span>&nbsp;
+                    <a :href="$store.chatWindow.poweredByLink || '#'" target="_blank" style="font-weight: 700; color: inherit; text-decoration: none;" x-text="$store.chatWindow.poweredByText || 'vAInatheya.ai'"></a>
+                  </div>
                 </div>
-              </div>
+              </template>
+
             </div>
           </div>
           <!-- ========================================== -->
@@ -611,7 +713,7 @@
     </div>
 
     <!-- NEW: FLOATING GREET PREVIEW & INPUT BOX -->
-    <div x-show="(!$store.bubble.hideOnOpen || !openContactWidget) && !$store.chatbar.enabled && $store.greetWindow && $store.greetWindow.enabled && (!$store.greetWindow.dismissed || ($store.greetWindow.inputBox && $store.greetWindow.inputBox.enabled))"
+    <div x-show="(!$store.bubble.hideOnOpen || !openContactWidget) && !$store.chatbar.enabled && !$store.chat.hasSentMessage && $store.greetWindow && $store.greetWindow.enabled && !$store.greetWindow.dismissed"
          class="fixed z-30 flex flex-col items-end transition-all duration-300 pointer-events-none"
          style="box-sizing: border-box;"
          x-transition:enter="transition ease-out duration-300 delay-150"
@@ -627,9 +729,18 @@
            gap: '12px'
          }">
 
+      <!-- Close Button Wrapper (Sitting above Greet Card) -->
+      <div style="width: 100%; display: flex; justify-content: flex-end; padding-right: 2px; pointer-events: auto;">
+        <button type="button" @click.stop="$store.greetWindow.dismissed = true"
+                 style="border: none; background: #475569; color: #ffffff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: transform 0.2s, background-color 0.2s;"
+                 onmouseover="this.style.background='#1e293b'; this.style.transform='scale(1.05)'" 
+                 onmouseout="this.style.background='#475569'; this.style.transform='scale(1)'">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
       <!-- Greet Card -->
-      <div x-show="!$store.greetWindow.dismissed"
-           class="relative flex flex-col w-full cursor-pointer pointer-events-auto"
+      <div class="relative flex flex-col w-full cursor-pointer pointer-events-auto"
            @click="$dispatch('toggle-contact-widget')"
            :style="{
              backgroundColor: $store.greetWindow.backgroundColor || '#ffffff',
@@ -637,20 +748,14 @@
              padding: $store.greetWindow.padding || '24px 20px',
              boxShadow: ($store.greetWindow.boxShadow !== undefined && $store.greetWindow.boxShadow !== null) ? ($store.greetWindow.boxShadow || 'none') : '0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)'
            }">
-        
-        <button type="button" @click.stop="$store.greetWindow.dismissed = true"
-                 style="position: absolute; top: 12px; right: 12px; border: none; background: transparent; width: 24px; height: 24px; cursor: pointer; color: #94a3b8; display: flex; align-items: center; justify-content: center; transition: color 0.2s;"
-                 onmouseover="this.style.color='#475569'" onmouseout="this.style.color='#94a3b8'">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
 
-        <div style="width: 100%; display: flex; justify-content: center; margin-bottom: 16px;" 
-             x-show="$store.greetWindow.imageUrl || ($store.greetWindow.iconType === 'lucide' && $store.greetWindow.lucideIcon)">
+<div :style="'width: 100%; display: flex; align-items: center; margin-bottom: 16px; justify-content: ' + ($store.greetWindow.iconAlign === 'left' ? 'flex-start' : ($store.greetWindow.iconAlign === 'right' ? 'flex-end' : 'center'))"
+              x-show="$store.greetWindow.imageUrl || ($store.greetWindow.iconType === 'lucide' && $store.greetWindow.lucideIcon)">
           <!-- Animated Image -->
           <template x-if="$store.greetWindow.imageUrl">
             <img :src="$store.greetWindow.imageUrl" 
                  :class="$store.greetWindow.iconAnimation && $store.greetWindow.iconAnimation !== 'none' ? 'anim-zotly-' + $store.greetWindow.iconAnimation : ''"
-                 :style="{ height: ($store.greetWindow.imageHeight || 70) + 'px', objectFit: 'contain' }" />
+                 :style="'display: block; margin: ' + ($store.greetWindow.iconAlign === 'center' ? '0 auto' : '0') + '; height: ' + ($store.greetWindow.imageHeight || 70) + 'px; width: ' + ($store.greetWindow.imageWidth ? ($store.greetWindow.imageWidth + 'px') : 'auto') + '; object-fit: contain; padding: ' + ($store.greetWindow.imagePadding || '0px') + ';'" />
           </template>
           <!-- Animated Lucide Icon -->
           <template x-if="!$store.greetWindow.imageUrl && $store.greetWindow.iconType === 'lucide' && $store.greetWindow.lucideIcon">
@@ -667,7 +772,7 @@
                 <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z"></path><path d="M5 3l.8 1.6L7.4 5l-1.6.8L5 7.4l-.8-1.6L2.6 5l1.6-.8L5 3z"></path><path d="M19 17l.8 1.6 1.6.6-1.6.8-.8 1.6-.8-1.6-1.6-.8 1.6-.6.8-1.6z"></path></svg>
               </template>
               <template x-if="$store.greetWindow.lucideIcon === 'MessageCircle'">
-                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>
               </template>
               <template x-if="$store.greetWindow.lucideIcon === 'MessageSquare'">
                 <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
@@ -886,7 +991,7 @@
                   <svg viewBox="0 0 24 24" :width="settings.iconWidth || 28" :height="settings.iconHeight || 28" fill="currentColor" stroke="none"><path d="M12 4.5c0 3.5 3 6.5 6.5 6.5-3.5 0-6.5 3-6.5 6.5 0-3.5-3-6.5-6.5-6.5 3.5 0 6.5-3 6.5-6.5z"/><path d="M18.5 4c0 1.2.8 2 2 2-1.2 0-2 .8-2 2 0-1.2-.8-2-2-2 1.2 0 2-.8 2-2z"/></svg>
                 </template>
                 <template x-if="settings.lucideIcon === 'MessageCircle' || !settings.lucideIcon">
-                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 24" :height="settings.iconHeight || 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 24" :height="settings.iconHeight || 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>
                 </template>
               </div>
             </template>
@@ -928,7 +1033,7 @@
             <template x-if="settings.iconType === 'lucide'">
               <div :style="{ color: settings.iconColor || '#ffffff', opacity: hovered ? 1 : 0.8, display: 'flex' }">
                 <template x-if="settings.lucideIcon === 'MessageCircle' || !settings.lucideIcon">
-                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>
                 </template>
                 <template x-if="settings.lucideIcon === 'MessageSquare'">
                   <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
@@ -1193,7 +1298,7 @@
 
     if (!Alpine.store('greetWindow')) {
       Alpine.store('greetWindow', {
-        enabled: false, dismissed: false, useWebsiteTheme: false, width: 320, spacing: 16, backgroundColor: "#ffffff", borderRadius: 16, padding: "24px 20px", boxShadow: "0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)", imageUrl: "", imageHeight: 70, iconType: "", lucideIcon: "", iconSize: 48, iconColor: theme.primary || "#9333EA", iconAnimation: "none", iconAnimationDuration: "2.5s", title: "Hi there! 👋", titleColor: "#1e293b", titleFontSize: "15px", description: "How can we help you?", descriptionColor: "#475569", descriptionFontSize: "14px",
+        enabled: false, dismissed: false, useWebsiteTheme: false, width: 320, spacing: 16, backgroundColor: "#ffffff", borderRadius: 16, padding: "24px 20px", boxShadow: "0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)", imageUrl: "", imageHeight: 70, imageWidth: "", iconType: "", lucideIcon: "", iconSize: 48, iconColor: theme.primary || "#9333EA", iconAnimation: "none", iconAnimationDuration: "2.5s", title: "Hi there! 👋", titleColor: "#1e293b", titleFontSize: "15px", description: "How can we help you?", descriptionColor: "#475569", descriptionFontSize: "14px", iconAlign: "center", imagePadding: "0px",
         inputBox: { enabled: true, layout: "joined", placeholder: "Write your message...", backgroundColor: "#ffffff", textColor: "#1e293b", borderRadius: 24, boxShadow: "0 6px 16px rgba(0,0,0,0.12)", buttonColor: theme.primary || "#9333EA", buttonIconColor: "#ffffff", buttonBgColor: "", buttonBoxShadow: "", buttonSize: 42 }
       });
     }
@@ -1201,7 +1306,7 @@
     if (!Alpine.store('chatWindow')) {
       Alpine.store('chatWindow', {
         clientName: 'Zotly Support', agentName: 'Sarah', accentColor: theme.primary || '#0b5fff', useWebsiteTheme: true, widgetWidth: 350, widgetHeight: 550, expandedWidth: 480, expandedHeight: 550, widgetBorderRadius: 24, widgetShadow: true, widgetShadowBlur: 30, widgetShadowColor: 'rgba(0,0,0,0.12)', widgetBorderEnabled: true, widgetBorderWidth: 1, widgetBorderColor: '#e5e7eb', modernUi: true, typingIndicator: true, attachmentsEnabled: true,
-        welcome: { enabled: false }
+        welcome: { enabled: false, cardLayout: "normal", cardBg: "", cardBorder: "", cardBorderRadius: 20, cardPadding: "24px", cardBlur: 8, cardShadow: "" }
       });
       Alpine.store('chatcontactv2', Alpine.store('chatWindow'));
     }
@@ -1313,7 +1418,7 @@
         state: welcomeEnabled ? 'welcome' : 'active',
         isExpanded: false, panelOpen: false, unreadCount: 0, isMobile: window.innerWidth < 640 || window.innerHeight < 750,
         clientName: (chatConfig && chatConfig.clientName) ? chatConfig.clientName : 'Zotly Support',
-        agentName: initialAgentName, agentsOnline: true, token: 'visitor-token-demo', position: 1, menuOpen: false, attachOpen: false, emojiOpen: false, confirmBox: null, confirmResolve: function () { }, reconnecting: false, soundsOn: true, consentDismissed: false, typingName: '', uploading: false, offlineSending: false, offlineName: '', offlineEmail: '', offlineMessage: '', draft: '',
+        agentName: initialAgentName, agentsOnline: true, token: 'visitor-token-demo', position: 1, menuOpen: false, attachOpen: false, emojiOpen: false, confirmBox: null, confirmResolve: function () { }, reconnecting: false, soundsOn: true, consentDismissed: false, typingName: '', uploading: false, offlineSending: false, offlineName: '', offlineEmail: '', offlineMessage: '', draft: '', hasSentMessage: false,
         flags: { 'widget.modernUi': true, 'chat.typingIndicator': true, 'attachments.enabled': true },
         messages: [
           { key: 'm1', senderType: 'AGENT', senderName: initialAgentName, body: 'Hi! How can I help you today?', created: new Date(Date.now() - 300000).toISOString() },
@@ -1337,6 +1442,11 @@
             const msgObj = { key: 'msg_' + Date.now(), senderType: 'VISITOR', body: text, created: new Date().toISOString(), status: 'sent' };
             this.messages.push(msgObj);
             this.draft = ''; this.emojiOpen = false; this.attachOpen = false; this.scrollDown();
+            this.hasSentMessage = true;
+
+            if (Alpine.store('greetWindow')) {
+              Alpine.store('greetWindow').dismissed = true;
+            }
 
             setTimeout(() => { const idx = this.messages.findIndex(m => m.key === msgObj.key); if (idx !== -1) { this.messages[idx].status = 'delivered'; this.messages = [...this.messages]; } }, 2000);
             setTimeout(() => { const idx = this.messages.findIndex(m => m.key === msgObj.key); if (idx !== -1) { this.messages[idx].status = 'read'; this.messages = [...this.messages]; } }, 4000);
