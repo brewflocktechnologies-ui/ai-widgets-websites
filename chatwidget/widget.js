@@ -242,10 +242,16 @@
                  background: $store.chatWindow.welcome?.bgGradient || 'linear-gradient(135deg, #f59e0b, #b45309)'
                }">
             
-            <!-- Abstract background blobs for modern look -->
+          <!-- Abstract background blobs for modern look -->
             <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 0;">
-              <div style="position: absolute; top: -10%; left: -20%; width: 80%; height: 50%; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%); border-radius: 50%; mix-blend-mode: overlay;"></div>
-              <div style="position: absolute; bottom: 10%; right: -20%; width: 70%; height: 60%; background: radial-gradient(circle, rgba(0,0,0,0.15) 0%, transparent 60%); border-radius: 50%;"></div>
+              <!-- Top sweeping highlight -->
+              <div style="position: absolute; top: -50%; right: -20%; width: 140%; height: 120%; background: linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 80%); border-radius: 50%; transform: rotate(-15deg);"></div>
+              
+              <!-- Secondary inner highlight for the glossy layered look -->
+              <div style="position: absolute; top: -20%; right: -30%; width: 120%; height: 100%; background: linear-gradient(200deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 60%); border-radius: 40% 60% 50% 50%; transform: rotate(10deg);"></div>
+              
+              <!-- Bottom left shadow sweep for depth -->
+              <div style="position: absolute; bottom: -40%; left: -20%; width: 130%; height: 100%; background: linear-gradient(35deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; transform: rotate(-10deg);"></div>
             </div>
 
             <!-- Content Container ensuring it sits above background -->
