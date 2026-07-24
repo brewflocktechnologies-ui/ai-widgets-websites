@@ -114,7 +114,7 @@
   
   "//_chatcontactv2_section": "--- CHAT WINDOW LAYOUT AND THEME ---",
 
-  "chatcontactv2": {
+  "chatWindow": {
     "useWebsiteTheme": true,
     "clientName": "EcoSphere Support",
     "agentName": "Sarah (Eco)",

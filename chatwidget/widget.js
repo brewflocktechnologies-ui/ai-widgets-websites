@@ -98,8 +98,8 @@
       class="fixed z-50 flex flex-col transition-all duration-300 pointer-events-auto zotly-widget-panel-wrapper"
       :style="{
         boxSizing: 'border-box',
-        width: $store.chat.isExpanded ? ($store.chatcontactv2.expandedWidth ? $store.chatcontactv2.expandedWidth + 'px' : '480px') : ($store.chatcontactv2.widgetWidth ? $store.chatcontactv2.widgetWidth + 'px' : '350px'),
-        height: $store.chatcontactv2.widgetHeight ? $store.chatcontactv2.widgetHeight + 'px' : '550px',
+        width: $store.chat.isExpanded ? ($store.chatWindow.expandedWidth ? $store.chatWindow.expandedWidth + 'px' : '480px') : ($store.chatWindow.widgetWidth ? $store.chatWindow.widgetWidth + 'px' : '350px'),
+        height: $store.chatWindow.widgetHeight ? $store.chatWindow.widgetHeight + 'px' : '550px',
         maxWidth: 'calc(100vw - 32px)',
         maxHeight: (function() {
           const defaultBottom = $store.chatbar.enabled
@@ -141,29 +141,29 @@
       
       <div class="panel flex flex-col relative w-full h-full overflow-hidden"
         :style="{
-          boxShadow: $store.chatcontactv2.widgetShadow ? \`0 0 \${$store.chatcontactv2.widgetShadowBlur || 20}px \${$store.chatcontactv2.widgetShadowColor || 'rgba(0,0,0,0.15)'}\` : 'none',
-          border: $store.chatcontactv2.widgetBorderEnabled ? \`\${$store.chatcontactv2.widgetBorderWidth || 1}px solid \${$store.chatcontactv2.widgetBorderColor || '#e5e7eb'}\` : 'none',
-          borderRadius: \`\${$store.chatcontactv2.widgetBorderRadius || 16}px\`,
-          background: $store.chatcontactv2.bodyBg || 'var(--cw-bg)',
-          '--cw-accent': $store.chatcontactv2.accentColor || '#0b5fff',
+          boxShadow: $store.chatWindow.widgetShadow ? \`0 0 \${$store.chatWindow.widgetShadowBlur || 20}px \${$store.chatWindow.widgetShadowColor || 'rgba(0,0,0,0.15)'}\` : 'none',
+          border: $store.chatWindow.widgetBorderEnabled ? \`\${$store.chatWindow.widgetBorderWidth || 1}px solid \${$store.chatWindow.widgetBorderColor || '#e5e7eb'}\` : 'none',
+          borderRadius: \`\${$store.chatWindow.widgetBorderRadius || 16}px\`,
+          background: $store.chatWindow.bodyBg || 'var(--cw-bg)',
+          '--cw-accent': $store.chatWindow.accentColor || '#0b5fff',
           isolation: 'isolate',
           transform: 'translateZ(0)'
         }">
         <header class="panel-header" :style="{
-          background: $store.chatcontactv2.headerBg || 'var(--cw-grad)',
-          color: $store.chatcontactv2.headerTextColor || '#fff',
-          padding: $store.chatcontactv2.headerPadding || '14px 16px',
+          background: $store.chatWindow.headerBg || 'var(--cw-grad)',
+          color: $store.chatWindow.headerTextColor || '#fff',
+          padding: $store.chatWindow.headerPadding || '14px 16px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          borderBottom: $store.chatcontactv2.headerBorderColor ? \`1px solid \${$store.chatcontactv2.headerBorderColor}\` : '1px solid rgba(0,0,0,0.08)',
+          borderBottom: $store.chatWindow.headerBorderColor ? \`1px solid \${$store.chatWindow.headerBorderColor}\` : '1px solid rgba(0,0,0,0.08)',
           position: 'relative'
         }">
           <!-- Left side: Expand button, Brand Avatar & Text -->
           <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
             <!-- Expand / Collapse Button -->
             <button type="button" class="icon-btn" :aria-label="$store.chat.isExpanded ? 'Collapse chat' : 'Expand chat'"
-                    :style="{ color: $store.chatcontactv2.headerTextColor || '#fff', opacity: '0.7' }"
+                    :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }"
                     x-show="$store.chat.flag('widget.modernUi', true)"
                     @click="$store.chat.toggleExpand()">
               <!-- Collapse Icon (diagonal arrows pointing inwards) when expanded -->
@@ -185,26 +185,26 @@
             <!-- Brand Avatar -->
             <div style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; flex-shrink: 0; position: relative;"
                  :style="{
-                   background: $store.chatcontactv2.headerAvatarBg || ($store.chatcontactv2.headerTextColor === '#18181b' ? '#e4e4e7' : 'rgba(255,255,255,0.2)'),
-                   color: $store.chatcontactv2.headerAvatarColor || ($store.chatcontactv2.headerTextColor || '#fff')
+                   background: $store.chatWindow.headerAvatarBg || ($store.chatWindow.headerTextColor === '#18181b' ? '#e4e4e7' : 'rgba(255,255,255,0.2)'),
+                   color: $store.chatWindow.headerAvatarColor || ($store.chatWindow.headerTextColor || '#fff')
                  }">
-              <span x-text="($store.chat.clientName || $store.chatcontactv2.clientName || 'S').charAt(0)"></span>
+              <span x-text="($store.chat.clientName || $store.chatWindow.clientName || 'S').charAt(0)"></span>
               <div style="position: absolute; bottom: 0; right: 0; display: flex; align-items: center; justify-content: center;"
                    :style="{
-                     width: ($store.chatcontactv2.activeDot?.size !== undefined ? $store.chatcontactv2.activeDot.size : 8) + 'px',
-                     height: ($store.chatcontactv2.activeDot?.size !== undefined ? $store.chatcontactv2.activeDot.size : 8) + 'px'
+                     width: ($store.chatWindow.activeDot?.size !== undefined ? $store.chatWindow.activeDot.size : 8) + 'px',
+                     height: ($store.chatWindow.activeDot?.size !== undefined ? $store.chatWindow.activeDot.size : 8) + 'px'
                    }">
                 <!-- Pulsing Outer Ping Ring -->
-                <span x-show="!$store.chatcontactv2.activeDot || $store.chatcontactv2.activeDot.animate !== false"
+                <span x-show="!$store.chatWindow.activeDot || $store.chatWindow.activeDot.animate !== false"
                       style="position: absolute; width: 100%; height: 100%; border-radius: 50%; opacity: 0.6; pointer-events: none; animation: statusPulse 1.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;"
                       :style="{
-                        backgroundColor: $store.chatcontactv2.activeDot?.color || '#22c55e'
+                        backgroundColor: $store.chatWindow.activeDot?.color || '#22c55e'
                       }"></span>
                 <!-- Solid Inner Core Dot -->
                 <span style="position: absolute; width: 100%; height: 100%; border-radius: 50%;"
                       :style="{
-                        backgroundColor: $store.chatcontactv2.activeDot?.color || '#22c55e',
-                        border: ($store.chatcontactv2.activeDot?.borderWidth !== undefined ? $store.chatcontactv2.activeDot.borderWidth : 0) + 'px solid ' + ($store.chatcontactv2.activeDot?.borderColor || 'transparent')
+                        backgroundColor: $store.chatWindow.activeDot?.color || '#22c55e',
+                        border: ($store.chatWindow.activeDot?.borderWidth !== undefined ? $store.chatWindow.activeDot.borderWidth : 0) + 'px solid ' + ($store.chatWindow.activeDot?.borderColor || 'transparent')
                       }"></span>
               </div>
             </div>
@@ -212,11 +212,11 @@
             <!-- Brand Title & Subtitle -->
             <div style="display: flex; flex-direction: column; text-align: left; min-width: 0;">
               <span style="font-weight: 700; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                    :style="{ fontSize: $store.chatcontactv2.headerTitleFontSize || '14px' }"
-                    x-text="$store.chat.clientName || $store.chatcontactv2.clientName || 'Support'"></span>
+                    :style="{ fontSize: $store.chatWindow.headerTitleFontSize || '14px' }"
+                    x-text="$store.chat.clientName || $store.chatWindow.clientName || 'Support'"></span>
               <span style="opacity: 0.8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                    :style="{ fontSize: $store.chatcontactv2.headerSubtitleFontSize || '11px' }"
-                    x-text="$store.chat.state === 'active' ? (($store.chat.agentName || $store.chatcontactv2.agentName) ? ($store.chat.agentName || $store.chatcontactv2.agentName) + ' · Online' : 'Online') : 'Online'"></span>
+                    :style="{ fontSize: $store.chatWindow.headerSubtitleFontSize || '11px' }"
+                    x-text="$store.chat.state === 'active' ? (($store.chat.agentName || $store.chatWindow.agentName) ? ($store.chat.agentName || $store.chatWindow.agentName) + ' · Online' : 'Online') : 'Online'"></span>
             </div>
           </div>
 
@@ -224,7 +224,7 @@
           <div style="display: flex; gap: 8px; align-items: center; flex-shrink: 0;">
             <!-- End Chat Session (Power Icon Button) -->
             <button type="button" class="icon-btn" aria-label="End chat session"
-                    :style="{ color: $store.chatcontactv2.headerTextColor || '#fff', opacity: '0.7' }"
+                    :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }"
                     @click="$store.chat.askEndChat()">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -232,7 +232,7 @@
               </svg>
             </button>
             <button type="button" class="icon-btn" aria-label="Chat options"
-                    :style="{ color: $store.chatcontactv2.headerTextColor || '#fff', opacity: '0.7' }"
+                    :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }"
                     x-show="$store.chat.flag('widget.modernUi', true)"
                     @click="$store.chat.menuOpen = !$store.chat.menuOpen">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
@@ -240,7 +240,7 @@
               </svg>
             </button>
             <button type="button" class="icon-btn" aria-label="Minimize chat panel"
-                    :style="{ color: $store.chatcontactv2.headerTextColor || '#fff', opacity: '0.7' }"
+                    :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }"
                     @click="$store.chat.closePanel(); openContactWidget = false">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -270,7 +270,7 @@
           </button>
         </div>
 
-        <div class="panel-body" id="panel-body" :style="{ background: $store.chatcontactv2.bodyBg || 'var(--cw-bg)' }">
+        <div class="panel-body" id="panel-body" :style="{ background: $store.chatWindow.bodyBg || 'var(--cw-bg)' }">
           <div class="center-note" x-show="$store.chat.state === 'boot'">
             <div class="spinner" aria-hidden="true"></div>
             <p>Connecting…</p>
@@ -278,7 +278,7 @@
 
           <div class="prechat" x-show="$store.chat.state === 'prechat'">
             <div class="avatar prechat-avatar" aria-hidden="true">
-              <span x-text="($store.chat.clientName || $store.chatcontactv2.clientName || 'S').charAt(0)"></span>
+              <span x-text="($store.chat.clientName || $store.chatWindow.clientName || 'S').charAt(0)"></span>
             </div>
             <h2>Hi there 👋</h2>
             <p class="muted">Tell us who you are and we'll connect you with an agent right away.</p>
@@ -335,7 +335,7 @@
           </div>
 
           <div class="chat" x-show="$store.chat.state === 'active' || $store.chat.state === 'closed'">
-            <div class="messages" x-ref="messages" :style="{ background: $store.chatcontactv2.bodyBg || 'var(--cw-bg)' }">
+            <div class="messages" x-ref="messages" :style="{ background: $store.chatWindow.bodyBg || 'var(--cw-bg)' }">
               <template x-for="(m, i) in $store.chat.messages" :key="m.key">
                 <div>
                   <div class="day-divider" x-show="$store.chat.dividerBefore(i)" x-text="$store.chat.dayLabel(m)"></div>
@@ -347,40 +347,40 @@
                          'g-end': $store.chat.groupEnd(i)
                        }">
                     <div class="msg-avatar" aria-hidden="true" x-show="m.senderType === 'AGENT' && $store.chat.groupEnd(i)" :style="{
-                      background: $store.chatcontactv2.agentAvatarBg || 'var(--cw-accent-tint)',
-                      color: $store.chatcontactv2.agentAvatarColor || 'var(--cw-accent-deep)'
+                      background: $store.chatWindow.agentAvatarBg || 'var(--cw-accent-tint)',
+                      color: $store.chatWindow.agentAvatarColor || 'var(--cw-accent-deep)'
                     }">
-                      <template x-if="$store.chatcontactv2.agentAvatarUrl">
-                        <img :src="$store.chatcontactv2.agentAvatarUrl" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
+                      <template x-if="$store.chatWindow.agentAvatarUrl">
+                        <img :src="$store.chatWindow.agentAvatarUrl" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
                       </template>
-                      <template x-if="!$store.chatcontactv2.agentAvatarUrl">
-                        <span x-text="(m.senderName || $store.chat.agentName || $store.chatcontactv2.agentName || 'A').charAt(0)"></span>
+                      <template x-if="!$store.chatWindow.agentAvatarUrl">
+                        <span x-text="(m.senderName || $store.chat.agentName || $store.chatWindow.agentName || 'A').charAt(0)"></span>
                       </template>
                     </div>
                     <div class="bubble" :class="{ pending: m.pending, 'has-img': m.attachment || m.localUrl }" :style="{
                       background: m.senderType === 'VISITOR' 
-                        ? ($store.chatcontactv2.visitorBubbleBg || 'var(--cw-grad)') 
-                        : ($store.chatcontactv2.agentBubbleBg || 'var(--cw-surface)'),
+                        ? ($store.chatWindow.visitorBubbleBg || 'var(--cw-grad)') 
+                        : ($store.chatWindow.agentBubbleBg || 'var(--cw-surface)'),
                       color: m.senderType === 'VISITOR' 
-                        ? ($store.chatcontactv2.visitorBubbleColor || '#fff') 
-                        : ($store.chatcontactv2.agentBubbleColor || 'var(--cw-ink)'),
+                        ? ($store.chatWindow.visitorBubbleColor || '#fff') 
+                        : ($store.chatWindow.agentBubbleColor || 'var(--cw-ink)'),
                       borderColor: m.senderType === 'VISITOR' 
                         ? 'transparent' 
-                        : ($store.chatcontactv2.agentBubbleBorderColor || 'var(--cw-border)'),
+                        : ($store.chatWindow.agentBubbleBorderColor || 'var(--cw-border)'),
                       boxShadow: m.senderType === 'VISITOR' 
-                        ? ($store.chatcontactv2.visitorBubbleBg ? 'none' : '0 2px 8px color-mix(in srgb, var(--cw-accent) 25%, transparent)') 
+                        ? ($store.chatWindow.visitorBubbleBg ? 'none' : '0 2px 8px color-mix(in srgb, var(--cw-accent) 25%, transparent)') 
                         : '0 1px 2px rgba(16, 24, 40, 0.05)',
                       borderStyle: 'solid',
                       borderWidth: m.senderType === 'VISITOR' ? '0px' : '1px',
                       borderRadius: m.senderType === 'VISITOR' 
-                        ? ($store.chatcontactv2.visitorBubbleBorderRadius || '16px')
-                        : ($store.chatcontactv2.agentBubbleBorderRadius || '16px'),
+                        ? ($store.chatWindow.visitorBubbleBorderRadius || '16px')
+                        : ($store.chatWindow.agentBubbleBorderRadius || '16px'),
                       padding: m.senderType === 'VISITOR'
-                        ? ($store.chatcontactv2.visitorBubblePadding || '10px 14px')
-                        : ($store.chatcontactv2.agentBubblePadding || '10px 14px'),
+                        ? ($store.chatWindow.visitorBubblePadding || '10px 14px')
+                        : ($store.chatWindow.agentBubblePadding || '10px 14px'),
                       fontSize: m.senderType === 'VISITOR'
-                        ? ($store.chatcontactv2.visitorBubbleFontSize || '14px')
-                        : ($store.chatcontactv2.agentBubbleFontSize || '14px')
+                        ? ($store.chatWindow.visitorBubbleFontSize || '14px')
+                        : ($store.chatWindow.agentBubbleFontSize || '14px')
                     }">
                       <template x-if="m.attachment || m.localUrl">
                         <img class="bubble-img" alt="attachment" :src="m.localUrl || $store.chat.attachmentUrl(m)" @load="$store.chat.scrollDown()" @click="!m.pending && window.open($store.chat.attachmentUrl(m), '_blank')" />
@@ -388,28 +388,28 @@
                       <span class="bubble-body" x-show="m.body" x-text="m.body"></span>
                       <span class="bubble-time" x-show="$store.chat.groupEnd(i)">
                         <span x-text="$store.chat.timeLabel(m)"></span>
-                        <template x-if="m.senderType === 'VISITOR' && ($store.chatcontactv2.ticksEnabled !== false)">
+                        <template x-if="m.senderType === 'VISITOR' && ($store.chatWindow.ticksEnabled !== false)">
                           <span style="margin-left: 4px; display: inline-flex; align-items: center; vertical-align: middle;">
                             <!-- One grey tick (sent) -->
                             <template x-if="!m.status || m.status === 'sent'">
                               <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                                   :stroke="$store.chatcontactv2.sentTickColor || 'currentColor'"
-                                   :style="{ opacity: $store.chatcontactv2.sentTickColor ? 1 : 0.7 }">
+                                   :stroke="$store.chatWindow.sentTickColor || 'currentColor'"
+                                   :style="{ opacity: $store.chatWindow.sentTickColor ? 1 : 0.7 }">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                               </svg>
                             </template>
                             <!-- Two grey ticks (delivered) -->
                             <template x-if="m.status === 'delivered'">
                               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                                   :stroke="$store.chatcontactv2.deliveredTickColor || 'currentColor'"
-                                   :style="{ opacity: $store.chatcontactv2.deliveredTickColor ? 1 : 0.7 }">
+                                   :stroke="$store.chatWindow.deliveredTickColor || 'currentColor'"
+                                   :style="{ opacity: $store.chatWindow.deliveredTickColor ? 1 : 0.7 }">
                                 <path d="M17 6L8.5 14.5L5 11M22 6L13.5 14.5L12.5 13.5"></path>
                               </svg>
                             </template>
                             <!-- Two blue ticks (read) -->
                             <template x-if="m.status === 'read'">
                               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                                   :stroke="$store.chatcontactv2.readTickColor || '#34b7f1'">
+                                   :stroke="$store.chatWindow.readTickColor || '#34b7f1'">
                                 <path d="M17 6L8.5 14.5L5 11M22 6L13.5 14.5L12.5 13.5"></path>
                               </svg>
                             </template>
@@ -461,20 +461,20 @@
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              padding: $store.chatcontactv2.inputPadding || '6px 8px',
-              margin: $store.chatcontactv2.inputMargin || '12px 16px',
-              background: $store.chatcontactv2.inputBg || 'var(--cw-surface)',
-              borderRadius: $store.chatcontactv2.inputBorderRadius || '9999px',
+              padding: $store.chatWindow.inputPadding || '6px 8px',
+              margin: $store.chatWindow.inputMargin || '12px 16px',
+              background: $store.chatWindow.inputBg || 'var(--cw-surface)',
+              borderRadius: $store.chatWindow.inputBorderRadius || '9999px',
               border: focused 
-                ? ('1px solid ' + ($store.chatcontactv2.inputFocusBorderColor || $store.chatcontactv2.accentColor || '#0b5fff')) 
-                : ('1px solid ' + ($store.chatcontactv2.inputBorderColor || 'var(--cw-border)')),
+                ? ('1px solid ' + ($store.chatWindow.inputFocusBorderColor || $store.chatWindow.accentColor || '#0b5fff')) 
+                : ('1px solid ' + ($store.chatWindow.inputBorderColor || 'var(--cw-border)')),
               boxShadow: focused 
-                ? ($store.chatcontactv2.inputFocusShadow || '0 0 0 2px rgba(11, 95, 255, 0.1)') 
+                ? ($store.chatWindow.inputFocusShadow || '0 0 0 2px rgba(11, 95, 255, 0.1)') 
                 : 'none',
               boxSizing: 'border-box',
               transition: 'all 0.2s ease'
             }">
-              <style x-text="'.composer textarea::placeholder { color: ' + ($store.chatcontactv2.inputPlaceholderColor || '#a1a1aa') + ' !important; }'"></style>
+              <style x-text="'.composer textarea::placeholder { color: ' + ($store.chatWindow.inputPlaceholderColor || '#a1a1aa') + ' !important; }'"></style>
               <input type="file" id="cw-embed-file" class="file-input" accept="image/png,image/jpeg,image/gif,image/webp" @change="$store.chat.uploadImage($event.target)" style="display: none;" />
               
               <!-- Plus Attachment Button -->
@@ -490,8 +490,8 @@
                 margin: '0',
                 lineHeight: '0',
                 boxSizing: 'border-box',
-                background: $store.chatcontactv2.attachButtonBg || '#ffffff',
-                color: $store.chatcontactv2.attachButtonColor || '#71717a',
+                background: $store.chatWindow.attachButtonBg || '#ffffff',
+                color: $store.chatWindow.attachButtonColor || '#71717a',
                 cursor: 'pointer',
                 flexShrink: '0',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
@@ -504,9 +504,9 @@
                 resize: 'none',
                 padding: '6px 12px',
                 background: 'transparent',
-                color: $store.chatcontactv2.inputTextColor || 'var(--cw-ink)',
+                color: $store.chatWindow.inputTextColor || 'var(--cw-ink)',
                 outline: 'none',
-                fontSize: $store.chatcontactv2.textareaFontSize || '14px',
+                fontSize: $store.chatWindow.textareaFontSize || '14px',
                 fontFamily: 'inherit',
                 height: '32px',
                 minHeight: '24px',
@@ -526,7 +526,7 @@
                 border: 'none',
                 padding: '0',
                 background: 'transparent',
-                color: $store.chatcontactv2.emojiButtonColor || '#71717a',
+                color: $store.chatWindow.emojiButtonColor || '#71717a',
                 cursor: 'pointer',
                 flexShrink: '0',
                 marginRight: '2px'
@@ -550,22 +550,22 @@
                 border: 'none',
                 padding: '0',
                 background: !$store.chat.draft.trim() 
-                  ? ($store.chatcontactv2.sendButtonBgInactive || '#e4e4e7') 
-                  : ($store.chatcontactv2.sendButtonBgActive || $store.chatcontactv2.accentColor || '#0b5fff'),
+                  ? ($store.chatWindow.sendButtonBgInactive || '#e4e4e7') 
+                  : ($store.chatWindow.sendButtonBgActive || $store.chatWindow.accentColor || '#0b5fff'),
                 color: !$store.chat.draft.trim() 
-                  ? ($store.chatcontactv2.sendButtonColorInactive || '#a1a1aa') 
-                  : ($store.chatcontactv2.sendButtonColorActive || '#ffffff'),
+                  ? ($store.chatWindow.sendButtonColorInactive || '#a1a1aa') 
+                  : ($store.chatWindow.sendButtonColorActive || '#ffffff'),
                 cursor: !$store.chat.draft.trim() ? 'default' : 'pointer',
                 transition: 'all 0.2s ease',
                 flexShrink: '0'
               }">
-                <template x-if="$store.chatcontactv2.sendIconType === 'arrow'">
+                <template x-if="$store.chatWindow.sendIconType === 'arrow'">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <line x1="12" y1="19" x2="12" y2="5"></line>
                     <polyline points="5 12 12 5 19 12"></polyline>
                   </svg>
                 </template>
-                <template x-if="$store.chatcontactv2.sendIconType !== 'arrow'">
+                <template x-if="$store.chatWindow.sendIconType !== 'arrow'">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" style="transform: rotate(45deg); margin-left: 2px; margin-top: -2px;">
                     <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                   </svg>
@@ -576,22 +576,22 @@
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              paddingBottom: $store.chatcontactv2.footerPaddingBottom || '16px',
-              background: $store.chatcontactv2.footerBg || $store.chatcontactv2.bodyBg || '#ffffff',
-              borderBottomLeftRadius: ($store.chatcontactv2.widgetBorderRadius || 16) + 'px',
-              borderBottomRightRadius: ($store.chatcontactv2.widgetBorderRadius || 16) + 'px'
+              paddingBottom: $store.chatWindow.footerPaddingBottom || '16px',
+              background: $store.chatWindow.footerBg || $store.chatWindow.bodyBg || '#ffffff',
+              borderBottomLeftRadius: ($store.chatWindow.widgetBorderRadius || 16) + 'px',
+              borderBottomRightRadius: ($store.chatWindow.widgetBorderRadius || 16) + 'px'
             }">
               <div class="powered" x-show="$store.chat.flag('widget.modernUi', true)" 
                    style="display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; align-items: center !important; justify-content: center !important; gap: 4px !important; font-family: inherit !important; width: 100% !important; background: transparent !important; text-align: center !important;"
                    :style="{
-                     fontSize: $store.chatcontactv2.footerFontSize || '10px',
-                     color: $store.chatcontactv2.footerTextColor || 'var(--cw-muted)'
+                     fontSize: $store.chatWindow.footerFontSize || '10px',
+                     color: $store.chatWindow.footerTextColor || 'var(--cw-muted)'
                    }">
                 <span>Powered by</span> 
-                <template x-if="$store.chatcontactv2.poweredByLogo">
-                  <span x-html="$store.chatcontactv2.poweredByLogo" style="display: inline-flex; align-items: center; justify-content: center; height: 12px; width: 12px; flex-shrink: 0;"></span>
+                <template x-if="$store.chatWindow.poweredByLogo">
+                  <span x-html="$store.chatWindow.poweredByLogo" style="display: inline-flex; align-items: center; justify-content: center; height: 12px; width: 12px; flex-shrink: 0;"></span>
                 </template>
-                <a :href="$store.chatcontactv2.poweredByLink || '#'" target="_blank" style="font-weight: 700; color: inherit; text-decoration: none; display: inline-block;" :style="{ color: $store.chatcontactv2.poweredByColor || '#a1a1aa' }" x-text="$store.chatcontactv2.poweredByText || 'vAInatheya.ai'"></a>
+                <a :href="$store.chatWindow.poweredByLink || '#'" target="_blank" style="font-weight: 700; color: inherit; text-decoration: none; display: inline-block;" :style="{ color: $store.chatWindow.poweredByColor || '#a1a1aa' }" x-text="$store.chatWindow.poweredByText || 'vAInatheya.ai'"></a>
               </div>
             </div>
 
@@ -608,22 +608,22 @@
         <div class="modal-overlay" x-show="$store.chat.confirmBox" x-cloak @click.self="$store.chat.confirmBox = null">
           <div class="modal-card" role="alertdialog" aria-modal="true" :aria-label="$store.chat.confirmBox && $store.chat.confirmBox.message"
                :style="{
-                 background: $store.chatcontactv2.modalCardBg || '#ffffff',
-                 borderRadius: ($store.chatcontactv2.modalBorderRadius || 16) + 'px'
+                 background: $store.chatWindow.modalCardBg || '#ffffff',
+                 borderRadius: ($store.chatWindow.modalBorderRadius || 16) + 'px'
                }">
-            <p class="modal-message" :style="{ color: $store.chatcontactv2.modalMessageColor || '#101828' }" x-text="$store.chat.confirmBox && $store.chat.confirmBox.message"></p>
+            <p class="modal-message" :style="{ color: $store.chatWindow.modalMessageColor || '#101828' }" x-text="$store.chat.confirmBox && $store.chat.confirmBox.message"></p>
             <div class="modal-actions">
               <button type="button" class="btn-ghost" @click="$store.chat.confirmBox = null" 
                       :style="{
-                        background: $store.chatcontactv2.endChatCancelBg || 'var(--cw-surface)',
-                        color: $store.chatcontactv2.endChatCancelTextColor || 'var(--cw-muted)',
-                        borderColor: $store.chatcontactv2.endChatCancelBorderColor || 'var(--cw-border)'
+                        background: $store.chatWindow.endChatCancelBg || 'var(--cw-surface)',
+                        color: $store.chatWindow.endChatCancelTextColor || 'var(--cw-muted)',
+                        borderColor: $store.chatWindow.endChatCancelBorderColor || 'var(--cw-border)'
                       }"
                       x-text="$store.chat.confirmBox && $store.chat.confirmBox.cancelLabel || 'Cancel'"></button>
               <button type="button" class="btn-confirm" @click="$store.chat.confirmResolve()" 
                       :style="{
-                        background: $store.chatcontactv2.endChatConfirmBg || 'var(--cw-grad)',
-                        color: $store.chatcontactv2.endChatConfirmTextColor || '#ffffff'
+                        background: $store.chatWindow.endChatConfirmBg || 'var(--cw-grad)',
+                        color: $store.chatWindow.endChatConfirmTextColor || '#ffffff'
                       }"
                       x-text="($store.chat.confirmBox && $store.chat.confirmBox.confirmLabel) || 'Confirm'"></button>
             </div>
@@ -1048,7 +1048,7 @@
       getBackgroundStyle() {
         if (!this.settings) return '#007bff';
         if (this.settings.useWebsiteTheme) {
-          const chatConfig = Alpine.store('chatcontactv2');
+          const chatConfig = Alpine.store('chatWindow');
           return chatConfig.accentColor || '#0b5fff';
         }
         if (!this.settings.gradientEnabled) return this.settings.bgColor || '#007bff';
@@ -1124,7 +1124,7 @@
          const data = await response.json();
          return {
            bubbleConfig: data.bubble || {},
-           chatConfig: data.chatcontactv2 || data.chat || {}
+           chatConfig: data.chatWindow || data.chat || {}
          };
        } catch (error) {
          console.error('[Zotly Widget] Failed to fetch MongoDB client config:', error);
@@ -1147,7 +1147,7 @@
         console.log(`[Zotly Widget] Successfully loaded configuration for client "${clientId}"`);
         return {
           bubbleConfig: data.bubble || {},
-          chatConfig: data.chatcontactv2 || data.chat || {},
+          chatConfig: data.chatWindow || data.chat || {},
           chatbarConfig: data.chatbar || {}
         };
       } else {
@@ -1157,9 +1157,9 @@
       console.warn(`[Zotly Widget] Network error trying to fetch client config:`, e);
     }
 
-    // Strategy 2: Fallback to root public default JSON files (bubble.json, chatcontactv2.json, chatbar.json)
+    // Strategy 2: Fallback to root public default JSON files (bubble.json, chatWindow.json, chatbar.json)
     const defaultBubbleUrl = `${baseUrl}public/bubble.json`;
-    const defaultChatUrl = `${baseUrl}public/chatcontactv2.json`;
+    const defaultChatUrl = `${baseUrl}public/chatWindow.json`;
     const defaultChatbarUrl = `${baseUrl}public/chatbar.json`;
     console.log(`[Zotly Widget] Fetching default configurations from: "${defaultBubbleUrl}" & "${defaultChatUrl}" & "${defaultChatbarUrl}"`);
     try {
@@ -1203,8 +1203,8 @@
       });
     }
 
-    if (!Alpine.store('chatcontactv2')) {
-      Alpine.store('chatcontactv2', {
+    if (!Alpine.store('chatWindow')) {
+      Alpine.store('chatWindow', {
         clientName: 'Zotly Support', agentName: 'Sarah',
         accentColor: theme.primary || '#0b5fff',
         useWebsiteTheme: true,
@@ -1213,6 +1213,7 @@
         widgetBorderEnabled: true, widgetBorderWidth: 1, widgetBorderColor: '#e5e7eb',
         modernUi: true, typingIndicator: true, attachmentsEnabled: true
       });
+      Alpine.store('chatcontactv2', Alpine.store('chatWindow'));
     }
 
     if (!Alpine.store('chatbar')) {
@@ -1294,7 +1295,10 @@
           Object.assign(activeConfig, chatConfig.dark);
         }
 
-        Object.assign(Alpine.store('chatcontactv2'), activeConfig);
+        Object.assign(Alpine.store('chatWindow'), activeConfig);
+        if (Alpine.store('chatcontactv2')) {
+          Object.assign(Alpine.store('chatcontactv2'), activeConfig);
+        }
       };
 
       // Initial apply
@@ -1385,7 +1389,7 @@
           }
         },
         askEndChat() {
-          const config = Alpine.store('chatcontactv2');
+          const config = Alpine.store('chatWindow');
           this.confirmBox = {
             message: config.endChatConfirmMessage || 'Are you sure you want to end this chat session?',
             confirmLabel: config.endChatConfirmLabel || 'End chat',

@@ -108,7 +108,7 @@
     },
     "hideOnOpen": true
   },
-  "chatcontactv2": {
+  "chatWindow": {
     "useWebsiteTheme": false,
     "clientName": "PhonePe Support",
     "agentName": "Sarah",

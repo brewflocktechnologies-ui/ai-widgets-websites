@@ -108,7 +108,7 @@
     },
     "hideOnOpen": false
   },
-  "chatcontactv2": {
+  "chatWindow": {
     "useWebsiteTheme": true,
     "clientName": "Google Cloud Support",
     "agentName": "Sarah",
