@@ -1,9 +1,7 @@
 {
   "clientId": "amber",
   "clientName": "Vortex Studio Amber",
-
   "//_bubble_section": "--- FLOATING BUBBLE TRIGGER BUTTON ---",
-
   "bubble": {
     "useWebsiteTheme": true,
     "width": 60,
@@ -100,16 +98,35 @@
     },
     "badge": {
       "position": "top-right",
-      "offsetX": -6,          
-      "offsetY": -6,          
-      "size": 20,              
-      "fontSize": 11,          
+      "offsetX": -6,
+      "offsetY": -6,
+      "size": 20,
+      "fontSize": 11,
       "backgroundColor": "#dc2626",
       "textColor": "#ffffff",
       "borderWidth": 2,
       "borderColor": "#ffffff"
     },
-    "hideOnOpen": true
+    "hideOnOpen": true,
+    "tooltip": {
+      "enabled": true,
+      "text": "Chat with us",
+      "position": "left",
+      "backgroundColor": "#D3D3D3",
+      "textColor": "#374151",
+      "fontSize": 14,
+      "borderRadius": {
+        "tl": 20,
+        "tr": 0,
+        "br": 20,
+        "bl": 20
+      },
+      "padding": "8px 16px",
+      "boxShadow": "0 4px 12px rgba(0,0,0,0.1)",
+      "arrowEnabled": false,
+      "borderColor": "transparent",
+      "borderWidth": 0
+    }
   },
 
   "//_chatWindow_section": "--- CHAT WINDOW LAYOUT AND THEME ---",
@@ -239,9 +256,34 @@
     "poweredByText": "vainateya.ai",
     "poweredByLink": "",
     "poweredByColor": "#d97706",
-    "poweredByLogo": ""
+    "poweredByLogo": "",
+    "welcome": {
+      "enabled": true,
+      "title": "Hi there! 👋 How can we help you today?",
+      "description": "Our support heroes are here to assist you.",
+      "bgGradient": "linear-gradient(145deg, #f59e0b 0%, #b45309 100%)",
+      "headerTextColor": "#ffffff",
+      "subtextColor": "rgba(255,255,255,0.9)",
+      "padding": "40px 32px",
+      "titleFontSize": "28px",
+      "descriptionFontSize": "15px",
+      "avatarBorderColor": "rgba(255,255,255,0.2)",
+      "avatars": [
+        "https://png.pngtree.com/png-vector/20230831/ourmid/pngtree-man-avatar-image-for-profile-png-image_9197908.png",
+        "https://png.pngtree.com/png-vector/20230831/ourmid/pngtree-man-avatar-image-for-profile-png-image_9197908.png",
+        "https://png.pngtree.com/png-vector/20230831/ourmid/pngtree-man-avatar-image-for-profile-png-image_9197908.png"
+      ],
+      "buttonText": "Start Conversation",
+      "buttonSubtext": "Typically replies in 5 minutes",
+      "buttonBg": "#ffffff",
+      "buttonTextColor": "#111827",
+      "buttonPadding": "18px 24px",
+      "buttonBorderRadius": 24,
+      "buttonIconBg": "transparent",
+      "buttonIconColor": "#d97706"
+    }
   },
-    "chatbar": {
+  "chatbar": {
     "enabled": false,
     "useWebsiteTheme": true,
     "text": "Chat with us",
@@ -281,7 +323,7 @@
       "br": 20
     },
     "shadow": true,
-      "hideOnOpen": true,
+    "hideOnOpen": true,
     "offsetBottom": 12,
     "offsetRight": 16,
     "stackGap": 12,

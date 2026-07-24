@@ -37,18 +37,9 @@
         font-family: inherit !important;
       }
       @keyframes statusPulse {
-        0% {
-          transform: scale(0.9);
-          opacity: 0.65;
-        }
-        50% {
-          transform: scale(1.6);
-          opacity: 0.3;
-        }
-        100% {
-          transform: scale(2.4);
-          opacity: 0;
-        }
+        0% { transform: scale(0.9); opacity: 0.65; }
+        50% { transform: scale(1.6); opacity: 0.3; }
+        100% { transform: scale(2.4); opacity: 0; }
       }
     `;
     document.head.appendChild(styleRule);
@@ -59,13 +50,9 @@
     const rootStyle = getComputedStyle(document.documentElement);
     const bodyStyle = getComputedStyle(document.body);
 
-    let primary = rootStyle.getPropertyValue('--primary-color').trim() ||
-      bodyStyle.getPropertyValue('--primary-color').trim();
+    let primary = rootStyle.getPropertyValue('--primary-color').trim() || bodyStyle.getPropertyValue('--primary-color').trim();
+    let secondary = rootStyle.getPropertyValue('--secondary-color').trim() || bodyStyle.getPropertyValue('--secondary-color').trim();
 
-    let secondary = rootStyle.getPropertyValue('--secondary-color').trim() ||
-      bodyStyle.getPropertyValue('--secondary-color').trim();
-
-    // Fallback: check script attribute if defined
     let scriptTag = document.currentScript;
     if (!scriptTag || !scriptTag.src || !scriptTag.src.includes('widget.js')) {
       scriptTag = document.querySelector('script[data-client-id]') || document.querySelector('script[src*="widget.js"]');
@@ -102,9 +89,7 @@
         height: $store.chatWindow.widgetHeight ? $store.chatWindow.widgetHeight + 'px' : '550px',
         maxWidth: 'calc(100vw - 32px)',
         maxHeight: (function() {
-          const defaultBottom = $store.chatbar.enabled
-            ? ($store.chatbar.offsetBottom !== undefined ? $store.chatbar.offsetBottom : 12)
-            : ($store.bubble.offsetBottom !== undefined ? $store.bubble.offsetBottom : 12);
+          const defaultBottom = $store.chatbar.enabled ? ($store.chatbar.offsetBottom !== undefined ? $store.chatbar.offsetBottom : 12) : ($store.bubble.offsetBottom !== undefined ? $store.bubble.offsetBottom : 12);
           let offset = defaultBottom;
           if ($store.chatbar.enabled && !$store.chatbar.hideOnOpen) {
             const h = $store.chatbar.height || ($store.chatbar.layout === 'card' ? 220 : 40);
@@ -119,9 +104,7 @@
         })(),
         position: 'fixed',
         bottom: (function() {
-          const defaultBottom = $store.chatbar.enabled
-            ? ($store.chatbar.offsetBottom !== undefined ? $store.chatbar.offsetBottom : 12)
-            : ($store.bubble.offsetBottom !== undefined ? $store.bubble.offsetBottom : 12);
+          const defaultBottom = $store.chatbar.enabled ? ($store.chatbar.offsetBottom !== undefined ? $store.chatbar.offsetBottom : 12) : ($store.bubble.offsetBottom !== undefined ? $store.bubble.offsetBottom : 12);
           if ($store.chatbar.enabled && !$store.chatbar.hideOnOpen) {
             const h = $store.chatbar.height || ($store.chatbar.layout === 'card' ? 220 : 40);
             const gap = $store.chatbar.stackGap !== undefined ? $store.chatbar.stackGap : 12;
@@ -134,22 +117,20 @@
           }
           return defaultBottom + 'px';
         })(),
-        right: ($store.chatbar.enabled
-          ? ($store.chatbar.offsetRight !== undefined ? $store.chatbar.offsetRight : 16)
-          : ($store.bubble.offsetRight !== undefined ? $store.bubble.offsetRight : 16)) + 'px'
+        right: ($store.chatbar.enabled ? ($store.chatbar.offsetRight !== undefined ? $store.chatbar.offsetRight : 16) : ($store.bubble.offsetRight !== undefined ? $store.bubble.offsetRight : 16)) + 'px'
       }" style="display: none;">
       
       <div class="panel flex flex-col relative w-full h-full overflow-hidden"
         :style="{
-          boxShadow: $store.chatWindow.widgetShadow ? \`0 0 \${$store.chatWindow.widgetShadowBlur || 20}px \${$store.chatWindow.widgetShadowColor || 'rgba(0,0,0,0.15)'}\` : 'none',
+          boxShadow: $store.chatWindow.widgetShadow ? \`0 8px \${$store.chatWindow.widgetShadowBlur || 30}px \${$store.chatWindow.widgetShadowColor || 'rgba(0,0,0,0.12)'}\` : 'none',
           border: $store.chatWindow.widgetBorderEnabled ? \`\${$store.chatWindow.widgetBorderWidth || 1}px solid \${$store.chatWindow.widgetBorderColor || '#e5e7eb'}\` : 'none',
-          borderRadius: \`\${$store.chatWindow.widgetBorderRadius || 16}px\`,
+          borderRadius: \`\${$store.chatWindow.widgetBorderRadius || 24}px\`,
           background: $store.chatWindow.bodyBg || 'var(--cw-bg)',
           '--cw-accent': $store.chatWindow.accentColor || '#0b5fff',
           isolation: 'isolate',
           transform: 'translateZ(0)'
         }">
-        <header class="panel-header" :style="{
+        <header class="panel-header" x-show="$store.chat.state !== 'welcome'" :style="{
           background: $store.chatWindow.headerBg || 'var(--cw-grad)',
           color: $store.chatWindow.headerTextColor || '#fff',
           padding: $store.chatWindow.headerPadding || '14px 16px',
@@ -159,57 +140,30 @@
           borderBottom: $store.chatWindow.headerBorderColor ? \`1px solid \${$store.chatWindow.headerBorderColor}\` : '1px solid rgba(0,0,0,0.08)',
           position: 'relative'
         }">
-          <!-- Left side: Expand button, Brand Avatar & Text -->
           <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
-            <!-- Expand / Collapse Button -->
             <button type="button" class="icon-btn" :aria-label="$store.chat.isExpanded ? 'Collapse chat' : 'Expand chat'"
                     :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }"
                     x-show="$store.chat.flag('widget.modernUi', true)"
                     @click="$store.chat.toggleExpand()">
-              <!-- Collapse Icon (diagonal arrows pointing inwards) when expanded -->
               <template x-if="$store.chat.isExpanded">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-                     stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7" />
-                </svg>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7" /></svg>
               </template>
-              <!-- Expand Icon (diagonal arrows pointing outwards) when collapsed -->
               <template x-if="!$store.chat.isExpanded">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-                     stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-                </svg>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
               </template>
             </button>
-
-            <!-- Brand Avatar -->
             <div style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; flex-shrink: 0; position: relative;"
-                 :style="{
-                   background: $store.chatWindow.headerAvatarBg || ($store.chatWindow.headerTextColor === '#18181b' ? '#e4e4e7' : 'rgba(255,255,255,0.2)'),
-                   color: $store.chatWindow.headerAvatarColor || ($store.chatWindow.headerTextColor || '#fff')
-                 }">
+                 :style="{ background: $store.chatWindow.headerAvatarBg || ($store.chatWindow.headerTextColor === '#18181b' ? '#e4e4e7' : 'rgba(255,255,255,0.2)'), color: $store.chatWindow.headerAvatarColor || ($store.chatWindow.headerTextColor || '#fff') }">
               <span x-text="($store.chat.clientName || $store.chatWindow.clientName || 'S').charAt(0)"></span>
               <div style="position: absolute; bottom: 0; right: 0; display: flex; align-items: center; justify-content: center;"
-                   :style="{
-                     width: ($store.chatWindow.activeDot?.size !== undefined ? $store.chatWindow.activeDot.size : 8) + 'px',
-                     height: ($store.chatWindow.activeDot?.size !== undefined ? $store.chatWindow.activeDot.size : 8) + 'px'
-                   }">
-                <!-- Pulsing Outer Ping Ring -->
+                   :style="{ width: ($store.chatWindow.activeDot?.size !== undefined ? $store.chatWindow.activeDot.size : 8) + 'px', height: ($store.chatWindow.activeDot?.size !== undefined ? $store.chatWindow.activeDot.size : 8) + 'px' }">
                 <span x-show="!$store.chatWindow.activeDot || $store.chatWindow.activeDot.animate !== false"
                       style="position: absolute; width: 100%; height: 100%; border-radius: 50%; opacity: 0.6; pointer-events: none; animation: statusPulse 1.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;"
-                      :style="{
-                        backgroundColor: $store.chatWindow.activeDot?.color || '#22c55e'
-                      }"></span>
-                <!-- Solid Inner Core Dot -->
+                      :style="{ backgroundColor: $store.chatWindow.activeDot?.color || '#22c55e' }"></span>
                 <span style="position: absolute; width: 100%; height: 100%; border-radius: 50%;"
-                      :style="{
-                        backgroundColor: $store.chatWindow.activeDot?.color || '#22c55e',
-                        border: ($store.chatWindow.activeDot?.borderWidth !== undefined ? $store.chatWindow.activeDot.borderWidth : 0) + 'px solid ' + ($store.chatWindow.activeDot?.borderColor || 'transparent')
-                      }"></span>
+                      :style="{ backgroundColor: $store.chatWindow.activeDot?.color || '#22c55e', border: ($store.chatWindow.activeDot?.borderWidth !== undefined ? $store.chatWindow.activeDot.borderWidth : 0) + 'px solid ' + ($store.chatWindow.activeDot?.borderColor || 'transparent') }"></span>
               </div>
             </div>
-
-            <!-- Brand Title & Subtitle -->
             <div style="display: flex; flex-direction: column; text-align: left; min-width: 0;">
               <span style="font-weight: 700; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
                     :style="{ fontSize: $store.chatWindow.headerTitleFontSize || '14px' }"
@@ -219,58 +173,152 @@
                     x-text="$store.chat.state === 'active' ? (($store.chat.agentName || $store.chatWindow.agentName) ? ($store.chat.agentName || $store.chatWindow.agentName) + ' · Online' : 'Online') : 'Online'"></span>
             </div>
           </div>
-
-          <!-- Right side: Actions -->
           <div style="display: flex; gap: 8px; align-items: center; flex-shrink: 0;">
-            <!-- End Chat Session (Power Icon Button) -->
-            <button type="button" class="icon-btn" aria-label="End chat session"
-                    :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }"
-                    @click="$store.chat.askEndChat()">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-                   stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10" />
-              </svg>
+            <button type="button" class="icon-btn" aria-label="End chat session" :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }" @click="$store.chat.askEndChat()">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10" /></svg>
             </button>
-            <button type="button" class="icon-btn" aria-label="Chat options"
-                    :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }"
-                    x-show="$store.chat.flag('widget.modernUi', true)"
-                    @click="$store.chat.menuOpen = !$store.chat.menuOpen">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-                <circle cx="5" cy="12" r="1.8" /><circle cx="12" cy="12" r="1.8" /><circle cx="19" cy="12" r="1.8" />
-              </svg>
+            <button type="button" class="icon-btn" aria-label="Chat options" :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }" x-show="$store.chat.flag('widget.modernUi', true)" @click="$store.chat.menuOpen = !$store.chat.menuOpen">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8" /><circle cx="12" cy="12" r="1.8" /><circle cx="19" cy="12" r="1.8" /></svg>
             </button>
-            <button type="button" class="icon-btn" aria-label="Minimize chat panel"
-                    :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }"
-                    @click="$store.chat.closePanel(); openContactWidget = false">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
+            <button type="button" class="icon-btn" aria-label="Minimize chat panel" :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }" @click="$store.chat.closePanel(); openContactWidget = false">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" /></svg>
             </button>
           </div>
         </header>
 
-        <!-- Options menu -->
-        <div class="menu-pop" x-show="$store.chat.menuOpen" x-cloak
-             @click.outside="$store.chat.menuOpen = false">
+        <div class="menu-pop" x-show="$store.chat.menuOpen" x-cloak @click.outside="$store.chat.menuOpen = false">
           <button type="button" class="menu-item" @click="$store.chat.downloadTranscript()">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
-            </svg>
-            Download transcript
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" /></svg> Download transcript
           </button>
           <button type="button" class="menu-item" @click="$store.chat.toggleSounds()">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M11 5L6 9H3v6h3l5 4V5zM16 9a4 4 0 010 6" />
-            </svg>
-            Sounds
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4V5zM16 9a4 4 0 010 6" /></svg> Sounds
             <span class="mini-switch" :class="{ on: $store.chat.soundsOn }" aria-hidden="true"><i></i></span>
           </button>
         </div>
 
-        <div class="panel-body" id="panel-body" :style="{ background: $store.chatWindow.bodyBg || 'var(--cw-bg)' }">
+        <div class="panel-body" id="panel-body" 
+             :style="{ 
+               background: $store.chat.state === 'welcome' ? ($store.chatWindow.welcome?.bgGradient || 'linear-gradient(135deg, #d97706, #78350f)') : ($store.chatWindow.bodyBg || 'var(--cw-bg)'),
+               padding: $store.chat.state === 'welcome' ? '0px' : ''
+             }">
+             
+          <!-- ========================================== -->
+          <!-- HIGHLY POLISHED WELCOME SCREEN COMPONENT     -->
+          <!-- ========================================== -->
+          <div x-show="$store.chat.state === 'welcome'" 
+               style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; position: relative; overflow: hidden;"
+               :style="{
+                 padding: $store.chatWindow.welcome?.padding || '40px 32px',
+                 color: $store.chatWindow.welcome?.headerTextColor || '#ffffff',
+                 background: $store.chatWindow.welcome?.bgGradient || 'linear-gradient(135deg, #f59e0b, #b45309)'
+               }">
+            
+            <!-- Abstract background blobs for modern look -->
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 0;">
+              <div style="position: absolute; top: -10%; left: -20%; width: 80%; height: 50%; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%); border-radius: 50%; mix-blend-mode: overlay;"></div>
+              <div style="position: absolute; bottom: 10%; right: -20%; width: 70%; height: 60%; background: radial-gradient(circle, rgba(0,0,0,0.15) 0%, transparent 60%); border-radius: 50%;"></div>
+            </div>
+
+            <!-- Content Container ensuring it sits above background -->
+            <div style="position: relative; z-index: 10; display: flex; flex-direction: column; height: 100%; justify-content: space-between;">
+              
+              <!-- Clean Close Button -->
+              <button type="button" 
+                      style="position: absolute; top: -10px; right: -10px; border: none; background: transparent; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s, transform 0.2s;"
+                      :style="{ color: $store.chatWindow.welcome?.headerTextColor || '#ffffff' }"
+                      @click="$store.chat.closePanel(); openContactWidget = false"
+                      @mouseenter="$el.style.background = 'rgba(255, 255, 255, 0.15)'; $el.style.transform = 'scale(1.05)';"
+                      @mouseleave="$el.style.background = 'transparent'; $el.style.transform = 'scale(1)';">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+
+              <div>
+                <!-- Stylized Top Icon (mimics violet reference logo) -->
+                <div style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 28px;">
+                  <template x-if="$store.chatWindow.welcome?.logoUrl">
+                    <img :src="$store.chatWindow.welcome?.logoUrl" style="height: 36px; object-fit: contain;" />
+                  </template>
+                  <template x-if="!$store.chatWindow.welcome?.logoUrl">
+                    <div :style="{ color: $store.chatWindow.welcome?.headerTextColor || '#ffffff' }" style="opacity: 1;">
+                      <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                      </svg>
+                    </div>
+                  </template>
+                </div>
+
+                <!-- Sleek Typography -->
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; text-align: left;">
+                  <h2 style="font-weight: 800; font-size: 28px; line-height: 1.15; letter-spacing: -0.02em;" 
+                      :style="{ fontSize: $store.chatWindow.welcome?.titleFontSize || '28px' }"
+                      x-text="$store.chatWindow.welcome?.title || 'Hi there! 👋 How can we help you today?'"></h2>
+                  <p style="font-size: 16px; line-height: 1.5; font-weight: 400;" 
+                     :style="{ 
+                       color: $store.chatWindow.welcome?.subtextColor || 'rgba(255,255,255,0.9)',
+                       fontSize: $store.chatWindow.welcome?.descriptionFontSize || '16px'
+                     }"
+                     x-text="$store.chatWindow.welcome?.description || 'Our support heroes are here to assist you.'"></p>
+                  
+                  <!-- Overlapping Online Avatars without Text (Cleaner) -->
+                  <div style="display: flex; align-items: center; gap: 0; margin-top: 24px;">
+                    <template x-for="(avatar, index) in ($store.chatWindow.welcome?.avatars || [])" :key="index">
+                      <img :src="avatar" 
+                           style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid; object-fit: cover; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"
+                           :style="{ 
+                             marginLeft: index === 0 ? '0' : '-12px',
+                             borderColor: $store.chatWindow.welcome?.avatarBorderColor || 'rgba(255,255,255,0.2)',
+                             zIndex: 10 + index
+                           }" />
+                    </template>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pill-shaped Start Button -->
+              <div>
+                <button type="button" 
+                        @click="$store.chat.startFromWelcome()"
+                        style="display: flex; align-items: center; gap: 16px; width: 100%; border: none; cursor: pointer; text-align: left; transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);"
+                        :style="{
+                          background: $store.chatWindow.welcome?.buttonBg || '#ffffff',
+                          color: $store.chatWindow.welcome?.buttonTextColor || '#111827',
+                          borderRadius: ($store.chatWindow.welcome?.buttonBorderRadius || 24) + 'px',
+                          padding: $store.chatWindow.welcome?.buttonPadding || '18px 24px',
+                          marginBottom: '20px'
+                        }"
+                        @mouseenter="$el.style.transform = 'translateY(-4px)'; $el.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';"
+                        @mouseleave="$el.style.transform = 'translateY(0)'; $el.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)';">
+                  <!-- Simplified Chat Icon inside button -->
+                  <div style="display: flex; align-items: center; justify-content: center; flex-shrink: 0;"
+                       :style="{ color: $store.chatWindow.welcome?.buttonIconColor || '#d97706' }">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                      <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+                    </svg>
+                  </div>
+                  <div style="display: flex; flex-direction: column; min-width: 0;">
+                    <span style="font-weight: 700; font-size: 15px; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" 
+                          :style="{ color: $store.chatWindow.welcome?.buttonTextColor || '#111827' }"
+                          x-text="$store.chatWindow.welcome?.buttonText || 'Start Conversation'"></span>
+                    <span style="font-size: 12px; font-weight: 500; opacity: 0.6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" 
+                          :style="{ color: $store.chatWindow.welcome?.buttonTextColor || '#111827' }"
+                          x-text="$store.chatWindow.welcome?.buttonSubtext || 'Typically replies in 5 minutes'"></span>
+                  </div>
+                </button>
+
+                <!-- Clean Footer -->
+                <div style="display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: 500; opacity: 0.8;"
+                     :style="{ color: $store.chatWindow.welcome?.subtextColor || 'rgba(255,255,255,0.9)' }">
+                  <span>Powered by</span>&nbsp;
+                  <a :href="$store.chatWindow.poweredByLink || '#'" target="_blank" style="font-weight: 700; color: inherit; text-decoration: none;" x-text="$store.chatWindow.poweredByText || 'vAInatheya.ai'"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ========================================== -->
+
           <div class="center-note" x-show="$store.chat.state === 'boot'">
             <div class="spinner" aria-hidden="true"></div>
             <p>Connecting…</p>
@@ -390,7 +438,6 @@
                         <span x-text="$store.chat.timeLabel(m)"></span>
                         <template x-if="m.senderType === 'VISITOR' && ($store.chatWindow.ticksEnabled !== false)">
                           <span style="margin-left: 4px; display: inline-flex; align-items: center; vertical-align: middle;">
-                            <!-- One grey tick (sent) -->
                             <template x-if="!m.status || m.status === 'sent'">
                               <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
                                    :stroke="$store.chatWindow.sentTickColor || 'currentColor'"
@@ -398,7 +445,6 @@
                                 <polyline points="20 6 9 17 4 12"></polyline>
                               </svg>
                             </template>
-                            <!-- Two grey ticks (delivered) -->
                             <template x-if="m.status === 'delivered'">
                               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
                                    :stroke="$store.chatWindow.deliveredTickColor || 'currentColor'"
@@ -406,7 +452,6 @@
                                 <path d="M17 6L8.5 14.5L5 11M22 6L13.5 14.5L12.5 13.5"></path>
                               </svg>
                             </template>
-                            <!-- Two blue ticks (read) -->
                             <template x-if="m.status === 'read'">
                               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
                                    :stroke="$store.chatWindow.readTickColor || '#34b7f1'">
@@ -435,18 +480,11 @@
 
             <div class="attach-pop" x-show="$store.chat.attachOpen" x-cloak @click.outside="$store.chat.attachOpen = false">
               <button type="button" class="menu-item" @click="$store.chat.attachOpen = false; document.getElementById('cw-embed-file').click()">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <rect x="3" y="5" width="18" height="14" rx="2" />
-                  <circle cx="8.5" cy="10" r="1.5" />
-                  <path d="M21 15l-4.5-4.5L9 18" />
-                </svg>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="8.5" cy="10" r="1.5" /><path d="M21 15l-4.5-4.5L9 18" /></svg>
                 Send an image
               </button>
               <button type="button" class="menu-item" @click="$store.chat.captureScreenshot()">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2" /><circle cx="12" cy="12" r="3" /></svg>
                 Add screenshot
               </button>
             </div>
@@ -477,121 +515,42 @@
               <style x-text="'.composer textarea::placeholder { color: ' + ($store.chatWindow.inputPlaceholderColor || '#a1a1aa') + ' !important; }'"></style>
               <input type="file" id="cw-embed-file" class="file-input" accept="image/png,image/jpeg,image/gif,image/webp" @change="$store.chat.uploadImage($event.target)" style="display: none;" />
               
-              <!-- Plus Attachment Button -->
               <button type="button" class="attach-btn" aria-label="Attach" title="Attach" x-show="$store.chat.flag('attachments.enabled', true)" :disabled="$store.chat.uploading" @click="$store.chat.attachOpen = !$store.chat.attachOpen; $store.chat.emojiOpen = false" :style="{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '30px',
-                height: '30px',
-                borderRadius: '50%',
-                border: 'none',
-                padding: '0',
-                margin: '0',
-                lineHeight: '0',
-                boxSizing: 'border-box',
-                background: $store.chatWindow.attachButtonBg || '#ffffff',
-                color: $store.chatWindow.attachButtonColor || '#71717a',
-                cursor: 'pointer',
-                flexShrink: '0',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', borderRadius: '50%', border: 'none', padding: '0', margin: '0', lineHeight: '0', boxSizing: 'border-box', background: $store.chatWindow.attachButtonBg || '#ffffff', color: $store.chatWindow.attachButtonColor || '#71717a', cursor: 'pointer', flexShrink: '0', boxShadow: 'none'
               }"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="display: block; margin: auto;"><path d="M8 3.5v9M3.5 8h9" /></svg></button>
 
-              <!-- Textarea input field -->
               <textarea rows="1" maxlength="4000" placeholder="Write a message…" aria-label="Message" x-model="$store.chat.draft" @input="$store.chat.notifyTyping(); $el.style.height = 'auto'; $el.style.height = Math.min($el.scrollHeight, 120) + 'px'" @keydown.enter.prevent="$store.chat.send()" @focus="focused = true" @blur="focused = false" :style="{
-                flex: '1',
-                border: 'none',
-                resize: 'none',
-                padding: '6px 12px',
-                background: 'transparent',
-                color: $store.chatWindow.inputTextColor || 'var(--cw-ink)',
-                outline: 'none',
-                fontSize: $store.chatWindow.textareaFontSize || '14px',
-                fontFamily: 'inherit',
-                height: '32px',
-                minHeight: '24px',
-                maxHeight: '120px',
-                overflowY: 'auto',
-                boxSizing: 'border-box'
+                flex: '1', border: 'none', resize: 'none', padding: '6px 12px', background: 'transparent', color: $store.chatWindow.inputTextColor || 'var(--cw-ink)', outline: 'none', fontSize: $store.chatWindow.textareaFontSize || '14px', fontFamily: 'inherit', height: '32px', minHeight: '24px', maxHeight: '120px', overflowY: 'auto', boxSizing: 'border-box'
               }"></textarea>
 
-              <!-- Emoji Toggle Button -->
               <button type="button" aria-label="Emoji" x-show="$store.chat.flag('widget.modernUi', true)" @click="$store.chat.emojiOpen = !$store.chat.emojiOpen; $store.chat.attachOpen = false" :style="{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '30px',
-                height: '30px',
-                borderRadius: '50%',
-                border: 'none',
-                padding: '0',
-                background: 'transparent',
-                color: $store.chatWindow.emojiButtonColor || '#71717a',
-                cursor: 'pointer',
-                flexShrink: '0',
-                marginRight: '2px'
+                display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', borderRadius: '50%', border: 'none', padding: '0', background: 'transparent', color: $store.chatWindow.emojiButtonColor || '#71717a', cursor: 'pointer', flexShrink: '0', marginRight: '2px'
               }">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="M8.5 14.5a4.5 4.5 0 007 0" />
-                  <circle cx="9" cy="10" r="0.5" fill="currentColor" />
-                  <circle cx="15" cy="10" r="0.5" fill="currentColor" />
-                </svg>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M8.5 14.5a4.5 4.5 0 007 0" /><circle cx="9" cy="10" r="0.5" fill="currentColor" /><circle cx="15" cy="10" r="0.5" fill="currentColor" /></svg>
               </button>
 
-              <!-- Send Button -->
               <button type="button" aria-label="Send message" :disabled="!$store.chat.draft.trim()" @click="$store.chat.send()" :style="{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '30px',
-                height: '30px',
-                borderRadius: '50%',
-                border: 'none',
-                padding: '0',
-                background: !$store.chat.draft.trim() 
-                  ? ($store.chatWindow.sendButtonBgInactive || '#e4e4e7') 
-                  : ($store.chatWindow.sendButtonBgActive || $store.chatWindow.accentColor || '#0b5fff'),
-                color: !$store.chat.draft.trim() 
-                  ? ($store.chatWindow.sendButtonColorInactive || '#a1a1aa') 
-                  : ($store.chatWindow.sendButtonColorActive || '#ffffff'),
-                cursor: !$store.chat.draft.trim() ? 'default' : 'pointer',
-                transition: 'all 0.2s ease',
-                flexShrink: '0'
+                display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', borderRadius: '50%', border: 'none', padding: '0', background: !$store.chat.draft.trim() ? ($store.chatWindow.sendButtonBgInactive || '#e4e4e7') : ($store.chatWindow.sendButtonBgActive || $store.chatWindow.accentColor || '#0b5fff'), color: !$store.chat.draft.trim() ? ($store.chatWindow.sendButtonColorInactive || '#a1a1aa') : ($store.chatWindow.sendButtonColorActive || '#ffffff'), cursor: !$store.chat.draft.trim() ? 'default' : 'pointer', transition: 'all 0.2s ease', flexShrink: '0'
               }">
                 <template x-if="$store.chatWindow.sendIconType === 'arrow'">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <line x1="12" y1="19" x2="12" y2="5"></line>
-                    <polyline points="5 12 12 5 19 12"></polyline>
-                  </svg>
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
                 </template>
                 <template x-if="$store.chatWindow.sendIconType !== 'arrow'">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" style="transform: rotate(45deg); margin-left: 2px; margin-top: -2px;">
-                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                  </svg>
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" style="transform: rotate(45deg); margin-left: 2px; margin-top: -2px;"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" /></svg>
                 </template>
               </button>
             </div>
             <div class="panel-footer" x-show="$store.chat.state === 'active'" :style="{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingBottom: $store.chatWindow.footerPaddingBottom || '16px',
-              background: $store.chatWindow.footerBg || $store.chatWindow.bodyBg || '#ffffff',
-              borderBottomLeftRadius: ($store.chatWindow.widgetBorderRadius || 16) + 'px',
-              borderBottomRightRadius: ($store.chatWindow.widgetBorderRadius || 16) + 'px'
+              display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: $store.chatWindow.footerPaddingBottom || '16px', background: $store.chatWindow.footerBg || $store.chatWindow.bodyBg || '#ffffff', borderBottomLeftRadius: ($store.chatWindow.widgetBorderRadius || 24) + 'px', borderBottomRightRadius: ($store.chatWindow.widgetBorderRadius || 24) + 'px'
             }">
               <div class="powered" x-show="$store.chat.flag('widget.modernUi', true)" 
                    style="display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; align-items: center !important; justify-content: center !important; gap: 4px !important; font-family: inherit !important; width: 100% !important; background: transparent !important; text-align: center !important;"
-                   :style="{
-                     fontSize: $store.chatWindow.footerFontSize || '10px',
-                     color: $store.chatWindow.footerTextColor || 'var(--cw-muted)'
-                   }">
+                   :style="{ fontSize: $store.chatWindow.footerFontSize || '11px', color: $store.chatWindow.footerTextColor || 'var(--cw-muted)' }">
                 <span>Powered by</span> 
                 <template x-if="$store.chatWindow.poweredByLogo">
                   <span x-html="$store.chatWindow.poweredByLogo" style="display: inline-flex; align-items: center; justify-content: center; height: 12px; width: 12px; flex-shrink: 0;"></span>
                 </template>
-                <a :href="$store.chatWindow.poweredByLink || '#'" target="_blank" style="font-weight: 700; color: inherit; text-decoration: none; display: inline-block;" :style="{ color: $store.chatWindow.poweredByColor || '#a1a1aa' }" x-text="$store.chatWindow.poweredByText || 'vAInatheya.ai'"></a>
+                <a :href="$store.chatWindow.poweredByLink || '#'" target="_blank" style="font-weight: 600; color: inherit; text-decoration: none; display: inline-block;" :style="{ color: $store.chatWindow.poweredByColor || '#a1a1aa' }" x-text="$store.chatWindow.poweredByText || 'vAInatheya.ai'"></a>
               </div>
             </div>
 
@@ -607,24 +566,14 @@
 
         <div class="modal-overlay" x-show="$store.chat.confirmBox" x-cloak @click.self="$store.chat.confirmBox = null">
           <div class="modal-card" role="alertdialog" aria-modal="true" :aria-label="$store.chat.confirmBox && $store.chat.confirmBox.message"
-               :style="{
-                 background: $store.chatWindow.modalCardBg || '#ffffff',
-                 borderRadius: ($store.chatWindow.modalBorderRadius || 16) + 'px'
-               }">
+               :style="{ background: $store.chatWindow.modalCardBg || '#ffffff', borderRadius: ($store.chatWindow.modalBorderRadius || 24) + 'px' }">
             <p class="modal-message" :style="{ color: $store.chatWindow.modalMessageColor || '#101828' }" x-text="$store.chat.confirmBox && $store.chat.confirmBox.message"></p>
             <div class="modal-actions">
               <button type="button" class="btn-ghost" @click="$store.chat.confirmBox = null" 
-                      :style="{
-                        background: $store.chatWindow.endChatCancelBg || 'var(--cw-surface)',
-                        color: $store.chatWindow.endChatCancelTextColor || 'var(--cw-muted)',
-                        borderColor: $store.chatWindow.endChatCancelBorderColor || 'var(--cw-border)'
-                      }"
+                      :style="{ background: $store.chatWindow.endChatCancelBg || 'var(--cw-surface)', color: $store.chatWindow.endChatCancelTextColor || 'var(--cw-muted)', borderColor: $store.chatWindow.endChatCancelBorderColor || 'var(--cw-border)' }"
                       x-text="$store.chat.confirmBox && $store.chat.confirmBox.cancelLabel || 'Cancel'"></button>
               <button type="button" class="btn-confirm" @click="$store.chat.confirmResolve()" 
-                      :style="{
-                        background: $store.chatWindow.endChatConfirmBg || 'var(--cw-grad)',
-                        color: $store.chatWindow.endChatConfirmTextColor || '#ffffff'
-                      }"
+                      :style="{ background: $store.chatWindow.endChatConfirmBg || 'var(--cw-grad)', color: $store.chatWindow.endChatConfirmTextColor || '#ffffff' }"
                       x-text="($store.chat.confirmBox && $store.chat.confirmBox.confirmLabel) || 'Confirm'"></button>
             </div>
           </div>
@@ -663,25 +612,15 @@
 
       <style x-text="cssKeyframes()"></style>
 
-      <!-- SHOW OVERLAY IMAGE -->
       <template x-if="settings.backgroundOverlayType === 'image' && settings.backgroundImageUrl">
         <div class="absolute inset-0 pointer-events-none" :style="{
-            backgroundImage: \`url(\${settings.backgroundImageUrl})\`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            backgroundSize: settings.backgroundImageSize || 'contain',
-            opacity: settings.backgroundImageOpacity || 0.25,
-            mixBlendMode: settings.backgroundBlendMode || 'normal',
-            borderRadius: 'inherit'
+            backgroundImage: \`url(\${settings.backgroundImageUrl})\`, backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundSize: settings.backgroundImageSize || 'contain', opacity: settings.backgroundImageOpacity || 0.25, mixBlendMode: settings.backgroundBlendMode || 'normal', borderRadius: 'inherit'
           }"></div>
       </template>
 
-      <!-- SHOW LUCIDE OVERLAY ICON -->
       <template x-if="settings.backgroundOverlayType === 'lucide' && settings.backgroundLucideIcon">
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none" :style="{
-            color: settings.backgroundLucideColor || '#FFFFFF',
-            opacity: settings.backgroundLucideOpacity || 0.2,
-            mixBlendMode: settings.backgroundBlendMode || 'normal'
+            color: settings.backgroundLucideColor || '#FFFFFF', opacity: settings.backgroundLucideOpacity || 0.2, mixBlendMode: settings.backgroundBlendMode || 'normal'
           }">
           <template x-if="settings.backgroundLucideIcon === 'Star'">
             <svg viewBox="0 0 24 24" :width="settings.backgroundLucideSize || 24" :height="settings.backgroundLucideSize || 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
@@ -692,7 +631,6 @@
         </div>
       </template>
 
-      <!-- SHOW CHAT ICON: Hides when hovering (if dots are enabled) -->
       <template x-if="!(settings.dots && settings.dots.animation && settings.dots.animation !== 'none' && hovered && !openContactWidget)">
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none text-white">
           <template x-if="openContactWidget">
@@ -708,7 +646,6 @@
         </div>
       </template>
 
-      <!-- SHOW DOTS ON HOVER -->
       <template x-if="settings.dots && settings.dots.animation && settings.dots.animation !== 'none' && hovered && !openContactWidget">
         <div class="absolute flex z-10" :style="{ gap: \`\${settings.dots.spacing || 6}px\` }">
           <template x-for="i in [0, 1, 2]">
@@ -717,15 +654,22 @@
         </div>
       </template>
 
-      <!-- OUTLINE RING -->
       <template x-if="settings.outlineRing && settings.outlineRing.enabled">
         <div aria-hidden class="pointer-events-none absolute inset-0" :style="{ borderRadius: 'inherit', boxShadow: \`0 0 0 \${settings.outlineRing.width || 3}px \${hexToRgba(settings.outlineRing.color || '#22d3ee', settings.outlineRing.opacity || 0.4)}\` }">
         </div>
       </template>
 
-      <!-- UNREAD NOTIFICATION BADGE -->
       <template x-if="$store.chat.unreadCount > 0">
         <div :style="getBadgeStyle()" x-text="$store.chat.unreadCount"></div>
+      </template>
+
+      <template x-if="settings.tooltip && settings.tooltip.enabled && !openContactWidget">
+        <div :style="getTooltipStyle()">
+          <span x-text="settings.tooltip.text || 'Chat with us'"></span>
+          <template x-if="settings.tooltip.arrowEnabled !== false">
+            <div :style="getTooltipArrowStyle()"></div>
+          </template>
+        </div>
       </template>
     </div>
 
@@ -741,42 +685,21 @@
       class="fixed z-40 flex cursor-pointer select-none transition-all duration-200"
       @mouseenter="hovered = true" @mouseleave="hovered = false"
       :style="{
-        boxSizing: 'border-box',
-        width: (settings.width || (settings.layout === 'card' ? 240 : 255)) + 'px',
-        height: (settings.height || (settings.layout === 'card' ? 220 : 40)) + 'px',
-        bottom: (settings.offsetBottom !== undefined ? settings.offsetBottom : 12) + 'px',
-        right: (settings.offsetRight !== undefined ? settings.offsetRight : 16) + 'px',
-        background: getBackgroundStyle(),
-        color: settings.textColor || '#ffffff',
-        borderRadius: getBorderRadius(),
-        boxShadow: settings.shadow ? '0 4px 16px rgba(0,0,0,0.15)' : 'none',
-        padding: settings.padding !== undefined ? settings.padding : (settings.layout === 'card' ? '24px 16px' : '0 16px'),
-        transform: hovered ? 'scale(1.02)' : 'scale(1.0)',
-        flexDirection: settings.layout === 'card' ? 'column' : 'row',
-        alignItems: 'center',
-        justifyContent: settings.layout === 'card' ? 'space-between' : 'space-between',
-        gap: settings.gap !== undefined ? (settings.gap + 'px') : (settings.layout === 'card' ? '14px' : '0')
+        boxSizing: 'border-box', width: (settings.width || (settings.layout === 'card' ? 240 : 255)) + 'px', height: (settings.height || (settings.layout === 'card' ? 220 : 40)) + 'px', bottom: (settings.offsetBottom !== undefined ? settings.offsetBottom : 12) + 'px', right: (settings.offsetRight !== undefined ? settings.offsetRight : 16) + 'px', background: getBackgroundStyle(), color: settings.textColor || '#ffffff', borderRadius: getBorderRadius(), boxShadow: settings.shadow ? '0 4px 16px rgba(0,0,0,0.15)' : 'none', padding: settings.padding !== undefined ? settings.padding : (settings.layout === 'card' ? '24px 16px' : '0 16px'), transform: hovered ? 'scale(1.02)' : 'scale(1.0)', flexDirection: settings.layout === 'card' ? 'column' : 'row', alignItems: 'center', justifyContent: settings.layout === 'card' ? 'space-between' : 'space-between', gap: settings.gap !== undefined ? (settings.gap + 'px') : (settings.layout === 'card' ? '14px' : '0')
       }">
       
       <!-- CARD LAYOUT (Vertical) -->
       <template x-if="settings.layout === 'card'">
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; width: 100%; height: 100%; box-sizing: border-box; padding: 0;"
              :style="{ gap: (settings.gap !== undefined ? settings.gap : 14) + 'px' }">
-          
-          <!-- Sparkles / Icon -->
           <div style="display: flex; align-items: center; justify-content: center; position: relative;">
             <template x-if="settings.iconType === 'lucide'">
               <div :style="{ color: settings.iconColor || '#ffffff', opacity: hovered ? 1 : 0.85, display: 'flex' }">
                 <template x-if="settings.lucideIcon === 'Sparkles'">
-                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 28" :height="settings.iconHeight || 28" fill="currentColor" stroke="none">
-                    <path d="M12 4.5c0 3.5 3 6.5 6.5 6.5-3.5 0-6.5 3-6.5 6.5 0-3.5-3-6.5-6.5-6.5 3.5 0 6.5-3 6.5-6.5z"/>
-                    <path d="M18.5 4c0 1.2.8 2 2 2-1.2 0-2 .8-2 2 0-1.2-.8-2-2-2 1.2 0 2-.8 2-2z"/>
-                  </svg>
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 28" :height="settings.iconHeight || 28" fill="currentColor" stroke="none"><path d="M12 4.5c0 3.5 3 6.5 6.5 6.5-3.5 0-6.5 3-6.5 6.5 0-3.5-3-6.5-6.5-6.5 3.5 0 6.5-3 6.5-6.5z"/><path d="M18.5 4c0 1.2.8 2 2 2-1.2 0-2 .8-2 2 0-1.2-.8-2-2-2 1.2 0 2-.8 2-2z"/></svg>
                 </template>
                 <template x-if="settings.lucideIcon === 'MessageCircle' || !settings.lucideIcon">
-                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 24" :height="settings.iconHeight || 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                  </svg>
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 24" :height="settings.iconHeight || 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                 </template>
               </div>
             </template>
@@ -791,21 +714,15 @@
             </template>
           </div>
 
-          <!-- Main Text -->
           <span style="font-weight: 700; line-height: 1.35; white-space: pre-line; text-align: center;"
             :style="{ fontSize: (settings.textSize || 16) + 'px', letterSpacing: (settings.letterSpacing || 0) + 'px' }"
             x-text="settings.text || 'Questions about PayPal?'"></span>
 
-          <!-- Pill styled button -->
           <div style="background-color: #ffffff; color: #003087; font-weight: 700; border-radius: 9999px; display: flex; align-items: center; justify-content: center; padding: 10px 24px; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 85%;"
-               :style="{
-                 backgroundColor: settings.buttonBg || '#ffffff',
-                 color: settings.buttonTextColor || settings.bgColor || '#003087'
-               }">
+               :style="{ backgroundColor: settings.buttonBg || '#ffffff', color: settings.buttonTextColor || settings.bgColor || '#003087' }">
             <span x-text="settings.buttonText || 'Chat Now'"></span>
           </div>
 
-          <!-- Unread Badge on Card layout -->
           <template x-if="$store.chat.unreadCount > 0">
             <span style="position: absolute; top: -6px; right: -6px; background-color: #dc2626; color: #ffffff; font-weight: 700; border-radius: 9999px; display: flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; font-size: 11px; border: 2px solid #ffffff; z-index: 50; box-shadow: 0 2px 5px rgba(0,0,0,0.15);"
                   x-text="$store.chat.unreadCount"></span>
@@ -820,51 +737,35 @@
             :style="{ fontSize: (settings.textSize || 14) + 'px', letterSpacing: (settings.letterSpacing || 0) + 'px' }"
             x-text="settings.text || 'Chat with us'"></span>
           
-          <!-- Icon Container -->
           <div style="display: flex; align-items: center; justify-content: center; position: relative;">
-            <!-- Lucide Icon Option -->
             <template x-if="settings.iconType === 'lucide'">
               <div :style="{ color: settings.iconColor || '#ffffff', opacity: hovered ? 1 : 0.8, display: 'flex' }">
                 <template x-if="settings.lucideIcon === 'MessageCircle' || !settings.lucideIcon">
-                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                  </svg>
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                 </template>
                 <template x-if="settings.lucideIcon === 'MessageSquare'">
-                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                  </svg>
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                 </template>
                 <template x-if="settings.lucideIcon === 'Send'">
-                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                  </svg>
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </template>
                 <template x-if="settings.lucideIcon === 'HelpCircle'">
-                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                  </svg>
+                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                 </template>
               </div>
             </template>
             
-            <!-- Image Icon Option -->
             <template x-if="settings.iconType === 'image' && settings.iconImageUrl">
               <img :src="settings.iconImageUrl" alt="icon" class="rounded"
                 :style="{ objectFit: settings.iconFit || 'contain', opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : 1, width: (settings.iconWidth || 20) + 'px', height: (settings.iconHeight || 20) + 'px', mixBlendMode: settings.iconBlend || 'normal' }" />
             </template>
 
-            <!-- Custom SVG Option -->
             <template x-if="settings.iconType === 'customSvg' && settings.customSvg">
               <div class="custom-svg-icon"
                    :style="{ color: settings.iconColor || '#ffffff', opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : 1, display: 'inline-flex', width: (settings.iconWidth || 20) + 'px', height: (settings.iconHeight || 20) + 'px' }"
                    x-html="settings.customSvg"></div>
             </template>
 
-            <!-- Unread Badge inside Chatbar -->
             <template x-if="$store.chat.unreadCount > 0">
               <span style="position: absolute; top: -10px; right: -10px; background-color: #dc2626; color: #ffffff; font-weight: 700; border-radius: 9999px; display: flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; font-size: 10px; border: 1.5px solid #ffffff; z-index: 50; box-shadow: 0 1px 3px rgba(0,0,0,0.15);"
                     x-text="$store.chat.unreadCount"></span>
@@ -946,97 +847,67 @@
         if (!this.settings) return {};
         const b = this.settings.border;
         if (!b) return {};
-        return {
-          borderWidth: `${b.width || 0}px`,
-          borderStyle: b.style || 'solid',
-          borderColor: b.color || 'transparent'
-        };
+        return { borderWidth: `${b.width || 0}px`, borderStyle: b.style || 'solid', borderColor: b.color || 'transparent' };
       },
       getEntryAnimStyle() {
         const panelOpen = window.Alpine ? Alpine.store('chat').panelOpen : false;
         if (!this.settings || !this.settings.idleAnim || !this.settings.idleAnim.enabled || this.settings.idleAnim.type === 'none' || this.hovered || panelOpen) return {};
-        return {
-          animation: `idleFloat ${this.settings.idleAnim.duration || 3200}ms ease-in-out infinite`
-        };
+        return { animation: `idleFloat ${this.settings.idleAnim.duration || 3200}ms ease-in-out infinite` };
       },
       getBadgeStyle() {
         if (!this.settings || !this.settings.badge) {
-          return {
-            position: 'absolute',
-            top: '-6px',
-            right: '-6px',
-            backgroundColor: '#dc2626',
-            color: '#ffffff',
-            fontSize: '11px',
-            lineHeight: '1',
-            minWidth: '20px',
-            height: '20px',
-            border: '2px solid #ffffff',
-            borderRadius: '9999px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: '700',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
-            zIndex: 50
-          };
+          return { position: 'absolute', top: '-6px', right: '-6px', backgroundColor: '#dc2626', color: '#ffffff', fontSize: '11px', lineHeight: '1', minWidth: '20px', height: '20px', border: '2px solid #ffffff', borderRadius: '9999px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', boxShadow: '0 1px 3px rgba(0,0,0,0.15)', zIndex: 50 };
         }
-        
         const b = this.settings.badge;
         const pos = b.position || 'top-right';
         const offsetX = b.offsetX !== undefined ? b.offsetX : -6;
         const offsetY = b.offsetY !== undefined ? b.offsetY : -6;
         const size = b.size || 20;
         
-        const style = {
-          position: 'absolute',
-          backgroundColor: b.backgroundColor || '#dc2626',
-          color: b.textColor || '#ffffff',
-          fontSize: (b.fontSize || 11) + 'px',
-          lineHeight: '1',
-          minWidth: size + 'px',
-          height: size + 'px',
-          border: `${b.borderWidth !== undefined ? b.borderWidth : 2}px solid ${b.borderColor || '#ffffff'}`,
-          borderRadius: '9999px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontWeight: '700',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
-          zIndex: 50
-        };
+        const style = { position: 'absolute', backgroundColor: b.backgroundColor || '#dc2626', color: b.textColor || '#ffffff', fontSize: (b.fontSize || 11) + 'px', lineHeight: '1', minWidth: size + 'px', height: size + 'px', border: `${b.borderWidth !== undefined ? b.borderWidth : 2}px solid ${b.borderColor || '#ffffff'}`, borderRadius: '9999px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', boxShadow: '0 1px 3px rgba(0,0,0,0.15)', zIndex: 50 };
         
-        if (pos === 'top-left') {
-          style.top = offsetY + 'px';
-          style.left = offsetX + 'px';
-        } else if (pos === 'bottom-right') {
-          style.bottom = offsetY + 'px';
-          style.right = offsetX + 'px';
-        } else if (pos === 'bottom-left') {
-          style.bottom = offsetY + 'px';
-          style.left = offsetX + 'px';
-        } else {
-          style.top = offsetY + 'px';
-          style.right = offsetX + 'px';
-        }
-        
+        if (pos === 'top-left') { style.top = offsetY + 'px'; style.left = offsetX + 'px'; } else if (pos === 'bottom-right') { style.bottom = offsetY + 'px'; style.right = offsetX + 'px'; } else if (pos === 'bottom-left') { style.bottom = offsetY + 'px'; style.left = offsetX + 'px'; } else { style.top = offsetY + 'px'; style.right = offsetX + 'px'; }
         return style;
       },
       getNeonStyle() {
         if (!this.settings || !this.settings.neon || !this.settings.neon.enabled) return {};
         const color = this.settings.neon.color || '#22d3ee';
         const intensity = this.settings.neon.intensity || 0.8;
-        return {
-          boxShadow: `0 0 ${20 * intensity}px ${color}, inset 0 0 ${10 * intensity}px ${color}`
-        };
+        return { boxShadow: `0 0 ${20 * intensity}px ${color}, inset 0 0 ${10 * intensity}px ${color}` };
       },
       getGlassStyle() {
         if (!this.settings || !this.settings.glass || !this.settings.glass.enabled) return {};
-        return {
-          backdropFilter: `blur(${this.settings.glass.blur || 10}px)`,
-          WebkitBackdropFilter: `blur(${this.settings.glass.blur || 10}px)`,
-          backgroundColor: `rgba(255, 255, 255, ${this.settings.glass.bgOpacity || 0.3})`
-        };
+        return { backdropFilter: `blur(${this.settings.glass.blur || 10}px)`, WebkitBackdropFilter: `blur(${this.settings.glass.blur || 10}px)`, backgroundColor: `rgba(255, 255, 255, ${this.settings.glass.bgOpacity || 0.3})` };
+      },
+      getTooltipStyle() {
+        if (!this.settings || !this.settings.tooltip) return {};
+        const t = this.settings.tooltip;
+        const pos = t.position || 'left';
+        let borderRadius = '20px';
+        if (t.borderRadius) {
+          if (typeof t.borderRadius === 'object') {
+            const tl = t.borderRadius.tl !== undefined ? t.borderRadius.tl : 20;
+            const tr = t.borderRadius.tr !== undefined ? t.borderRadius.tr : 20;
+            const br = t.borderRadius.br !== undefined ? t.borderRadius.br : 20;
+            const bl = t.borderRadius.bl !== undefined ? t.borderRadius.bl : 20;
+            borderRadius = `${tl}px ${tr}px ${br}px ${bl}px`;
+          } else if (typeof t.borderRadius === 'number') { borderRadius = t.borderRadius + 'px'; } else { borderRadius = t.borderRadius; }
+        }
+
+        const style = { position: 'absolute', backgroundColor: t.backgroundColor || '#ffffff', color: t.textColor || '#374151', fontSize: (t.fontSize || 14) + 'px', padding: t.padding || '8px 16px', borderRadius: borderRadius, boxShadow: t.boxShadow || '0 4px 12px rgba(0,0,0,0.1)', border: `${t.borderWidth || 0}px solid ${t.borderColor || 'transparent'}`, whiteSpace: 'nowrap', pointerEvents: 'auto', zIndex: 100 };
+        if (pos === 'left') { style.right = 'calc(100% + 12px)'; style.top = '50%'; style.transform = 'translateY(-50%)'; } else if (pos === 'right') { style.left = 'calc(100% + 12px)'; style.top = '50%'; style.transform = 'translateY(-50%)'; } else if (pos === 'top') { style.bottom = 'calc(100% + 12px)'; style.left = '50%'; style.transform = 'translateX(-50%)'; } else if (pos === 'bottom') { style.top = 'calc(100% + 12px)'; style.left = '50%'; style.transform = 'translateX(-50%)'; }
+        return style;
+      },
+      getTooltipArrowStyle() {
+        if (!this.settings || !this.settings.tooltip) return {};
+        const t = this.settings.tooltip;
+        const pos = t.position || 'left';
+        const size = 8;
+        const style = { position: 'absolute', width: size + 'px', height: size + 'px', backgroundColor: t.backgroundColor || '#ffffff', boxSizing: 'border-box', pointerEvents: 'none' };
+        const borderW = t.borderWidth || 0;
+        const borderC = t.borderColor || 'transparent';
+        if (pos === 'left') { style.right = `-${size / 2}px`; style.top = '50%'; style.transform = 'translateY(-50%) rotate(45deg)'; if (borderW > 0) { style.borderTop = `${borderW}px solid ${borderC}`; style.borderRight = `${borderW}px solid ${borderC}`; } } else if (pos === 'right') { style.left = `-${size / 2}px`; style.top = '50%'; style.transform = 'translateY(-50%) rotate(45deg)'; if (borderW > 0) { style.borderBottom = `${borderW}px solid ${borderC}`; style.borderLeft = `${borderW}px solid ${borderC}`; } } else if (pos === 'top') { style.bottom = `-${size / 2}px`; style.left = '50%'; style.transform = 'translateX(-50%) rotate(45deg)'; if (borderW > 0) { style.borderBottom = `${borderW}px solid ${borderC}`; style.borderRight = `${borderW}px solid ${borderC}`; } } else if (pos === 'bottom') { style.top = `-${size / 2}px`; style.left = '50%'; style.transform = 'translateX(-50%) rotate(45deg)'; if (borderW > 0) { style.borderTop = `${borderW}px solid ${borderC}`; style.borderLeft = `${borderW}px solid ${borderC}`; } }
+        return style;
       }
     };
   };
@@ -1064,9 +935,7 @@
       },
       getBorderRadius() {
         if (!this.settings || !this.settings.borderRadius) return '20px';
-        if (typeof this.settings.borderRadius === 'number') {
-          return `${this.settings.borderRadius}px`;
-        }
+        if (typeof this.settings.borderRadius === 'number') { return `${this.settings.borderRadius}px`; }
         if (typeof this.settings.borderRadius === 'object') {
           const { tl = 20, tr = 20, br = 20, bl = 20 } = this.settings.borderRadius;
           return `${tl}px ${tr}px ${br}px ${bl}px`;
@@ -1076,29 +945,15 @@
     };
   };
 
-  /* ==========================================================================
-     CLIENT IDENTIFICATION SERVICE
-     --------------------------------------------------------------------------
-     Retrieves client ID from:
-     1. Global window variable (window.ZOTLY_CLIENT_ID)
-     2. Script tag attribute data-client-id (e.g., <script data-client-id="emerald">)
-     3. Script URL parameter (e.g. widget.js?client_id=emerald)
-     4. Default fallback ('default')
-     ========================================================================== */
   function getClientId() {
-    if (window.ZOTLY_CLIENT_ID) {
-      return window.ZOTLY_CLIENT_ID;
-    }
+    if (window.ZOTLY_CLIENT_ID) { return window.ZOTLY_CLIENT_ID; }
     let scriptTag = document.currentScript;
     if (!scriptTag || !scriptTag.src || !scriptTag.src.includes('widget.js')) {
-      scriptTag = document.querySelector('script[data-client-id]') ||
-        document.querySelector('script[src*="widget.js"]');
+      scriptTag = document.querySelector('script[data-client-id]') || document.querySelector('script[src*="widget.js"]');
     }
-
     if (scriptTag) {
       const dataId = scriptTag.getAttribute('data-client-id');
       if (dataId) return dataId;
-
       try {
         const url = new URL(scriptTag.src, window.location.href);
         const paramId = url.searchParams.get('client_id') || url.searchParams.get('clientId');
@@ -1108,75 +963,32 @@
     return 'default';
   }
 
-  /* ==========================================================================
-     CLIENT CONFIG SERVICE (DATA ACCESS LAYER)
-     --------------------------------------------------------------------------
-     Fetches client configuration (bubble settings and chat settings) dynamically.
-
-     HOW TO REPLACE WITH MONGODB / BACKEND DATABASE / REST API:
-     --------------------------------------------------------------------------
-     To query MongoDB or your custom backend API instead of static JSON files:
-     
-     async function fetchClientConfig(clientId) {
-       try {
-         // Query MongoDB backend endpoint with client ID
-         const response = await fetch(`/api/widget/config?clientId=${encodeURIComponent(clientId)}`);
-         const data = await response.json();
-         return {
-           bubbleConfig: data.bubble || {},
-           chatConfig: data.chatWindow || data.chat || {}
-         };
-       } catch (error) {
-         console.error('[Zotly Widget] Failed to fetch MongoDB client config:', error);
-         return { bubbleConfig: {}, chatConfig: {} };
-       }
-     }
-     ========================================================================== */
   async function fetchClientConfig(clientId) {
     const baseUrl = getWidgetBaseUrl();
-    console.log(`[Zotly Widget] Initializing config for Client ID: "${clientId}"`);
-    console.log(`[Zotly Widget] Resolved Base Asset URL: "${baseUrl}"`);
-
-    // Strategy 1: Try single combined client JSON file (e.g. public/clients/emerald.json)
     const clientConfigUrl = `${baseUrl}public/clients/${clientId}.json`;
-    console.log(`[Zotly Widget] Fetching client config from: "${clientConfigUrl}"`);
     try {
       const res = await fetch(clientConfigUrl);
       if (res.ok) {
         const data = await res.json();
-        console.log(`[Zotly Widget] Successfully loaded configuration for client "${clientId}"`);
-        return {
-          bubbleConfig: data.bubble || {},
-          chatConfig: data.chatWindow || data.chat || {},
-          chatbarConfig: data.chatbar || {}
-        };
-      } else {
-        console.warn(`[Zotly Widget] Client config file not found or failed to load (Status ${res.status}). Falling back to default settings.`);
+        return { bubbleConfig: data.bubble || {}, chatConfig: data.chatWindow || data.chat || {}, chatbarConfig: data.chatbar || {} };
       }
-    } catch (e) {
-      console.warn(`[Zotly Widget] Network error trying to fetch client config:`, e);
-    }
-
-    // Strategy 2: Fallback to root public default JSON files (bubble.json, chatWindow.json, chatbar.json)
+    } catch (e) { }
+    
     const defaultBubbleUrl = `${baseUrl}public/bubble.json`;
     const defaultChatUrl = `${baseUrl}public/chatWindow.json`;
     const defaultChatbarUrl = `${baseUrl}public/chatbar.json`;
-    console.log(`[Zotly Widget] Fetching default configurations from: "${defaultBubbleUrl}" & "${defaultChatUrl}" & "${defaultChatbarUrl}"`);
     try {
       const [bubbleRes, chatRes, chatbarRes] = await Promise.allSettled([
         fetch(defaultBubbleUrl).then(r => r.ok ? r.json() : {}),
         fetch(defaultChatUrl).then(r => r.ok ? r.json() : {}),
         fetch(defaultChatbarUrl).then(r => r.ok ? r.json() : {})
       ]);
-
-      const bubbleConfig = bubbleRes.status === 'fulfilled' ? bubbleRes.value : {};
-      const chatConfig = chatRes.status === 'fulfilled' ? chatRes.value : {};
-      const chatbarConfig = chatbarRes.status === 'fulfilled' ? chatbarRes.value : {};
-
-      console.log(`[Zotly Widget] Fallback default configurations loaded.`);
-      return { bubbleConfig, chatConfig, chatbarConfig };
+      return { 
+        bubbleConfig: bubbleRes.status === 'fulfilled' ? bubbleRes.value : {}, 
+        chatConfig: chatRes.status === 'fulfilled' ? chatRes.value : {}, 
+        chatbarConfig: chatbarRes.status === 'fulfilled' ? chatbarRes.value : {} 
+      };
     } catch (e) {
-      console.error(`[Zotly Widget] Critical error loading default configurations:`, e);
       return { bubbleConfig: {}, chatConfig: {}, chatbarConfig: {} };
     }
   }
@@ -1187,57 +999,31 @@
 
     if (!Alpine.store('bubble')) {
       Alpine.store('bubble', {
-        useWebsiteTheme: true,
-        width: 50, height: 50, borderRadius: { tl: 50, tr: 50, bl: 50, br: 50 },
-        backgroundColor: theme.primary || '#0b5fff',
-        gradientType: 'none',
-        // Add a default fallback stop just in case
-        gradientStops: [{ color: theme.primary || '#0b5fff', pos: 0 }, { color: theme.secondary || '#22D3EE', pos: 100 }],
-        backgroundOverlayType: 'image', backgroundImageUrl: 'https://static.vecteezy.com/system/resources/previews/047/656/219/non_2x/abstract-logo-design-for-any-corporate-brand-business-company-vector.jpg',
-        backgroundImageSize: 'contain', backgroundImageOpacity: 0.25, backgroundBlendMode: 'normal',
-        border: { width: 0, color: theme.primary || '#0b5fff', style: 'solid' },
-        outlineRing: { enabled: true, width: 3, color: theme.secondary || '#22D3EE', opacity: 0.4 },
-        boxShadowBlur: 20, boxShadowSpread: 0, boxShadowOffsetX: 0, boxShadowOffsetY: 8, boxShadowOpacity: 0.25,
-        dots: { color: '#F8FAFC', size: 6, spacing: 6, animation: 'bounce' },
-        hideOnOpen: true
+        useWebsiteTheme: true, width: 50, height: 50, borderRadius: { tl: 50, tr: 50, bl: 50, br: 50 }, backgroundColor: theme.primary || '#0b5fff', gradientType: 'none', gradientStops: [{ color: theme.primary || '#0b5fff', pos: 0 }, { color: theme.secondary || '#22D3EE', pos: 100 }], backgroundOverlayType: 'image', backgroundImageUrl: '', backgroundImageSize: 'contain', backgroundImageOpacity: 0.25, backgroundBlendMode: 'normal', border: { width: 0, color: theme.primary || '#0b5fff', style: 'solid' }, outlineRing: { enabled: true, width: 3, color: theme.secondary || '#22D3EE', opacity: 0.4 }, boxShadowBlur: 20, boxShadowSpread: 0, boxShadowOffsetX: 0, boxShadowOffsetY: 8, boxShadowOpacity: 0.25, dots: { color: '#F8FAFC', size: 6, spacing: 6, animation: 'bounce' }, hideOnOpen: true, tooltip: { enabled: false, text: 'Chat with us', position: 'left', backgroundColor: '#ffffff', textColor: '#374151', fontSize: 14, borderRadius: { tl: 20, tr: 20, br: 4, bl: 20 }, padding: '8px 16px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', arrowEnabled: true, borderColor: 'transparent', borderWidth: 0 }
       });
     }
 
     if (!Alpine.store('chatWindow')) {
       Alpine.store('chatWindow', {
-        clientName: 'Zotly Support', agentName: 'Sarah',
-        accentColor: theme.primary || '#0b5fff',
-        useWebsiteTheme: true,
-        widgetWidth: 350, widgetHeight: 550, expandedWidth: 480, expandedHeight: 550,
-        widgetBorderRadius: 16, widgetShadow: true, widgetShadowBlur: 20, widgetShadowColor: 'rgba(0,0,0,0.15)',
-        widgetBorderEnabled: true, widgetBorderWidth: 1, widgetBorderColor: '#e5e7eb',
-        modernUi: true, typingIndicator: true, attachmentsEnabled: true
+        clientName: 'Zotly Support', agentName: 'Sarah', accentColor: theme.primary || '#0b5fff', useWebsiteTheme: true, widgetWidth: 350, widgetHeight: 550, expandedWidth: 480, expandedHeight: 550, widgetBorderRadius: 24, widgetShadow: true, widgetShadowBlur: 30, widgetShadowColor: 'rgba(0,0,0,0.12)', widgetBorderEnabled: true, widgetBorderWidth: 1, widgetBorderColor: '#e5e7eb', modernUi: true, typingIndicator: true, attachmentsEnabled: true,
+        welcome: { enabled: false }
       });
       Alpine.store('chatcontactv2', Alpine.store('chatWindow'));
     }
 
     if (!Alpine.store('chatbar')) {
       Alpine.store('chatbar', {
-        enabled: false,
-        useWebsiteTheme: true,
-        text: "Chat with us", bgColor: theme.primary || "#0b5fff", textColor: "#ffffff", textSize: 14, letterSpacing: 0, gradientEnabled: false,
-        gradientStops: [{ color: theme.primary || "#0b5fff", pos: 0 }, { color: theme.secondary || "#22D3EE", pos: 100 }], gradientType: "linear", gradientAngle: 90,
-        iconType: "lucide", iconColor: "#ffffff", lucideIcon: "MessageCircle", iconImageUrl: "", iconFit: "contain", iconOpacity: 1,
-        iconBlend: "normal", iconWidth: 20, iconHeight: 20, width: 255, height: 40, shadow: true, borderRadius: { tl: 20, tr: 20, bl: 20, br: 20 },
-        hideOnOpen: true
+        enabled: false, useWebsiteTheme: true, text: "Chat with us", bgColor: theme.primary || "#0b5fff", textColor: "#ffffff", textSize: 14, letterSpacing: 0, gradientEnabled: false, gradientStops: [{ color: theme.primary || "#0b5fff", pos: 0 }, { color: theme.secondary || "#22D3EE", pos: 100 }], gradientType: "linear", gradientAngle: 90, iconType: "lucide", iconColor: "#ffffff", lucideIcon: "MessageCircle", iconImageUrl: "", iconFit: "contain", iconOpacity: 1, iconBlend: "normal", iconWidth: 20, iconHeight: 20, width: 255, height: 40, shadow: true, borderRadius: { tl: 20, tr: 20, bl: 20, br: 20 }, hideOnOpen: true
       });
     }
 
-    // Fetch and apply client-specific configuration
     const { bubbleConfig, chatConfig, chatbarConfig } = await fetchClientConfig(clientId);
 
     if (bubbleConfig && Object.keys(bubbleConfig).length > 0) {
       if (bubbleConfig.useWebsiteTheme === true) {
         bubbleConfig.backgroundColor = theme.primary;
         bubbleConfig.gradientType = 'none';
-        if (bubbleConfig.outlineRing) {
-          bubbleConfig.outlineRing.color = theme.secondary;
-        }
+        if (bubbleConfig.outlineRing) { bubbleConfig.outlineRing.color = theme.secondary; }
       }
       Object.assign(Alpine.store('bubble'), bubbleConfig);
     }
@@ -1262,14 +1048,13 @@
           activeConfig.agentAvatarBg = theme.primary;
           activeConfig.agentAvatarColor = '#ffffff';
           activeConfig.inputFocusBorderColor = theme.primary;
-          activeConfig.inputFocusShadow = `0 0 0 2px ${theme.primary}26`; // 15% opacity tint
+          activeConfig.inputFocusShadow = `0 0 0 2px ${theme.primary}26`;
           activeConfig.sendButtonBgActive = theme.primary;
           activeConfig.poweredByColor = theme.primary;
           activeConfig.endChatConfirmBg = theme.primary;
           activeConfig.endChatConfirmTextColor = '#ffffff';
 
           if (isDark) {
-            // Under browser dark mode, point styles directly to native dark CSS custom variables
             activeConfig.bodyBg = 'var(--cw-bg)';
             activeConfig.inputBg = 'var(--cw-surface)';
             activeConfig.agentBubbleBg = 'var(--cw-surface)';
@@ -1290,7 +1075,6 @@
           }
         }
 
-        // Apply dark overrides from JSON if configured and browser is in dark mode
         if (isDark && chatConfig.dark && Object.keys(chatConfig.dark).length > 0) {
           Object.assign(activeConfig, chatConfig.dark);
         }
@@ -1301,55 +1085,38 @@
         }
       };
 
-      // Initial apply
       applyTheme();
+      if (chatConfig.welcome) {
+        Alpine.store('chatWindow').welcome = Object.assign({}, Alpine.store('chatWindow').welcome, chatConfig.welcome);
+      }
 
-      // Listen for browser class changes to dynamically toggle light/dark styles
-      const observer = new MutationObserver(() => {
-        applyTheme();
-      });
+      const observer = new MutationObserver(() => { applyTheme(); });
       observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
     }
 
     if (!Alpine.store('chat')) {
       const initialAgentName = (chatConfig && chatConfig.agentName) ? chatConfig.agentName : 'Sarah';
+      const welcomeEnabled = chatConfig && chatConfig.welcome && chatConfig.welcome.enabled === true;
       Alpine.store('chat', {
-        state: 'active',
-        isExpanded: false,
-        panelOpen: false,
-        unreadCount: 0,
-        isMobile: window.innerWidth < 640 || window.innerHeight < 750,
+        state: welcomeEnabled ? 'welcome' : 'active',
+        isExpanded: false, panelOpen: false, unreadCount: 0, isMobile: window.innerWidth < 640 || window.innerHeight < 750,
         clientName: (chatConfig && chatConfig.clientName) ? chatConfig.clientName : 'Zotly Support',
-        agentName: initialAgentName,
-        agentsOnline: true,
-        token: 'visitor-token-demo', position: 1, menuOpen: false, attachOpen: false, emojiOpen: false, confirmBox: null,
-        confirmResolve: function () { }, reconnecting: false, soundsOn: true, consentDismissed: false, typingName: '',
-        uploading: false, offlineSending: false, offlineName: '', offlineEmail: '', offlineMessage: '', draft: '',
+        agentName: initialAgentName, agentsOnline: true, token: 'visitor-token-demo', position: 1, menuOpen: false, attachOpen: false, emojiOpen: false, confirmBox: null, confirmResolve: function () { }, reconnecting: false, soundsOn: true, consentDismissed: false, typingName: '', uploading: false, offlineSending: false, offlineName: '', offlineEmail: '', offlineMessage: '', draft: '',
         flags: { 'widget.modernUi': true, 'chat.typingIndicator': true, 'attachments.enabled': true },
         messages: [
           { key: 'm1', senderType: 'AGENT', senderName: initialAgentName, body: 'Hi! How can I help you today?', created: new Date(Date.now() - 300000).toISOString() },
           { key: 'm2', senderType: 'VISITOR', body: 'I need help with my order', created: new Date(Date.now() - 240000).toISOString(), status: 'read' }
         ],
+        startFromWelcome() { this.state = 'active'; this.scrollDown(); },
         async submitPrechat(formElement) {
           const formData = new FormData(formElement);
           const body = new URLSearchParams(formData);
           try {
-            const response = await fetch('/api/widget/conversations', {
-              method: 'POST',
-              headers: {
-                'X-Visitor-Token': this.token || '',
-                'Content-Type': 'application/x-www-form-urlencoded'
-              },
-              body: body
-            });
+            const response = await fetch('/api/widget/conversations', { method: 'POST', headers: { 'X-Visitor-Token': this.token || '', 'Content-Type': 'application/x-www-form-urlencoded' }, body: body });
             const html = await response.text();
             const target = document.getElementById('swap-zone-embed');
-            if (target) {
-              target.innerHTML = html;
-            }
-          } catch (err) {
-            console.error('Prechat submission error:', err);
-          }
+            if (target) { target.innerHTML = html; }
+          } catch (err) { }
         },
         flag(key, defaultValue) { return this.flags[key] !== undefined ? this.flags[key] : (defaultValue !== undefined ? defaultValue : true); },
         send() {
@@ -1359,101 +1126,45 @@
             this.messages.push(msgObj);
             this.draft = ''; this.emojiOpen = false; this.attachOpen = false; this.scrollDown();
             
-            // 2s delivered transition (two grey ticks)
-            setTimeout(() => {
-              const idx = this.messages.findIndex(m => m.key === msgObj.key);
-              if (idx !== -1) {
-                this.messages[idx].status = 'delivered';
-                this.messages = [...this.messages];
-              }
-            }, 2000);
-
-            // 4s read transition (two blue ticks)
-            setTimeout(() => {
-              const idx = this.messages.findIndex(m => m.key === msgObj.key);
-              if (idx !== -1) {
-                this.messages[idx].status = 'read';
-                this.messages = [...this.messages];
-              }
-            }, 4000);
+            setTimeout(() => { const idx = this.messages.findIndex(m => m.key === msgObj.key); if (idx !== -1) { this.messages[idx].status = 'delivered'; this.messages = [...this.messages]; } }, 2000);
+            setTimeout(() => { const idx = this.messages.findIndex(m => m.key === msgObj.key); if (idx !== -1) { this.messages[idx].status = 'read'; this.messages = [...this.messages]; } }, 4000);
 
             this.typingName = this.agentName || 'Agent';
             setTimeout(() => {
               this.typingName = '';
               this.messages.push({ key: 'msg_' + Date.now(), senderType: 'AGENT', senderName: this.agentName || 'Sarah', body: "Thanks! I'm checking that right now...", created: new Date().toISOString() });
               this.scrollDown();
-              if (!this.panelOpen) {
-                this.unreadCount++;
-              }
+              if (!this.panelOpen) { this.unreadCount++; }
             }, 1800);
           }
         },
         askEndChat() {
           const config = Alpine.store('chatWindow');
-          this.confirmBox = {
-            message: config.endChatConfirmMessage || 'Are you sure you want to end this chat session?',
-            confirmLabel: config.endChatConfirmLabel || 'End chat',
-            cancelLabel: config.endChatCancelLabel || 'Cancel'
-          };
+          this.confirmBox = { message: config.endChatConfirmMessage || 'Are you sure you want to end this chat session?', confirmLabel: config.endChatConfirmLabel || 'End chat', cancelLabel: config.endChatCancelLabel || 'Cancel' };
           this.confirmResolve = () => { this.state = 'closed'; this.confirmBox = null; };
         },
-        startNew() {
-          this.state = 'active';
-          this.messages = [{ key: 'm_new', senderType: 'AGENT', senderName: this.agentName || 'Sarah', body: 'Chat restarted. How can we help you?', created: new Date().toISOString() }];
-        },
-        closePanel() {
-          this.isExpanded = false; this.menuOpen = false; this.attachOpen = false; this.emojiOpen = false;
-          window.dispatchEvent(new CustomEvent('close-contact-widget'));
-        },
+        startNew() { this.state = 'active'; this.messages = [{ key: 'm_new', senderType: 'AGENT', senderName: this.agentName || 'Sarah', body: 'Chat restarted. How can we help you?', created: new Date().toISOString() }]; },
+        closePanel() { this.isExpanded = false; this.menuOpen = false; this.attachOpen = false; this.emojiOpen = false; window.dispatchEvent(new CustomEvent('close-contact-widget')); },
         toggleExpand() { this.isExpanded = !this.isExpanded; },
         downloadTranscript() { this.menuOpen = false; alert('Downloading transcript...'); },
         toggleSounds() { this.soundsOn = !this.soundsOn; },
         dismissConsent() { this.consentDismissed = true; },
-        submitOffline() {
-          if (this.offlineEmail && this.offlineMessage) {
-            this.offlineSending = true;
-            setTimeout(() => { this.offlineSending = false; this.state = 'offline-sent'; }, 1000);
-          }
-        },
+        submitOffline() { if (this.offlineEmail && this.offlineMessage) { this.offlineSending = true; setTimeout(() => { this.offlineSending = false; this.state = 'offline-sent'; }, 1000); } },
         uploadImage(input) {
           if (input.files && input.files[0]) {
             const url = URL.createObjectURL(input.files[0]);
             const msgObj = { key: 'img_' + Date.now(), senderType: 'VISITOR', localUrl: url, attachment: true, body: '', created: new Date().toISOString(), status: 'sent' };
             this.messages.push(msgObj);
             this.attachOpen = false; this.scrollDown();
-
-            // 2s delivered transition
-            setTimeout(() => {
-              const idx = this.messages.findIndex(m => m.key === msgObj.key);
-              if (idx !== -1) {
-                this.messages[idx].status = 'delivered';
-                this.messages = [...this.messages];
-              }
-            }, 2000);
-
-            // 4s read transition
-            setTimeout(() => {
-              const idx = this.messages.findIndex(m => m.key === msgObj.key);
-              if (idx !== -1) {
-                this.messages[idx].status = 'read';
-                this.messages = [...this.messages];
-              }
-            }, 4000);
+            setTimeout(() => { const idx = this.messages.findIndex(m => m.key === msgObj.key); if (idx !== -1) { this.messages[idx].status = 'delivered'; this.messages = [...this.messages]; } }, 2000);
+            setTimeout(() => { const idx = this.messages.findIndex(m => m.key === msgObj.key); if (idx !== -1) { this.messages[idx].status = 'read'; this.messages = [...this.messages]; } }, 4000);
           }
         },
         captureScreenshot() { this.attachOpen = false; alert('Screenshot captured!'); },
-        scrollDown() {
-          setTimeout(() => {
-            const msgs = document.querySelector('.messages');
-            if (msgs) msgs.scrollTop = msgs.scrollHeight;
-          }, 50);
-        },
+        scrollDown() { setTimeout(() => { const msgs = document.querySelector('.messages'); if (msgs) msgs.scrollTop = msgs.scrollHeight; }, 50); },
         dividerBefore(index) { return index === 0; },
         dayLabel() { return 'Today'; },
-        timeLabel(msg) {
-          const d = msg.created ? new Date(msg.created) : new Date();
-          return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        },
+        timeLabel(msg) { const d = msg.created ? new Date(msg.created) : new Date(); return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); },
         groupStart(index) { return index === 0 || this.messages[index].senderType !== this.messages[index - 1].senderType; },
         groupEnd(index) { return index === this.messages.length - 1 || this.messages[index].senderType !== this.messages[index + 1].senderType; },
         attachmentUrl(msg) { return msg.localUrl || msg.url || ''; },
@@ -1465,24 +1176,18 @@
         if (chatConfig.clientName) chatStore.clientName = chatConfig.clientName;
         if (chatConfig.agentName) {
           chatStore.agentName = chatConfig.agentName;
-          if (chatStore.messages && chatStore.messages[0]) {
-            chatStore.messages[0].senderName = chatConfig.agentName;
-          }
+          if (chatStore.messages && chatStore.messages[0]) { chatStore.messages[0].senderName = chatConfig.agentName; }
         }
       }
     }
 
-    // Dynamic resize listener to update mobile breakpoint state
     window.addEventListener('resize', () => {
       const isMob = window.innerWidth < 640 || window.innerHeight < 750;
       const chatStore = window.Alpine ? Alpine.store('chat') : null;
-      if (chatStore && chatStore.isMobile !== isMob) {
-        chatStore.isMobile = isMob;
-      }
+      if (chatStore && chatStore.isMobile !== isMob) { chatStore.isMobile = isMob; }
     });
   };
 
-  // Load Alpine.js if not present
   if (window.Alpine) {
     initStores();
   } else {
