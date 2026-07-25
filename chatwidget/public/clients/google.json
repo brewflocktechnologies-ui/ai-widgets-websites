@@ -167,6 +167,7 @@
   },
   "chatWindow": {
     "useWebsiteTheme": true,
+    
     "clientName": "Google Cloud Support",
     "agentName": "Sarah",
     "accentColor": "#4285F4",
@@ -248,10 +249,15 @@
     "poweredByColor": "#4285F4",
     "poweredByLogo": "",
     "welcome": {
-      "enabled": false,
+      "enabled": true,
+      "useWebsiteTheme": true,
       "cardLayout": "glassy",
       "cardBg": "rgba(255, 255, 255, 0.08)",
       "cardBorder": "1px solid rgba(255, 255, 255, 0.18)",
+            "cardAlign": "center",
+      "textAlign": "center",
+      "logoAlign": "center",
+      "avatarAlign": "center",
       "cardBorderRadius": 24,
       "cardPadding": "32px 24px",
       "cardBlur": 10,

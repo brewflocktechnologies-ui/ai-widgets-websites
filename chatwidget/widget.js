@@ -227,7 +227,7 @@
 
         <div class="panel-body" id="panel-body" 
              :style="{ 
-               background: $store.chat.state === 'welcome' ? ($store.chatWindow.welcome?.bgGradient || 'linear-gradient(135deg, #d97706, #78350f)') : ($store.chatWindow.bodyBg || 'var(--cw-bg)'),
+               background: $store.chat.state === 'welcome' ? ($store.chatWindow.welcome?.bgGradient || ('linear-gradient(135deg, ' + (getParentTheme().primary || '#0b5fff') + ', ' + (getParentTheme().secondary || '#0b5fff') + ')')) : ($store.chatWindow.bodyBg || 'var(--cw-bg)'),
                padding: $store.chat.state === 'welcome' ? '0px' : ''
              }">
              
@@ -237,9 +237,9 @@
           <div x-show="$store.chat.state === 'welcome'" 
                style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; position: relative; overflow: hidden;"
                :style="{
-                 padding: $store.chatWindow.welcome?.padding || '40px 32px',
+                 padding: $store.chatWindow.welcome?.padding || '24px 20px 12px 20px',
                  color: $store.chatWindow.welcome?.headerTextColor || '#ffffff',
-                 background: $store.chatWindow.welcome?.bgGradient || 'linear-gradient(135deg, #f59e0b, #b45309)'
+                 background: $store.chatWindow.welcome?.bgGradient || ('linear-gradient(135deg, ' + (getParentTheme().primary || '#0b5fff') + ', ' + (getParentTheme().secondary || '#0b5fff') + ')')
                }">
             
           <!-- Abstract background blobs for modern look -->
@@ -272,9 +272,11 @@
               <!-- Glassy Card Layout Mode -->
               <template x-if="$store.chatWindow.welcome?.cardLayout === 'glassy'">
                 <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; width: 100%;">
-                  <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; margin-bottom: 12px;">
+                  <div style="display: flex; flex-direction: column; height: 100%; margin-bottom: 12px;"
+                       :style="{ justifyContent: ($store.chatWindow.welcome?.cardAlign === 'center' || $store.chatWindow.welcome?.cardPosition === 'center') ? 'center' : 'space-between' }">
                     <!-- Stylized Top Icon (mimics violet reference logo) -->
-                    <div style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 20px; flex-shrink: 0;">
+                    <div style="display: flex; align-items: center; margin-bottom: 20px; flex-shrink: 0;"
+                         :style="{ justifyContent: $store.chatWindow.welcome?.logoAlign || ($store.chatWindow.welcome?.textAlign === 'center' || $store.chatWindow.welcome?.cardAlign === 'center' ? 'center' : 'flex-start') }">
                       <template x-if="$store.chatWindow.welcome?.logoUrl">
                         <img :src="$store.chatWindow.welcome?.logoUrl" style="height: 36px; object-fit: contain;" />
                       </template>
@@ -289,20 +291,24 @@
 
                     <!-- Glassy Container wrapping text, avatars, and button -->
                     <div :style="{
-                           background: $store.chatWindow.welcome?.cardBg || 'rgba(255, 255, 255, 0.08)',
-                           border: $store.chatWindow.welcome?.cardBorder || '1px solid rgba(255, 255, 255, 0.15)',
-                           borderRadius: ($store.chatWindow.welcome?.cardBorderRadius || 20) + 'px',
-                           padding: $store.chatWindow.welcome?.cardPadding || '24px',
-                           backdropFilter: 'blur(' + ($store.chatWindow.welcome?.cardBlur || 8) + 'px)',
-                           boxShadow: $store.chatWindow.welcome?.cardShadow || '0 8px 32px 0 rgba(0, 0, 0, 0.08)',
+                           background: $store.chatWindow.welcome?.cardBg || 'rgba(255, 255, 255, 0.12)',
+                           border: $store.chatWindow.welcome?.cardBorder || '1px solid rgba(255, 255, 255, 0.22)',
+                           borderRadius: ($store.chatWindow.welcome?.cardBorderRadius || 24) + 'px',
+                           padding: $store.chatWindow.welcome?.cardPadding || '32px 24px',
+                           backdropFilter: 'blur(' + ($store.chatWindow.welcome?.cardBlur || 16) + 'px)',
+                           webkitBackdropFilter: 'blur(' + ($store.chatWindow.welcome?.cardBlur || 16) + 'px)',
+                           boxShadow: $store.chatWindow.welcome?.cardShadow || '0 12px 40px 0 rgba(0, 0, 0, 0.15)',
                            display: 'flex',
                            flexDirection: 'column',
                            gap: '24px',
-                           flex: '1',
+                           flex: $store.chatWindow.welcome?.cardFlex || '1',
+                           width: $store.chatWindow.welcome?.cardWidth || '100%',
+                           minHeight: $store.chatWindow.welcome?.cardMinHeight || 'auto',
                            justifyContent: 'space-between'
                          }">
                       <!-- Sleek Typography -->
-                      <div style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
+                      <div style="display: flex; flex-direction: column; gap: 10px;"
+                           :style="{ textAlign: $store.chatWindow.welcome?.textAlign || ($store.chatWindow.welcome?.cardAlign === 'center' ? 'center' : 'left'), alignItems: ($store.chatWindow.welcome?.textAlign === 'center' || $store.chatWindow.welcome?.cardAlign === 'center') ? 'center' : 'flex-start' }">
                         <h2 style="font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; margin: 0;" 
                             :style="{ fontSize: $store.chatWindow.welcome?.titleFontSize || '28px', color: $store.chatWindow.welcome?.headerTextColor || '#ffffff' }"
                             x-text="$store.chatWindow.welcome?.title || 'Hi there! 👋 How can we help you today?'"></h2>
@@ -313,8 +319,9 @@
                            }"
                            x-text="$store.chatWindow.welcome?.description || 'Our support heroes are here to assist you.'"></p>
                         
-                        <!-- Overlapping Online Avatars without Text (Cleaner) -->
-                        <div style="display: flex; align-items: center; gap: 0; margin-top: 16px;">
+                        <!-- Overlapping Online Avatars -->
+                        <div style="display: flex; align-items: center; gap: 0; margin-top: 16px;"
+                             :style="{ justifyContent: $store.chatWindow.welcome?.avatarAlign || ($store.chatWindow.welcome?.textAlign === 'center' || $store.chatWindow.welcome?.cardAlign === 'center' ? 'center' : 'flex-start'), width: '100%' }">
                           <template x-for="(avatar, index) in ($store.chatWindow.welcome?.avatars || [])" :key="index">
                             <img :src="avatar" 
                                  style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid; object-fit: cover; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"
@@ -341,7 +348,7 @@
                               @mouseleave="$el.style.transform = 'translateY(0)'; $el.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)';"
                       >
                         <div style="display: flex; align-items: center; justify-content: center; flex-shrink: 0;"
-                             :style="{ color: $store.chatWindow.welcome?.buttonIconColor || '#d97706' }">
+                             :style="{ color: $store.chatWindow.welcome?.buttonIconColor || $store.chatWindow.accentColor || '#0b5fff' }">
                           <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
                             <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
                           </svg>
@@ -428,7 +435,7 @@
                             @mouseleave="$el.style.transform = 'translateY(0)'; $el.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)';"
                     >
                       <div style="display: flex; align-items: center; justify-content: center; flex-shrink: 0;"
-                           :style="{ color: $store.chatWindow.welcome?.buttonIconColor || '#d97706' }">
+                           :style="{ color: $store.chatWindow.welcome?.buttonIconColor || $store.chatWindow.accentColor || '#0b5fff' }">
                         <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
                           <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
                         </svg>
@@ -1312,7 +1319,7 @@
     if (!Alpine.store('chatWindow')) {
       Alpine.store('chatWindow', {
         clientName: 'Zotly Support', agentName: 'Sarah', accentColor: theme.primary || '#0b5fff', useWebsiteTheme: true, widgetWidth: 350, widgetHeight: 550, expandedWidth: 480, expandedHeight: 550, widgetBorderRadius: 24, widgetShadow: true, widgetShadowBlur: 30, widgetShadowColor: 'rgba(0,0,0,0.12)', widgetBorderEnabled: true, widgetBorderWidth: 1, widgetBorderColor: '#e5e7eb', modernUi: true, typingIndicator: true, attachmentsEnabled: true,
-        welcome: { enabled: false, cardLayout: "normal", cardBg: "", cardBorder: "", cardBorderRadius: 20, cardPadding: "24px", cardBlur: 8, cardShadow: "" }
+        welcome: { enabled: false, useWebsiteTheme: true, cardLayout: "glassy", cardAlign: "center", textAlign: "center", logoAlign: "center", avatarAlign: "center", cardBg: "rgba(255, 255, 255, 0.12)", cardBorder: "1px solid rgba(255, 255, 255, 0.22)", cardBorderRadius: 24, cardPadding: "32px 24px", padding: "24px 20px 12px 20px", cardBlur: 16, cardShadow: "0 12px 40px 0 rgba(0, 0, 0, 0.15)" }
       });
       Alpine.store('chatcontactv2', Alpine.store('chatWindow'));
     }
@@ -1356,6 +1363,10 @@
     }
 
     if (chatConfig && Object.keys(chatConfig).length > 0) {
+      if (chatConfig.welcome) {
+        Alpine.store('chatWindow').welcome = Object.assign({}, Alpine.store('chatWindow').welcome, chatConfig.welcome);
+      }
+
       const applyTheme = () => {
         const isDark = document.documentElement.classList.contains('dark');
         const activeConfig = JSON.parse(JSON.stringify(chatConfig));
@@ -1398,6 +1409,17 @@
           }
         }
 
+        const welcomeObj = activeConfig.welcome || Alpine.store('chatWindow').welcome;
+        if (welcomeObj) {
+          const welcomeUseTheme = welcomeObj.useWebsiteTheme !== undefined ? welcomeObj.useWebsiteTheme : activeConfig.useWebsiteTheme;
+          if (welcomeUseTheme === true) {
+            const secondaryColor = (theme.secondary && theme.secondary !== theme.primary) ? theme.secondary : theme.primary;
+            welcomeObj.bgGradient = `linear-gradient(135deg, ${theme.primary}, ${secondaryColor})`;
+            welcomeObj.buttonIconColor = theme.primary;
+            activeConfig.welcome = welcomeObj;
+          }
+        }
+
         if (isDark && chatConfig.dark && Object.keys(chatConfig.dark).length > 0) {
           Object.assign(activeConfig, chatConfig.dark);
         }
@@ -1409,9 +1431,6 @@
       };
 
       applyTheme();
-      if (chatConfig.welcome) {
-        Alpine.store('chatWindow').welcome = Object.assign({}, Alpine.store('chatWindow').welcome, chatConfig.welcome);
-      }
 
       const observer = new MutationObserver(() => { applyTheme(); });
       observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
