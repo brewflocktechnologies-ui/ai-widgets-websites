@@ -181,6 +181,8 @@
 
   "chatWindow": {
     "useWebsiteTheme": true,
+    "offsetRight": null,
+    "offsetBottom": null,
     "clientName": "EcoSphere Support",
     "agentName": "Sarah (Eco)",
     "accentColor": "#059669",
@@ -379,6 +381,10 @@
     "hideOnOpen": true,
     "offsetBottom": 12,
     "offsetRight": 16,
+    "cardOffsetRight": null,
+    "cardOffsetBottom": null,
+    "barOffsetRight": null,
+    "barOffsetBottom": null,
     "stackGap": 12,
     "padding": "0px 16px",
     "gap": 0

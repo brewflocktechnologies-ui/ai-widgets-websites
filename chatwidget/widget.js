@@ -118,7 +118,9 @@
         height: $store.chatWindow.widgetHeight ? $store.chatWindow.widgetHeight + 'px' : '550px',
         maxWidth: 'calc(100vw - 32px)',
         maxHeight: (function() {
-          const defaultBottom = $store.chatbar.enabled ? ($store.chatbar.offsetBottom !== undefined ? $store.chatbar.offsetBottom : 12) : ($store.bubble.offsetBottom !== undefined ? $store.bubble.offsetBottom : 12);
+          const defaultBottom = ($store.chatWindow.offsetBottom !== undefined && $store.chatWindow.offsetBottom !== null && $store.chatWindow.offsetBottom !== '')
+            ? $store.chatWindow.offsetBottom
+            : ($store.chatbar.enabled ? ($store.chatbar.offsetBottom !== undefined ? $store.chatbar.offsetBottom : 12) : ($store.bubble.offsetBottom !== undefined ? $store.bubble.offsetBottom : 12));
           let offset = defaultBottom;
           if ($store.chatbar.enabled && !$store.chatbar.hideOnOpen) {
             const h = $store.chatbar.height || ($store.chatbar.layout === 'card' ? 220 : 40);
@@ -133,7 +135,9 @@
         })(),
         position: 'fixed',
         bottom: (function() {
-          const defaultBottom = $store.chatbar.enabled ? ($store.chatbar.offsetBottom !== undefined ? $store.chatbar.offsetBottom : 12) : ($store.bubble.offsetBottom !== undefined ? $store.bubble.offsetBottom : 12);
+          const defaultBottom = ($store.chatWindow.offsetBottom !== undefined && $store.chatWindow.offsetBottom !== null && $store.chatWindow.offsetBottom !== '')
+            ? $store.chatWindow.offsetBottom
+            : ($store.chatbar.enabled ? ($store.chatbar.offsetBottom !== undefined ? $store.chatbar.offsetBottom : 12) : ($store.bubble.offsetBottom !== undefined ? $store.bubble.offsetBottom : 12));
           if ($store.chatbar.enabled && !$store.chatbar.hideOnOpen) {
             const h = $store.chatbar.height || ($store.chatbar.layout === 'card' ? 220 : 40);
             const gap = $store.chatbar.stackGap !== undefined ? $store.chatbar.stackGap : 12;
@@ -146,7 +150,11 @@
           }
           return defaultBottom + 'px';
         })(),
-        right: ($store.chatbar.enabled ? ($store.chatbar.offsetRight !== undefined ? $store.chatbar.offsetRight : 16) : ($store.bubble.offsetRight !== undefined ? $store.bubble.offsetRight : 16)) + 'px'
+        right: (($store.chatWindow.offsetRight !== undefined && $store.chatWindow.offsetRight !== null && $store.chatWindow.offsetRight !== '') 
+          ? $store.chatWindow.offsetRight 
+          : ($store.chatbar.enabled 
+            ? ($store.chatbar.offsetRight !== undefined ? $store.chatbar.offsetRight : 16) 
+            : ($store.bubble.offsetRight !== undefined ? $store.bubble.offsetRight : 16))) + 'px'
       }" style="display: none;">
       
       <div class="panel flex flex-col relative w-full h-full overflow-hidden"
@@ -1454,7 +1462,7 @@
 
     if (!Alpine.store('chatWindow')) {
       Alpine.store('chatWindow', {
-        clientName: 'Zotly Support', agentName: 'Sarah', accentColor: theme.primary || '#0b5fff', useWebsiteTheme: true, widgetWidth: 350, widgetHeight: 550, expandedWidth: 480, expandedHeight: 550, widgetBorderRadius: 24, widgetShadow: true, widgetShadowBlur: 30, widgetShadowColor: 'rgba(0,0,0,0.12)', widgetBorderEnabled: true, widgetBorderWidth: 1, widgetBorderColor: '#e5e7eb', modernUi: true, typingIndicator: true, attachmentsEnabled: true,
+        clientName: 'Zotly Support', agentName: 'Sarah', accentColor: theme.primary || '#0b5fff', useWebsiteTheme: true, widgetWidth: 350, widgetHeight: 550, expandedWidth: 480, expandedHeight: 550, widgetBorderRadius: 24, widgetShadow: true, widgetShadowBlur: 30, widgetShadowColor: 'rgba(0,0,0,0.12)', widgetBorderEnabled: true, widgetBorderWidth: 1, widgetBorderColor: '#e5e7eb', modernUi: true, typingIndicator: true, attachmentsEnabled: true, offsetRight: null, offsetBottom: null,
         welcome: { enabled: false, useWebsiteTheme: true, cardLayout: "glassy", cardAlign: "center", textAlign: "center", logoAlign: "center", avatarAlign: "center", cardBg: "rgba(255, 255, 255, 0.12)", cardBorder: "1px solid rgba(255, 255, 255, 0.22)", cardBorderRadius: 24, cardPadding: "32px 24px", padding: "24px 20px 12px 20px", cardBlur: 16, cardShadow: "0 12px 40px 0 rgba(0, 0, 0, 0.15)" }
       });
       Alpine.store('chatcontactv2', Alpine.store('chatWindow'));
@@ -1462,7 +1470,7 @@
 
     if (!Alpine.store('chatbar')) {
       Alpine.store('chatbar', {
-        enabled: false, useWebsiteTheme: true, position: 'bottom-right', offsetLeft: 16, offsetRight: 16, offsetBottom: 12, text: "Chat with us", cardText: "", barText: "Chat with us", bgColor: theme.primary || "#0b5fff", textColor: "#ffffff", textSize: 14, letterSpacing: 0, gradientEnabled: false, gradientStops: [{ color: theme.primary || "#0b5fff", pos: 0 }, { color: theme.secondary || "#22D3EE", pos: 100 }], gradientType: "linear", gradientAngle: 90, iconType: "lucide", iconColor: "#ffffff", lucideIcon: "MessageCircle", iconImageUrl: "", iconFit: "contain", iconOpacity: 1, iconBlend: "normal", iconWidth: 20, iconHeight: 20, width: 255, height: 40, shadow: true, borderRadius: { tl: 20, tr: 20, bl: 20, br: 20 }, hideOnOpen: true
+        enabled: false, useWebsiteTheme: true, position: 'bottom-right', offsetLeft: 16, offsetRight: 16, offsetBottom: 12, cardOffsetRight: null, cardOffsetBottom: null, barOffsetRight: null, barOffsetBottom: null, text: "Chat with us", cardText: "", barText: "Chat with us", bgColor: theme.primary || "#0b5fff", textColor: "#ffffff", textSize: 14, letterSpacing: 0, gradientEnabled: false, gradientStops: [{ color: theme.primary || "#0b5fff", pos: 0 }, { color: theme.secondary || "#22D3EE", pos: 100 }], gradientType: "linear", gradientAngle: 90, iconType: "lucide", iconColor: "#ffffff", lucideIcon: "MessageCircle", iconImageUrl: "", iconFit: "contain", iconOpacity: 1, iconBlend: "normal", iconWidth: 20, iconHeight: 20, width: 255, height: 40, shadow: true, borderRadius: { tl: 20, tr: 20, bl: 20, br: 20 }, hideOnOpen: true
       });
     }
 
@@ -1499,6 +1507,22 @@
 
     if (chatbarConfig && Object.keys(chatbarConfig).length > 0) {
       Object.assign(Alpine.store('chatbar'), chatbarConfig);
+      const store = Alpine.store('chatbar');
+      if (store.layout === 'card') {
+        if (store.cardOffsetRight !== undefined && store.cardOffsetRight !== null && store.cardOffsetRight !== '') {
+          store.offsetRight = store.cardOffsetRight;
+        }
+        if (store.cardOffsetBottom !== undefined && store.cardOffsetBottom !== null && store.cardOffsetBottom !== '') {
+          store.offsetBottom = store.cardOffsetBottom;
+        }
+      } else {
+        if (store.barOffsetRight !== undefined && store.barOffsetRight !== null && store.barOffsetRight !== '') {
+          store.offsetRight = store.barOffsetRight;
+        }
+        if (store.barOffsetBottom !== undefined && store.barOffsetBottom !== null && store.barOffsetBottom !== '') {
+          store.offsetBottom = store.barOffsetBottom;
+        }
+      }
     }
 
     if (chatConfig && Object.keys(chatConfig).length > 0) {
@@ -1609,6 +1633,17 @@
             chatbarStore.padding = '0px 16px';
             chatbarStore.gap = 0;
             chatbarStore.borderRadius = { tl: 20, tr: 20, bl: 20, br: 20 };
+            
+            if (chatbarStore.barOffsetRight !== undefined && chatbarStore.barOffsetRight !== null && chatbarStore.barOffsetRight !== '') {
+              chatbarStore.offsetRight = chatbarStore.barOffsetRight;
+            } else {
+              chatbarStore.offsetRight = 16;
+            }
+            if (chatbarStore.barOffsetBottom !== undefined && chatbarStore.barOffsetBottom !== null && chatbarStore.barOffsetBottom !== '') {
+              chatbarStore.offsetBottom = chatbarStore.barOffsetBottom;
+            } else {
+              chatbarStore.offsetBottom = 12;
+            }
           }
         },
         send() {

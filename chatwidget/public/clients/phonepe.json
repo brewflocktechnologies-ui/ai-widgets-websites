@@ -174,6 +174,8 @@
   },
   "chatWindow": {
     "useWebsiteTheme": false,
+    "offsetRight": 16,
+    "offsetBottom": 20,
     "clientName": "PhonePe Support",
     "agentName": "Sarah",
     "accentColor": "#5f259f",
@@ -347,6 +349,10 @@
     "hideOnOpen": true,
     "offsetBottom": 20,
     "offsetRight": 160,
+    "cardOffsetRight": 160,
+    "cardOffsetBottom": 20,
+    "barOffsetRight": 16,
+    "barOffsetBottom": 20,
     "stackGap": 0,
     "padding": "24px 16px",
     "gap": 12
