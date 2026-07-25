@@ -966,9 +966,54 @@
             </svg>
           </template>
           <template x-if="!openContactWidget">
-            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+              
+              <!-- Image Icon -->
+              <template x-if="(settings.iconType === 'image' || (!settings.iconType && (settings.iconImageUrl || settings.backgroundImageUrl))) && (settings.iconImageUrl || settings.backgroundImageUrl)">
+                <img :src="settings.iconImageUrl || settings.backgroundImageUrl" alt="bubble icon"
+                  :style="{
+                    width: (settings.iconWidth || 26) + 'px',
+                    height: (settings.iconHeight || 26) + 'px',
+                    objectFit: settings.iconFit || 'contain',
+                    opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : 1,
+                    mixBlendMode: settings.iconBlend || 'normal',
+                    borderRadius: '50%'
+                  }" />
+              </template>
+
+              <!-- Custom SVG Icon -->
+              <template x-if="(settings.iconType === 'customSvg' || (!settings.iconType && settings.customSvg)) && settings.customSvg">
+                <div class="custom-svg-icon"
+                  :style="{
+                    color: settings.iconColor || '#ffffff',
+                    width: (settings.iconWidth || 26) + 'px',
+                    height: (settings.iconHeight || 26) + 'px',
+                    display: 'inline-flex'
+                  }"
+                  x-html="settings.customSvg"></div>
+              </template>
+
+              <!-- Lucide/SVG Icons -->
+              <template x-if="(!settings.iconType || settings.iconType === 'lucide') && !settings.iconImageUrl && !settings.backgroundImageUrl && !settings.customSvg">
+                <div :style="{ color: settings.iconColor || '#ffffff', display: 'flex' }">
+                  <!-- Star -->
+                  <template x-if="settings.lucideIcon === 'Star' || settings.backgroundLucideIcon === 'Star'">
+                    <svg viewBox="0 0 24 24" :width="settings.iconWidth || 26" :height="settings.iconHeight || 26" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  </template>
+                  <!-- Heart -->
+                  <template x-if="settings.lucideIcon === 'Heart' || settings.backgroundLucideIcon === 'Heart'">
+                    <svg viewBox="0 0 24 24" :width="settings.iconWidth || 26" :height="settings.iconHeight || 26" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  </template>
+                  <!-- Default Message Bubble -->
+                  <template x-if="!settings.lucideIcon && settings.backgroundLucideIcon !== 'Star' && settings.backgroundLucideIcon !== 'Heart'">
+                    <svg viewBox="0 0 24 24" :width="settings.iconWidth || 26" :height="settings.iconHeight || 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </template>
+                </div>
+              </template>
+
+            </div>
           </template>
         </div>
       </template>
@@ -1043,7 +1088,7 @@
 
           <span style="font-weight: 700; line-height: 1.35; white-space: pre-line; text-align: center;"
             :style="{ fontSize: (settings.textSize || 16) + 'px', letterSpacing: (settings.letterSpacing || 0) + 'px' }"
-            x-text="settings.text || 'Questions about PayPal?'"></span>
+            x-text="settings.cardText || settings.text || 'Questions about PayPal?'"></span>
 
           <div style="background-color: #ffffff; color: #003087; font-weight: 700; border-radius: 9999px; display: flex; align-items: center; justify-content: center; padding: 10px 24px; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 85%;"
                :style="{ backgroundColor: settings.buttonBg || '#ffffff', color: settings.buttonTextColor || settings.bgColor || '#003087' }">
@@ -1060,36 +1105,41 @@
       <!-- BAR LAYOUT (Horizontal) -->
       <template x-if="settings.layout !== 'card'">
         <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; height: 100%;">
-          <span style="font-weight: 600;"
-            :style="{ fontSize: (settings.textSize || 14) + 'px', letterSpacing: (settings.letterSpacing || 0) + 'px' }"
-            x-text="settings.text || 'Chat with us'"></span>
+          <span style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; text-align: left;"
+            :style="{ 
+              fontSize: getFontSize(), 
+              letterSpacing: (settings ? (settings.letterSpacing || 0) : 0) + 'px',
+              lineHeight: '1.2',
+              color: settings ? (settings.textColor || '#ffffff') : '#ffffff'
+            }"
+            x-text="getChatbarText()"></span>
           
-          <div style="display: flex; align-items: center; justify-content: center; position: relative;">
+          <div style="display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; margin-left: 8px;">
             <template x-if="settings.iconType === 'lucide'">
               <div :style="{ color: settings.iconColor || '#ffffff', opacity: hovered ? 1 : 0.8, display: 'flex' }">
                 <template x-if="settings.lucideIcon === 'MessageCircle' || !settings.lucideIcon">
-                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>
+                  <svg viewBox="0 0 24 24" :width="getIconWidth('lucide')" :height="getIconHeight('lucide')" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>
                 </template>
                 <template x-if="settings.lucideIcon === 'MessageSquare'">
-                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  <svg viewBox="0 0 24 24" :width="getIconWidth('lucide')" :height="getIconHeight('lucide')" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                 </template>
                 <template x-if="settings.lucideIcon === 'Send'">
-                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                  <svg viewBox="0 0 24 24" :width="getIconWidth('lucide')" :height="getIconHeight('lucide')" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </template>
                 <template x-if="settings.lucideIcon === 'HelpCircle'">
-                  <svg viewBox="0 0 24 24" :width="settings.iconWidth || 20" :height="settings.iconHeight || 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                  <svg viewBox="0 0 24 24" :width="getIconWidth('lucide')" :height="getIconHeight('lucide')" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                 </template>
               </div>
             </template>
             
             <template x-if="settings.iconType === 'image' && settings.iconImageUrl">
               <img :src="settings.iconImageUrl" alt="icon" class="rounded"
-                :style="{ objectFit: settings.iconFit || 'contain', opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : 1, width: (settings.iconWidth || 20) + 'px', height: (settings.iconHeight || 20) + 'px', mixBlendMode: settings.iconBlend || 'normal' }" />
+                :style="{ objectFit: settings.iconFit || 'contain', opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : 1, width: getIconWidth('image') + 'px', height: getIconHeight('image') + 'px', mixBlendMode: settings.iconBlend || 'normal' }" />
             </template>
 
             <template x-if="settings.iconType === 'customSvg' && settings.customSvg">
               <div class="custom-svg-icon"
-                   :style="{ color: settings.iconColor || '#ffffff', opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : 1, display: 'inline-flex', width: (settings.iconWidth || 20) + 'px', height: (settings.iconHeight || 20) + 'px' }"
+                   :style="{ color: settings.iconColor || '#ffffff', opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : 1, display: 'inline-flex', width: getIconWidth('customSvg') + 'px', height: getIconHeight('customSvg') + 'px' }"
                    x-html="settings.customSvg"></div>
             </template>
 
@@ -1291,6 +1341,29 @@
           return `${tl}px ${tr}px ${br}px ${bl}px`;
         }
         return '20px';
+      },
+      getChatbarText() {
+        if (!this.settings) return 'Chat with us';
+        const txt = this.settings.text || 'Chat with us';
+        return typeof txt === 'string' ? txt.replace(/\n/g, ' ') : 'Chat with us';
+      },
+      getFontSize() {
+        if (!this.settings) return '14px';
+        const size = this.settings.textSize || 14;
+        const height = this.settings.height || 40;
+        return Math.min(size, Math.max(12, Math.floor(height * 0.35))) + 'px';
+      },
+      getIconWidth(type) {
+        if (!this.settings) return 20;
+        const width = this.settings.iconWidth || 20;
+        const height = this.settings.height || 40;
+        return Math.min(width, Math.max(16, Math.floor(height * (type === 'customSvg' ? 0.55 : 0.5))));
+      },
+      getIconHeight(type) {
+        if (!this.settings) return 20;
+        const height = this.settings.iconHeight || 20;
+        const barHeight = this.settings.height || 40;
+        return Math.min(height, Math.max(16, Math.floor(barHeight * (type === 'customSvg' ? 0.55 : 0.5))));
       }
     };
   };
@@ -1389,7 +1462,7 @@
 
     if (!Alpine.store('chatbar')) {
       Alpine.store('chatbar', {
-        enabled: false, useWebsiteTheme: true, position: 'bottom-right', offsetLeft: 16, offsetRight: 16, offsetBottom: 12, text: "Chat with us", bgColor: theme.primary || "#0b5fff", textColor: "#ffffff", textSize: 14, letterSpacing: 0, gradientEnabled: false, gradientStops: [{ color: theme.primary || "#0b5fff", pos: 0 }, { color: theme.secondary || "#22D3EE", pos: 100 }], gradientType: "linear", gradientAngle: 90, iconType: "lucide", iconColor: "#ffffff", lucideIcon: "MessageCircle", iconImageUrl: "", iconFit: "contain", iconOpacity: 1, iconBlend: "normal", iconWidth: 20, iconHeight: 20, width: 255, height: 40, shadow: true, borderRadius: { tl: 20, tr: 20, bl: 20, br: 20 }, hideOnOpen: true
+        enabled: false, useWebsiteTheme: true, position: 'bottom-right', offsetLeft: 16, offsetRight: 16, offsetBottom: 12, text: "Chat with us", cardText: "", barText: "Chat with us", bgColor: theme.primary || "#0b5fff", textColor: "#ffffff", textSize: 14, letterSpacing: 0, gradientEnabled: false, gradientStops: [{ color: theme.primary || "#0b5fff", pos: 0 }, { color: theme.secondary || "#22D3EE", pos: 100 }], gradientType: "linear", gradientAngle: 90, iconType: "lucide", iconColor: "#ffffff", lucideIcon: "MessageCircle", iconImageUrl: "", iconFit: "contain", iconOpacity: 1, iconBlend: "normal", iconWidth: 20, iconHeight: 20, width: 255, height: 40, shadow: true, borderRadius: { tl: 20, tr: 20, bl: 20, br: 20 }, hideOnOpen: true
       });
     }
 
@@ -1527,6 +1600,17 @@
           } catch (err) { }
         },
         flag(key, defaultValue) { return this.flags[key] !== undefined ? this.flags[key] : (defaultValue !== undefined ? defaultValue : true); },
+        resetChatbarLayout() {
+          const chatbarStore = Alpine.store('chatbar');
+          if (chatbarStore && chatbarStore.layout === 'card') {
+            chatbarStore.layout = 'bar';
+            chatbarStore.height = 40;
+            chatbarStore.width = 255;
+            chatbarStore.padding = '0px 16px';
+            chatbarStore.gap = 0;
+            chatbarStore.borderRadius = { tl: 20, tr: 20, bl: 20, br: 20 };
+          }
+        },
         send() {
           if (this.draft && this.draft.trim()) {
             const text = this.draft.trim();
@@ -1534,6 +1618,8 @@
             this.messages.push(msgObj);
             this.draft = ''; this.emojiOpen = false; this.attachOpen = false; this.scrollDown();
             this.hasSentMessage = true;
+
+            this.resetChatbarLayout();
 
             const greetStore = Alpine.store('greetWindow');
             if (greetStore) {
@@ -1574,6 +1660,7 @@
             const msgObj = { key: 'img_' + Date.now(), senderType: 'VISITOR', localUrl: url, attachment: true, body: '', created: new Date().toISOString(), status: 'sent' };
             this.messages.push(msgObj);
             this.attachOpen = false; this.scrollDown();
+            this.resetChatbarLayout();
             setTimeout(() => { const idx = this.messages.findIndex(m => m.key === msgObj.key); if (idx !== -1) { this.messages[idx].status = 'delivered'; this.messages = [...this.messages]; } }, 2000);
             setTimeout(() => { const idx = this.messages.findIndex(m => m.key === msgObj.key); if (idx !== -1) { this.messages[idx].status = 'read'; this.messages = [...this.messages]; } }, 4000);
           }

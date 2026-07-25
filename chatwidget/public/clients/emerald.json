@@ -347,6 +347,8 @@
   },
     "chatbar": {
     "enabled": true,
+    "layout": "bar",
+    "cardText": "Questions about PhonePe\nfor business?",
     "useWebsiteTheme": true,
     "text": "Chat with us",
     "bgColor": "#059669",
@@ -370,7 +372,7 @@
     "iconBlend": "normal",
     "iconWidth": 20,
     "iconHeight": 20,
-    "width": 255,
+    "width": 320,
     "height": 40,
     "borderRadius": { "tl": 20, "tr": 20, "bl": 20, "br": 20 },
     "shadow": true,

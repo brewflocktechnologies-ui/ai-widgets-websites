@@ -303,7 +303,8 @@
   "chatbar": {
     "enabled": true,
     "layout": "card",
-    "text": "Questions about PhonePe\nfor business?",
+    "cardText": "Questions about PhonePe\nfor business?",
+    "text": "Chat with us",
     "bgColor": "#5f259f",
     "textColor": "#ffffff",
     "textSize": 16,

@@ -75,7 +75,7 @@
     "backgroundLucideColor": "#FFFFFF",
     "backgroundLucideSize": 24,
     "backgroundLucideOpacity": 0.2,
-    "backgroundLucideIcon": "Star",
+    "backgroundLucideIcon": "MessageCircle",
     "backgroundImageUrl": "",
     "backgroundImageSize": "contain",
     "backgroundImageOpacity": 0.25,
@@ -350,6 +350,8 @@
   "chatbar": {
     "enabled": false,
     "useWebsiteTheme": true,
+    "layout": "bar",
+    "cardText": "Questions about PhonePe\nfor business?",
     "text": "Chat with us",
     "bgColor": "#d97706",
     "textColor": "#ffffff",

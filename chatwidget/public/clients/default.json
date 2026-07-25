@@ -353,6 +353,8 @@
   "chatbar": {
     "enabled": false,
     "useWebsiteTheme": true,
+    "layout": "bar",
+    "cardText": "Questions about PhonePe\nfor business?",
     "text": "Chat with us",
     "bgColor": "#0b5fff",
     "textColor": "#ffffff",
