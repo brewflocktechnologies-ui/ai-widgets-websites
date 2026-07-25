@@ -4,6 +4,8 @@
     "//_greetWindow_section": "--- FLOATING GREET PREVIEW AND INPUT ---",
   "greetWindow": {
     "enabled": true,
+    "openingTimeAfterInitialLoadSec": 6.0,
+    "animationOpeningSec": 0.8,
     "useWebsiteTheme": true,
     "width": 280,
     "spacing": 16,
@@ -30,6 +32,8 @@
     "descriptionFontSize": "14px",
     "inputBox": {
       "enabled": true,
+      "openingTimeAfterInitialLoadSec": 6.0,
+      "animationOpeningSec": 0.8,
       "layout":"",
       "placeholder": "Write your message...",
       "backgroundColor": "#ffffff",
@@ -42,6 +46,8 @@
   },
   "//_bubble_section": "--- FLOATING BUBBLE TRIGGER BUTTON ---",
   "bubble": {
+    "offsetRight": 24,
+    "offsetBottom": 24,
     "useWebsiteTheme": true,
     "width": 60,
     "height": 60,

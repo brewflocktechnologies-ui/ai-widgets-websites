@@ -108,10 +108,10 @@
       x-transition:enter="transition ease-out duration-300 origin-bottom-right"
       x-transition:enter-start="opacity-0 scale-50 translate-y-8"
       x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-      x-transition:leave="transition ease-in duration-200 origin-bottom-right"
+      x-transition:leave="transition ease-in duration-200"
       x-transition:leave-start="opacity-100 scale-100 translate-y-0"
       x-transition:leave-end="opacity-0 scale-50 translate-y-8"
-      class="fixed z-50 flex flex-col transition-all duration-300 pointer-events-auto zotly-widget-panel-wrapper"
+      class="fixed z-50 flex flex-col transition-all duration-300 pointer-events-auto zotly-widget-panel-wrapper origin-bottom-right"
       :style="{
         boxSizing: 'border-box',
         width: $store.chat.isExpanded ? ($store.chatWindow.expandedWidth ? $store.chatWindow.expandedWidth + 'px' : '480px') : ($store.chatWindow.widgetWidth ? $store.chatWindow.widgetWidth + 'px' : '350px'),
@@ -726,7 +726,7 @@
     </div>
 
     <!-- NEW: FLOATING GREET PREVIEW & INPUT BOX -->
-    <div x-show="(!$store.bubble.hideOnOpen || !openContactWidget) && !$store.chatbar.enabled && !$store.chat.hasSentMessage && $store.greetWindow && $store.greetWindow.enabled && !$store.greetWindow.dismissed"
+    <div x-show="((!$store.chatbar.enabled && (!$store.bubble.hideOnOpen || !openContactWidget)) || ($store.chatbar.enabled && (!$store.chatbar.hideOnOpen || !openContactWidget))) && !$store.chat.hasSentMessage && $store.greetWindow && $store.greetWindow.enabled && !$store.greetWindow.dismissed && $store.greetWindow.visible"
          class="fixed z-30 flex flex-col items-end transition-all duration-300 pointer-events-none"
          style="box-sizing: border-box;"
          x-transition:enter="transition ease-out duration-300 delay-150"
@@ -736,10 +736,16 @@
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 translate-y-4"
          :style="{
-           bottom: (($store.bubble.offsetBottom !== undefined ? $store.bubble.offsetBottom : 12) + ($store.bubble.height || 60) + ($store.greetWindow.spacing || 16)) + 'px',
-           right: ($store.bubble.offsetRight !== undefined ? $store.bubble.offsetRight : 16) + 'px',
+           bottom: (function() {
+             const baseBottom = $store.chatbar.enabled ? ($store.chatbar.offsetBottom !== undefined ? $store.chatbar.offsetBottom : 12) : ($store.bubble.offsetBottom !== undefined ? $store.bubble.offsetBottom : 12);
+             const triggerHeight = $store.chatbar.enabled ? ($store.chatbar.height || ($store.chatbar.layout === 'card' ? 220 : 40)) : ($store.bubble.height || 60);
+             const spacing = $store.greetWindow.spacing !== undefined ? $store.greetWindow.spacing : 16;
+             return (baseBottom + triggerHeight + spacing) + 'px';
+           })(),
+           right: ($store.chatbar.enabled ? ($store.chatbar.offsetRight !== undefined ? $store.chatbar.offsetRight : 16) : ($store.bubble.offsetRight !== undefined ? $store.bubble.offsetRight : 16)) + 'px',
            width: ($store.greetWindow.width || 320) + 'px',
-           gap: '12px'
+           gap: '12px',
+           transitionDuration: ($store.greetWindow.animationOpeningSec !== undefined ? $store.greetWindow.animationOpeningSec + 's' : '0.3s')
          }">
 
       <!-- Close Button Wrapper (Sitting above Greet Card) -->
@@ -818,7 +824,16 @@
 
       <!-- Quick Input Box -->
       <template x-if="$store.greetWindow.inputBox && $store.greetWindow.inputBox.enabled && $store.greetWindow.inputBox.layout === 'separated'">
-        <div class="flex items-center w-full relative pointer-events-auto" style="display: flex; gap: 8px; width: 100%; align-items: center; background: transparent;">
+        <div x-show="$store.greetWindow.inputBox.visible"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             class="flex items-center w-full relative pointer-events-auto"
+             style="display: flex; gap: 8px; width: 100%; align-items: center; background: transparent;"
+             :style="{
+               display: $store.greetWindow.inputBox.visible ? 'flex' : 'none',
+               transitionDuration: ($store.greetWindow.inputBox.animationOpeningSec !== undefined ? $store.greetWindow.inputBox.animationOpeningSec + 's' : '0.3s')
+             }">
           <!-- Input Container -->
           <div :style="{
                  flex: 1,
@@ -856,13 +871,18 @@
 
       <template x-if="$store.greetWindow.inputBox && $store.greetWindow.inputBox.enabled && $store.greetWindow.inputBox.layout !== 'separated'">
         <!-- Joined Quick Input Box (default) -->
-        <div class="flex items-center w-full relative pointer-events-auto"
+        <div x-show="$store.greetWindow.inputBox.visible"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             class="flex items-center w-full relative pointer-events-auto"
              :style="{
                backgroundColor: $store.greetWindow.inputBox?.backgroundColor || '#ffffff',
                borderRadius: ($store.greetWindow.inputBox?.borderRadius || 24) + 'px',
                boxShadow: ($store.greetWindow.inputBox?.boxShadow !== undefined && $store.greetWindow.inputBox?.boxShadow !== null) ? ($store.greetWindow.inputBox.boxShadow || 'none') : '0 6px 16px rgba(0,0,0,0.12)',
                padding: '4px 4px 4px 16px',
-               display: 'flex'
+               display: $store.greetWindow.inputBox.visible ? 'flex' : 'none',
+               transitionDuration: ($store.greetWindow.inputBox.animationOpeningSec !== undefined ? $store.greetWindow.inputBox.animationOpeningSec + 's' : '0.3s')
              }">
           <input type="text"
                  x-model="$store.chat.draft"
@@ -901,7 +921,7 @@
         width: (settings.width || 50) + 'px',
         height: (settings.height || 50) + 'px',
         bottom: (settings.offsetBottom !== undefined ? settings.offsetBottom : 12) + 'px',
-        right: (settings.offsetRight !== undefined ? settings.offsetRight : 16) + 'px',
+        right: ((settings.offsetRight !== undefined ? settings.offsetRight : 16) + 'px'),
         borderRadius: getBorderRadius(),
         background: getCompositeBackground(),
         backgroundBlendMode: settings.backgroundBlendMode || 'normal',
@@ -968,7 +988,7 @@
         <div :style="getBadgeStyle()" x-text="$store.chat.unreadCount"></div>
       </template>
 
-      <template x-if="settings.tooltip && settings.tooltip.enabled && !openContactWidget">
+      <template x-if="settings.tooltip && settings.tooltip.enabled && !openContactWidget && !$store.chat.hasSentMessage">
         <div :style="getTooltipStyle()">
           <span x-text="settings.tooltip.text || 'Chat with us'"></span>
           <template x-if="settings.tooltip.arrowEnabled !== false">
@@ -990,7 +1010,7 @@
       class="fixed z-40 flex cursor-pointer select-none transition-all duration-200"
       @mouseenter="hovered = true" @mouseleave="hovered = false"
       :style="{
-        boxSizing: 'border-box', width: (settings.width || (settings.layout === 'card' ? 240 : 255)) + 'px', height: (settings.height || (settings.layout === 'card' ? 220 : 40)) + 'px', bottom: (settings.offsetBottom !== undefined ? settings.offsetBottom : 12) + 'px', right: (settings.offsetRight !== undefined ? settings.offsetRight : 16) + 'px', background: getBackgroundStyle(), color: settings.textColor || '#ffffff', borderRadius: getBorderRadius(), boxShadow: settings.shadow ? '0 4px 16px rgba(0,0,0,0.15)' : 'none', padding: settings.padding !== undefined ? settings.padding : (settings.layout === 'card' ? '24px 16px' : '0 16px'), transform: hovered ? 'scale(1.02)' : 'scale(1.0)', flexDirection: settings.layout === 'card' ? 'column' : 'row', alignItems: 'center', justifyContent: settings.layout === 'card' ? 'space-between' : 'space-between', gap: settings.gap !== undefined ? (settings.gap + 'px') : (settings.layout === 'card' ? '14px' : '0')
+        boxSizing: 'border-box', width: (settings.width || (settings.layout === 'card' ? 240 : 255)) + 'px', height: (settings.height || (settings.layout === 'card' ? 220 : 40)) + 'px', bottom: (settings.offsetBottom !== undefined ? settings.offsetBottom : 12) + 'px', right: ((settings.offsetRight !== undefined ? settings.offsetRight : 16) + 'px'), background: getBackgroundStyle(), color: settings.textColor || '#ffffff', borderRadius: getBorderRadius(), boxShadow: settings.shadow ? '0 4px 16px rgba(0,0,0,0.15)' : 'none', padding: settings.padding !== undefined ? settings.padding : (settings.layout === 'card' ? '24px 16px' : '0 16px'), transform: hovered ? 'scale(1.02)' : 'scale(1.0)', flexDirection: settings.layout === 'card' ? 'column' : 'row', alignItems: 'center', justifyContent: settings.layout === 'card' ? 'space-between' : 'space-between', gap: settings.gap !== undefined ? (settings.gap + 'px') : (settings.layout === 'card' ? '14px' : '0')
       }">
       
       <!-- CARD LAYOUT (Vertical) -->
@@ -1197,6 +1217,11 @@
             const bl = t.borderRadius.bl !== undefined ? t.borderRadius.bl : 20;
             borderRadius = `${tl}px ${tr}px ${br}px ${bl}px`;
           } else if (typeof t.borderRadius === 'number') { borderRadius = t.borderRadius + 'px'; } else { borderRadius = t.borderRadius; }
+        } else {
+          if (pos === 'left') borderRadius = '20px 20px 4px 20px';
+          else if (pos === 'right') borderRadius = '20px 20px 20px 4px';
+          else if (pos === 'top') borderRadius = '20px 20px 20px 20px';
+          else if (pos === 'bottom') borderRadius = '20px 20px 20px 20px';
         }
 
         const style = { position: 'absolute', backgroundColor: t.backgroundColor || '#ffffff', color: t.textColor || '#374151', fontSize: (t.fontSize || 14) + 'px', padding: t.padding || '8px 16px', borderRadius: borderRadius, boxShadow: t.boxShadow || '0 4px 12px rgba(0,0,0,0.1)', border: `${t.borderWidth || 0}px solid ${t.borderColor || 'transparent'}`, whiteSpace: 'nowrap', pointerEvents: 'auto', zIndex: 100 };
@@ -1305,14 +1330,16 @@
 
     if (!Alpine.store('bubble')) {
       Alpine.store('bubble', {
-        useWebsiteTheme: true, width: 50, height: 50, borderRadius: { tl: 50, tr: 50, bl: 50, br: 50 }, backgroundColor: theme.primary || '#0b5fff', gradientType: 'none', gradientStops: [{ color: theme.primary || '#0b5fff', pos: 0 }, { color: theme.secondary || '#22D3EE', pos: 100 }], backgroundOverlayType: 'image', backgroundImageUrl: '', backgroundImageSize: 'contain', backgroundImageOpacity: 0.25, backgroundBlendMode: 'normal', border: { width: 0, color: theme.primary || '#0b5fff', style: 'solid' }, outlineRing: { enabled: true, width: 3, color: theme.secondary || '#22D3EE', opacity: 0.4 }, boxShadowBlur: 20, boxShadowSpread: 0, boxShadowOffsetX: 0, boxShadowOffsetY: 8, boxShadowOpacity: 0.25, dots: { color: '#F8FAFC', size: 6, spacing: 6, animation: 'bounce' }, hideOnOpen: true, tooltip: { enabled: false, text: 'Chat with us', position: 'left', backgroundColor: '#ffffff', textColor: '#374151', fontSize: 14, borderRadius: { tl: 20, tr: 20, br: 4, bl: 20 }, padding: '8px 16px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', arrowEnabled: true, borderColor: 'transparent', borderWidth: 0 }
+        useWebsiteTheme: true, position: 'bottom-right', offsetLeft: 16, offsetRight: 16, offsetBottom: 12, width: 50, height: 50, borderRadius: { tl: 50, tr: 50, bl: 50, br: 50 }, backgroundColor: theme.primary || '#0b5fff', gradientType: 'none', gradientStops: [{ color: theme.primary || '#0b5fff', pos: 0 }, { color: theme.secondary || '#22D3EE', pos: 100 }], backgroundOverlayType: 'image', backgroundImageUrl: '', backgroundImageSize: 'contain', backgroundImageOpacity: 0.25, backgroundBlendMode: 'normal', border: { width: 0, color: theme.primary || '#0b5fff', style: 'solid' }, outlineRing: { enabled: true, width: 3, color: theme.secondary || '#22D3EE', opacity: 0.4 }, boxShadowBlur: 20, boxShadowSpread: 0, boxShadowOffsetX: 0, boxShadowOffsetY: 8, boxShadowOpacity: 0.25, dots: { color: '#F8FAFC', size: 6, spacing: 6, animation: 'bounce' }, hideOnOpen: true, tooltip: { enabled: false, text: 'Chat with us', position: '', backgroundColor: '#ffffff', textColor: '#374151', fontSize: 14, borderRadius: { tl: 20, tr: 20, br: 4, bl: 20 }, padding: '8px 16px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', arrowEnabled: true, borderColor: 'transparent', borderWidth: 0 }
       });
     }
 
     if (!Alpine.store('greetWindow')) {
       Alpine.store('greetWindow', {
         enabled: false, dismissed: false, useWebsiteTheme: false, width: 320, spacing: 16, backgroundColor: "#ffffff", borderRadius: 16, padding: "24px 20px", boxShadow: "0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)", imageUrl: "", imageHeight: 70, imageWidth: "", iconType: "", lucideIcon: "", iconSize: 48, iconColor: theme.primary || "#9333EA", iconAnimation: "none", iconAnimationDuration: "2.5s", title: "Hi there! 👋", titleColor: "#1e293b", titleFontSize: "15px", description: "How can we help you?", descriptionColor: "#475569", descriptionFontSize: "14px", iconAlign: "center", imagePadding: "0px",
-        inputBox: { enabled: true, layout: "joined", placeholder: "Write your message...", backgroundColor: "#ffffff", textColor: "#1e293b", borderRadius: 24, boxShadow: "0 6px 16px rgba(0,0,0,0.12)", buttonColor: theme.primary || "#9333EA", buttonIconColor: "#ffffff", buttonBgColor: "", buttonBoxShadow: "", buttonSize: 42 }
+        openingTimeAfterInitialLoadSec: 2, animationOpeningSec: 0.5, visible: false,
+        position: 'bottom-right',
+        inputBox: { enabled: true, layout: "joined", placeholder: "Write your message...", backgroundColor: "#ffffff", textColor: "#1e293b", borderRadius: 24, boxShadow: "0 6px 16px rgba(0,0,0,0.12)", buttonColor: theme.primary || "#9333EA", buttonIconColor: "#ffffff", buttonBgColor: "", buttonBoxShadow: "", buttonSize: 42, openingTimeAfterInitialLoadSec: 4, animationOpeningSec: 0.5, visible: false }
       });
     }
 
@@ -1326,7 +1353,7 @@
 
     if (!Alpine.store('chatbar')) {
       Alpine.store('chatbar', {
-        enabled: false, useWebsiteTheme: true, text: "Chat with us", bgColor: theme.primary || "#0b5fff", textColor: "#ffffff", textSize: 14, letterSpacing: 0, gradientEnabled: false, gradientStops: [{ color: theme.primary || "#0b5fff", pos: 0 }, { color: theme.secondary || "#22D3EE", pos: 100 }], gradientType: "linear", gradientAngle: 90, iconType: "lucide", iconColor: "#ffffff", lucideIcon: "MessageCircle", iconImageUrl: "", iconFit: "contain", iconOpacity: 1, iconBlend: "normal", iconWidth: 20, iconHeight: 20, width: 255, height: 40, shadow: true, borderRadius: { tl: 20, tr: 20, bl: 20, br: 20 }, hideOnOpen: true
+        enabled: false, useWebsiteTheme: true, position: 'bottom-right', offsetLeft: 16, offsetRight: 16, offsetBottom: 12, text: "Chat with us", bgColor: theme.primary || "#0b5fff", textColor: "#ffffff", textSize: 14, letterSpacing: 0, gradientEnabled: false, gradientStops: [{ color: theme.primary || "#0b5fff", pos: 0 }, { color: theme.secondary || "#22D3EE", pos: 100 }], gradientType: "linear", gradientAngle: 90, iconType: "lucide", iconColor: "#ffffff", lucideIcon: "MessageCircle", iconImageUrl: "", iconFit: "contain", iconOpacity: 1, iconBlend: "normal", iconWidth: 20, iconHeight: 20, width: 255, height: 40, shadow: true, borderRadius: { tl: 20, tr: 20, bl: 20, br: 20 }, hideOnOpen: true
       });
     }
 
@@ -1339,6 +1366,9 @@
         if (bubbleConfig.outlineRing) { bubbleConfig.outlineRing.color = theme.secondary; }
       }
       Object.assign(Alpine.store('bubble'), bubbleConfig);
+      if (bubbleConfig.position) {
+        Alpine.store('greetWindow').position = bubbleConfig.position;
+      }
     }
 
     if (greetWindowConfig && Object.keys(greetWindowConfig).length > 0) {
@@ -1469,8 +1499,13 @@
             this.draft = ''; this.emojiOpen = false; this.attachOpen = false; this.scrollDown();
             this.hasSentMessage = true;
 
-            if (Alpine.store('greetWindow')) {
-              Alpine.store('greetWindow').dismissed = true;
+            const greetStore = Alpine.store('greetWindow');
+            if (greetStore) {
+              greetStore.dismissed = true;
+              greetStore.visible = false;
+              if (greetStore.inputBox) {
+                greetStore.inputBox.visible = false;
+              }
             }
 
             setTimeout(() => { const idx = this.messages.findIndex(m => m.key === msgObj.key); if (idx !== -1) { this.messages[idx].status = 'delivered'; this.messages = [...this.messages]; } }, 2000);
@@ -1525,6 +1560,28 @@
           chatStore.agentName = chatConfig.agentName;
           if (chatStore.messages && chatStore.messages[0]) { chatStore.messages[0].senderName = chatConfig.agentName; }
         }
+      }
+    }
+
+    // Set up greet window and input box visibility timers
+    const greetStore = Alpine.store('greetWindow');
+    if (greetStore && greetStore.enabled) {
+      const greetDelaySec = greetStore.openingTimeAfterInitialLoadSec !== undefined ? parseFloat(greetStore.openingTimeAfterInitialLoadSec) : 2;
+      setTimeout(() => {
+        const chatStore = Alpine.store('chat');
+        if (!greetStore.dismissed && (!chatStore || !chatStore.hasSentMessage)) {
+          greetStore.visible = true;
+        }
+      }, greetDelaySec * 1000);
+
+      if (greetStore.inputBox && greetStore.inputBox.enabled) {
+        const inputDelaySec = greetStore.inputBox.openingTimeAfterInitialLoadSec !== undefined ? parseFloat(greetStore.inputBox.openingTimeAfterInitialLoadSec) : 4;
+        setTimeout(() => {
+          const chatStore = Alpine.store('chat');
+          if (!greetStore.dismissed && (!chatStore || !chatStore.hasSentMessage)) {
+            greetStore.inputBox.visible = true;
+          }
+        }, inputDelaySec * 1000);
       }
     }
 

@@ -3,7 +3,9 @@
   "clientName": "EcoSphere Emerald",
   
       "greetWindow": {
-    "enabled": false,
+    "enabled": true,
+    "openingTimeAfterInitialLoadSec": 2.0,
+    "animationOpeningSec": 0.5,
     "useWebsiteTheme": true,
     "width": 320,
     "spacing": 16,
@@ -29,7 +31,9 @@
     "descriptionColor": "#475569",
     "descriptionFontSize": "14px",
     "inputBox": {
-      "enabled": false,
+      "enabled": true,
+      "openingTimeAfterInitialLoadSec": 4.0,
+      "animationOpeningSec": 0.5,
       "layout":"",
       "placeholder": "Write your message...",
       "backgroundColor": "#ffffff",
@@ -44,6 +48,9 @@
   "//_bubble_section": "--- FLOATING BUBBLE TRIGGER BUTTON ---",
 
   "bubble": {
+    "offsetRight": 16,
+    "offsetLeft": 16,
+    "offsetBottom": 12,
     "useWebsiteTheme": true,
     "width": 60,
     "height": 60,
@@ -300,12 +307,12 @@
     "poweredByColor": "#2563eb",
     "poweredByLogo": "",
     "welcome": {
-      "enabled": false,
+      "enabled": true,
       "useWebsiteTheme": true,
       "cardLayout": "glassy",
       "cardBg": "rgba(255, 255, 255, 0.08)",
       "cardBorder": "1px solid rgba(255, 255, 255, 0.18)",
-            "cardAlign": "center",
+      "cardAlign": "center",
       "textAlign": "center",
       "logoAlign": "center",
       "avatarAlign": "center",

@@ -3,6 +3,8 @@
   "clientName": "PhonePe Business Support",
       "greetWindow": {
     "enabled": false,
+    "openingTimeAfterInitialLoadSec": 2.0,
+    "animationOpeningSec": 0.5,
     "useWebsiteTheme": true,
     "width": 320,
     "spacing": 16,
@@ -29,6 +31,8 @@
     "descriptionFontSize": "14px",
     "inputBox": {
       "enabled": false,
+      "openingTimeAfterInitialLoadSec": 4.0,
+      "animationOpeningSec": 0.5,
       "layout":"",
       "placeholder": "Write your message...",
       "backgroundColor": "#ffffff",
@@ -40,6 +44,9 @@
     }
   },
   "bubble": {
+    "offsetRight": 16,
+    "offsetLeft": 16,
+    "offsetBottom": 12,
     "useWebsiteTheme": false,
     "width": 60,
     "height": 60,
