@@ -6,6 +6,7 @@
     "enabled": true,
     "openingTimeAfterInitialLoadSec": 6.0,
     "animationOpeningSec": 0.8,
+    "animationClosingSec": 0.4,
     "useWebsiteTheme": true,
     "width": 280,
     "spacing": 16,
@@ -150,7 +151,12 @@
       "backgroundColor": "#dc2626",
       "textColor": "#ffffff",
       "borderWidth": 2,
-      "borderColor": "#ffffff"
+      "borderColor": "#ffffff",
+      "boxShadow": "0 1px 3px rgba(0,0,0,0.15)",
+      "borderRadius": "9999px",
+      "fontWeight": "700",
+      "padding": "0px",
+      "animation": "pulse 1.5s infinite"
     },
     "hideOnOpen": true,
     "tooltip": {

@@ -6,6 +6,7 @@
     "enabled": false,
     "openingTimeAfterInitialLoadSec": 2.0,
     "animationOpeningSec": 0.5,
+    "animationClosingSec": 0.3,
     "useWebsiteTheme": true,
     "width": 320,
     "spacing": 16,
@@ -146,14 +147,19 @@
     },
     "badge": {
       "position": "top-right",
-      "offsetX": -6,          
-      "offsetY": -6,          
-      "size": 20,              
-      "fontSize": 11,          
+      "offsetX": -6,
+      "offsetY": -6,
+      "size": 20,
+      "fontSize": 11,
       "backgroundColor": "#dc2626",
       "textColor": "#ffffff",
       "borderWidth": 2,
-      "borderColor": "#ffffff"
+      "borderColor": "#ffffff",
+      "boxShadow": "0 1px 3px rgba(0,0,0,0.15)",
+      "borderRadius": "9999px",
+      "fontWeight": "700",
+      "padding": "0px",
+      "animation": "pulse 1.5s infinite"
     },
     "hideOnOpen": true,
     "tooltip": {

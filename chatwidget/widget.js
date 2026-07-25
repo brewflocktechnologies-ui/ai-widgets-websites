@@ -745,7 +745,9 @@
            right: ($store.chatbar.enabled ? ($store.chatbar.offsetRight !== undefined ? $store.chatbar.offsetRight : 16) : ($store.bubble.offsetRight !== undefined ? $store.bubble.offsetRight : 16)) + 'px',
            width: ($store.greetWindow.width || 320) + 'px',
            gap: '12px',
-           transitionDuration: ($store.greetWindow.animationOpeningSec !== undefined ? $store.greetWindow.animationOpeningSec + 's' : '0.3s')
+           transitionDuration: (!$store.greetWindow.visible || $store.greetWindow.dismissed)
+             ? (($store.greetWindow.animationClosingSec !== undefined ? $store.greetWindow.animationClosingSec : 0.3) + 's')
+             : (($store.greetWindow.animationOpeningSec !== undefined ? $store.greetWindow.animationOpeningSec : 0.3) + 's')
          }">
 
       <!-- Close Button Wrapper (Sitting above Greet Card) -->
@@ -1189,7 +1191,25 @@
         const offsetY = b.offsetY !== undefined ? b.offsetY : -6;
         const size = b.size || 20;
 
-        const style = { position: 'absolute', backgroundColor: b.backgroundColor || '#dc2626', color: b.textColor || '#ffffff', fontSize: (b.fontSize || 11) + 'px', lineHeight: '1', minWidth: size + 'px', height: size + 'px', border: `${b.borderWidth !== undefined ? b.borderWidth : 2}px solid ${b.borderColor || '#ffffff'}`, borderRadius: '9999px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', boxShadow: '0 1px 3px rgba(0,0,0,0.15)', zIndex: 50 };
+        const style = {
+          position: 'absolute',
+          backgroundColor: b.backgroundColor || '#dc2626',
+          color: b.textColor || '#ffffff',
+          fontSize: (b.fontSize || 11) + 'px',
+          lineHeight: '1',
+          minWidth: size + 'px',
+          height: size + 'px',
+          border: `${b.borderWidth !== undefined ? b.borderWidth : 2}px solid ${b.borderColor || '#ffffff'}`,
+          borderRadius: b.borderRadius !== undefined ? b.borderRadius : '9999px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontWeight: b.fontWeight || '700',
+          boxShadow: b.boxShadow || '0 1px 3px rgba(0,0,0,0.15)',
+          padding: b.padding || '0px',
+          zIndex: 50,
+          animation: b.animation || 'none'
+        };
 
         if (pos === 'top-left') { style.top = offsetY + 'px'; style.left = offsetX + 'px'; } else if (pos === 'bottom-right') { style.bottom = offsetY + 'px'; style.right = offsetX + 'px'; } else if (pos === 'bottom-left') { style.bottom = offsetY + 'px'; style.left = offsetX + 'px'; } else { style.top = offsetY + 'px'; style.right = offsetX + 'px'; }
         return style;
@@ -1330,14 +1350,30 @@
 
     if (!Alpine.store('bubble')) {
       Alpine.store('bubble', {
-        useWebsiteTheme: true, position: 'bottom-right', offsetLeft: 16, offsetRight: 16, offsetBottom: 12, width: 50, height: 50, borderRadius: { tl: 50, tr: 50, bl: 50, br: 50 }, backgroundColor: theme.primary || '#0b5fff', gradientType: 'none', gradientStops: [{ color: theme.primary || '#0b5fff', pos: 0 }, { color: theme.secondary || '#22D3EE', pos: 100 }], backgroundOverlayType: 'image', backgroundImageUrl: '', backgroundImageSize: 'contain', backgroundImageOpacity: 0.25, backgroundBlendMode: 'normal', border: { width: 0, color: theme.primary || '#0b5fff', style: 'solid' }, outlineRing: { enabled: true, width: 3, color: theme.secondary || '#22D3EE', opacity: 0.4 }, boxShadowBlur: 20, boxShadowSpread: 0, boxShadowOffsetX: 0, boxShadowOffsetY: 8, boxShadowOpacity: 0.25, dots: { color: '#F8FAFC', size: 6, spacing: 6, animation: 'bounce' }, hideOnOpen: true, tooltip: { enabled: false, text: 'Chat with us', position: '', backgroundColor: '#ffffff', textColor: '#374151', fontSize: 14, borderRadius: { tl: 20, tr: 20, br: 4, bl: 20 }, padding: '8px 16px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', arrowEnabled: true, borderColor: 'transparent', borderWidth: 0 }
+        useWebsiteTheme: true, position: 'bottom-right', offsetLeft: 16, offsetRight: 16, offsetBottom: 12, width: 50, height: 50, borderRadius: { tl: 50, tr: 50, bl: 50, br: 50 }, backgroundColor: theme.primary || '#0b5fff', gradientType: 'none', gradientStops: [{ color: theme.primary || '#0b5fff', pos: 0 }, { color: theme.secondary || '#22D3EE', pos: 100 }], backgroundOverlayType: 'image', backgroundImageUrl: '', backgroundImageSize: 'contain', backgroundImageOpacity: 0.25, backgroundBlendMode: 'normal', border: { width: 0, color: theme.primary || '#0b5fff', style: 'solid' }, outlineRing: { enabled: true, width: 3, color: theme.secondary || '#22D3EE', opacity: 0.4 }, boxShadowBlur: 20, boxShadowSpread: 0, boxShadowOffsetX: 0, boxShadowOffsetY: 8, boxShadowOpacity: 0.25, dots: { color: '#F8FAFC', size: 6, spacing: 6, animation: 'bounce' }, hideOnOpen: true, tooltip: { enabled: false, text: 'Chat with us', position: '', backgroundColor: '#ffffff', textColor: '#374151', fontSize: 14, borderRadius: { tl: 20, tr: 20, br: 4, bl: 20 }, padding: '8px 16px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', arrowEnabled: true, borderColor: 'transparent', borderWidth: 0 },
+        badge: {
+          position: 'top-right',
+          offsetX: -6,
+          offsetY: -6,
+          size: 20,
+          backgroundColor: '#dc2626',
+          textColor: '#ffffff',
+          fontSize: 11,
+          borderWidth: 2,
+          borderColor: '#ffffff',
+          borderRadius: '9999px',
+          fontWeight: '700',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
+          padding: '0px',
+          animation: 'pulse 1.5s infinite'
+        }
       });
     }
 
     if (!Alpine.store('greetWindow')) {
       Alpine.store('greetWindow', {
         enabled: false, dismissed: false, useWebsiteTheme: false, width: 320, spacing: 16, backgroundColor: "#ffffff", borderRadius: 16, padding: "24px 20px", boxShadow: "0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)", imageUrl: "", imageHeight: 70, imageWidth: "", iconType: "", lucideIcon: "", iconSize: 48, iconColor: theme.primary || "#9333EA", iconAnimation: "none", iconAnimationDuration: "2.5s", title: "Hi there! 👋", titleColor: "#1e293b", titleFontSize: "15px", description: "How can we help you?", descriptionColor: "#475569", descriptionFontSize: "14px", iconAlign: "center", imagePadding: "0px",
-        openingTimeAfterInitialLoadSec: 2, animationOpeningSec: 0.5, visible: false,
+        openingTimeAfterInitialLoadSec: 2, animationOpeningSec: 0.5, animationClosingSec: 0.3, visible: false,
         position: 'bottom-right',
         inputBox: { enabled: true, layout: "joined", placeholder: "Write your message...", backgroundColor: "#ffffff", textColor: "#1e293b", borderRadius: 24, boxShadow: "0 6px 16px rgba(0,0,0,0.12)", buttonColor: theme.primary || "#9333EA", buttonIconColor: "#ffffff", buttonBgColor: "", buttonBoxShadow: "", buttonSize: 42, openingTimeAfterInitialLoadSec: 4, animationOpeningSec: 0.5, visible: false }
       });
