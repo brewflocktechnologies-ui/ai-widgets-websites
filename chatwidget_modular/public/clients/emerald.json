@@ -76,7 +76,7 @@
     "backgroundOverlayType": "none",
     "backgroundLucideColor": "#FFFFFF",
     "backgroundLucideSize": 24,
-    "backgroundLucideOpacity": 0.2,
+    "backgroundLucideOpacity": 1,
     "backgroundLucideIcon": "Star",
     "backgroundImageUrl": "",
     "backgroundImageSize": "contain",

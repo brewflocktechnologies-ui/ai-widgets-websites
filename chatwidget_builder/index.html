@@ -86,7 +86,7 @@
             <div class="accordion-header">
               <div class="accordion-title"><span>⚙️</span> Layout Control & Master Toggles</div>
             </div>
-            <div class="accordion-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; padding-top: 16px;">
+            <div class="accordion-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; padding-top: 16px;">
               <div class="toggle-group" style="margin: 0;">
                 <span class="switch-label" style="font-size: 12px;">Greet Card Popup</span>
                 <label class="switch">
@@ -102,18 +102,20 @@
                 </label>
               </div>
               <div class="toggle-group" style="margin: 0;">
-                <span class="switch-label" style="font-size: 12px;">Chatbar Trigger</span>
-                <label class="switch">
-                  <input type="checkbox" id="master-chatbar-enabled" data-path="chatbar.enabled">
-                  <span class="slider"></span>
-                </label>
-              </div>
-              <div class="toggle-group" style="margin: 0;">
                 <span class="switch-label" style="font-size: 12px;">Welcome Dashboard</span>
                 <label class="switch">
                   <input type="checkbox" id="master-welcome-enabled" data-path="chatWindow.welcome.enabled">
                   <span class="slider"></span>
                 </label>
+              </div>
+              
+              <div class="form-group" style="margin: 0; grid-column: span 2;">
+                <label style="font-size: 10px; margin-bottom: 4px;">Launcher Style</label>
+                <div class="segmented-control">
+                  <input type="checkbox" id="master-chatbar-enabled" data-path="chatbar.enabled" style="display: none;">
+                  <button type="button" id="launcher-chatbar-btn" class="segmented-btn">Chatbar</button>
+                  <button type="button" id="launcher-bubble-btn" class="segmented-btn">Bubble</button>
+                </div>
               </div>
             </div>
           </div>
@@ -151,7 +153,7 @@
           </div>
 
           <!-- Section 2: Greet Card Configurations -->
-          <div class="accordion-section">
+          <div class="accordion-section" id="accordion-greet-card">
             <div class="accordion-header">
               <div class="accordion-title"><span>👋</span> Floating Greet Card Details</div>
             </div>
@@ -347,7 +349,8 @@
                 </div>
               </div>
 
-              <h3 class="section-subtitle">Quick Input Box</h3>
+              <div id="sub-section-greet-input" class="sub-section-group">
+                <h3 class="section-subtitle">Quick Input Box</h3>
               <div class="form-row">
                 <div class="form-group">
                   <label>Input Delay (s)</label>
@@ -423,11 +426,12 @@
                   </div>
                 </div>
               </div>
+              </div>
             </div>
           </div>
 
           <!-- Section 3: Floating Bubble Trigger -->
-          <div class="accordion-section">
+          <div class="accordion-section" id="accordion-bubble-trigger">
             <div class="accordion-header">
               <div class="accordion-title"><span>💬</span> Floating Bubble Button</div>
             </div>
@@ -1008,7 +1012,7 @@
           </div>
 
           <!-- Section 4: Chatbar Trigger Layout -->
-          <div class="accordion-section">
+          <div class="accordion-section" id="accordion-chatbar-trigger">
             <div class="accordion-header">
               <div class="accordion-title"><span>📊</span> Chatbar Trigger Details</div>
             </div>
@@ -1078,16 +1082,6 @@
                 <div class="form-group">
                   <label>Card Offset Bottom</label>
                   <input type="number" data-path="chatbar.cardOffsetBottom" placeholder="12">
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Bar Offset Right</label>
-                  <input type="number" data-path="chatbar.barOffsetRight" placeholder="16">
-                </div>
-                <div class="form-group">
-                  <label>Bar Offset Bottom</label>
-                  <input type="number" data-path="chatbar.barOffsetBottom" placeholder="12">
                 </div>
               </div>
               <div class="form-group">
@@ -1782,7 +1776,7 @@
           </div>
 
           <!-- Section 6: Welcome Dashboard Card -->
-          <div class="accordion-section">
+          <div class="accordion-section" id="accordion-welcome-dashboard">
             <div class="accordion-header">
               <div class="accordion-title"><span>✨</span> Welcome Dashboard Details</div>
             </div>

@@ -67,7 +67,7 @@
                     width: (settings.iconWidth || 26) + 'px',
                     height: (settings.iconHeight || 26) + 'px',
                     objectFit: settings.iconFit || 'contain',
-                    opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : 1,
+                    opacity: settings.iconOpacity !== undefined ? settings.iconOpacity : (settings.backgroundLucideOpacity !== undefined ? settings.backgroundLucideOpacity : 1),
                     mixBlendMode: settings.iconBlend || 'normal',
                     borderRadius: '50%'
                   }" />
@@ -77,7 +77,8 @@
               <template x-if="(settings.iconType === 'customSvg' || (!settings.iconType && settings.customSvg)) && settings.customSvg">
                 <div class="custom-svg-icon"
                   :style="{
-                    color: settings.iconColor || '#ffffff',
+                    color: settings.backgroundLucideColor || settings.iconColor || '#ffffff',
+                    opacity: settings.backgroundLucideOpacity !== undefined ? settings.backgroundLucideOpacity : 1,
                     width: (settings.iconWidth || 26) + 'px',
                     height: (settings.iconHeight || 26) + 'px',
                     display: 'inline-flex'
@@ -87,7 +88,7 @@
 
               <!-- Lucide/SVG Icons -->
               <template x-if="(!settings.iconType || settings.iconType === 'lucide') && !settings.iconImageUrl && !settings.backgroundImageUrl && !settings.customSvg">
-                <div :style="{ color: settings.iconColor || '#ffffff', display: 'flex' }">
+                <div :style="{ color: settings.backgroundLucideColor || settings.iconColor || '#ffffff', opacity: settings.backgroundLucideOpacity !== undefined ? settings.backgroundLucideOpacity : 1, display: 'flex' }">
                   <!-- Star -->
                   <template x-if="settings.lucideIcon === 'Star' || settings.backgroundLucideIcon === 'Star'">
                     <svg viewBox="0 0 24 24" :width="settings.iconWidth || 26" :height="settings.iconHeight || 26" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>

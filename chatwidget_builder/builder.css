@@ -982,6 +982,28 @@ input[type="range"] {
   top: 80px; /* shift down slightly to avoid overlapping toggle fab */
 }
 
+/* Sidebar collapsed transition rules */
+.sidebar-editor {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.preview-area {
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-toggle-fab {
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.sidebar-collapsed .sidebar-editor {
+  transform: translateX(-480px);
+}
+
+.sidebar-collapsed .preview-area {
+  margin-left: 0;
+  width: 100%;
+}
+
 /* Responsive adjustment for configurator panel */
 @media (max-width: 1024px) {
   .sidebar-editor {
@@ -1019,4 +1041,56 @@ input[type="range"] {
     margin: 20px auto;
     width: calc(100% - 48px);
   }
+}
+
+/* Disabled States for Accordions and Sub-sections */
+.accordion-section.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+  background: rgba(15, 23, 42, 0.4);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.sub-section-group {
+  transition: opacity 0.3s ease;
+}
+
+.sub-section-group.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Segmented Control styling */
+.segmented-control {
+  display: flex;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 3px;
+  width: 100%;
+}
+
+.segmented-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+  font-family: inherit;
+}
+
+.segmented-btn:hover {
+  color: var(--text-main);
+}
+
+.segmented-btn.active {
+  background: var(--accent-color);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
 }

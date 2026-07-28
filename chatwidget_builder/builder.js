@@ -466,8 +466,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     visualEditorSection.style.display = 'none';
   });
 
-  // Load default preset (Emerald)
-  await selectPreset('emerald');
+  // Parse preset from URL query parameter (default to 'emerald')
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetPreset = urlParams.get('preset') || urlParams.get('client') || 'emerald';
+  await selectPreset(targetPreset);
 
   // Boot the chat widget preview
   await bootstrapWidgetPreview();
@@ -577,6 +579,9 @@ async function selectPreset(presetName) {
   if (jsonTextarea) {
     jsonTextarea.value = JSON.stringify(window.builderConfig, null, 2);
   }
+
+  // Reset welcome card display tracker for preset load
+  window.lastWelcomeEnabled = undefined;
 
   // Populate Visual Form Controls
   syncConfigToVisualForm(window.builderConfig);
@@ -779,7 +784,22 @@ function syncConfigToVisualForm(config) {
     }
   });
 
+  // Sync Launcher Style Segmented Buttons
+  const chatbarVal = !!getValueByPath(config, 'chatbar.enabled');
+  const chatbarBtn = document.getElementById('launcher-chatbar-btn');
+  const bubbleBtn = document.getElementById('launcher-bubble-btn');
+  if (chatbarBtn && bubbleBtn) {
+    if (chatbarVal) {
+      chatbarBtn.classList.add('active');
+      bubbleBtn.classList.remove('active');
+    } else {
+      bubbleBtn.classList.add('active');
+      chatbarBtn.classList.remove('active');
+    }
+  }
+
   updateColorPickerStates();
+  updateDisabledAccordionStates();
 }
 
 // Disable color inputs and show warning hint text if theme sync is enabled
@@ -877,6 +897,7 @@ function setupFormEventListeners() {
       // Update Alpine Stores
       updateAlpineStores(window.builderConfig);
       updateColorPickerStates();
+      updateDisabledAccordionStates();
     };
 
     input.addEventListener('input', handleInput);
@@ -1041,6 +1062,34 @@ function setupFormEventListeners() {
       opacityInput.addEventListener('input', handleShadowChange);
     }
   });
+
+  // Listen to Launcher Style Segmented Buttons
+  const chatbarBtn = document.getElementById('launcher-chatbar-btn');
+  const bubbleBtn = document.getElementById('launcher-bubble-btn');
+  const hiddenCheckbox = document.getElementById('master-chatbar-enabled');
+
+  if (chatbarBtn && bubbleBtn && hiddenCheckbox) {
+    chatbarBtn.addEventListener('click', () => {
+      if (hiddenCheckbox.checked !== true) {
+        hiddenCheckbox.checked = true;
+        // Dispatch change event to trigger form listener and update state
+        hiddenCheckbox.dispatchEvent(new Event('change'));
+        
+        chatbarBtn.classList.add('active');
+        bubbleBtn.classList.remove('active');
+      }
+    });
+
+    bubbleBtn.addEventListener('click', () => {
+      if (hiddenCheckbox.checked !== false) {
+        hiddenCheckbox.checked = false;
+        hiddenCheckbox.dispatchEvent(new Event('change'));
+
+        bubbleBtn.classList.add('active');
+        chatbarBtn.classList.remove('active');
+      }
+    });
+  }
 }
 
 // JSON Textarea Editor Listeners (Validate and sync raw edits)
@@ -1197,7 +1246,14 @@ function updateAlpineStores(config) {
       
       // Dynamically switch active view to welcome or active based on checkbox toggle if user hasn't sent messages
       if (!chatStore.hasSentMessage && chatConfig.welcome) {
-        chatStore.state = (chatConfig.welcome.enabled === true) ? 'welcome' : 'active';
+        const targetState = (chatConfig.welcome.enabled === true) ? 'welcome' : 'active';
+        if (window.lastWelcomeEnabled === undefined) {
+          window.lastWelcomeEnabled = chatConfig.welcome.enabled;
+          chatStore.state = targetState;
+        } else if (window.lastWelcomeEnabled !== chatConfig.welcome.enabled) {
+          window.lastWelcomeEnabled = chatConfig.welcome.enabled;
+          chatStore.state = targetState;
+        }
       }
     }
   }
@@ -1324,3 +1380,69 @@ window.setGradientStop = function(section, index, color) {
   // Update Alpine
   updateAlpineStores(window.builderConfig);
 };
+
+// Enable/Disable Accordion sections dynamically based on toggles
+function updateDisabledAccordionStates() {
+  const config = window.builderConfig;
+  if (!config) return;
+
+  // 1. Greet Card Popup (Section 2) -> Enabled if greetWindow.enabled is true
+  const greetEnabled = !!getValueByPath(config, 'greetWindow.enabled');
+  const greetSection = document.getElementById('accordion-greet-card');
+  if (greetSection) {
+    if (greetEnabled) {
+      greetSection.classList.remove('disabled');
+    } else {
+      greetSection.classList.add('disabled');
+      greetSection.classList.remove('active'); // Close if active
+    }
+  }
+
+  // 2. Greet Card Quick Input Box (sub-section inside Section 2) -> Enabled if greetWindow.inputBox.enabled is true
+  const greetInputEnabled = !!getValueByPath(config, 'greetWindow.inputBox.enabled');
+  const greetInputSub = document.getElementById('sub-section-greet-input');
+  if (greetInputSub) {
+    if (greetInputEnabled) {
+      greetInputSub.classList.remove('disabled');
+    } else {
+      greetInputSub.classList.add('disabled');
+    }
+  }
+
+  // 3. Chatbar Trigger (Section 4) vs Bubble Trigger (Section 3)
+  // - If chatbar.enabled is true: Chatbar trigger is enabled, Bubble trigger is disabled.
+  // - If chatbar.enabled is false: Bubble trigger is enabled, Chatbar trigger is disabled.
+  const chatbarEnabled = !!getValueByPath(config, 'chatbar.enabled');
+  const chatbarSection = document.getElementById('accordion-chatbar-trigger');
+  const bubbleSection = document.getElementById('accordion-bubble-trigger');
+
+  if (chatbarSection) {
+    if (chatbarEnabled) {
+      chatbarSection.classList.remove('disabled');
+    } else {
+      chatbarSection.classList.add('disabled');
+      chatbarSection.classList.remove('active');
+    }
+  }
+
+  if (bubbleSection) {
+    if (!chatbarEnabled) {
+      bubbleSection.classList.remove('disabled');
+    } else {
+      bubbleSection.classList.add('disabled');
+      bubbleSection.classList.remove('active');
+    }
+  }
+
+  // 4. Welcome Dashboard (Section 6) -> Enabled if chatWindow.welcome.enabled is true
+  const welcomeEnabled = !!getValueByPath(config, 'chatWindow.welcome.enabled');
+  const welcomeSection = document.getElementById('accordion-welcome-dashboard');
+  if (welcomeSection) {
+    if (welcomeEnabled) {
+      welcomeSection.classList.remove('disabled');
+    } else {
+      welcomeSection.classList.add('disabled');
+      welcomeSection.classList.remove('active');
+    }
+  }
+}
