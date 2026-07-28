@@ -103,6 +103,222 @@ function formatCardBg(hexColor, opacity) {
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 
+// Parse any shadow string (like "0 12px 28px -6px rgba(0, 0, 0, 0.15), 0 8px 14px -4px rgba(...)") to extract color and opacity.
+// Returns { color: '#000000', opacity: 0.15 }
+function parseShadowColor(shadowStr) {
+  if (!shadowStr || typeof shadowStr !== 'string') {
+    return { color: '#000000', opacity: 0.15 };
+  }
+  const clean = shadowStr.toLowerCase();
+  
+  // Look for rgba(...) first
+  const rgbaMatch = clean.match(/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)/);
+  if (rgbaMatch) {
+    const r = parseInt(rgbaMatch[1]).toString(16).padStart(2, '0');
+    const g = parseInt(rgbaMatch[2]).toString(16).padStart(2, '0');
+    const b = parseInt(rgbaMatch[3]).toString(16).padStart(2, '0');
+    const opacity = parseFloat(rgbaMatch[4]);
+    return { color: `#${r}${g}${b}`, opacity };
+  }
+  
+  // Look for rgb(...)
+  const rgbMatch = clean.match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/);
+  if (rgbMatch) {
+    const r = parseInt(rgbMatch[1]).toString(16).padStart(2, '0');
+    const g = parseInt(rgbMatch[2]).toString(16).padStart(2, '0');
+    const b = parseInt(rgbMatch[3]).toString(16).padStart(2, '0');
+    return { color: `#${r}${g}${b}`, opacity: 1.0 };
+  }
+  
+  // Look for hex color
+  const hexMatch = clean.match(/#[0-9a-fA-F]+/);
+  if (hexMatch) {
+    return { color: hexMatch[0], opacity: 1.0 };
+  }
+  
+  return { color: '#000000', opacity: 0.15 };
+}
+
+function updateShadowColor(shadowStr, newHexColor, newOpacity) {
+  const r = parseInt(newHexColor.slice(1, 3), 16);
+  const g = parseInt(newHexColor.slice(3, 5), 16);
+  const b = parseInt(newHexColor.slice(5, 7), 16);
+  const newRgba = `rgba(${r}, ${g}, ${b}, ${newOpacity})`;
+  
+  if (!shadowStr || typeof shadowStr !== 'string') {
+    return `0 8px 16px ${newRgba}`;
+  }
+  // Match rgba(...), rgb(...), hex values, or transparent
+  const colorRegex = /rgba\([^\)]+\)|rgb\([^\)]+\)|#[0-9a-fA-F]{3,8}|transparent/g;
+  if (colorRegex.test(shadowStr)) {
+    return shadowStr.replace(colorRegex, newRgba);
+  }
+  // If no color was found, append it at the end
+  return `${shadowStr.trim()} ${newRgba}`;
+}
+
+// Helper to extract hex or rgb/rgba color tokens from a gradient string
+function extractColors(str) {
+  const hexPattern = /#[0-9a-fA-F]{3,8}/g;
+  const rgbPattern = /rgba?\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*(?:,\s*[\d.]+)?\)/g;
+  let matches = [];
+  
+  let match;
+  hexPattern.lastIndex = 0;
+  rgbPattern.lastIndex = 0;
+
+  while ((match = hexPattern.exec(str)) !== null) {
+    matches.push({ index: match.index, val: match[0] });
+  }
+  while ((match = rgbPattern.exec(str)) !== null) {
+    const hexVal = parseCardBg(match[0]).color;
+    matches.push({ index: match.index, val: hexVal });
+  }
+  matches.sort((a, b) => a.index - b.index);
+  return matches.map(m => m.val);
+}
+
+// Helper to parse background values (gradient or solid color)
+function parseBgGradient(bgStr) {
+  const result = {
+    type: 'solid',
+    angle: 135,
+    color1: '#059669',
+    color2: '#0d9488'
+  };
+  if (!bgStr || typeof bgStr !== 'string') return result;
+  
+  const clean = bgStr.trim();
+  if (clean.includes('linear-gradient')) {
+    result.type = 'linear';
+    const angleMatch = clean.match(/(\d+)deg/);
+    if (angleMatch) {
+      result.angle = parseInt(angleMatch[1]);
+    }
+    const colors = extractColors(clean);
+    if (colors.length >= 2) {
+      result.color1 = colors[0];
+      result.color2 = colors[1];
+    } else if (colors.length === 1) {
+      result.color1 = colors[0];
+      result.color2 = colors[0];
+    }
+  } else if (clean.includes('radial-gradient')) {
+    result.type = 'radial';
+    const colors = extractColors(clean);
+    if (colors.length >= 2) {
+      result.color1 = colors[0];
+      result.color2 = colors[1];
+    } else if (colors.length === 1) {
+      result.color1 = colors[0];
+      result.color2 = colors[0];
+    }
+  } else {
+    result.type = 'solid';
+    const parsed = parseCardBg(clean);
+    result.color1 = parsed.color;
+    result.color2 = parsed.color;
+  }
+  return result;
+}
+
+// Helper to format background values into gradient or solid color string
+function formatBgGradient(type, angle, color1, color2) {
+  if (type === 'solid') {
+    return color1;
+  } else if (type === 'linear') {
+    return `linear-gradient(${angle}deg, ${color1}, ${color2})`;
+  } else if (type === 'radial') {
+    return `radial-gradient(circle, ${color1}, ${color2})`;
+  }
+  return color1;
+}
+
+// Setup welcome screen background gradient panel listeners
+function setupWelcomeBgPickerListeners() {
+  const typeSelect = document.getElementById('welcome-bg-type');
+  const angleInput = document.getElementById('welcome-bg-angle');
+  
+  const solidPick = document.getElementById('welcome-bg-solid-pick');
+  const solidText = document.getElementById('welcome-bg-solid-text');
+  
+  const startPick = document.getElementById('welcome-bg-grad-start-pick');
+  const startText = document.getElementById('welcome-bg-grad-start-text');
+  const endPick = document.getElementById('welcome-bg-grad-end-pick');
+  const endText = document.getElementById('welcome-bg-grad-end-text');
+  
+  const hiddenInput = document.getElementById('welcome-bg-gradient-hidden');
+
+  if (!typeSelect || !hiddenInput) return;
+
+  const updateWelcomeBg = () => {
+    const type = typeSelect.value;
+    const angle = parseInt(angleInput.value || 135);
+    const color1 = type === 'solid' ? solidText.value : startText.value;
+    const color2 = type === 'solid' ? solidText.value : endText.value;
+
+    const formatted = formatBgGradient(type, angle, color1, color2);
+    hiddenInput.value = formatted;
+    
+    // Dispatch events to trigger the visual-form change handler
+    hiddenInput.dispatchEvent(new Event('input'));
+    hiddenInput.dispatchEvent(new Event('change'));
+  };
+
+  // Toggle visibility helper
+  const updateVisibility = () => {
+    const type = typeSelect.value;
+    const angleGroup = document.getElementById('welcome-bg-angle-group');
+    const solidGroup = document.getElementById('welcome-bg-solid-group');
+    const gradGroup = document.getElementById('welcome-bg-gradient-colors');
+
+    if (type === 'solid') {
+      if (angleGroup) angleGroup.style.display = 'none';
+      if (solidGroup) solidGroup.style.display = 'block';
+      if (gradGroup) gradGroup.style.display = 'none';
+    } else if (type === 'linear') {
+      if (angleGroup) angleGroup.style.display = 'block';
+      if (solidGroup) solidGroup.style.display = 'none';
+      if (gradGroup) gradGroup.style.display = 'flex';
+    } else {
+      // Radial
+      if (angleGroup) angleGroup.style.display = 'none';
+      if (solidGroup) solidGroup.style.display = 'none';
+      if (gradGroup) gradGroup.style.display = 'flex';
+    }
+  };
+
+  // Attach change listeners
+  typeSelect.addEventListener('change', () => {
+    updateVisibility();
+    updateWelcomeBg();
+  });
+  
+  angleInput.addEventListener('input', updateWelcomeBg);
+
+  // Sync picks with texts
+  const syncAndChange = (pick, text) => {
+    pick.addEventListener('input', () => {
+      text.value = pick.value;
+      updateWelcomeBg();
+    });
+    text.addEventListener('input', () => {
+      const hex = text.value;
+      if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+        pick.value = hex;
+      }
+      updateWelcomeBg();
+    });
+  };
+
+  if (solidPick && solidText) syncAndChange(solidPick, solidText);
+  if (startPick && startText) syncAndChange(startPick, startText);
+  if (endPick && endText) syncAndChange(endPick, endText);
+
+  // Initialize visibility
+  updateVisibility();
+}
+
 // Parse border shorthand [width]px [style] [color] into width, style, hexColor, and opacity
 function parseCardBorder(borderStr) {
   if (!borderStr || typeof borderStr !== 'string') {
@@ -162,6 +378,73 @@ const presetColors = {
 // Main Initialization
 document.addEventListener('DOMContentLoaded', async () => {
 
+  // 1. Setup collapsible accordions dynamically
+  document.querySelectorAll('.accordion-section').forEach((section, idx) => {
+    const header = section.querySelector('.accordion-header');
+    const content = section.querySelector('.accordion-content');
+    if (!header || !content) return;
+
+    header.style.cursor = 'pointer';
+
+    // Create wrapper
+    const wrapper = document.createElement('div');
+    wrapper.className = 'accordion-collapse-wrapper';
+
+    const innerWrapper = document.createElement('div');
+    innerWrapper.style.minHeight = '0';
+
+    // Insert wrapper and move content inside
+    header.parentNode.insertBefore(wrapper, content);
+    wrapper.appendChild(innerWrapper);
+    innerWrapper.appendChild(content);
+
+    // Add chevron
+    const chevron = document.createElement('span');
+    chevron.className = 'accordion-chevron-wrapper';
+    chevron.innerHTML = `
+      <svg class="accordion-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.25s ease;">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    `;
+    header.appendChild(chevron);
+
+    // Expand first section by default
+    if (idx === 0) {
+      section.classList.add('active');
+    }
+
+    header.addEventListener('click', (e) => {
+      // Prevent toggle if clicking on forms or other interactive nodes inside header
+      if (e.target.closest('input, select, button, label')) return;
+
+      const isActive = section.classList.contains('active');
+      if (isActive) {
+        section.classList.remove('active');
+      } else {
+        section.classList.add('active');
+      }
+    });
+  });
+
+  // 2. Setup Sidebar Toggle FAB
+  const layout = document.querySelector('.builder-layout');
+  const toggleBtn = document.getElementById('sidebar-toggle-btn');
+  if (toggleBtn && layout) {
+    const toggleText = toggleBtn.querySelector('.sidebar-toggle-text');
+    toggleBtn.addEventListener('click', () => {
+      const collapsed = layout.classList.toggle('sidebar-collapsed');
+      if (collapsed) {
+        toggleText.textContent = 'Show Editor';
+        toggleBtn.classList.add('collapsed');
+      } else {
+        toggleText.textContent = 'Hide Editor';
+        toggleBtn.classList.remove('collapsed');
+      }
+    });
+  }
+
+  // 3. Setup Welcome background gradient picker event listeners
+  setupWelcomeBgPickerListeners();
 
   // Setup tab switches
   const tabFormBtn = document.getElementById('tab-form-btn');
@@ -391,6 +674,111 @@ function syncConfigToVisualForm(config) {
     if (borderOpacityLabel) borderOpacityLabel.textContent = Math.round(welcomeBorderParsed.opacity * 100) + '%';
   }
 
+  // Sync welcome background gradient & solid picker
+  const welcomeGradVal = getValueByPath(config, 'chatWindow.welcome.bgGradient');
+  if (welcomeGradVal) {
+    const welcomeBgParsed = parseBgGradient(welcomeGradVal);
+    const typeSelect = document.getElementById('welcome-bg-type');
+    const angleInput = document.getElementById('welcome-bg-angle');
+    
+    const solidPick = document.getElementById('welcome-bg-solid-pick');
+    const solidText = document.getElementById('welcome-bg-solid-text');
+    
+    const startPick = document.getElementById('welcome-bg-grad-start-pick');
+    const startText = document.getElementById('welcome-bg-grad-start-text');
+    const endPick = document.getElementById('welcome-bg-grad-end-pick');
+    const endText = document.getElementById('welcome-bg-grad-end-text');
+    
+    const hiddenInput = document.getElementById('welcome-bg-gradient-hidden');
+
+    if (hiddenInput) hiddenInput.value = welcomeGradVal;
+    if (typeSelect) {
+      typeSelect.value = welcomeBgParsed.type;
+      
+      // Update custom component visibility
+      const angleGroup = document.getElementById('welcome-bg-angle-group');
+      const solidGroup = document.getElementById('welcome-bg-solid-group');
+      const gradGroup = document.getElementById('welcome-bg-gradient-colors');
+
+      if (welcomeBgParsed.type === 'solid') {
+        if (angleGroup) angleGroup.style.display = 'none';
+        if (solidGroup) solidGroup.style.display = 'block';
+        if (gradGroup) gradGroup.style.display = 'none';
+        
+        if (solidPick) solidPick.value = welcomeBgParsed.color1;
+        if (solidText) solidText.value = welcomeBgParsed.color1;
+      } else {
+        if (angleGroup) angleGroup.style.display = welcomeBgParsed.type === 'linear' ? 'block' : 'none';
+        if (solidGroup) solidGroup.style.display = 'none';
+        if (gradGroup) gradGroup.style.display = 'flex';
+        
+        if (angleInput) angleInput.value = welcomeBgParsed.angle;
+        if (startPick) startPick.value = welcomeBgParsed.color1;
+        if (startText) startText.value = welcomeBgParsed.color1;
+        if (endPick) endPick.value = welcomeBgParsed.color2;
+        if (endText) endText.value = welcomeBgParsed.color2;
+      }
+    }
+  }
+
+  // Sync bubble gradient stops
+  const bubbleGradStops = getValueByPath(config, 'bubble.gradientStops');
+  if (bubbleGradStops && Array.isArray(bubbleGradStops)) {
+    const bubbleStartPick = document.getElementById('bubble-grad-start-pick');
+    const bubbleStartText = document.getElementById('bubble-grad-start-text');
+    const bubbleEndPick = document.getElementById('bubble-grad-end-pick');
+    const bubbleEndText = document.getElementById('bubble-grad-end-text');
+    
+    if (bubbleGradStops[0]) {
+      const c = bubbleGradStops[0].color;
+      if (bubbleStartPick) bubbleStartPick.value = c;
+      if (bubbleStartText) bubbleStartText.value = c;
+    }
+    if (bubbleGradStops[1]) {
+      const c = bubbleGradStops[1].color;
+      if (bubbleEndPick) bubbleEndPick.value = c;
+      if (bubbleEndText) bubbleEndText.value = c;
+    }
+  }
+
+  // Sync chatbar gradient stops
+  const chatbarGradStops = getValueByPath(config, 'chatbar.gradientStops');
+  if (chatbarGradStops && Array.isArray(chatbarGradStops)) {
+    const chatbarStartPick = document.getElementById('chatbar-grad-start-pick');
+    const chatbarStartText = document.getElementById('chatbar-grad-start-text');
+    const chatbarEndPick = document.getElementById('chatbar-grad-end-pick');
+    const chatbarEndText = document.getElementById('chatbar-grad-end-text');
+    
+    if (chatbarGradStops[0]) {
+      const c = chatbarGradStops[0].color;
+      if (chatbarStartPick) chatbarStartPick.value = c;
+      if (chatbarStartText) chatbarStartText.value = c;
+    }
+    if (chatbarGradStops[1]) {
+      const c = chatbarGradStops[1].color;
+      if (chatbarEndPick) chatbarEndPick.value = c;
+      if (chatbarEndText) chatbarEndText.value = c;
+    }
+  }
+
+  // Sync all shadow-editor-wrapper fields
+  document.querySelectorAll('.shadow-editor-wrapper[data-shadow-path]').forEach(wrapper => {
+    const path = wrapper.dataset.shadowPath;
+    const val = getValueByPath(config, path);
+    const parsed = parseShadowColor(val);
+    const pickInput = wrapper.querySelector('.shadow-color-pick');
+    const textInput = wrapper.querySelector('.shadow-color-text');
+    const opacityInput = wrapper.querySelector('.shadow-opacity');
+    const opacityLabel = wrapper.querySelector('.shadow-opacity-label');
+    
+    if (pickInput) pickInput.value = parsed.color;
+    if (textInput) textInput.value = parsed.color;
+    if (opacityInput) {
+      opacityInput.value = parsed.opacity;
+      if (opacityLabel) opacityLabel.textContent = Math.round(parsed.opacity * 100) + '%';
+    }
+  });
+
   updateColorPickerStates();
 }
 
@@ -608,6 +996,51 @@ function setupFormEventListeners() {
   }
   if (welcomeBorderText) welcomeBorderText.addEventListener('input', handleWelcomeBorderChange);
   if (welcomeBorderOpacity) welcomeBorderOpacity.addEventListener('input', handleWelcomeBorderChange);
+
+  // Listen to all shadow-editor-wrapper changes
+  document.querySelectorAll('.shadow-editor-wrapper[data-shadow-path]').forEach(wrapper => {
+    const path = wrapper.dataset.shadowPath;
+    const pickInput = wrapper.querySelector('.shadow-color-pick');
+    const textInput = wrapper.querySelector('.shadow-color-text');
+    const opacityInput = wrapper.querySelector('.shadow-opacity');
+    const opacityLabel = wrapper.querySelector('.shadow-opacity-label');
+    
+    const handleShadowChange = () => {
+      if (!pickInput || !textInput || !opacityInput) return;
+      const hex = textInput.value;
+      if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+        pickInput.value = hex;
+      }
+      const opacity = parseFloat(opacityInput.value);
+      if (opacityLabel) {
+        opacityLabel.textContent = Math.round(opacity * 100) + '%';
+      }
+      
+      const currentVal = getValueByPath(window.builderConfig, path) || '';
+      const updated = updateShadowColor(currentVal, pickInput.value, opacity);
+      setValueByPath(window.builderConfig, path, updated);
+      
+      // Update JSON textarea
+      const jsonTextarea = document.getElementById('raw-json-textarea');
+      if (jsonTextarea) {
+        jsonTextarea.value = JSON.stringify(window.builderConfig, null, 2);
+      }
+      updateAlpineStores(window.builderConfig);
+    };
+
+    if (pickInput) {
+      pickInput.addEventListener('input', () => {
+        textInput.value = pickInput.value;
+        handleShadowChange();
+      });
+    }
+    if (textInput) {
+      textInput.addEventListener('input', handleShadowChange);
+    }
+    if (opacityInput) {
+      opacityInput.addEventListener('input', handleShadowChange);
+    }
+  });
 }
 
 // JSON Textarea Editor Listeners (Validate and sync raw edits)
@@ -875,6 +1308,13 @@ window.setGradientStop = function(section, index, color) {
     window.builderConfig[section].gradientStops[index].color = color;
   }
   
+  // Keep the UI color inputs and text boxes in sync
+  const suffix = index === 0 ? 'start' : 'end';
+  const pickEl = document.getElementById(`${section}-grad-${suffix}-pick`);
+  const textEl = document.getElementById(`${section}-grad-${suffix}-text`);
+  if (pickEl) pickEl.value = color;
+  if (textEl) textEl.value = color;
+
   // Sync to JSON editor
   const jsonTextarea = document.getElementById('raw-json-textarea');
   if (jsonTextarea) {
