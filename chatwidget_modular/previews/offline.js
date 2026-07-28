@@ -68,7 +68,7 @@
           background: $store.chatWindow.headerBg || 'var(--cw-grad)',
           color: $store.chatWindow.headerTextColor || '#fff',
           padding: $store.chatWindow.headerPadding || '14px 16px',
-          display: 'flex',
+          display: $store.chat.state === 'welcome' ? 'none' : 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           borderBottom: $store.chatWindow.headerBorderColor ? \`1px solid \${$store.chatWindow.headerBorderColor}\` : '1px solid rgba(0,0,0,0.08)',

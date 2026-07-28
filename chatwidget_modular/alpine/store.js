@@ -42,6 +42,10 @@
       Alpine.store('chatcontactv2', Alpine.store('chatWindow'));
     }
 
+    if (!Alpine.store('chat')) {
+      window.ZotlyRegisterChatStore({});
+    }
+
     if (!Alpine.store('chatbar')) {
       Alpine.store('chatbar', {
         enabled: false, useWebsiteTheme: true, position: 'bottom-right', offsetLeft: 16, offsetRight: 16, offsetBottom: 12, cardOffsetRight: null, cardOffsetBottom: null, barOffsetRight: null, barOffsetBottom: null, text: "Chat with us", cardText: "", barText: "Chat with us", bgColor: theme.primary || "#0b5fff", textColor: "#ffffff", textSize: 14, letterSpacing: 0, gradientEnabled: false, gradientStops: [{ color: theme.primary || "#0b5fff", pos: 0 }, { color: theme.secondary || "#22D3EE", pos: 100 }], gradientType: "linear", gradientAngle: 90, iconType: "lucide", iconColor: "#ffffff", lucideIcon: "MessageCircle", iconImageUrl: "", iconFit: "contain", iconOpacity: 1, iconBlend: "normal", iconWidth: 20, iconHeight: 20, width: 255, height: 40, shadow: true, borderRadius: { tl: 20, tr: 20, bl: 20, br: 20 }, hideOnOpen: true

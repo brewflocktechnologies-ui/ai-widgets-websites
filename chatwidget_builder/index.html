@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Widget Builder</title>
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="../chatwidget_modular/public/style.css">
+  <link rel="stylesheet" href="builder.css">
+
+  <!-- Font imports (Outfit for widget preview styling) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Tailwind CSS (optional fallback styling for layout structure) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0b5fff',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Widgets Bootstrap Config & Previews -->
+  <script src="../chatwidget_modular/utils.js" defer></script>
+  <script src="../chatwidget_modular/config.js" defer></script>
+  <script src="../chatwidget_modular/alpine/chat.js" defer></script>
+  <script src="../chatwidget_modular/alpine/bubble.js" defer></script>
+  <script src="../chatwidget_modular/alpine/chatbar.js" defer></script>
+  <script src="../chatwidget_modular/alpine/store.js" defer></script>
+  <script src="../chatwidget_modular/previews/bubble.js" defer></script>
+  <script src="../chatwidget_modular/previews/chatbar.js" defer></script>
+  <script src="../chatwidget_modular/previews/welcome.js" defer></script>
+  <script src="../chatwidget_modular/previews/offline.js" defer></script>
+
+  <!-- Alpine.js (used to drive the modular widget templates) -->
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+  <!-- Builder Main Script -->
+  <script src="builder.js" defer></script>
+</head>
+<body>
+
+  <div class="builder-layout">
+
+    <!-- Left Side: Sidebar Configurator -->
+    <aside class="sidebar-editor">
+      <div class="sidebar-header">
+        <span class="sidebar-logo">🎨</span>
+        <h1 class="sidebar-title">Widget Builder</h1>
+      </div>
+
+      <div class="sidebar-scrollable">
+        
+        <!-- Preset Theme Selector -->
+        <label>Select Preset Template</label>
+        <div class="preset-grid">
+          <div class="preset-card active" data-preset="emerald">
+            <span class="preset-dot" style="background-color: #059669;"></span>
+            <span class="preset-name">EcoSphere (Emerald)</span>
+          </div>
+        </div>
+
+        <!-- Editor Tab Toggle -->
+        <div class="tab-container">
+          <button id="tab-form-btn" class="tab-btn active">Visual Form</button>
+          <button id="tab-json-btn" class="tab-btn">Raw JSON Code</button>
+        </div>
+
+        <!-- Tab 1: Visual Form Configurator -->
+        <div id="visual-editor-section">
+          
+          <!-- Section 0: Master Layout & Switches -->
+          <div class="accordion-section">
+            <div class="accordion-header">
+              <div class="accordion-title"><span>⚙️</span> Layout Control & Master Toggles</div>
+            </div>
+            <div class="accordion-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; padding-top: 16px;">
+              <div class="toggle-group" style="margin: 0;">
+                <span class="switch-label" style="font-size: 12px;">Greet Card Popup</span>
+                <label class="switch">
+                  <input type="checkbox" id="master-greet-enabled" data-path="greetWindow.enabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="toggle-group" style="margin: 0;">
+                <span class="switch-label" style="font-size: 12px;">Quick Greet Input</span>
+                <label class="switch">
+                  <input type="checkbox" id="master-greet-input-enabled" data-path="greetWindow.inputBox.enabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="toggle-group" style="margin: 0;">
+                <span class="switch-label" style="font-size: 12px;">Chatbar Trigger</span>
+                <label class="switch">
+                  <input type="checkbox" id="master-chatbar-enabled" data-path="chatbar.enabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="toggle-group" style="margin: 0;">
+                <span class="switch-label" style="font-size: 12px;">Welcome Dashboard</span>
+                <label class="switch">
+                  <input type="checkbox" id="master-welcome-enabled" data-path="chatWindow.welcome.enabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 1: Host Website Colors -->
+          <div class="accordion-section">
+            <div class="accordion-header">
+              <div class="accordion-title"><span>🌐</span> Host Page Brand Sync</div>
+            </div>
+            <div class="accordion-content">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="host-primary-color">Primary CSS Var</label>
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="host-primary-color-pick" value="#059669" oninput="document.getElementById('host-primary-color').value = this.value; document.getElementById('host-primary-color').dispatchEvent(new Event('change'))">
+                    <input type="text" id="host-primary-color" class="color-picker-text" value="#059669">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="host-secondary-color">Secondary CSS Var</label>
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="host-secondary-color-pick" value="#0d9488" oninput="document.getElementById('host-secondary-color').value = this.value; document.getElementById('host-secondary-color').dispatchEvent(new Event('change'))">
+                    <input type="text" id="host-secondary-color" class="color-picker-text" value="#0d9488">
+                  </div>
+                </div>
+              </div>
+              <div class="toggle-group">
+                <span class="switch-label">Host Page Dark Mode</span>
+                <label class="switch">
+                  <input type="checkbox" id="host-dark-mode">
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Greet Card Configurations -->
+          <div class="accordion-section">
+            <div class="accordion-header">
+              <div class="accordion-title"><span>👋</span> Floating Greet Card Details</div>
+            </div>
+            <div class="accordion-content">
+              <h3 class="section-subtitle">Behavior & Delays</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Initial Load Delay (s)</label>
+                  <input type="number" step="0.1" data-path="greetWindow.openingTimeAfterInitialLoadSec" placeholder="2.0">
+                </div>
+                <div class="form-group">
+                  <label>Opening Transition (s)</label>
+                  <input type="number" step="0.1" data-path="greetWindow.animationOpeningSec" placeholder="0.5">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Closing Transition (s)</label>
+                  <input type="number" step="0.1" data-path="greetWindow.animationClosingSec" placeholder="0.3">
+                </div>
+                <div class="form-group">
+                  <label>Spacing Bottom (px)</label>
+                  <input type="number" data-path="greetWindow.spacing" placeholder="16">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Card Styling</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Card BG Color</label>
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="greet-bg-color-pick" value="#ffffff" oninput="document.getElementById('greet-bg-color').value = this.value; document.getElementById('greet-bg-color').dispatchEvent(new Event('change'))">
+                    <input type="text" id="greet-bg-color" class="color-picker-text" data-path="greetWindow.backgroundColor">
+                  </div>
+                  <div class="theme-color-hint" id="greet-bg-color-hint" style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable 'Use Website Theme' to customize color</div>
+                </div>
+                <div class="form-group">
+                  <label>Card Width (px)</label>
+                  <input type="number" data-path="greetWindow.width" placeholder="320">
+                </div>
+              </div>
+
+              <div class="toggle-group" style="margin-top: 12px; margin-bottom: 16px;">
+                <span class="switch-label">Use Website Theme</span>
+                <label class="switch">
+                  <input type="checkbox" id="greet-use-theme" data-path="greetWindow.useWebsiteTheme">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Border Radius (px)</label>
+                  <input type="number" data-path="greetWindow.borderRadius" placeholder="16">
+                </div>
+                <div class="form-group">
+                  <label>Box Shadow</label>
+                  <input type="text" data-path="greetWindow.boxShadow" placeholder="Shadow values...">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Card Padding</label>
+                <div class="padding-grid" data-padding-path="greetWindow.padding">
+                  <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="24"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="20"></div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="24"></div>
+                  <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="20"></div>
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Image & Icon</h3>
+              <div class="form-group">
+                <label>Custom Image URL</label>
+                <input type="text" data-path="greetWindow.imageUrl" placeholder="https://...">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Image Width (px)</label>
+                  <input type="text" data-path="greetWindow.imageWidth" placeholder="Auto">
+                </div>
+                <div class="form-group">
+                  <label>Image Height (px)</label>
+                  <input type="number" data-path="greetWindow.imageHeight" placeholder="70">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Image Padding</label>
+                <div class="padding-grid" data-padding-path="greetWindow.imagePadding">
+                  <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="0"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="0"></div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="0"></div>
+                  <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="0"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Icon Alignment</label>
+                <select data-path="greetWindow.iconAlign">
+                  <option value="center">Center</option>
+                  <option value="left">Left</option>
+                  <option value="right">Right</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Icon Type</label>
+                  <select data-path="greetWindow.iconType">
+                    <option value="lucide">Lucide Icon</option>
+                    <option value="image">Custom Image</option>
+                    <option value="customSvg">Custom SVG</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Lucide Icon Name</label>
+                  <input type="text" data-path="greetWindow.lucideIcon" placeholder="Sparkles">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Icon Size (px)</label>
+                  <input type="number" data-path="greetWindow.iconSize" placeholder="52">
+                </div>
+                <div class="form-group">
+                  <label>Icon Color</label>
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="greet-icon-color-pick" value="#d97706" oninput="document.getElementById('greet-icon-color').value = this.value; document.getElementById('greet-icon-color').dispatchEvent(new Event('change'))">
+                    <input type="text" id="greet-icon-color" class="color-picker-text" data-path="greetWindow.iconColor">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Icon Animation</label>
+                  <select data-path="greetWindow.iconAnimation">
+                    <option value="none">None</option>
+                    <option value="wiggle">Wiggle</option>
+                    <option value="pulse">Pulse</option>
+                    <option value="bounce">Bounce</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Animation Duration</label>
+                  <input type="text" data-path="greetWindow.iconAnimationDuration" placeholder="2.5s">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Text & Font Sizes</h3>
+              <div class="form-group">
+                <label>Title Text</label>
+                <input type="text" data-path="greetWindow.title" placeholder="Hi there! 👋">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Title Text Color</label>
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="greet-title-color-pick" value="#1e293b" oninput="document.getElementById('greet-title-color').value = this.value; document.getElementById('greet-title-color').dispatchEvent(new Event('change'))">
+                    <input type="text" id="greet-title-color" class="color-picker-text" data-path="greetWindow.titleColor">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Title Size (px/rem)</label>
+                  <input type="text" data-path="greetWindow.titleFontSize" placeholder="15px">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Description Text</label>
+                <textarea data-path="greetWindow.description" rows="2" placeholder="Let's chat!"></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Description Color</label>
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="greet-desc-color-pick" value="#475569" oninput="document.getElementById('greet-desc-color').value = this.value; document.getElementById('greet-desc-color').dispatchEvent(new Event('change'))">
+                    <input type="text" id="greet-desc-color" class="color-picker-text" data-path="greetWindow.descriptionColor">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Description Size</label>
+                  <input type="text" data-path="greetWindow.descriptionFontSize" placeholder="14px">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Quick Input Box</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Input Delay (s)</label>
+                  <input type="number" step="0.1" data-path="greetWindow.inputBox.openingTimeAfterInitialLoadSec" placeholder="4.0">
+                </div>
+                <div class="form-group">
+                  <label>Input Transition (s)</label>
+                  <input type="number" step="0.1" data-path="greetWindow.inputBox.animationOpeningSec" placeholder="0.5">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Input Layout</label>
+                  <select data-path="greetWindow.inputBox.layout">
+                    <option value="separated">Separated Row</option>
+                    <option value="integrated">Integrated Box</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Placeholder Text</label>
+                  <input type="text" data-path="greetWindow.inputBox.placeholder" placeholder="Write your message...">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Input BG Color</label>
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="greet-ib-bg-pick" value="#ffffff" oninput="document.getElementById('greet-ib-bg').value = this.value; document.getElementById('greet-ib-bg').dispatchEvent(new Event('change'))">
+                    <input type="text" id="greet-ib-bg" class="color-picker-text" data-path="greetWindow.inputBox.backgroundColor">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Input Text Color</label>
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="greet-ib-text-pick" value="#1e293b" oninput="document.getElementById('greet-ib-text').value = this.value; document.getElementById('greet-ib-text').dispatchEvent(new Event('change'))">
+                    <input type="text" id="greet-ib-text" class="color-picker-text" data-path="greetWindow.inputBox.textColor">
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Border Radius (px)</label>
+                  <input type="number" data-path="greetWindow.inputBox.borderRadius" placeholder="24">
+                </div>
+                <div class="form-group">
+                  <label>Box Shadow</label>
+                  <input type="text" data-path="greetWindow.inputBox.boxShadow" placeholder="Shadow values...">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Submit Button Color</label>
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="greet-ib-btn-pick" value="#d97706" oninput="document.getElementById('greet-ib-btn').value = this.value; document.getElementById('greet-ib-btn').dispatchEvent(new Event('change'))">
+                    <input type="text" id="greet-ib-btn" class="color-picker-text" data-path="greetWindow.inputBox.buttonColor">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Button Icon Color</label>
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="greet-ib-btnicon-pick" value="#ffffff" oninput="document.getElementById('greet-ib-btnicon').value = this.value; document.getElementById('greet-ib-btnicon').dispatchEvent(new Event('change'))">
+                    <input type="text" id="greet-ib-btnicon" class="color-picker-text" data-path="greetWindow.inputBox.buttonIconColor">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Floating Bubble Trigger -->
+          <div class="accordion-section">
+            <div class="accordion-header">
+              <div class="accordion-title"><span>💬</span> Floating Bubble Button</div>
+            </div>
+            <div class="accordion-content">
+              <h3 class="section-subtitle">Size & Offsets</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Bubble Width (px)</label>
+                  <input type="number" data-path="bubble.width" placeholder="60">
+                </div>
+                <div class="form-group">
+                  <label>Bubble Height (px)</label>
+                  <input type="number" data-path="bubble.height" placeholder="60">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Offset Bottom (px)</label>
+                  <input type="number" data-path="bubble.offsetBottom" placeholder="12">
+                </div>
+                <div class="form-group">
+                  <label>Offset Right (px)</label>
+                  <input type="number" data-path="bubble.offsetRight" placeholder="16">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Offset Left (px)</label>
+                  <input type="number" data-path="bubble.offsetLeft" placeholder="16">
+                </div>
+                <div class="form-group">
+                  <label>Hide bubble on open</label>
+                  <select data-path="bubble.hideOnOpen">
+                    <option value="true">True</option>
+                    <option value="false">False</option>
+                  </select>
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Background & Gradients</h3>
+              <div class="form-group">
+                <label>Bubble Background Color</label>
+                <div class="color-picker-wrapper">
+                  <input type="color" id="bubble-bg-color-pick" value="#1E40AF" oninput="document.getElementById('bubble-bg-color').value = this.value; document.getElementById('bubble-bg-color').dispatchEvent(new Event('change'))">
+                  <input type="text" id="bubble-bg-color" class="color-picker-text" data-path="bubble.backgroundColor">
+                </div>
+                <div class="theme-color-hint" id="bubble-bg-color-hint" style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable 'Inherit Website Theme Color' to customize color</div>
+              </div>
+
+              <div class="toggle-group" style="margin-top: 12px; margin-bottom: 16px;">
+                <span class="switch-label">Inherit Website Theme Color</span>
+                <label class="switch">
+                  <input type="checkbox" id="bubble-use-theme" data-path="bubble.useWebsiteTheme">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Gradient Type</label>
+                  <select data-path="bubble.gradientType">
+                    <option value="none">None</option>
+                    <option value="linear">Linear</option>
+                    <option value="radial">Radial</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Gradient Angle</label>
+                  <input type="number" data-path="bubble.gradientAngle" placeholder="135">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Grad Color Start</label>
+                  <input type="color" value="#1E40AF" onchange="window.setGradientStop('bubble', 0, this.value)">
+                </div>
+                <div class="form-group">
+                  <label>Grad Color End</label>
+                  <input type="color" value="#9333EA" onchange="window.setGradientStop('bubble', 1, this.value)">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Corner Radius</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Top-Left (px)</label>
+                  <input type="number" data-path="bubble.borderRadius.tl" placeholder="50">
+                </div>
+                <div class="form-group">
+                  <label>Top-Right (px)</label>
+                  <input type="number" data-path="bubble.borderRadius.tr" placeholder="50">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Bottom-Left (px)</label>
+                  <input type="number" data-path="bubble.borderRadius.bl" placeholder="50">
+                </div>
+                <div class="form-group">
+                  <label>Bottom-Right (px)</label>
+                  <input type="number" data-path="bubble.borderRadius.br" placeholder="50">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Border & Outline</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Border Width (px)</label>
+                  <input type="number" data-path="bubble.border.width" placeholder="0">
+                </div>
+                <div class="form-group">
+                  <label>Border Color</label>
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="bubble-border-color-pick" value="#3B82F6" oninput="document.getElementById('bubble-border-color').value = this.value; document.getElementById('bubble-border-color').dispatchEvent(new Event('change'))">
+                    <input type="text" id="bubble-border-color" class="color-picker-text" data-path="bubble.border.color">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Border Style</label>
+                <select data-path="bubble.border.style">
+                  <option value="solid">Solid</option>
+                  <option value="dashed">Dashed</option>
+                  <option value="dotted">Dotted</option>
+                </select>
+              </div>
+
+              <div class="toggle-group" style="margin-top: 12px;">
+                <span class="switch-label">Border Gradient Enabled</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="bubble.borderGradientEnabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Border Grad Angle</label>
+                  <input type="number" data-path="bubble.borderGradientAngle" placeholder="90">
+                </div>
+                <div class="form-group">
+                  <label>Offset Animation</label>
+                  <select data-path="bubble.borderOffsetAnim">
+                    <option value="false">Disable</option>
+                    <option value="true">Enable</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="toggle-group" style="margin-top: 12px;">
+                <span class="switch-label">Outline Ring Enabled</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="bubble.outlineRing.enabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Outline Width (px)</label>
+                  <input type="number" data-path="bubble.outlineRing.width" placeholder="0">
+                </div>
+                <div class="form-group">
+                  <label>Outline Color</label>
+                  <input type="color" data-path="bubble.outlineRing.color" value="#22D3EE">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Overlay Contents</h3>
+              <div class="form-group">
+                <label>Overlay Type</label>
+                <select data-path="bubble.backgroundOverlayType">
+                  <option value="none">None</option>
+                  <option value="lucide">Lucide Icon</option>
+                  <option value="image">Background Image</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Lucide Icon Name</label>
+                  <input type="text" data-path="bubble.backgroundLucideIcon" placeholder="Star">
+                </div>
+                <div class="form-group">
+                  <label>Icon Size (px)</label>
+                  <input type="number" data-path="bubble.backgroundLucideSize" placeholder="24">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Icon Color</label>
+                  <input type="color" data-path="bubble.backgroundLucideColor" value="#FFFFFF">
+                </div>
+                <div class="form-group">
+                  <label>Icon Opacity</label>
+                  <input type="number" step="0.05" data-path="bubble.backgroundLucideOpacity" placeholder="0.2">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Overlay Image URL</label>
+                <input type="text" data-path="bubble.backgroundImageUrl" placeholder="https://...">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Image Size</label>
+                  <input type="text" data-path="bubble.backgroundImageSize" placeholder="contain">
+                </div>
+                <div class="form-group">
+                  <label>Image Opacity</label>
+                  <input type="number" step="0.05" data-path="bubble.backgroundImageOpacity" placeholder="0.25">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Blend Mode</label>
+                <select data-path="bubble.backgroundBlendMode">
+                  <option value="normal">normal</option>
+                  <option value="overlay">overlay</option>
+                  <option value="multiply">multiply</option>
+                  <option value="screen">screen</option>
+                </select>
+              </div>
+
+              <h3 class="section-subtitle">Shadows & Special Styles</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Box Shadow Blur</label>
+                  <input type="number" data-path="bubble.boxShadowBlur" placeholder="0">
+                </div>
+                <div class="form-group">
+                  <label>Spread (px)</label>
+                  <input type="number" data-path="bubble.boxShadowSpread" placeholder="0">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Offset X (px)</label>
+                  <input type="number" data-path="bubble.boxShadowOffsetX" placeholder="0">
+                </div>
+                <div class="form-group">
+                  <label>Offset Y (px)</label>
+                  <input type="number" data-path="bubble.boxShadowOffsetY" placeholder="0">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Box Shadow Opacity</label>
+                <input type="number" step="0.05" data-path="bubble.boxShadowOpacity" placeholder="0">
+              </div>
+
+              <div class="toggle-group" style="margin-top: 12px;">
+                <span class="switch-label">Inner Shadow</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="bubble.innerShadow.enabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Inner Blur</label>
+                  <input type="number" data-path="bubble.innerShadow.blur" placeholder="12">
+                </div>
+                <div class="form-group">
+                  <label>Inner Opacity</label>
+                  <input type="number" step="0.05" data-path="bubble.innerShadow.opacity" placeholder="0.25">
+                </div>
+              </div>
+
+              <div class="toggle-group" style="margin-top: 12px;">
+                <span class="switch-label">Glassmorphism</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="bubble.glass.enabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Glass Blur (px)</label>
+                  <input type="number" data-path="bubble.glass.blur" placeholder="10">
+                </div>
+                <div class="form-group">
+                  <label>BG Opacity</label>
+                  <input type="number" step="0.05" data-path="bubble.glass.bgOpacity" placeholder="0.3">
+                </div>
+              </div>
+
+              <div class="toggle-group" style="margin-top: 12px;">
+                <span class="switch-label">Neon Glow Effect</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="bubble.neon.enabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Glow Color</label>
+                  <input type="color" data-path="bubble.neon.color" value="#22D3EE">
+                </div>
+                <div class="form-group">
+                  <label>Intensity</label>
+                  <input type="number" step="0.1" data-path="bubble.neon.intensity" placeholder="0.8">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Animations</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Entrance Type</label>
+                  <select data-path="bubble.animation.type">
+                    <option value="fadeIn">fadeIn</option>
+                    <option value="scaleUp">scaleUp</option>
+                    <option value="slideUp">slideUp</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Duration (ms)</label>
+                  <input type="number" data-path="bubble.animation.duration" placeholder="350">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Anim Delay (ms)</label>
+                  <input type="number" data-path="bubble.animation.delay" placeholder="0">
+                </div>
+                <div class="form-group">
+                  <label>Hover Scale</label>
+                  <input type="number" step="0.05" data-path="bubble.hoverScale" placeholder="1.0">
+                </div>
+              </div>
+
+              <div class="toggle-group" style="margin-top: 12px;">
+                <span class="switch-label">Idle Animation Loop</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="bubble.idleAnim.enabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Idle Anim Type</label>
+                  <select data-path="bubble.idleAnim.type">
+                    <option value="none">none</option>
+                    <option value="bounce">bounce</option>
+                    <option value="pulse">pulse</option>
+                    <option value="float">float</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Amplitude</label>
+                  <input type="number" data-path="bubble.idleAnim.amplitude" placeholder="6">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Idle Duration (ms)</label>
+                <input type="number" data-path="bubble.idleAnim.duration" placeholder="3200">
+              </div>
+
+              <h3 class="section-subtitle">Loading Dots</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Dots Color</label>
+                  <input type="color" data-path="bubble.dots.color" value="#F8FAFC">
+                </div>
+                <div class="form-group">
+                  <label>Dots Size (px)</label>
+                  <input type="number" data-path="bubble.dots.size" placeholder="6">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Spacing</label>
+                  <input type="number" data-path="bubble.dots.spacing" placeholder="6">
+                </div>
+                <div class="form-group">
+                  <label>Animation</label>
+                  <select data-path="bubble.dots.animation">
+                    <option value="bounce">bounce</option>
+                    <option value="pulse">pulse</option>
+                  </select>
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Unread Badge</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Badge Position</label>
+                  <select data-path="bubble.badge.position">
+                    <option value="top-right">top-right</option>
+                    <option value="top-left">top-left</option>
+                    <option value="bottom-right">bottom-right</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Badge Size (px)</label>
+                  <input type="number" data-path="bubble.badge.size" placeholder="20">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Offset X (px)</label>
+                  <input type="number" data-path="bubble.badge.offsetX" placeholder="-6">
+                </div>
+                <div class="form-group">
+                  <label>Offset Y (px)</label>
+                  <input type="number" data-path="bubble.badge.offsetY" placeholder="-6">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Font Size (px)</label>
+                  <input type="number" data-path="bubble.badge.fontSize" placeholder="11">
+                </div>
+                <div class="form-group">
+                  <label>Font Weight</label>
+                  <select data-path="bubble.badge.fontWeight">
+                    <option value="400">normal (400)</option>
+                    <option value="500">medium (500)</option>
+                    <option value="600">semibold (600)</option>
+                    <option value="700">bold (700)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Badge BG Color</label>
+                  <input type="color" data-path="bubble.badge.backgroundColor" value="#dc2626">
+                </div>
+                <div class="form-group">
+                  <label>Text Color</label>
+                  <input type="color" data-path="bubble.badge.textColor" value="#ffffff">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Border Width (px)</label>
+                  <input type="number" data-path="bubble.badge.borderWidth" placeholder="2">
+                </div>
+                <div class="form-group">
+                  <label>Border Color</label>
+                  <input type="color" data-path="bubble.badge.borderColor" value="#ffffff">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Badge Padding</label>
+                <div class="padding-grid" data-padding-path="bubble.badge.padding">
+                  <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="0"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="0"></div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="0"></div>
+                  <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="0"></div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Box Shadow</label>
+                  <input type="text" data-path="bubble.badge.boxShadow" placeholder="Shadow values...">
+                </div>
+                <div class="form-group">
+                  <label>Animation</label>
+                  <select data-path="bubble.badge.animation">
+                    <option value="none">none</option>
+                    <option value="pulse 1.5s infinite">pulse</option>
+                    <option value="bounce 2s infinite">bounce</option>
+                  </select>
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Hover Tooltip</h3>
+              <div class="toggle-group" style="margin-top: 12px;">
+                <span class="switch-label">Tooltip Enabled</span>
+                <label class="switch">
+                  <input type="checkbox" id="bubble-tooltip-enabled" data-path="bubble.tooltip.enabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="form-group">
+                <label>Tooltip Hover Text</label>
+                <input type="text" id="bubble-tooltip-text" data-path="bubble.tooltip.text" placeholder="Chat with us">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Tooltip Position</label>
+                  <select data-path="bubble.tooltip.position">
+                    <option value="left">Left</option>
+                    <option value="top">Top</option>
+                    <option value="right">Right</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Text Size (px)</label>
+                  <input type="number" data-path="bubble.tooltip.fontSize" placeholder="14">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Tooltip BG Color</label>
+                  <input type="color" data-path="bubble.tooltip.backgroundColor" value="#D3D3D3">
+                </div>
+                <div class="form-group">
+                  <label>Text Color</label>
+                  <input type="color" data-path="bubble.tooltip.textColor" value="#374151">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Top-Left Radius</label>
+                  <input type="number" data-path="bubble.tooltip.borderRadius.tl" placeholder="20">
+                </div>
+                <div class="form-group">
+                  <label>Top-Right Radius</label>
+                  <input type="number" data-path="bubble.tooltip.borderRadius.tr" placeholder="0">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Bottom-Left Radius</label>
+                  <input type="number" data-path="bubble.tooltip.borderRadius.bl" placeholder="20">
+                </div>
+                <div class="form-group">
+                  <label>Bottom-Right Radius</label>
+                  <input type="number" data-path="bubble.tooltip.borderRadius.br" placeholder="20">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Tooltip Padding</label>
+                <div class="padding-grid" data-padding-path="bubble.tooltip.padding">
+                  <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="8"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="16"></div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="8"></div>
+                  <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="16"></div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Box Shadow</label>
+                  <input type="text" data-path="bubble.tooltip.boxShadow" placeholder="Shadow values...">
+                </div>
+                <div class="form-group">
+                  <label>Arrow Enabled</label>
+                  <select data-path="bubble.tooltip.arrowEnabled">
+                    <option value="false">False</option>
+                    <option value="true">True</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Border Width (px)</label>
+                  <input type="number" data-path="bubble.tooltip.borderWidth" placeholder="0">
+                </div>
+                <div class="form-group">
+                  <label>Border Color</label>
+                  <input type="color" data-path="bubble.tooltip.borderColor" value="#000000">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 4: Chatbar Trigger Layout -->
+          <div class="accordion-section">
+            <div class="accordion-header">
+              <div class="accordion-title"><span>📊</span> Chatbar Trigger Details</div>
+            </div>
+            <div class="accordion-content">
+              <h3 class="section-subtitle">Text & Font Settings</h3>
+              <div class="form-group">
+                <label>Button Text (Bar layout)</label>
+                <input type="text" data-path="chatbar.text" placeholder="Chat with us">
+              </div>
+              <div class="form-group">
+                <label>Greeting Text (Card layout)</label>
+                <textarea data-path="chatbar.cardText" rows="2" placeholder="Questions?"></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Text Size (px)</label>
+                  <input type="number" data-path="chatbar.textSize" placeholder="14">
+                </div>
+                <div class="form-group">
+                  <label>Letter Spacing (px)</label>
+                  <input type="number" data-path="chatbar.letterSpacing" placeholder="0">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Text Color</label>
+                  <input type="color" data-path="chatbar.textColor" value="#ffffff">
+                </div>
+                <div class="form-group">
+                  <label>Hide on open</label>
+                  <select data-path="chatbar.hideOnOpen">
+                    <option value="true">True</option>
+                    <option value="false">False</option>
+                  </select>
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Dimensions & Positioning</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Layout Type</label>
+                  <select data-path="chatbar.layout">
+                    <option value="bar">Bar (Horizontal)</option>
+                    <option value="card">Card (Greeting Box)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Stacking Gap (px)</label>
+                  <input type="number" data-path="chatbar.stackGap" placeholder="12">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Offset Bottom (px)</label>
+                  <input type="number" data-path="chatbar.offsetBottom" placeholder="12">
+                </div>
+                <div class="form-group">
+                  <label>Offset Right (px)</label>
+                  <input type="number" data-path="chatbar.offsetRight" placeholder="16">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Card Offset Right</label>
+                  <input type="number" data-path="chatbar.cardOffsetRight" placeholder="16">
+                </div>
+                <div class="form-group">
+                  <label>Card Offset Bottom</label>
+                  <input type="number" data-path="chatbar.cardOffsetBottom" placeholder="12">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Bar Offset Right</label>
+                  <input type="number" data-path="chatbar.barOffsetRight" placeholder="16">
+                </div>
+                <div class="form-group">
+                  <label>Bar Offset Bottom</label>
+                  <input type="number" data-path="chatbar.barOffsetBottom" placeholder="12">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Padding</label>
+                <div class="padding-grid" data-padding-path="chatbar.padding">
+                  <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="0"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="16"></div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="0"></div>
+                  <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="16"></div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Inner Element Gap</label>
+                  <input type="number" data-path="chatbar.gap" placeholder="0">
+                </div>
+                <div class="form-group">
+                  <label>Width (px)</label>
+                  <input type="number" data-path="chatbar.width" placeholder="255">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Height (px)</label>
+                <input type="number" data-path="chatbar.height" placeholder="40">
+              </div>
+
+              <h3 class="section-subtitle">Background & Gradient</h3>
+              <div class="form-group">
+                <label>Chatbar Background Color</label>
+                <div class="color-picker-wrapper">
+                  <input type="color" id="chatbar-bg-color-pick" value="#059669" oninput="document.getElementById('chatbar-bg-color').value = this.value; document.getElementById('chatbar-bg-color').dispatchEvent(new Event('change'))">
+                  <input type="text" id="chatbar-bg-color" class="color-picker-text" data-path="chatbar.bgColor">
+                </div>
+                <div class="theme-color-hint" id="chatbar-bg-color-hint" style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable 'Use Website Theme' to customize color</div>
+              </div>
+
+              <div class="toggle-group" style="margin-top: 12px; margin-bottom: 16px;">
+                <span class="switch-label">Use Website Theme</span>
+                <label class="switch">
+                  <input type="checkbox" id="chatbar-use-theme" data-path="chatbar.useWebsiteTheme">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-group" style="margin-top: 12px;">
+                <span class="switch-label">Gradient Background</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="chatbar.gradientEnabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Gradient Type</label>
+                  <select data-path="chatbar.gradientType">
+                    <option value="linear">Linear</option>
+                    <option value="radial">Radial</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Gradient Angle</label>
+                  <input type="number" data-path="chatbar.gradientAngle" placeholder="90">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Grad Start Color</label>
+                  <input type="color" value="#0b5fff" onchange="window.setGradientStop('chatbar', 0, this.value)">
+                </div>
+                <div class="form-group">
+                  <label>Grad End Color</label>
+                  <input type="color" value="#a855f7" onchange="window.setGradientStop('chatbar', 1, this.value)">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Trigger Icons</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Icon Type</label>
+                  <select data-path="chatbar.iconType">
+                    <option value="lucide">Lucide Icon</option>
+                    <option value="image">Custom Image</option>
+                    <option value="customSvg">Custom SVG</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Lucide Icon Name</label>
+                  <input type="text" data-path="chatbar.lucideIcon" placeholder="MessageCircle">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Icon Color</label>
+                  <input type="color" data-path="chatbar.iconColor" value="#ffffff">
+                </div>
+                <div class="form-group">
+                  <label>Custom Image URL</label>
+                  <input type="text" data-path="chatbar.iconImageUrl" placeholder="https://...">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Custom SVG Markup</label>
+                <textarea data-path="chatbar.customSvg" rows="2" placeholder="<svg>...</svg>"></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Icon Width (px)</label>
+                  <input type="number" data-path="chatbar.iconWidth" placeholder="20">
+                </div>
+                <div class="form-group">
+                  <label>Icon Height (px)</label>
+                  <input type="number" data-path="chatbar.iconHeight" placeholder="20">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Icon Fit Mode</label>
+                  <select data-path="chatbar.iconFit">
+                    <option value="contain">contain</option>
+                    <option value="cover">cover</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Icon Opacity</label>
+                  <input type="number" step="0.05" data-path="chatbar.iconOpacity" placeholder="1">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Icon Blend Mode</label>
+                <select data-path="chatbar.iconBlend">
+                  <option value="normal">normal</option>
+                  <option value="screen">screen</option>
+                  <option value="overlay">overlay</option>
+                </select>
+              </div>
+
+              <h3 class="section-subtitle">Border & Shadow</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Top-Left (px)</label>
+                  <input type="number" data-path="chatbar.borderRadius.tl" placeholder="20">
+                </div>
+                <div class="form-group">
+                  <label>Top-Right (px)</label>
+                  <input type="number" data-path="chatbar.borderRadius.tr" placeholder="20">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Bottom-Left (px)</label>
+                  <input type="number" data-path="chatbar.borderRadius.bl" placeholder="20">
+                </div>
+                <div class="form-group">
+                  <label>Bottom-Right (px)</label>
+                  <input type="number" data-path="chatbar.borderRadius.br" placeholder="20">
+                </div>
+              </div>
+              <div class="toggle-group" style="margin-top: 12px;">
+                <span class="switch-label">Enable Outer Shadow</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="chatbar.shadow">
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 5: Chat Window Setup -->
+          <div class="accordion-section">
+            <div class="accordion-header">
+              <div class="accordion-title"><span>💻</span> Chat Window Details</div>
+            </div>
+            <div class="accordion-content">
+              <h3 class="section-subtitle">General Branding</h3>
+              <div class="form-group">
+                <label>Widget Client Title</label>
+                <input type="text" data-path="chatWindow.clientName" placeholder="Zotly Support">
+              </div>
+              <div class="form-group">
+                <label>Primary Agent Name</label>
+                <input type="text" data-path="chatWindow.agentName" placeholder="Sarah">
+              </div>
+              
+              <div class="form-group">
+                <label>Widget Accent Color</label>
+                <div class="color-picker-wrapper">
+                  <input type="color" id="config-accent-color-pick" value="#0b5fff" oninput="document.getElementById('config-accent-color').value = this.value; document.getElementById('config-accent-color').dispatchEvent(new Event('change'))">
+                  <input type="text" id="config-accent-color" class="color-picker-text" data-path="chatWindow.accentColor">
+                </div>
+                <div class="theme-color-hint" id="config-accent-color-hint" style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable 'Use Website Theme' to customize color</div>
+              </div>
+
+              <div class="toggle-group" style="margin-top: 12px; margin-bottom: 16px;">
+                <span class="switch-label">Use Website Theme (CSS Variables)</span>
+                <label class="switch">
+                  <input type="checkbox" id="config-use-theme" data-path="chatWindow.useWebsiteTheme">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-group" style="margin-bottom: 16px;">
+                <span class="switch-label">Modern UI Layout</span>
+                <label class="switch">
+                  <input type="checkbox" id="config-modern-ui" data-path="chatWindow.modernUi">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <h3 class="section-subtitle">Dimensions & Positioning</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Window Width (px)</label>
+                  <input type="number" data-path="chatWindow.widgetWidth" placeholder="400">
+                </div>
+                <div class="form-group">
+                  <label>Window Height (px)</label>
+                  <input type="number" data-path="chatWindow.widgetHeight" placeholder="950">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Expanded Width (px)</label>
+                  <input type="number" data-path="chatWindow.expandedWidth" placeholder="550">
+                </div>
+                <div class="form-group">
+                  <label>Offset Bottom (px)</label>
+                  <input type="number" data-path="chatWindow.offsetBottom" placeholder="12">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Offset Right (px)</label>
+                <input type="number" data-path="chatWindow.offsetRight" placeholder="16">
+              </div>
+
+              <h3 class="section-subtitle">Borders & Shadows</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Border Radius (px)</label>
+                  <input type="number" data-path="chatWindow.widgetBorderRadius" placeholder="28">
+                </div>
+                <div class="form-group">
+                  <label>Shadow Blur (px)</label>
+                  <input type="number" data-path="chatWindow.widgetShadowBlur" placeholder="20">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Shadow Color</label>
+                  <input type="text" data-path="chatWindow.widgetShadowColor" placeholder="rgba(0,0,0,0.15)">
+                </div>
+                <div class="form-group">
+                  <label>Shadow Enabled</label>
+                  <select data-path="chatWindow.widgetShadow">
+                    <option value="true">Enable</option>
+                    <option value="false">Disable</option>
+                  </select>
+                </div>
+              </div>
+              <div class="toggle-group" style="margin-top: 12px;">
+                <span class="switch-label">Enable Border Outline</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="chatWindow.widgetBorderEnabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Border Width (px)</label>
+                  <input type="number" data-path="chatWindow.widgetBorderWidth" placeholder="1">
+                </div>
+                <div class="form-group">
+                  <label>Border Color</label>
+                  <input type="color" data-path="chatWindow.widgetBorderColor" value="#e5e7eb">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Features & Indicators</h3>
+              <div class="toggle-group">
+                <span class="switch-label">Typing Indicator</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="chatWindow.typingIndicator">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="toggle-group">
+                <span class="switch-label">Attachments Enabled</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="chatWindow.attachmentsEnabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="toggle-group">
+                <span class="switch-label">Message Ticks Enabled</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="chatWindow.ticksEnabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Sent Tick Color</label>
+                  <input type="color" data-path="chatWindow.sentTickColor" value="#a1a1aa">
+                </div>
+                <div class="form-group">
+                  <label>Read Tick Color</label>
+                  <input type="color" data-path="chatWindow.readTickColor" value="#34b7f1">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Top Header Styles</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Header BG Color</label>
+                  <input type="color" data-path="chatWindow.headerBg" value="#f4f4f5">
+                </div>
+                <div class="form-group">
+                  <label>Text Color</label>
+                  <input type="color" data-path="chatWindow.headerTextColor" value="#18181b">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Border Color</label>
+                  <input type="color" data-path="chatWindow.headerBorderColor" value="#e4e4e7">
+                </div>
+                <div class="form-group">
+                  <label>Header Padding</label>
+                  <div class="padding-grid" data-padding-path="chatWindow.headerPadding">
+                    <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="14"></div>
+                    <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="16"></div>
+                    <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="14"></div>
+                    <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="16"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Title Font Size</label>
+                  <input type="text" data-path="chatWindow.headerTitleFontSize" placeholder="14px">
+                </div>
+                <div class="form-group">
+                  <label>Subtitle Size</label>
+                  <input type="text" data-path="chatWindow.headerSubtitleFontSize" placeholder="11px">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Avatar BG Color</label>
+                  <input type="color" data-path="chatWindow.headerAvatarBg" value="#e4e4e7">
+                </div>
+                <div class="form-group">
+                  <label>Avatar Text Color</label>
+                  <input type="color" data-path="chatWindow.headerAvatarColor" value="#18181b">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Online Status indicator</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Indicator Color</label>
+                  <input type="color" data-path="chatWindow.activeDot.color" value="#22c55e">
+                </div>
+                <div class="form-group">
+                  <label>Indicator Size (px)</label>
+                  <input type="number" data-path="chatWindow.activeDot.size" placeholder="8">
+                </div>
+              </div>
+              <div class="toggle-group" style="margin-top: 12px;">
+                <span class="switch-label">Animate Pulse loop</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="chatWindow.activeDot.animate">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <h3 class="section-subtitle">Close Chat Modal Settings</h3>
+              <div class="form-group">
+                <label>Confirmation Message</label>
+                <input type="text" data-path="chatWindow.endChatConfirmMessage" placeholder="Are you sure you want to end?">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Confirm Button Text</label>
+                  <input type="text" data-path="chatWindow.endChatConfirmLabel" placeholder="End chat">
+                </div>
+                <div class="form-group">
+                  <label>Cancel Button Text</label>
+                  <input type="text" data-path="chatWindow.endChatCancelLabel" placeholder="Cancel">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Modal BG Color</label>
+                  <input type="color" data-path="chatWindow.modalCardBg" value="#ffffff">
+                </div>
+                <div class="form-group">
+                  <label>Modal Message Color</label>
+                  <input type="color" data-path="chatWindow.modalMessageColor" value="#101828">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Modal Radius (px)</label>
+                  <input type="number" data-path="chatWindow.modalBorderRadius" placeholder="28">
+                </div>
+                <div class="form-group">
+                  <label>Confirm Button BG</label>
+                  <input type="color" data-path="chatWindow.endChatConfirmBg" value="#d97706">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Confirm Text Color</label>
+                  <input type="color" data-path="chatWindow.endChatConfirmTextColor" value="#ffffff">
+                </div>
+                <div class="form-group">
+                  <label>Cancel Button BG</label>
+                  <input type="color" data-path="chatWindow.endChatCancelBg" value="#ffffff">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Cancel Text Color</label>
+                  <input type="color" data-path="chatWindow.endChatCancelTextColor" value="#667085">
+                </div>
+                <div class="form-group">
+                  <label>Cancel Border Color</label>
+                  <input type="color" data-path="chatWindow.endChatCancelBorderColor" value="#e9ecf1">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Chat Screen Body Backdrop</h3>
+              <div class="form-group">
+                <label>Chat Panel Body Color</label>
+                <div class="color-picker-wrapper">
+                  <input type="color" id="window-body-bg-pick" value="#f4f4f5" oninput="document.getElementById('window-body-bg').value = this.value; document.getElementById('window-body-bg').dispatchEvent(new Event('change'))">
+                  <input type="text" id="window-body-bg" class="color-picker-text" data-path="chatWindow.bodyBg">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Visitor Bubble Styles</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Bubble BG Color</label>
+                  <input type="color" data-path="chatWindow.visitorBubbleBg" value="#d97706">
+                </div>
+                <div class="form-group">
+                  <label>Bubble Text Color</label>
+                  <input type="color" data-path="chatWindow.visitorBubbleColor" value="#ffffff">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Font Size</label>
+                  <input type="text" data-path="chatWindow.visitorBubbleFontSize" placeholder="14px">
+                </div>
+                <div class="form-group">
+                  <label>Padding</label>
+                  <div class="padding-grid" data-padding-path="chatWindow.visitorBubblePadding">
+                    <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="10"></div>
+                    <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="14"></div>
+                    <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="10"></div>
+                    <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="14"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Border Radius</label>
+                <input type="text" data-path="chatWindow.visitorBubbleBorderRadius" placeholder="16px">
+              </div>
+
+              <h3 class="section-subtitle">Agent Bubble Styles</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Bubble BG Color</label>
+                  <input type="color" data-path="chatWindow.agentBubbleBg" value="#ffffff">
+                </div>
+                <div class="form-group">
+                  <label>Bubble Text Color</label>
+                  <input type="color" data-path="chatWindow.agentBubbleColor" value="#111827">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Border Color</label>
+                  <input type="color" data-path="chatWindow.agentBubbleBorderColor" value="#d1d5db">
+                </div>
+                <div class="form-group">
+                  <label>Font Size</label>
+                  <input type="text" data-path="chatWindow.agentBubbleFontSize" placeholder="14px">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Padding</label>
+                <div class="padding-grid" data-padding-path="chatWindow.agentBubblePadding">
+                  <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="10"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="14"></div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="10"></div>
+                  <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="14"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Border Radius</label>
+                <input type="text" data-path="chatWindow.agentBubbleBorderRadius" placeholder="16px">
+              </div>
+
+              <h3 class="section-subtitle">Agent Profile Details</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Avatar BG Color</label>
+                  <input type="color" data-path="chatWindow.agentAvatarBg" value="#d97706">
+                </div>
+                <div class="form-group">
+                  <label>Avatar Text Color</label>
+                  <input type="color" data-path="chatWindow.agentAvatarColor" value="#ffffff">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Avatar Profile Image URL</label>
+                <input type="text" data-path="chatWindow.agentAvatarUrl" placeholder="https://...">
+              </div>
+
+              <h3 class="section-subtitle">Message Input Composer</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Composer BG Color</label>
+                  <input type="color" data-path="chatWindow.inputBg" value="#ffffff">
+                </div>
+                <div class="form-group">
+                  <label>Text Color</label>
+                  <input type="color" data-path="chatWindow.inputTextColor" value="#18181b">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Placeholder Color</label>
+                  <input type="color" data-path="chatWindow.inputPlaceholderColor" value="#6b7280">
+                </div>
+                <div class="form-group">
+                  <label>Border Color</label>
+                  <input type="color" data-path="chatWindow.inputBorderColor" value="#d1d5db">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Focus Border Color</label>
+                  <input type="color" data-path="chatWindow.inputFocusBorderColor" value="#d97706">
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Focus Shadow</label>
+                    <input type="text" data-path="chatWindow.inputFocusShadow" placeholder="rgba values...">
+                  </div>
+                  <div class="form-group">
+                    <label>Border Radius</label>
+                    <input type="text" data-path="chatWindow.inputBorderRadius" placeholder="9999px">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Input Padding</label>
+                <div class="padding-grid" data-padding-path="chatWindow.inputPadding">
+                  <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="6"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="8"></div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="6"></div>
+                  <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="8"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Input Margin</label>
+                <div class="padding-grid" data-padding-path="chatWindow.inputMargin">
+                  <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="12"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="16"></div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="12"></div>
+                  <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="16"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Textarea Size</label>
+                <input type="text" data-path="chatWindow.textareaFontSize" placeholder="14px">
+              </div>
+
+              <h3 class="section-subtitle">Composer Action Buttons</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Attach Button BG</label>
+                  <input type="color" data-path="chatWindow.attachButtonBg" value="#ffffff">
+                </div>
+                <div class="form-group">
+                  <label>Attach Icon Color</label>
+                  <input type="color" data-path="chatWindow.attachButtonColor" value="#6b7280">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Emoji Icon Color</label>
+                  <input type="color" data-path="chatWindow.emojiButtonColor" value="#6b7280">
+                </div>
+                <div class="form-group">
+                  <label>Send Icon Type</label>
+                  <select data-path="chatWindow.sendIconType">
+                    <option value="arrow">Arrow</option>
+                    <option value="send">Paper Plane</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Send Active BG</label>
+                  <input type="color" data-path="chatWindow.sendButtonBgActive" value="#d97706">
+                </div>
+                <div class="form-group">
+                  <label>Send Active Color</label>
+                  <input type="color" data-path="chatWindow.sendButtonColorActive" value="#ffffff">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Send Inactive BG</label>
+                  <input type="color" data-path="chatWindow.sendButtonBgInactive" value="#e5e7eb">
+                </div>
+                <div class="form-group">
+                  <label>Send Inactive Color</label>
+                  <input type="color" data-path="chatWindow.sendButtonColorInactive" value="#9ca3af">
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Footer Branding Details</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Footer BG Color</label>
+                  <input type="color" data-path="chatWindow.footerBg" value="#f9fafb">
+                </div>
+                <div class="form-group">
+                  <label>Footer Text Color</label>
+                  <input type="color" data-path="chatWindow.footerTextColor" value="#6b7280">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Text Size</label>
+                  <input type="text" data-path="chatWindow.footerFontSize" placeholder="12px">
+                </div>
+                <div class="form-group">
+                  <label>Padding Bottom</label>
+                  <input type="text" data-path="chatWindow.footerPaddingBottom" placeholder="16px">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Powered By Text</label>
+                <input type="text" data-path="chatWindow.poweredByText" placeholder="vainateya.ai">
+              </div>
+              <div class="form-group">
+                <label>Powered By Link</label>
+                <input type="text" data-path="chatWindow.poweredByLink" placeholder="https://...">
+              </div>
+              <div class="form-group">
+                <label>Branding Text Color</label>
+                <input type="color" data-path="chatWindow.poweredByColor" value="#d97706">
+              </div>
+              <div class="form-group">
+                <label>Branding Logo SVG</label>
+                <textarea data-path="chatWindow.poweredByLogo" rows="2" placeholder="<svg>...</svg>"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 6: Welcome Dashboard Card -->
+          <div class="accordion-section">
+            <div class="accordion-header">
+              <div class="accordion-title"><span>✨</span> Welcome Dashboard Details</div>
+            </div>
+            <div class="accordion-content">
+              <h3 class="section-subtitle">Card Styling & Layout</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Card Layout</label>
+                  <select data-path="chatWindow.welcome.cardLayout">
+                    <option value="glassy">Glassy Gradient</option>
+                    <option value="normal">Normal Grid</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Card Border Radius</label>
+                  <input type="number" data-path="chatWindow.welcome.cardBorderRadius" placeholder="24">
+                </div>
+              </div>
+              
+              <!-- Upgraded Background Editor -->
+              <div class="form-group">
+                <label>Card Background Color & Opacity</label>
+                <div class="welcome-bg-editor">
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="welcome-card-bg-color-pick" value="#ffffff" oninput="document.getElementById('welcome-card-bg-color-text').value = this.value; document.getElementById('welcome-card-bg-color-text').dispatchEvent(new Event('change'))">
+                    <input type="text" id="welcome-card-bg-color-text" class="color-picker-text" value="#ffffff">
+                  </div>
+                  <div class="slider-wrapper" style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
+                    <input type="range" id="welcome-card-bg-opacity" min="0" max="1" step="0.01" value="0.12" style="flex: 1;">
+                    <span id="welcome-card-bg-opacity-label" class="range-val" style="font-size: 11px; min-width: 32px;">12%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Upgraded Border Editor -->
+              <div class="form-group">
+                <label>Card Border Details</label>
+                <div class="welcome-border-editor" style="display: flex; flex-direction: column; gap: 8px;">
+                  <div class="form-row" style="margin: 0; gap: 8px;">
+                    <div style="flex: 1;">
+                      <label style="font-size: 10px; margin-bottom: 2px;">Width (px)</label>
+                      <input type="number" id="welcome-card-border-width" value="1" placeholder="1" style="padding: 6px !important;">
+                    </div>
+                    <div style="flex: 1.5;">
+                      <label style="font-size: 10px; margin-bottom: 2px;">Style</label>
+                      <select id="welcome-card-border-style" style="padding: 6px !important;">
+                        <option value="solid">Solid</option>
+                        <option value="dashed">Dashed</option>
+                        <option value="dotted">Dotted</option>
+                        <option value="none">None</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="welcome-card-border-color-pick" value="#ffffff" oninput="document.getElementById('welcome-card-border-color-text').value = this.value; document.getElementById('welcome-card-border-color-text').dispatchEvent(new Event('change'))">
+                    <input type="text" id="welcome-card-border-color-text" class="color-picker-text" value="#ffffff">
+                  </div>
+                  <div class="slider-wrapper" style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
+                    <input type="range" id="welcome-card-border-opacity" min="0" max="1" step="0.01" value="0.18" style="flex: 1;">
+                    <span id="welcome-card-border-opacity-label" class="range-val" style="font-size: 11px; min-width: 32px;">18%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Card Blur (px)</label>
+                  <input type="number" data-path="chatWindow.welcome.cardBlur" placeholder="16">
+                </div>
+                <div class="form-group">
+                  <label>Card Shadow</label>
+                  <input type="text" data-path="chatWindow.welcome.cardShadow" placeholder="Shadow values...">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Card Padding</label>
+                <div class="padding-grid" data-padding-path="chatWindow.welcome.cardPadding">
+                  <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="28"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="24"></div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="28"></div>
+                  <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="24"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Container Padding</label>
+                <div class="padding-grid" data-padding-path="chatWindow.welcome.padding">
+                  <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="32"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="20"></div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="10"></div>
+                  <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="20"></div>
+                </div>
+              </div>
+
+              <div class="toggle-group" style="margin-top: 12px; margin-bottom: 16px;">
+                <span class="switch-label">Use Website Theme</span>
+                <label class="switch">
+                  <input type="checkbox" data-path="chatWindow.welcome.useWebsiteTheme">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <h3 class="section-subtitle">Alignments</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Card Align</label>
+                  <select data-path="chatWindow.welcome.cardAlign">
+                    <option value="center">Center</option>
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Text Align</label>
+                  <select data-path="chatWindow.welcome.textAlign">
+                    <option value="center">Center</option>
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Logo Align</label>
+                  <select data-path="chatWindow.welcome.logoAlign">
+                    <option value="center">Center</option>
+                    <option value="left">Left</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Avatar Align</label>
+                  <select data-path="chatWindow.welcome.avatarAlign">
+                    <option value="center">Center</option>
+                    <option value="left">Left</option>
+                  </select>
+                </div>
+              </div>
+
+              <h3 class="section-subtitle">Welcome Screen Texts</h3>
+              <div class="form-group">
+                <label>Welcome Title Text</label>
+                <input type="text" data-path="chatWindow.welcome.title" placeholder="Hi there! 👋">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Header Text Color</label>
+                  <input type="color" data-path="chatWindow.welcome.headerTextColor" value="#ffffff">
+                </div>
+                <div class="form-group">
+                  <label>Title Size</label>
+                  <input type="text" data-path="chatWindow.welcome.titleFontSize" placeholder="26px">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Welcome Description</label>
+                <textarea data-path="chatWindow.welcome.description" rows="2" placeholder="Our support heroes..."></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Subtext Text Color</label>
+                  <input type="color" data-path="chatWindow.welcome.subtextColor" value="#ffffff">
+                </div>
+                <div class="form-group">
+                  <label>Description Size</label>
+                  <input type="text" data-path="chatWindow.welcome.descriptionFontSize" placeholder="15px">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Background Gradient</label>
+                <input type="text" data-path="chatWindow.welcome.bgGradient" placeholder="linear-gradient(...)">
+              </div>
+              <div class="form-group">
+                <label>Footer Padding Bottom</label>
+                <input type="text" data-path="chatWindow.welcome.footerPaddingBottom" placeholder="0px">
+              </div>
+
+              <h3 class="section-subtitle">Online Agents Avatars</h3>
+              <div class="form-group">
+                <label>Avatar URLs (comma separated)</label>
+                <textarea data-path="chatWindow.welcome.avatars" rows="3" placeholder="https://..., https://..."></textarea>
+              </div>
+              <div class="form-group">
+                <label>Avatar Border Color</label>
+                <input type="color" data-path="chatWindow.welcome.avatarBorderColor" value="#ffffff">
+              </div>
+
+              <h3 class="section-subtitle">Start Conversation Button</h3>
+              <div class="form-group">
+                <label>Button Text</label>
+                <input type="text" data-path="chatWindow.welcome.buttonText" placeholder="Start Conversation">
+              </div>
+              <div class="form-group">
+                <label>Button Subtext</label>
+                <input type="text" data-path="chatWindow.welcome.buttonSubtext" placeholder="Typically replies in 5m">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Button BG Color</label>
+                  <input type="color" data-path="chatWindow.welcome.buttonBg" value="#ffffff">
+                </div>
+                <div class="form-group">
+                  <label>Button Text Color</label>
+                  <input type="color" data-path="chatWindow.welcome.buttonTextColor" value="#111827">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Button Padding</label>
+                <div class="padding-grid" data-padding-path="chatWindow.welcome.buttonPadding">
+                  <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="16"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="20"></div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="16"></div>
+                  <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="20"></div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Border Radius</label>
+                  <input type="number" data-path="chatWindow.welcome.buttonBorderRadius" placeholder="16">
+                </div>
+                <div class="form-group">
+                  <label>Button Icon BG</label>
+                  <input type="color" data-path="chatWindow.welcome.buttonIconBg" value="transparent">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Button Icon Color</label>
+                <input type="color" data-path="chatWindow.welcome.buttonIconColor" value="#0b5fff">
+              </div>
+            </div>
+          </div>
+
+          <!-- Utility Helper Buttons -->
+          <button id="btn-retrigger-greet" class="btn-primary">⚡ Retrigger Greet Card</button>
+          <button id="btn-reset-chat" class="btn-secondary">↺ Restart Chat Panel Session</button>
+
+        </div>
+
+        <!-- Tab 2: Raw JSON Editor -->
+        <div id="json-editor-section" style="display: none;">
+          <div class="json-editor-wrapper">
+            <div id="json-status" class="json-status valid">✓ Live syncing with editor state.</div>
+            <textarea id="raw-json-textarea" class="json-textarea" spellcheck="false" placeholder="Loading config JSON..."></textarea>
+            <button id="btn-format-json" class="btn-secondary">⚙ Format JSON</button>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- Right Side: Live Mock Website Container -->
+    <main class="preview-area">
+      
+      <!-- Mock Top Header Navigation bar -->
+      <header class="mock-header">
+        <div class="mock-logo">
+          <div class="mock-logo-icon">🌱</div>
+          <span>EcoSphere Global</span>
+        </div>
+        <nav class="mock-nav">
+          <a href="#">Solutions</a>
+          <a href="#">Carbon Offsetting</a>
+          <a href="#">Enterprise</a>
+          <a href="#">Pricing</a>
+        </nav>
+        <button class="mock-btn">Get Started</button>
+      </header>
+
+      <!-- Mock Hero Section -->
+      <section class="mock-hero">
+        <div class="mock-badge">🌱 Mockup Host Page: CSS Variables Linked</div>
+        <h1>Sustainable Energy Solutions<br>Built For <span class="mock-gradient-text">Tomorrow</span></h1>
+        <p>Empowering forward-thinking enterprises with real-time carbon intelligence, emission offsets, and automated customer support integration.</p>
+        <div class="mock-hero-buttons">
+          <button class="mock-btn">Explore Framework</button>
+          <button class="mock-btn" style="background: transparent; color: #475569; border: 1px solid #cbd5e1; box-shadow: none;">Request Quote</button>
+        </div>
+      </section>
+
+      <!-- Mock Features Grid -->
+      <section class="mock-features">
+        <div class="mock-feature-card">
+          <div class="mock-feature-icon">⚡</div>
+          <h3>Real-time Tracking</h3>
+          <p>Monitor your project's metrics with instant WebSocket feedback data.</p>
+        </div>
+        <div class="mock-feature-card">
+          <div class="mock-feature-icon">🛡️</div>
+          <h3>Secure Offsets</h3>
+          <p>Verified ledger credits ensuring transparent climate accountability.</p>
+        </div>
+        <div class="mock-feature-card">
+          <div class="mock-feature-icon">🤖</div>
+          <h3>AI Support Desk</h3>
+          <p>Dynamic AI chatbot assisting customers directly on your host environment.</p>
+        </div>
+      </section>
+
+      <!-- Mock Page Footer -->
+      <footer class="mock-footer">
+        &copy; 2026 EcoSphere Global Inc. All rights reserved. Powered by modular widgets sandbox.
+      </footer>
+
+      <!-- Floating Settings Action panel for mockup website -->
+      <div class="mock-host-controls">
+        <label>Theme Sync: <span id="host-theme-active-status" style="font-weight: bold; color: var(--primary-color);">Emerald Active</span></label>
+      </div>
+
+    </main>
+
+  </div>
+
+</body>
+</html>
