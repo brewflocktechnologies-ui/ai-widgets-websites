@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Widget Builder</title>
-  
+
   <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="../chatwidget_modular/public/style.css">
   <link rel="stylesheet" href="builder.css">
@@ -12,7 +13,9 @@
   <!-- Font imports (Outfit for widget preview styling) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
 
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -50,6 +53,7 @@
   <!-- Builder Main Script -->
   <script src="builder.js" defer></script>
 </head>
+
 <body>
 
   <div class="builder-layout">
@@ -62,7 +66,7 @@
       </div>
 
       <div class="sidebar-scrollable">
-        
+
         <!-- Preset Theme Selector -->
         <label>Select Preset Template</label>
         <div class="preset-grid">
@@ -80,13 +84,14 @@
 
         <!-- Tab 1: Visual Form Configurator -->
         <div id="visual-editor-section">
-          
+
           <!-- Section 0: Master Layout & Switches -->
           <div class="accordion-section">
             <div class="accordion-header">
               <div class="accordion-title"><span>⚙️</span> Layout Control & Master Toggles</div>
             </div>
-            <div class="accordion-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; padding-top: 16px;">
+            <div class="accordion-content"
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; padding-top: 16px;">
               <div class="toggle-group" style="margin: 0;">
                 <span class="switch-label" style="font-size: 12px;">Greet Card Popup</span>
                 <label class="switch">
@@ -108,13 +113,53 @@
                   <span class="slider"></span>
                 </label>
               </div>
-              
+
               <div class="form-group" style="margin: 0; grid-column: span 2;">
                 <label style="font-size: 10px; margin-bottom: 4px;">Launcher Style</label>
                 <div class="segmented-control">
                   <input type="checkbox" id="master-chatbar-enabled" data-path="chatbar.enabled" style="display: none;">
                   <button type="button" id="launcher-chatbar-btn" class="segmented-btn">Chatbar</button>
                   <button type="button" id="launcher-bubble-btn" class="segmented-btn">Bubble</button>
+                </div>
+              </div>
+
+              <!-- Dynamic Launcher Offsets -->
+              <div id="layout-bubble-offsets" class="form-group" style="margin: 0; grid-column: span 2; display: none;">
+                <label style="font-size: 10px; margin-bottom: 4px;">Bubble Position Offset</label>
+                <div class="form-row" style="margin-top: 6px;">
+                  <div class="form-group" style="margin-top: 0;">
+                    <label>Offset Bottom (px)</label>
+                    <input type="number" data-path="bubble.offsetBottom" placeholder="12">
+                  </div>
+                  <div class="form-group" style="margin-top: 0;">
+                    <label>Offset Right (px)</label>
+                    <input type="number" data-path="bubble.offsetRight" placeholder="16">
+                  </div>
+                </div>
+              </div>
+
+              <div id="layout-chatbar-offsets" class="form-group"
+                style="margin: 0; grid-column: span 2; display: none;">
+                <label style="font-size: 10px; margin-bottom: 4px;">Chatbar Position Offset</label>
+                <div class="form-row" style="margin-top: 6px;">
+                  <div class="form-group" style="margin-top: 0;">
+                    <label>Card Offset Right (px)</label>
+                    <input type="number" data-path="chatbar.cardOffsetRight" placeholder="16">
+                  </div>
+                  <div class="form-group" style="margin-top: 0;">
+                    <label>Card Offset Bottom (px)</label>
+                    <input type="number" data-path="chatbar.cardOffsetBottom" placeholder="12">
+                  </div>
+                </div>
+                <div class="form-row" style="margin-top: 12px;">
+                  <div class="form-group" style="margin-top: 0;">
+                    <label>Bar Offset Right (px)</label>
+                    <input type="number" data-path="chatbar.barOffsetRight" placeholder="16">
+                  </div>
+                  <div class="form-group" style="margin-top: 0;">
+                    <label>Bar Offset Bottom (px)</label>
+                    <input type="number" data-path="chatbar.barOffsetBottom" placeholder="12">
+                  </div>
                 </div>
               </div>
             </div>
@@ -130,14 +175,16 @@
                 <div class="form-group">
                   <label for="host-primary-color">Primary CSS Var</label>
                   <div class="color-picker-wrapper">
-                    <input type="color" id="host-primary-color-pick" value="#059669" oninput="document.getElementById('host-primary-color').value = this.value; document.getElementById('host-primary-color').dispatchEvent(new Event('change'))">
+                    <input type="color" id="host-primary-color-pick" value="#059669"
+                      oninput="document.getElementById('host-primary-color').value = this.value; document.getElementById('host-primary-color').dispatchEvent(new Event('change'))">
                     <input type="text" id="host-primary-color" class="color-picker-text" value="#059669">
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="host-secondary-color">Secondary CSS Var</label>
                   <div class="color-picker-wrapper">
-                    <input type="color" id="host-secondary-color-pick" value="#0d9488" oninput="document.getElementById('host-secondary-color').value = this.value; document.getElementById('host-secondary-color').dispatchEvent(new Event('change'))">
+                    <input type="color" id="host-secondary-color-pick" value="#0d9488"
+                      oninput="document.getElementById('host-secondary-color').value = this.value; document.getElementById('host-secondary-color').dispatchEvent(new Event('change'))">
                     <input type="text" id="host-secondary-color" class="color-picker-text" value="#0d9488">
                   </div>
                 </div>
@@ -162,7 +209,8 @@
               <div class="form-row">
                 <div class="form-group">
                   <label>Initial Load Delay (s)</label>
-                  <input type="number" step="0.1" data-path="greetWindow.openingTimeAfterInitialLoadSec" placeholder="2.0">
+                  <input type="number" step="0.1" data-path="greetWindow.openingTimeAfterInitialLoadSec"
+                    placeholder="2.0">
                 </div>
                 <div class="form-group">
                   <label>Opening Transition (s)</label>
@@ -185,10 +233,14 @@
                 <div class="form-group">
                   <label>Card BG Color</label>
                   <div class="color-picker-wrapper">
-                    <input type="color" id="greet-bg-color-pick" value="#ffffff" oninput="document.getElementById('greet-bg-color').value = this.value; document.getElementById('greet-bg-color').dispatchEvent(new Event('change'))">
-                    <input type="text" id="greet-bg-color" class="color-picker-text" data-path="greetWindow.backgroundColor">
+                    <input type="color" id="greet-bg-color-pick" value="#ffffff"
+                      oninput="document.getElementById('greet-bg-color').value = this.value; document.getElementById('greet-bg-color').dispatchEvent(new Event('change'))">
+                    <input type="text" id="greet-bg-color" class="color-picker-text"
+                      data-path="greetWindow.backgroundColor">
                   </div>
-                  <div class="theme-color-hint" id="greet-bg-color-hint" style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable 'Use Website Theme' to customize color</div>
+                  <div class="theme-color-hint" id="greet-bg-color-hint"
+                    style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable
+                    'Use Website Theme' to customize color</div>
                 </div>
                 <div class="form-group">
                   <label>Card Width (px)</label>
@@ -218,7 +270,8 @@
                     </div>
                     <div class="slider-wrapper" style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
                       <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
-                      <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.15" style="flex: 1;">
+                      <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.15"
+                        style="flex: 1;">
                       <span class="range-val shadow-opacity-label" style="font-size: 11px; min-width: 32px;">15%</span>
                     </div>
                   </div>
@@ -228,8 +281,10 @@
                 <label>Card Padding</label>
                 <div class="padding-grid" data-padding-path="greetWindow.padding">
                   <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="24"></div>
-                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="20"></div>
-                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="24"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="20">
+                  </div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="24">
+                  </div>
                   <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="20"></div>
                 </div>
               </div>
@@ -253,8 +308,10 @@
                 <label>Image Padding</label>
                 <div class="padding-grid" data-padding-path="greetWindow.imagePadding">
                   <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="0"></div>
-                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="0"></div>
-                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="0"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="0">
+                  </div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="0">
+                  </div>
                   <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="0"></div>
                 </div>
               </div>
@@ -290,8 +347,10 @@
                 <div class="form-group">
                   <label>Icon Color</label>
                   <div class="color-picker-wrapper">
-                    <input type="color" id="greet-icon-color-pick" value="#d97706" oninput="document.getElementById('greet-icon-color').value = this.value; document.getElementById('greet-icon-color').dispatchEvent(new Event('change'))">
-                    <input type="text" id="greet-icon-color" class="color-picker-text" data-path="greetWindow.iconColor">
+                    <input type="color" id="greet-icon-color-pick" value="#d97706"
+                      oninput="document.getElementById('greet-icon-color').value = this.value; document.getElementById('greet-icon-color').dispatchEvent(new Event('change'))">
+                    <input type="text" id="greet-icon-color" class="color-picker-text"
+                      data-path="greetWindow.iconColor">
                   </div>
                 </div>
               </div>
@@ -321,8 +380,10 @@
                 <div class="form-group">
                   <label>Title Text Color</label>
                   <div class="color-picker-wrapper">
-                    <input type="color" id="greet-title-color-pick" value="#1e293b" oninput="document.getElementById('greet-title-color').value = this.value; document.getElementById('greet-title-color').dispatchEvent(new Event('change'))">
-                    <input type="text" id="greet-title-color" class="color-picker-text" data-path="greetWindow.titleColor">
+                    <input type="color" id="greet-title-color-pick" value="#1e293b"
+                      oninput="document.getElementById('greet-title-color').value = this.value; document.getElementById('greet-title-color').dispatchEvent(new Event('change'))">
+                    <input type="text" id="greet-title-color" class="color-picker-text"
+                      data-path="greetWindow.titleColor">
                   </div>
                 </div>
                 <div class="form-group">
@@ -339,8 +400,10 @@
                 <div class="form-group">
                   <label>Description Color</label>
                   <div class="color-picker-wrapper">
-                    <input type="color" id="greet-desc-color-pick" value="#475569" oninput="document.getElementById('greet-desc-color').value = this.value; document.getElementById('greet-desc-color').dispatchEvent(new Event('change'))">
-                    <input type="text" id="greet-desc-color" class="color-picker-text" data-path="greetWindow.descriptionColor">
+                    <input type="color" id="greet-desc-color-pick" value="#475569"
+                      oninput="document.getElementById('greet-desc-color').value = this.value; document.getElementById('greet-desc-color').dispatchEvent(new Event('change'))">
+                    <input type="text" id="greet-desc-color" class="color-picker-text"
+                      data-path="greetWindow.descriptionColor">
                   </div>
                 </div>
                 <div class="form-group">
@@ -351,81 +414,94 @@
 
               <div id="sub-section-greet-input" class="sub-section-group">
                 <h3 class="section-subtitle">Quick Input Box</h3>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Input Delay (s)</label>
-                  <input type="number" step="0.1" data-path="greetWindow.inputBox.openingTimeAfterInitialLoadSec" placeholder="4.0">
-                </div>
-                <div class="form-group">
-                  <label>Input Transition (s)</label>
-                  <input type="number" step="0.1" data-path="greetWindow.inputBox.animationOpeningSec" placeholder="0.5">
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Input Layout</label>
-                  <select data-path="greetWindow.inputBox.layout">
-                    <option value="separated">Separated Row</option>
-                    <option value="integrated">Integrated Box</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Placeholder Text</label>
-                  <input type="text" data-path="greetWindow.inputBox.placeholder" placeholder="Write your message...">
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Input BG Color</label>
-                  <div class="color-picker-wrapper">
-                    <input type="color" id="greet-ib-bg-pick" value="#ffffff" oninput="document.getElementById('greet-ib-bg').value = this.value; document.getElementById('greet-ib-bg').dispatchEvent(new Event('change'))">
-                    <input type="text" id="greet-ib-bg" class="color-picker-text" data-path="greetWindow.inputBox.backgroundColor">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Input Delay (s)</label>
+                    <input type="number" step="0.1" data-path="greetWindow.inputBox.openingTimeAfterInitialLoadSec"
+                      placeholder="4.0">
+                  </div>
+                  <div class="form-group">
+                    <label>Input Transition (s)</label>
+                    <input type="number" step="0.1" data-path="greetWindow.inputBox.animationOpeningSec"
+                      placeholder="0.5">
                   </div>
                 </div>
-                <div class="form-group">
-                  <label>Input Text Color</label>
-                  <div class="color-picker-wrapper">
-                    <input type="color" id="greet-ib-text-pick" value="#1e293b" oninput="document.getElementById('greet-ib-text').value = this.value; document.getElementById('greet-ib-text').dispatchEvent(new Event('change'))">
-                    <input type="text" id="greet-ib-text" class="color-picker-text" data-path="greetWindow.inputBox.textColor">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Input Layout</label>
+                    <select data-path="greetWindow.inputBox.layout">
+                      <option value="separated">Separated Row</option>
+                      <option value="integrated">Integrated Box</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Placeholder Text</label>
+                    <input type="text" data-path="greetWindow.inputBox.placeholder" placeholder="Write your message...">
                   </div>
                 </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Border Radius (px)</label>
-                  <input type="number" data-path="greetWindow.inputBox.borderRadius" placeholder="24">
-                </div>
-                <div class="form-group">
-                  <label>Box Shadow Color & Opacity</label>
-                  <div class="shadow-editor-wrapper" data-shadow-path="greetWindow.inputBox.boxShadow">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Input BG Color</label>
                     <div class="color-picker-wrapper">
-                      <input type="color" class="shadow-color-pick" value="#000000">
-                      <input type="text" class="color-picker-text shadow-color-text" value="#000000">
-                    </div>
-                    <div class="slider-wrapper" style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
-                      <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
-                      <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.12" style="flex: 1;">
-                      <span class="range-val shadow-opacity-label" style="font-size: 11px; min-width: 32px;">12%</span>
+                      <input type="color" id="greet-ib-bg-pick" value="#ffffff"
+                        oninput="document.getElementById('greet-ib-bg').value = this.value; document.getElementById('greet-ib-bg').dispatchEvent(new Event('change'))">
+                      <input type="text" id="greet-ib-bg" class="color-picker-text"
+                        data-path="greetWindow.inputBox.backgroundColor">
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Submit Button Color</label>
-                  <div class="color-picker-wrapper">
-                    <input type="color" id="greet-ib-btn-pick" value="#d97706" oninput="document.getElementById('greet-ib-btn').value = this.value; document.getElementById('greet-ib-btn').dispatchEvent(new Event('change'))">
-                    <input type="text" id="greet-ib-btn" class="color-picker-text" data-path="greetWindow.inputBox.buttonColor">
+                  <div class="form-group">
+                    <label>Input Text Color</label>
+                    <div class="color-picker-wrapper">
+                      <input type="color" id="greet-ib-text-pick" value="#1e293b"
+                        oninput="document.getElementById('greet-ib-text').value = this.value; document.getElementById('greet-ib-text').dispatchEvent(new Event('change'))">
+                      <input type="text" id="greet-ib-text" class="color-picker-text"
+                        data-path="greetWindow.inputBox.textColor">
+                    </div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label>Button Icon Color</label>
-                  <div class="color-picker-wrapper">
-                    <input type="color" id="greet-ib-btnicon-pick" value="#ffffff" oninput="document.getElementById('greet-ib-btnicon').value = this.value; document.getElementById('greet-ib-btnicon').dispatchEvent(new Event('change'))">
-                    <input type="text" id="greet-ib-btnicon" class="color-picker-text" data-path="greetWindow.inputBox.buttonIconColor">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Border Radius (px)</label>
+                    <input type="number" data-path="greetWindow.inputBox.borderRadius" placeholder="24">
+                  </div>
+                  <div class="form-group">
+                    <label>Box Shadow Color & Opacity</label>
+                    <div class="shadow-editor-wrapper" data-shadow-path="greetWindow.inputBox.boxShadow">
+                      <div class="color-picker-wrapper">
+                        <input type="color" class="shadow-color-pick" value="#000000">
+                        <input type="text" class="color-picker-text shadow-color-text" value="#000000">
+                      </div>
+                      <div class="slider-wrapper"
+                        style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
+                        <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.12"
+                          style="flex: 1;">
+                        <span class="range-val shadow-opacity-label"
+                          style="font-size: 11px; min-width: 32px;">12%</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Submit Button Color</label>
+                    <div class="color-picker-wrapper">
+                      <input type="color" id="greet-ib-btn-pick" value="#d97706"
+                        oninput="document.getElementById('greet-ib-btn').value = this.value; document.getElementById('greet-ib-btn').dispatchEvent(new Event('change'))">
+                      <input type="text" id="greet-ib-btn" class="color-picker-text"
+                        data-path="greetWindow.inputBox.buttonColor">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Button Icon Color</label>
+                    <div class="color-picker-wrapper">
+                      <input type="color" id="greet-ib-btnicon-pick" value="#ffffff"
+                        oninput="document.getElementById('greet-ib-btnicon').value = this.value; document.getElementById('greet-ib-btnicon').dispatchEvent(new Event('change'))">
+                      <input type="text" id="greet-ib-btnicon" class="color-picker-text"
+                        data-path="greetWindow.inputBox.buttonIconColor">
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -436,7 +512,7 @@
               <div class="accordion-title"><span>💬</span> Floating Bubble Button</div>
             </div>
             <div class="accordion-content">
-              <h3 class="section-subtitle">Size & Offsets</h3>
+              <h3 class="section-subtitle">Size Settings</h3>
               <div class="form-row">
                 <div class="form-group">
                   <label>Bubble Width (px)</label>
@@ -448,20 +524,6 @@
                 </div>
               </div>
               <div class="form-row">
-                <div class="form-group">
-                  <label>Offset Bottom (px)</label>
-                  <input type="number" data-path="bubble.offsetBottom" placeholder="12">
-                </div>
-                <div class="form-group">
-                  <label>Offset Right (px)</label>
-                  <input type="number" data-path="bubble.offsetRight" placeholder="16">
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Offset Left (px)</label>
-                  <input type="number" data-path="bubble.offsetLeft" placeholder="16">
-                </div>
                 <div class="form-group">
                   <label>Hide bubble on open</label>
                   <select data-path="bubble.hideOnOpen">
@@ -475,10 +537,13 @@
               <div class="form-group">
                 <label>Bubble Background Color</label>
                 <div class="color-picker-wrapper">
-                  <input type="color" id="bubble-bg-color-pick" value="#1E40AF" oninput="document.getElementById('bubble-bg-color').value = this.value; document.getElementById('bubble-bg-color').dispatchEvent(new Event('change'))">
+                  <input type="color" id="bubble-bg-color-pick" value="#1E40AF"
+                    oninput="document.getElementById('bubble-bg-color').value = this.value; document.getElementById('bubble-bg-color').dispatchEvent(new Event('change'))">
                   <input type="text" id="bubble-bg-color" class="color-picker-text" data-path="bubble.backgroundColor">
                 </div>
-                <div class="theme-color-hint" id="bubble-bg-color-hint" style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable 'Inherit Website Theme Color' to customize color</div>
+                <div class="theme-color-hint" id="bubble-bg-color-hint"
+                  style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable
+                  'Inherit Website Theme Color' to customize color</div>
               </div>
 
               <div class="toggle-group" style="margin-top: 12px; margin-bottom: 16px;">
@@ -507,15 +572,19 @@
                 <div class="form-group">
                   <label>Grad Color Start</label>
                   <div class="color-picker-wrapper">
-                    <input type="color" id="bubble-grad-start-pick" value="#1E40AF" oninput="document.getElementById('bubble-grad-start-text').value = this.value; window.setGradientStop('bubble', 0, this.value)">
-                    <input type="text" id="bubble-grad-start-text" class="color-picker-text" value="#1E40AF" onchange="document.getElementById('bubble-grad-start-pick').value = this.value; window.setGradientStop('bubble', 0, this.value)">
+                    <input type="color" id="bubble-grad-start-pick" value="#1E40AF"
+                      oninput="document.getElementById('bubble-grad-start-text').value = this.value; window.setGradientStop('bubble', 0, this.value)">
+                    <input type="text" id="bubble-grad-start-text" class="color-picker-text" value="#1E40AF"
+                      onchange="document.getElementById('bubble-grad-start-pick').value = this.value; window.setGradientStop('bubble', 0, this.value)">
                   </div>
                 </div>
                 <div class="form-group">
                   <label>Grad Color End</label>
                   <div class="color-picker-wrapper">
-                    <input type="color" id="bubble-grad-end-pick" value="#9333EA" oninput="document.getElementById('bubble-grad-end-text').value = this.value; window.setGradientStop('bubble', 1, this.value)">
-                    <input type="text" id="bubble-grad-end-text" class="color-picker-text" value="#9333EA" onchange="document.getElementById('bubble-grad-end-pick').value = this.value; window.setGradientStop('bubble', 1, this.value)">
+                    <input type="color" id="bubble-grad-end-pick" value="#9333EA"
+                      oninput="document.getElementById('bubble-grad-end-text').value = this.value; window.setGradientStop('bubble', 1, this.value)">
+                    <input type="text" id="bubble-grad-end-text" class="color-picker-text" value="#9333EA"
+                      onchange="document.getElementById('bubble-grad-end-pick').value = this.value; window.setGradientStop('bubble', 1, this.value)">
                   </div>
                 </div>
               </div>
@@ -551,8 +620,10 @@
                 <div class="form-group">
                   <label>Border Color</label>
                   <div class="color-picker-wrapper">
-                    <input type="color" id="bubble-border-color-pick" value="#3B82F6" oninput="document.getElementById('bubble-border-color').value = this.value; document.getElementById('bubble-border-color').dispatchEvent(new Event('change'))">
-                    <input type="text" id="bubble-border-color" class="color-picker-text" data-path="bubble.border.color">
+                    <input type="color" id="bubble-border-color-pick" value="#3B82F6"
+                      oninput="document.getElementById('bubble-border-color').value = this.value; document.getElementById('bubble-border-color').dispatchEvent(new Event('change'))">
+                    <input type="text" id="bubble-border-color" class="color-picker-text"
+                      data-path="bubble.border.color">
                   </div>
                 </div>
               </div>
@@ -880,8 +951,10 @@
                 <label>Badge Padding</label>
                 <div class="padding-grid" data-padding-path="bubble.badge.padding">
                   <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="0"></div>
-                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="0"></div>
-                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="0"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="0">
+                  </div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="0">
+                  </div>
                   <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="0"></div>
                 </div>
               </div>
@@ -895,7 +968,8 @@
                     </div>
                     <div class="slider-wrapper" style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
                       <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
-                      <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.15" style="flex: 1;">
+                      <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.15"
+                        style="flex: 1;">
                       <span class="range-val shadow-opacity-label" style="font-size: 11px; min-width: 32px;">15%</span>
                     </div>
                   </div>
@@ -970,8 +1044,10 @@
                 <label>Tooltip Padding</label>
                 <div class="padding-grid" data-padding-path="bubble.tooltip.padding">
                   <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="8"></div>
-                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="16"></div>
-                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="8"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="16">
+                  </div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="8">
+                  </div>
                   <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="16"></div>
                 </div>
               </div>
@@ -985,7 +1061,8 @@
                     </div>
                     <div class="slider-wrapper" style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
                       <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
-                      <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.08" style="flex: 1;">
+                      <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.08"
+                        style="flex: 1;">
                       <span class="range-val shadow-opacity-label" style="font-size: 11px; min-width: 32px;">8%</span>
                     </div>
                   </div>
@@ -1064,32 +1141,15 @@
                   <input type="number" data-path="chatbar.stackGap" placeholder="12">
                 </div>
               </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Offset Bottom (px)</label>
-                  <input type="number" data-path="chatbar.offsetBottom" placeholder="12">
-                </div>
-                <div class="form-group">
-                  <label>Offset Right (px)</label>
-                  <input type="number" data-path="chatbar.offsetRight" placeholder="16">
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Card Offset Right</label>
-                  <input type="number" data-path="chatbar.cardOffsetRight" placeholder="16">
-                </div>
-                <div class="form-group">
-                  <label>Card Offset Bottom</label>
-                  <input type="number" data-path="chatbar.cardOffsetBottom" placeholder="12">
-                </div>
-              </div>
+
               <div class="form-group">
                 <label>Padding</label>
                 <div class="padding-grid" data-padding-path="chatbar.padding">
                   <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="0"></div>
-                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="16"></div>
-                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="0"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="16">
+                  </div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="0">
+                  </div>
                   <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="16"></div>
                 </div>
               </div>
@@ -1112,10 +1172,13 @@
               <div class="form-group">
                 <label>Chatbar Background Color</label>
                 <div class="color-picker-wrapper">
-                  <input type="color" id="chatbar-bg-color-pick" value="#059669" oninput="document.getElementById('chatbar-bg-color').value = this.value; document.getElementById('chatbar-bg-color').dispatchEvent(new Event('change'))">
+                  <input type="color" id="chatbar-bg-color-pick" value="#059669"
+                    oninput="document.getElementById('chatbar-bg-color').value = this.value; document.getElementById('chatbar-bg-color').dispatchEvent(new Event('change'))">
                   <input type="text" id="chatbar-bg-color" class="color-picker-text" data-path="chatbar.bgColor">
                 </div>
-                <div class="theme-color-hint" id="chatbar-bg-color-hint" style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable 'Use Website Theme' to customize color</div>
+                <div class="theme-color-hint" id="chatbar-bg-color-hint"
+                  style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable
+                  'Use Website Theme' to customize color</div>
               </div>
 
               <div class="toggle-group" style="margin-top: 12px; margin-bottom: 16px;">
@@ -1150,15 +1213,19 @@
                 <div class="form-group">
                   <label>Grad Start Color</label>
                   <div class="color-picker-wrapper">
-                    <input type="color" id="chatbar-grad-start-pick" value="#0b5fff" oninput="document.getElementById('chatbar-grad-start-text').value = this.value; window.setGradientStop('chatbar', 0, this.value)">
-                    <input type="text" id="chatbar-grad-start-text" class="color-picker-text" value="#0b5fff" onchange="document.getElementById('chatbar-grad-start-pick').value = this.value; window.setGradientStop('chatbar', 0, this.value)">
+                    <input type="color" id="chatbar-grad-start-pick" value="#0b5fff"
+                      oninput="document.getElementById('chatbar-grad-start-text').value = this.value; window.setGradientStop('chatbar', 0, this.value)">
+                    <input type="text" id="chatbar-grad-start-text" class="color-picker-text" value="#0b5fff"
+                      onchange="document.getElementById('chatbar-grad-start-pick').value = this.value; window.setGradientStop('chatbar', 0, this.value)">
                   </div>
                 </div>
                 <div class="form-group">
                   <label>Grad End Color</label>
                   <div class="color-picker-wrapper">
-                    <input type="color" id="chatbar-grad-end-pick" value="#a855f7" oninput="document.getElementById('chatbar-grad-end-text').value = this.value; window.setGradientStop('chatbar', 1, this.value)">
-                    <input type="text" id="chatbar-grad-end-text" class="color-picker-text" value="#a855f7" onchange="document.getElementById('chatbar-grad-end-pick').value = this.value; window.setGradientStop('chatbar', 1, this.value)">
+                    <input type="color" id="chatbar-grad-end-pick" value="#a855f7"
+                      oninput="document.getElementById('chatbar-grad-end-text').value = this.value; window.setGradientStop('chatbar', 1, this.value)">
+                    <input type="text" id="chatbar-grad-end-text" class="color-picker-text" value="#a855f7"
+                      onchange="document.getElementById('chatbar-grad-end-pick').value = this.value; window.setGradientStop('chatbar', 1, this.value)">
                   </div>
                 </div>
               </div>
@@ -1270,14 +1337,18 @@
                 <label>Primary Agent Name</label>
                 <input type="text" data-path="chatWindow.agentName" placeholder="Sarah">
               </div>
-              
+
               <div class="form-group">
                 <label>Widget Accent Color</label>
                 <div class="color-picker-wrapper">
-                  <input type="color" id="config-accent-color-pick" value="#0b5fff" oninput="document.getElementById('config-accent-color').value = this.value; document.getElementById('config-accent-color').dispatchEvent(new Event('change'))">
-                  <input type="text" id="config-accent-color" class="color-picker-text" data-path="chatWindow.accentColor">
+                  <input type="color" id="config-accent-color-pick" value="#0b5fff"
+                    oninput="document.getElementById('config-accent-color').value = this.value; document.getElementById('config-accent-color').dispatchEvent(new Event('change'))">
+                  <input type="text" id="config-accent-color" class="color-picker-text"
+                    data-path="chatWindow.accentColor">
                 </div>
-                <div class="theme-color-hint" id="config-accent-color-hint" style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable 'Use Website Theme' to customize color</div>
+                <div class="theme-color-hint" id="config-accent-color-hint"
+                  style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable
+                  'Use Website Theme' to customize color</div>
               </div>
 
               <div class="toggle-group" style="margin-top: 12px; margin-bottom: 16px;">
@@ -1343,7 +1414,8 @@
                     </div>
                     <div class="slider-wrapper" style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
                       <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
-                      <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.12" style="flex: 1;">
+                      <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.12"
+                        style="flex: 1;">
                       <span class="range-val shadow-opacity-label" style="font-size: 11px; min-width: 32px;">12%</span>
                     </div>
                   </div>
@@ -1427,9 +1499,12 @@
                   <label>Header Padding</label>
                   <div class="padding-grid" data-padding-path="chatWindow.headerPadding">
                     <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="14"></div>
-                    <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="16"></div>
-                    <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="14"></div>
-                    <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="16"></div>
+                    <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="16">
+                    </div>
+                    <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="14">
+                    </div>
+                    <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="16">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1476,7 +1551,8 @@
               <h3 class="section-subtitle">Close Chat Modal Settings</h3>
               <div class="form-group">
                 <label>Confirmation Message</label>
-                <input type="text" data-path="chatWindow.endChatConfirmMessage" placeholder="Are you sure you want to end?">
+                <input type="text" data-path="chatWindow.endChatConfirmMessage"
+                  placeholder="Are you sure you want to end?">
               </div>
               <div class="form-row">
                 <div class="form-group">
@@ -1533,7 +1609,8 @@
               <div class="form-group">
                 <label>Chat Panel Body Color</label>
                 <div class="color-picker-wrapper">
-                  <input type="color" id="window-body-bg-pick" value="#f4f4f5" oninput="document.getElementById('window-body-bg').value = this.value; document.getElementById('window-body-bg').dispatchEvent(new Event('change'))">
+                  <input type="color" id="window-body-bg-pick" value="#f4f4f5"
+                    oninput="document.getElementById('window-body-bg').value = this.value; document.getElementById('window-body-bg').dispatchEvent(new Event('change'))">
                   <input type="text" id="window-body-bg" class="color-picker-text" data-path="chatWindow.bodyBg">
                 </div>
               </div>
@@ -1558,9 +1635,12 @@
                   <label>Padding</label>
                   <div class="padding-grid" data-padding-path="chatWindow.visitorBubblePadding">
                     <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="10"></div>
-                    <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="14"></div>
-                    <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="10"></div>
-                    <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="14"></div>
+                    <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="14">
+                    </div>
+                    <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="10">
+                    </div>
+                    <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="14">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1594,8 +1674,10 @@
                 <label>Padding</label>
                 <div class="padding-grid" data-padding-path="chatWindow.agentBubblePadding">
                   <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="10"></div>
-                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="14"></div>
-                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="10"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="14">
+                  </div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="10">
+                  </div>
                   <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="14"></div>
                 </div>
               </div>
@@ -1654,10 +1736,13 @@
                         <input type="color" class="shadow-color-pick" value="#d97706">
                         <input type="text" class="color-picker-text shadow-color-text" value="#d97706">
                       </div>
-                      <div class="slider-wrapper" style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
+                      <div class="slider-wrapper"
+                        style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
                         <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
-                        <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.15" style="flex: 1;">
-                        <span class="range-val shadow-opacity-label" style="font-size: 11px; min-width: 32px;">15%</span>
+                        <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.15"
+                          style="flex: 1;">
+                        <span class="range-val shadow-opacity-label"
+                          style="font-size: 11px; min-width: 32px;">15%</span>
                       </div>
                     </div>
                   </div>
@@ -1671,8 +1756,10 @@
                 <label>Input Padding</label>
                 <div class="padding-grid" data-padding-path="chatWindow.inputPadding">
                   <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="6"></div>
-                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="8"></div>
-                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="6"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="8">
+                  </div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="6">
+                  </div>
                   <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="8"></div>
                 </div>
               </div>
@@ -1680,8 +1767,10 @@
                 <label>Input Margin</label>
                 <div class="padding-grid" data-padding-path="chatWindow.inputMargin">
                   <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="12"></div>
-                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="16"></div>
-                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="12"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="16">
+                  </div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="12">
+                  </div>
                   <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="16"></div>
                 </div>
               </div>
@@ -1795,19 +1884,22 @@
                   <input type="number" data-path="chatWindow.welcome.cardBorderRadius" placeholder="24">
                 </div>
               </div>
-              
+
               <!-- Upgraded Background Editor -->
               <div class="form-group">
                 <label>Card Background Color & Opacity</label>
                 <div class="welcome-bg-editor">
                   <div class="color-picker-wrapper">
-                    <input type="color" id="welcome-card-bg-color-pick" value="#ffffff" oninput="document.getElementById('welcome-card-bg-color-text').value = this.value; document.getElementById('welcome-card-bg-color-text').dispatchEvent(new Event('change'))">
+                    <input type="color" id="welcome-card-bg-color-pick" value="#ffffff"
+                      oninput="document.getElementById('welcome-card-bg-color-text').value = this.value; document.getElementById('welcome-card-bg-color-text').dispatchEvent(new Event('change'))">
                     <input type="text" id="welcome-card-bg-color-text" class="color-picker-text" value="#ffffff">
                   </div>
                   <div class="slider-wrapper" style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
-                    <input type="range" id="welcome-card-bg-opacity" min="0" max="1" step="0.01" value="0.12" style="flex: 1;">
-                    <span id="welcome-card-bg-opacity-label" class="range-val" style="font-size: 11px; min-width: 32px;">12%</span>
+                    <input type="range" id="welcome-card-bg-opacity" min="0" max="1" step="0.01" value="0.12"
+                      style="flex: 1;">
+                    <span id="welcome-card-bg-opacity-label" class="range-val"
+                      style="font-size: 11px; min-width: 32px;">12%</span>
                   </div>
                 </div>
               </div>
@@ -1819,7 +1911,8 @@
                   <div class="form-row" style="margin: 0; gap: 8px;">
                     <div style="flex: 1;">
                       <label style="font-size: 10px; margin-bottom: 2px;">Width (px)</label>
-                      <input type="number" id="welcome-card-border-width" value="1" placeholder="1" style="padding: 6px !important;">
+                      <input type="number" id="welcome-card-border-width" value="1" placeholder="1"
+                        style="padding: 6px !important;">
                     </div>
                     <div style="flex: 1.5;">
                       <label style="font-size: 10px; margin-bottom: 2px;">Style</label>
@@ -1832,13 +1925,16 @@
                     </div>
                   </div>
                   <div class="color-picker-wrapper">
-                    <input type="color" id="welcome-card-border-color-pick" value="#ffffff" oninput="document.getElementById('welcome-card-border-color-text').value = this.value; document.getElementById('welcome-card-border-color-text').dispatchEvent(new Event('change'))">
+                    <input type="color" id="welcome-card-border-color-pick" value="#ffffff"
+                      oninput="document.getElementById('welcome-card-border-color-text').value = this.value; document.getElementById('welcome-card-border-color-text').dispatchEvent(new Event('change'))">
                     <input type="text" id="welcome-card-border-color-text" class="color-picker-text" value="#ffffff">
                   </div>
                   <div class="slider-wrapper" style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
-                    <input type="range" id="welcome-card-border-opacity" min="0" max="1" step="0.01" value="0.18" style="flex: 1;">
-                    <span id="welcome-card-border-opacity-label" class="range-val" style="font-size: 11px; min-width: 32px;">18%</span>
+                    <input type="range" id="welcome-card-border-opacity" min="0" max="1" step="0.01" value="0.18"
+                      style="flex: 1;">
+                    <span id="welcome-card-border-opacity-label" class="range-val"
+                      style="font-size: 11px; min-width: 32px;">18%</span>
                   </div>
                 </div>
               </div>
@@ -1857,7 +1953,8 @@
                     </div>
                     <div class="slider-wrapper" style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
                       <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
-                      <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.15" style="flex: 1;">
+                      <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.15"
+                        style="flex: 1;">
                       <span class="range-val shadow-opacity-label" style="font-size: 11px; min-width: 32px;">15%</span>
                     </div>
                   </div>
@@ -1867,8 +1964,10 @@
                 <label>Card Padding</label>
                 <div class="padding-grid" data-padding-path="chatWindow.welcome.cardPadding">
                   <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="28"></div>
-                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="24"></div>
-                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="28"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="24">
+                  </div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="28">
+                  </div>
                   <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="24"></div>
                 </div>
               </div>
@@ -1876,8 +1975,10 @@
                 <label>Container Padding</label>
                 <div class="padding-grid" data-padding-path="chatWindow.welcome.padding">
                   <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="32"></div>
-                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="20"></div>
-                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="10"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="20">
+                  </div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="10">
+                  </div>
                   <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="20"></div>
                 </div>
               </div>
@@ -1943,7 +2044,8 @@
               </div>
               <div class="form-group">
                 <label>Welcome Description</label>
-                <textarea data-path="chatWindow.welcome.description" rows="2" placeholder="Our support heroes..."></textarea>
+                <textarea data-path="chatWindow.welcome.description" rows="2"
+                  placeholder="Our support heroes..."></textarea>
               </div>
               <div class="form-row">
                 <div class="form-group">
@@ -1958,7 +2060,8 @@
               <!-- Upgraded Welcome Background Editor -->
               <div class="form-group">
                 <label>Welcome Background Style</label>
-                <div class="gradient-editor-card" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-top: 6px;">
+                <div class="gradient-editor-card"
+                  style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-top: 6px;">
                   <div class="form-row" style="margin-top: 0; gap: 8px;">
                     <div class="form-group" style="margin-top: 0; flex: 1.5;">
                       <label style="font-size: 10px; margin-bottom: 2px;">Bg Type</label>
@@ -1970,37 +2073,41 @@
                     </div>
                     <div class="form-group" style="margin-top: 0; flex: 1;" id="welcome-bg-angle-group">
                       <label style="font-size: 10px; margin-bottom: 2px;">Angle (deg)</label>
-                      <input type="number" id="welcome-bg-angle" min="0" max="360" value="135" style="padding: 6px 10px !important; font-size: 12px;">
+                      <input type="number" id="welcome-bg-angle" min="0" max="360" value="135"
+                        style="padding: 6px 10px !important; font-size: 12px;">
                     </div>
                   </div>
-                  
+
                   <!-- Solid Color Input -->
                   <div class="form-group" id="welcome-bg-solid-group" style="margin-top: 10px;">
                     <label style="font-size: 10px; margin-bottom: 2px;">Background Color</label>
                     <div class="color-picker-wrapper">
-                      <input type="color" id="welcome-bg-solid-pick" value="#059669" oninput="document.getElementById('welcome-bg-solid-text').value = this.value; document.getElementById('welcome-bg-solid-text').dispatchEvent(new Event('change'))">
+                      <input type="color" id="welcome-bg-solid-pick" value="#059669"
+                        oninput="document.getElementById('welcome-bg-solid-text').value = this.value; document.getElementById('welcome-bg-solid-text').dispatchEvent(new Event('change'))">
                       <input type="text" id="welcome-bg-solid-text" class="color-picker-text" value="#059669">
                     </div>
                   </div>
-                  
+
                   <!-- Gradient Color Inputs -->
                   <div class="form-row" id="welcome-bg-gradient-colors" style="margin-top: 10px; gap: 8px;">
                     <div class="form-group" style="margin-top: 0; flex: 1;">
                       <label style="font-size: 10px; margin-bottom: 2px;">Start Color</label>
                       <div class="color-picker-wrapper">
-                        <input type="color" id="welcome-bg-grad-start-pick" value="#059669" oninput="document.getElementById('welcome-bg-grad-start-text').value = this.value; document.getElementById('welcome-bg-grad-start-text').dispatchEvent(new Event('change'))">
+                        <input type="color" id="welcome-bg-grad-start-pick" value="#059669"
+                          oninput="document.getElementById('welcome-bg-grad-start-text').value = this.value; document.getElementById('welcome-bg-grad-start-text').dispatchEvent(new Event('change'))">
                         <input type="text" id="welcome-bg-grad-start-text" class="color-picker-text" value="#059669">
                       </div>
                     </div>
                     <div class="form-group" style="margin-top: 0; flex: 1;">
                       <label style="font-size: 10px; margin-bottom: 2px;">End Color</label>
                       <div class="color-picker-wrapper">
-                        <input type="color" id="welcome-bg-grad-end-pick" value="#0d9488" oninput="document.getElementById('welcome-bg-grad-end-text').value = this.value; document.getElementById('welcome-bg-grad-end-text').dispatchEvent(new Event('change'))">
+                        <input type="color" id="welcome-bg-grad-end-pick" value="#0d9488"
+                          oninput="document.getElementById('welcome-bg-grad-end-text').value = this.value; document.getElementById('welcome-bg-grad-end-text').dispatchEvent(new Event('change'))">
                         <input type="text" id="welcome-bg-grad-end-text" class="color-picker-text" value="#0d9488">
                       </div>
                     </div>
                   </div>
-                  
+
                   <!-- Hidden text input to bind back to the store configuration -->
                   <input type="hidden" id="welcome-bg-gradient-hidden" data-path="chatWindow.welcome.bgGradient">
                 </div>
@@ -2013,7 +2120,8 @@
               <h3 class="section-subtitle">Online Agents Avatars</h3>
               <div class="form-group">
                 <label>Avatar URLs (comma separated)</label>
-                <textarea data-path="chatWindow.welcome.avatars" rows="3" placeholder="https://..., https://..."></textarea>
+                <textarea data-path="chatWindow.welcome.avatars" rows="3"
+                  placeholder="https://..., https://..."></textarea>
               </div>
               <div class="form-group">
                 <label>Avatar Border Color</label>
@@ -2043,8 +2151,10 @@
                 <label>Button Padding</label>
                 <div class="padding-grid" data-padding-path="chatWindow.welcome.buttonPadding">
                   <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="16"></div>
-                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="20"></div>
-                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="16"></div>
+                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="20">
+                  </div>
+                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="16">
+                  </div>
                   <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="20"></div>
                 </div>
               </div>
@@ -2075,7 +2185,8 @@
         <div id="json-editor-section" style="display: none;">
           <div class="json-editor-wrapper">
             <div id="json-status" class="json-status valid">✓ Live syncing with editor state.</div>
-            <textarea id="raw-json-textarea" class="json-textarea" spellcheck="false" placeholder="Loading config JSON..."></textarea>
+            <textarea id="raw-json-textarea" class="json-textarea" spellcheck="false"
+              placeholder="Loading config JSON..."></textarea>
             <button id="btn-format-json" class="btn-secondary">⚙ Format JSON</button>
           </div>
         </div>
@@ -2085,10 +2196,11 @@
 
     <!-- Right Side: Live Mock Website Container -->
     <main class="preview-area">
-      
+
       <!-- Sidebar Toggle Floating Action Button -->
       <button id="sidebar-toggle-btn" class="sidebar-toggle-fab">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="sidebar-toggle-icon">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round" class="sidebar-toggle-icon">
           <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
           <line x1="9" y1="3" x2="9" y2="21"></line>
         </svg>
@@ -2114,10 +2226,13 @@
       <section class="mock-hero">
         <div class="mock-badge">🌱 Mockup Host Page: CSS Variables Linked</div>
         <h1>Sustainable Energy Solutions<br>Built For <span class="mock-gradient-text">Tomorrow</span></h1>
-        <p>Empowering forward-thinking enterprises with real-time carbon intelligence, emission offsets, and automated customer support integration.</p>
+        <p>Empowering forward-thinking enterprises with real-time carbon intelligence, emission offsets, and automated
+          customer support integration.</p>
         <div class="mock-hero-buttons">
           <button class="mock-btn">Explore Framework</button>
-          <button class="mock-btn" style="background: transparent; color: #475569; border: 1px solid #cbd5e1; box-shadow: none;">Request Quote</button>
+          <button class="mock-btn"
+            style="background: transparent; color: #475569; border: 1px solid #cbd5e1; box-shadow: none;">Request
+            Quote</button>
         </div>
       </section>
 
@@ -2147,7 +2262,8 @@
 
       <!-- Floating Settings Action panel for mockup website -->
       <div class="mock-host-controls">
-        <label>Theme Sync: <span id="host-theme-active-status" style="font-weight: bold; color: var(--primary-color);">Emerald Active</span></label>
+        <label>Theme Sync: <span id="host-theme-active-status"
+            style="font-weight: bold; color: var(--primary-color);">Emerald Active</span></label>
       </div>
 
     </main>
@@ -2155,4 +2271,5 @@
   </div>
 
 </body>
+
 </html>

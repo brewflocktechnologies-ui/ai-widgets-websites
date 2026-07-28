@@ -1169,6 +1169,24 @@ function updateAlpineStores(config) {
   // 3. Update Chatbar Store
   if (Alpine.store('chatbar') && config.chatbar) {
     let chatbarConfig = JSON.parse(JSON.stringify(config.chatbar));
+    
+    // Copy the correct offset fields to offsetRight and offsetBottom dynamically
+    if (chatbarConfig.layout === 'card') {
+      if (chatbarConfig.cardOffsetRight !== undefined && chatbarConfig.cardOffsetRight !== null && chatbarConfig.cardOffsetRight !== '') {
+        chatbarConfig.offsetRight = chatbarConfig.cardOffsetRight;
+      }
+      if (chatbarConfig.cardOffsetBottom !== undefined && chatbarConfig.cardOffsetBottom !== null && chatbarConfig.cardOffsetBottom !== '') {
+        chatbarConfig.offsetBottom = chatbarConfig.cardOffsetBottom;
+      }
+    } else {
+      if (chatbarConfig.barOffsetRight !== undefined && chatbarConfig.barOffsetRight !== null && chatbarConfig.barOffsetRight !== '') {
+        chatbarConfig.offsetRight = chatbarConfig.barOffsetRight;
+      }
+      if (chatbarConfig.barOffsetBottom !== undefined && chatbarConfig.barOffsetBottom !== null && chatbarConfig.barOffsetBottom !== '') {
+        chatbarConfig.offsetBottom = chatbarConfig.barOffsetBottom;
+      }
+    }
+
     Object.assign(Alpine.store('chatbar'), chatbarConfig);
   }
 
@@ -1443,6 +1461,19 @@ function updateDisabledAccordionStates() {
     } else {
       welcomeSection.classList.add('disabled');
       welcomeSection.classList.remove('active');
+    }
+  }
+
+  // 5. Dynamic Launcher Offsets toggling
+  const bubbleOffsets = document.getElementById('layout-bubble-offsets');
+  const chatbarOffsets = document.getElementById('layout-chatbar-offsets');
+  if (bubbleOffsets && chatbarOffsets) {
+    if (chatbarEnabled) {
+      chatbarOffsets.style.display = 'block';
+      bubbleOffsets.style.display = 'none';
+    } else {
+      bubbleOffsets.style.display = 'block';
+      chatbarOffsets.style.display = 'none';
     }
   }
 }
