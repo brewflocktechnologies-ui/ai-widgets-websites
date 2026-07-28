@@ -12,7 +12,40 @@
       class="fixed z-40 flex cursor-pointer select-none transition-all duration-200"
       @mouseenter="hovered = true" @mouseleave="hovered = false"
       :style="{
-        boxSizing: 'border-box', width: (settings.width || (settings.layout === 'card' ? 240 : 255)) + 'px', height: (settings.height || (settings.layout === 'card' ? 220 : 40)) + 'px', bottom: (settings.offsetBottom !== undefined ? settings.offsetBottom : 12) + 'px', right: ((settings.offsetRight !== undefined ? settings.offsetRight : 16) + 'px'), background: getBackgroundStyle(), color: settings.textColor || '#ffffff', borderRadius: getBorderRadius(), boxShadow: settings.shadow ? '0 4px 16px rgba(0,0,0,0.15)' : 'none', padding: settings.padding !== undefined ? settings.padding : (settings.layout === 'card' ? '24px 16px' : '0 16px'), transform: hovered ? 'scale(1.02)' : 'scale(1.0)', flexDirection: settings.layout === 'card' ? 'column' : 'row', alignItems: 'center', justifyContent: settings.layout === 'card' ? 'space-between' : 'space-between', gap: settings.gap !== undefined ? (settings.gap + 'px') : (settings.layout === 'card' ? '14px' : '0')
+        boxSizing: 'border-box',
+        width: (settings.width || (settings.layout === 'card' ? 240 : 255)) + 'px',
+        maxWidth: 'calc(100% - 24px)',
+        height: (settings.height || (settings.layout === 'card' ? 220 : 40)) + 'px',
+        bottom: (() => {
+          const rawBottom = settings.offsetBottom !== undefined ? parseInt(settings.offsetBottom) : 12;
+          const heightVal = settings.height || (settings.layout === 'card' ? 220 : 40);
+          const isMobileSim = document.querySelector('.preview-area.mode-mobile') !== null;
+          if (isMobileSim) {
+            const maxBottom = 720 - heightVal - 12;
+            return Math.max(12, Math.min(rawBottom, maxBottom)) + 'px';
+          }
+          return 'min(' + rawBottom + 'px, calc(100% - ' + heightVal + 'px - 12px))';
+        })(),
+        right: (() => {
+          const rawRight = settings.offsetRight !== undefined ? parseInt(settings.offsetRight) : 16;
+          const widthVal = settings.width || (settings.layout === 'card' ? 240 : 255);
+          const isMobileSim = document.querySelector('.preview-area.mode-mobile') !== null;
+          if (isMobileSim) {
+            const maxRight = 375 - widthVal - 12;
+            return Math.max(12, Math.min(rawRight, maxRight)) + 'px';
+          }
+          return 'min(' + rawRight + 'px, calc(100% - ' + widthVal + 'px - 12px))';
+        })(),
+        background: getBackgroundStyle(),
+        color: settings.textColor || '#ffffff',
+        borderRadius: getBorderRadius(),
+        boxShadow: settings.shadow ? '0 4px 16px rgba(0,0,0,0.15)' : 'none',
+        padding: settings.padding !== undefined ? settings.padding : (settings.layout === 'card' ? '24px 16px' : '0 16px'),
+        transform: hovered ? 'scale(1.02)' : 'scale(1.0)',
+        flexDirection: settings.layout === 'card' ? 'column' : 'row',
+        alignItems: 'center',
+        justifyContent: settings.layout === 'card' ? 'space-between' : 'space-between',
+        gap: settings.gap !== undefined ? (settings.gap + 'px') : (settings.layout === 'card' ? '14px' : '0')
       }">
       
       <!-- CARD LAYOUT (Vertical) -->

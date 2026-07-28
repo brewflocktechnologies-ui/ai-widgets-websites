@@ -17,8 +17,18 @@
              const spacing = $store.greetWindow.spacing !== undefined ? $store.greetWindow.spacing : 16;
              return (baseBottom + triggerHeight + spacing) + 'px';
            })(),
-           right: ($store.chatbar.enabled ? ($store.chatbar.offsetRight !== undefined ? $store.chatbar.offsetRight : 16) : ($store.bubble.offsetRight !== undefined ? $store.bubble.offsetRight : 16)) + 'px',
+           right: (() => {
+            const rawRight = ($store.chatbar.enabled ? ($store.chatbar.offsetRight !== undefined ? parseInt($store.chatbar.offsetRight) : 16) : ($store.bubble.offsetRight !== undefined ? parseInt($store.bubble.offsetRight) : 16));
+            const widthVal = $store.greetWindow.width || 320;
+            const isMobileSim = document.querySelector('.preview-area.mode-mobile') !== null;
+            if (isMobileSim) {
+              const maxRight = 375 - widthVal - 12;
+              return Math.max(12, Math.min(rawRight, maxRight)) + 'px';
+            }
+            return 'min(' + rawRight + 'px, calc(100% - ' + widthVal + 'px - 12px))';
+          })(),
            width: ($store.greetWindow.width || 320) + 'px',
+            maxWidth: 'calc(100% - 24px)',
            gap: '12px',
            transitionDuration: (!$store.greetWindow.visible || $store.greetWindow.dismissed)
              ? (($store.greetWindow.animationClosingSec !== undefined ? $store.greetWindow.animationClosingSec : 0.3) + 's')
@@ -202,8 +212,18 @@
              const spacing = $store.greetWindow.spacing !== undefined ? $store.greetWindow.spacing : 16;
              return (baseBottom + triggerHeight + spacing) + 'px';
            })(),
-           right: ($store.chatbar.enabled ? ($store.chatbar.offsetRight !== undefined ? $store.chatbar.offsetRight : 16) : ($store.bubble.offsetRight !== undefined ? $store.bubble.offsetRight : 16)) + 'px',
+           right: (() => {
+            const rawRight = ($store.chatbar.enabled ? ($store.chatbar.offsetRight !== undefined ? parseInt($store.chatbar.offsetRight) : 16) : ($store.bubble.offsetRight !== undefined ? parseInt($store.bubble.offsetRight) : 16));
+            const widthVal = $store.greetWindow.width || 320;
+            const isMobileSim = document.querySelector('.preview-area.mode-mobile') !== null;
+            if (isMobileSim) {
+              const maxRight = 375 - widthVal - 12;
+              return Math.max(12, Math.min(rawRight, maxRight)) + 'px';
+            }
+            return 'min(' + rawRight + 'px, calc(100% - ' + widthVal + 'px - 12px))';
+          })(),
            width: ($store.greetWindow.width || 320) + 'px',
+            maxWidth: 'calc(100% - 24px)',
            gap: '12px',
            transitionDuration: (!$store.greetWindow.visible || $store.greetWindow.dismissed)
              ? (($store.greetWindow.animationClosingSec !== undefined ? $store.greetWindow.animationClosingSec : 0.3) + 's')

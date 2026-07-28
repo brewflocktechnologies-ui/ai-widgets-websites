@@ -1094,3 +1094,262 @@ input[type="range"] {
   color: #ffffff;
   box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
 }
+
+/* Toolbar inside Preview Pane */
+.preview-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 24px;
+  height: 60px;
+  box-sizing: border-box;
+  z-index: 50;
+  position: relative;
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.toolbar-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-decoration: none;
+}
+
+.toolbar-btn:hover {
+  background: var(--bg-input);
+  border-color: var(--accent-color);
+}
+
+.toolbar-btn.primary-btn {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+}
+
+.toolbar-btn.primary-btn:hover {
+  opacity: 0.9;
+}
+
+/* Viewport Selector segmented control */
+.viewport-toggles {
+  display: flex;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.viewport-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.viewport-btn:hover {
+  color: var(--text-main);
+}
+
+.viewport-btn.active {
+  background: var(--bg-card);
+  color: var(--accent-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Viewport wrapper styling */
+#preview-viewport-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 60px);
+  background: #f8fafc;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#preview-scrollable-content {
+  width: 100%;
+  height: 100%;
+}
+
+/* Mobile device frame mode */
+.preview-area.mode-mobile {
+  background: #0f172a; /* dark backdrop for mobile frame */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-area.mode-mobile #preview-viewport-wrapper {
+  width: 375px;
+  height: 720px;
+  min-height: 720px;
+  margin: 40px auto;
+  border: 12px solid #334155;
+  border-radius: 40px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  background: #f8fafc;
+  overflow: hidden; /* Prevent phone frame itself from scrolling! */
+  position: relative;
+}
+
+.preview-area.mode-mobile #preview-scrollable-content {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  scrollbar-width: none;
+}
+
+.preview-area.mode-mobile #preview-scrollable-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* Mobile absolute positioning override for widgets */
+.preview-area.mode-mobile #zotly-widget-embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.preview-area.mode-mobile #zotly-widget-embed .fixed {
+  position: absolute !important;
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+}
+
+.preview-area.mode-mobile #zotly-widget-embed .zotly-widget-panel-wrapper {
+  left: 12px !important;
+  right: 12px !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+/* Ensure the mockup page scales beautifully inside mobile */
+.preview-area.mode-mobile .mock-header {
+  padding: 10px 16px;
+}
+.preview-area.mode-mobile .mock-logo span,
+.preview-area.mode-mobile .mock-nav,
+.preview-area.mode-mobile .mock-btn {
+  display: none !important; /* hide navigation links and buttons to look like mobile nav */
+}
+.preview-area.mode-mobile .mock-logo {
+  font-size: 16px;
+}
+.preview-area.mode-mobile .mock-hero h1 {
+  font-size: 28px;
+}
+.preview-area.mode-mobile .mock-hero p {
+  font-size: 13px;
+}
+.preview-area.mode-mobile .mock-features {
+  grid-template-columns: 1fr; /* single column features */
+  gap: 16px;
+}
+
+/* Hide mock website sections inside the builder to show a clean white background instead */
+.mock-header,
+.mock-hero,
+.mock-features,
+.mock-footer,
+.mock-host-controls {
+  display: none !important;
+}
+
+/* Enforce solid white background for editor viewport and content wrappers */
+#preview-viewport-wrapper,
+#preview-scrollable-content,
+.preview-area.mode-mobile #preview-viewport-wrapper {
+  background: #ffffff !important;
+}
+
+/* Live Preview Dropdown Menu styles */
+.live-preview-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.live-preview-dropdown .dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  z-index: 200;
+  min-width: 190px;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 4px 0;
+}
+
+.live-preview-dropdown:hover .dropdown-menu,
+.live-preview-dropdown.active .dropdown-menu {
+  display: block;
+  animation: fadeInDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.dropdown-item:hover {
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--accent-color);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

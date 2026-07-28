@@ -377,6 +377,32 @@ const presetColors = {
 
 // Main Initialization
 document.addEventListener('DOMContentLoaded', async () => {
+  // 0. Dynamically generate preset cards from configuration array
+  const presets = [
+    { id: 'default', name: 'Default Setup', color: '#0b5fff' },
+    { id: 'emerald', name: 'EcoSphere (Emerald)', color: '#059669' },
+    { id: 'amber', name: 'Vortex (Amber)', color: '#d97706' },
+    { id: 'google', name: 'Search (Google)', color: '#1a73e8' },
+    { id: 'phonepe', name: 'Pay (PhonePe)', color: '#5f259f' }
+  ];
+
+  const presetGrid = document.querySelector('.preset-grid');
+  if (presetGrid) {
+    presetGrid.innerHTML = '';
+    presets.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'preset-card';
+      card.dataset.preset = p.id;
+      card.innerHTML = `
+        <span class="preset-dot" style="background-color: ${p.color};"></span>
+        <span class="preset-name">${p.name}</span>
+      `;
+      card.addEventListener('click', () => {
+        selectPreset(p.id);
+      });
+      presetGrid.appendChild(card);
+    });
+  }
 
   // 1. Setup collapsible accordions dynamically
   document.querySelectorAll('.accordion-section').forEach((section, idx) => {
@@ -440,6 +466,51 @@ document.addEventListener('DOMContentLoaded', async () => {
         toggleText.textContent = 'Hide Editor';
         toggleBtn.classList.remove('collapsed');
       }
+    });
+  }
+
+  // Viewport Toggles (Desktop vs Mobile)
+  const previewArea = document.querySelector('.preview-area');
+  const desktopBtn = document.getElementById('viewport-desktop-btn');
+  const mobileBtn = document.getElementById('viewport-mobile-btn');
+
+  if (desktopBtn && mobileBtn && previewArea) {
+    desktopBtn.addEventListener('click', () => {
+      previewArea.classList.remove('mode-mobile');
+      desktopBtn.classList.add('active');
+      mobileBtn.classList.remove('active');
+      // Re-trigger store update to correctly calculate styles
+      updateAlpineStores(window.builderConfig);
+    });
+
+    mobileBtn.addEventListener('click', () => {
+      previewArea.classList.add('mode-mobile');
+      mobileBtn.classList.add('active');
+      desktopBtn.classList.remove('active');
+      // Re-trigger store update to correctly calculate styles
+      updateAlpineStores(window.builderConfig);
+    });
+  }
+
+  // Deploy to Test Site Dropdown click listener
+  const dropdownTrigger = document.getElementById('btn-live-preview-trigger');
+  const dropdownWrapper = document.querySelector('.live-preview-dropdown');
+  if (dropdownTrigger && dropdownWrapper) {
+    dropdownTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownWrapper.classList.toggle('active');
+    });
+
+    document.addEventListener('click', () => {
+      dropdownWrapper.classList.remove('active');
+    });
+
+    document.querySelectorAll('.live-preview-dropdown .dropdown-item').forEach(item => {
+      item.addEventListener('click', () => {
+        // Save the currently active editor config to localStorage
+        localStorage.setItem('zotly_temp_preview_config', JSON.stringify(window.builderConfig));
+        dropdownWrapper.classList.remove('active');
+      });
     });
   }
 
@@ -516,8 +587,13 @@ async function bootstrapWidgetPreview() {
   widgetContainer.setAttribute('@close-contact-widget.window', 'openContactWidget = false; $store.chat.panelOpen = false;');
 
   widgetContainer.innerHTML = window.ZotlyChatWindowHTML + window.ZotlyWelcomeHTML + window.ZotlyBubbleHTML + window.ZotlyChatbarHTML;
-  
-  document.body.appendChild(widgetContainer);
+
+  const viewportWrapper = document.getElementById('preview-viewport-wrapper');
+  if (viewportWrapper) {
+    viewportWrapper.appendChild(widgetContainer);
+  } else {
+    document.body.appendChild(widgetContainer);
+  }
 
   // Initialize Alpine Stores
   if (window.Alpine) {
@@ -590,6 +666,7 @@ async function selectPreset(presetName) {
   if (window.Alpine) {
     updateAlpineStores(window.builderConfig);
   }
+
 }
 
 // Populate visual controls from active config object

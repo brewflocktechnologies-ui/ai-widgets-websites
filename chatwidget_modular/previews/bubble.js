@@ -14,8 +14,26 @@
         boxSizing: 'border-box',
         width: (settings.width || 50) + 'px',
         height: (settings.height || 50) + 'px',
-        bottom: (settings.offsetBottom !== undefined ? settings.offsetBottom : 12) + 'px',
-        right: ((settings.offsetRight !== undefined ? settings.offsetRight : 16) + 'px'),
+        bottom: (() => {
+          const rawBottom = settings.offsetBottom !== undefined ? parseInt(settings.offsetBottom) : 12;
+          const heightVal = settings.height || 50;
+          const isMobileSim = document.querySelector('.preview-area.mode-mobile') !== null;
+          if (isMobileSim) {
+            const maxBottom = 720 - heightVal - 12;
+            return Math.max(12, Math.min(rawBottom, maxBottom)) + 'px';
+          }
+          return 'min(' + rawBottom + 'px, calc(100% - ' + heightVal + 'px - 12px))';
+        })(),
+        right: (() => {
+          const rawRight = settings.offsetRight !== undefined ? parseInt(settings.offsetRight) : 16;
+          const widthVal = settings.width || 50;
+          const isMobileSim = document.querySelector('.preview-area.mode-mobile') !== null;
+          if (isMobileSim) {
+            const maxRight = 375 - widthVal - 12;
+            return Math.max(12, Math.min(rawRight, maxRight)) + 'px';
+          }
+          return 'min(' + rawRight + 'px, calc(100% - ' + widthVal + 'px - 12px))';
+        })(),
         borderRadius: getBorderRadius(),
         background: getCompositeBackground(),
         backgroundBlendMode: settings.backgroundBlendMode || 'normal',

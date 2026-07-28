@@ -13,7 +13,7 @@
         boxSizing: 'border-box',
         width: $store.chat.isExpanded ? ($store.chatWindow.expandedWidth ? $store.chatWindow.expandedWidth + 'px' : '480px') : ($store.chatWindow.widgetWidth ? $store.chatWindow.widgetWidth + 'px' : '350px'),
         height: $store.chatWindow.widgetHeight ? $store.chatWindow.widgetHeight + 'px' : '550px',
-        maxWidth: 'calc(100vw - 32px)',
+        maxWidth: 'calc(100% - 24px)',
         maxHeight: (function() {
           const defaultBottom = ($store.chatWindow.offsetBottom !== undefined && $store.chatWindow.offsetBottom !== null && $store.chatWindow.offsetBottom !== '')
             ? $store.chatWindow.offsetBottom
@@ -28,7 +28,7 @@
             const gap = $store.bubble.stackGap !== undefined ? $store.bubble.stackGap : 12;
             offset = defaultBottom + h + gap;
           }
-          return 'calc(100vh - ' + (offset + 24) + 'px)';
+          return 'calc(100% - ' + (offset + 24) + 'px)';
         })(),
         position: 'fixed',
         bottom: (function() {
@@ -47,11 +47,22 @@
           }
           return defaultBottom + 'px';
         })(),
-        right: (($store.chatWindow.offsetRight !== undefined && $store.chatWindow.offsetRight !== null && $store.chatWindow.offsetRight !== '') 
-          ? $store.chatWindow.offsetRight 
-          : ($store.chatbar.enabled 
-            ? ($store.chatbar.offsetRight !== undefined ? $store.chatbar.offsetRight : 16) 
-            : ($store.bubble.offsetRight !== undefined ? $store.bubble.offsetRight : 16))) + 'px'
+        right: (() => {
+          const rawRight = (($store.chatWindow.offsetRight !== undefined && $store.chatWindow.offsetRight !== null && $store.chatWindow.offsetRight !== '') 
+            ? parseInt($store.chatWindow.offsetRight) 
+            : ($store.chatbar.enabled 
+              ? ($store.chatbar.offsetRight !== undefined ? parseInt($store.chatbar.offsetRight) : 16) 
+              : ($store.bubble.offsetRight !== undefined ? parseInt($store.bubble.offsetRight) : 16)));
+          const widthVal = $store.chat.isExpanded 
+            ? ($store.chatWindow.expandedWidth || 480) 
+            : ($store.chatWindow.widgetWidth || 350);
+          const isMobileSim = document.querySelector('.preview-area.mode-mobile') !== null;
+          if (isMobileSim) {
+            const maxRight = 375 - widthVal - 12;
+            return Math.max(12, Math.min(rawRight, maxRight)) + 'px';
+          }
+          return 'min(' + rawRight + 'px, calc(100% - ' + widthVal + 'px - 12px))';
+        })()
       }" style="display: none;">
       
       <div class="panel flex flex-col relative w-full h-full overflow-hidden"

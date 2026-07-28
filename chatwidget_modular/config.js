@@ -18,6 +18,24 @@
   }
 
   async function fetchClientConfig(clientId) {
+    // Check if test parameter is present to load editor preview state from local storage
+    if (window.location.search.includes('test=true')) {
+      const temp = localStorage.getItem('zotly_temp_preview_config');
+      if (temp) {
+        try {
+          const data = JSON.parse(temp);
+          return {
+            bubbleConfig: data.bubble || {},
+            chatConfig: data.chatWindow || data.chat || {},
+            chatbarConfig: data.chatbar || {},
+            greetWindowConfig: data.greetWindow || {}
+          };
+        } catch (err) {
+          console.warn("Failed to parse temporary preview configuration:", err);
+        }
+      }
+    }
+
     const baseUrl = window.ZotlyUtils ? window.ZotlyUtils.getWidgetBaseUrl() : './';
     const clientConfigUrl = `${baseUrl}public/clients/${clientId}.json`;
     try {
