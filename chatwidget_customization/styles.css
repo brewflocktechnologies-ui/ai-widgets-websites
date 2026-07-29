@@ -150,35 +150,36 @@ button {
 }
 
 /* ==============================
-   TOP NAV
+   SIDEBAR NAV
    ============================== */
-.app-nav {
+.app-nav-sidebar {
+  width: 200px;
+  min-width: 200px;
   display: flex;
-  padding: 0 28px;
-  gap: 2px;
+  flex-direction: column;
   background: var(--bg-surface);
-  border-bottom: 1px solid var(--border-color);
-  overflow-x: auto;
-  position: sticky;
-  top: 73px;
-  z-index: 99;
+  border-right: 1px solid var(--border-color);
+  overflow-y: auto;
+  flex-shrink: 0;
+  padding: 8px 0;
 }
 
 .nav-tab {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 12px 18px;
+  gap: 8px;
+  padding: 10px 16px;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
   border: none;
   background: transparent;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
+  border-left: 3px solid transparent;
   transition: all 0.15s;
-  white-space: nowrap;
-  margin-bottom: -1px;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
 }
 
 .nav-tab:hover {
@@ -188,7 +189,8 @@ button {
 
 .nav-tab.active {
   color: var(--accent);
-  border-bottom-color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-light);
   font-weight: 600;
 }
 
@@ -197,13 +199,13 @@ button {
    ============================== */
 .main-layout {
   display: flex;
-  height: calc(100vh - 116px);
+  height: calc(100vh - 73px);
   overflow: hidden;
 }
 
 .settings-panel {
-  width: 60%;
-  min-width: 320px;
+  flex: 1;
+  width: auto;
   overflow-y: auto;
   background: var(--bg-surface);
   border-right: 1px solid var(--border-color);
@@ -1222,16 +1224,34 @@ input:checked+.slider::before {
 }
 
 /* Responsive */
-@media (max-width: 1200px) {
-  .settings-panel {
-    width: 60%;
-  }
-}
-
 @media (max-width: 900px) {
   .main-layout {
     flex-direction: column;
     height: auto;
+  }
+
+  .app-nav-sidebar {
+    width: 100%;
+    min-width: auto;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 4px 0;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .nav-tab {
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    padding: 8px 14px;
+    width: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .nav-tab.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--accent);
   }
 
   .settings-panel {
