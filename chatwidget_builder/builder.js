@@ -1,5 +1,5 @@
 /* ==========================================================================
-   WIDGET BUILDER MAIN JS LOGIC
+   WIDGET customization MAIN JS LOGIC
    Handles visual forms, raw JSON editor, Alpine store syncing & presets
    ========================================================================== */
 
@@ -365,8 +365,8 @@ function formatCardBorder(width, style, hexColor, opacity) {
   return `${width || 1}px ${style || 'solid'} rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 
-// Global Builder State
-window.builderConfig = {};
+// Global customization State
+window.cutomizationConfig = {};
 const presetColors = {
   emerald: { primary: '#059669', secondary: '#0d9488', dark: false },
   amber: { primary: '#d97706', secondary: '#b45309', dark: false },
@@ -453,7 +453,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // 2. Setup Sidebar Toggle FAB
-  const layout = document.querySelector('.builder-layout');
+  const layout = document.querySelector('.customization-layout');
   const toggleBtn = document.getElementById('sidebar-toggle-btn');
   if (toggleBtn && layout) {
     const toggleText = toggleBtn.querySelector('.sidebar-toggle-text');
@@ -480,7 +480,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       desktopBtn.classList.add('active');
       mobileBtn.classList.remove('active');
       // Re-trigger store update to correctly calculate styles
-      updateAlpineStores(window.builderConfig);
+      updateAlpineStores(window.cutomizationConfig);
     });
 
     mobileBtn.addEventListener('click', () => {
@@ -488,7 +488,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       mobileBtn.classList.add('active');
       desktopBtn.classList.remove('active');
       // Re-trigger store update to correctly calculate styles
-      updateAlpineStores(window.builderConfig);
+      updateAlpineStores(window.cutomizationConfig);
     });
   }
 
@@ -508,7 +508,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.live-preview-dropdown .dropdown-item').forEach(item => {
       item.addEventListener('click', () => {
         // Save the currently active editor config to localStorage
-        localStorage.setItem('zotly_temp_preview_config', JSON.stringify(window.builderConfig));
+        localStorage.setItem('zotly_temp_preview_config', JSON.stringify(window.cutomizationConfig));
         dropdownWrapper.classList.remove('active');
       });
     });
@@ -569,13 +569,13 @@ async function bootstrapWidgetPreview() {
     };
   }
 
-  // Override ZotlyConfig.fetchClientConfig to return the builder's active config
+  // Override ZotlyConfig.fetchClientConfig to return the customization's active config
   window.ZotlyConfig.fetchClientConfig = async function() {
     return {
-      bubbleConfig: window.builderConfig.bubble || {},
-      chatConfig: window.builderConfig.chatWindow || window.builderConfig.chat || {},
-      chatbarConfig: window.builderConfig.chatbar || {},
-      greetWindowConfig: window.builderConfig.greetWindow || {}
+      bubbleConfig: window.cutomizationConfig.bubble || {},
+      chatConfig: window.cutomizationConfig.chatWindow || window.cutomizationConfig.chat || {},
+      chatbarConfig: window.cutomizationConfig.chatbar || {},
+      greetWindowConfig: window.cutomizationConfig.greetWindow || {}
     };
   };
 
@@ -598,12 +598,12 @@ async function bootstrapWidgetPreview() {
   // Initialize Alpine Stores
   if (window.Alpine) {
     await window.ZotlyInitStores();
-    updateAlpineStores(window.builderConfig);
+    updateAlpineStores(window.cutomizationConfig);
     window.Alpine.initTree(widgetContainer);
   } else {
     document.addEventListener('alpine:init', async () => {
       await window.ZotlyInitStores();
-      updateAlpineStores(window.builderConfig);
+      updateAlpineStores(window.cutomizationConfig);
       window.Alpine.initTree(widgetContainer);
     });
   }
@@ -634,13 +634,13 @@ async function selectPreset(presetName) {
   try {
     const res = await fetch(`../chatwidget_modular/public/clients/${presetName}.json`);
     if (res.ok) {
-      window.builderConfig = await res.json();
+      window.cutomizationConfig = await res.json();
     } else {
       throw new Error("Failed to load preset json file");
     }
   } catch (err) {
     console.warn("Could not load preset file, using default structure: ", err);
-    window.builderConfig = {
+    window.cutomizationConfig = {
       clientId: presetName,
       clientName: "Support Team",
       greetWindow: { enabled: true, title: "Need help?", description: "Chat with us!", useWebsiteTheme: true },
@@ -653,18 +653,18 @@ async function selectPreset(presetName) {
   // Update raw JSON textarea
   const jsonTextarea = document.getElementById('raw-json-textarea');
   if (jsonTextarea) {
-    jsonTextarea.value = JSON.stringify(window.builderConfig, null, 2);
+    jsonTextarea.value = JSON.stringify(window.cutomizationConfig, null, 2);
   }
 
   // Reset welcome card display tracker for preset load
   window.lastWelcomeEnabled = undefined;
 
   // Populate Visual Form Controls
-  syncConfigToVisualForm(window.builderConfig);
+  syncConfigToVisualForm(window.cutomizationConfig);
 
   // Sync to Alpine Stores
   if (window.Alpine) {
-    updateAlpineStores(window.builderConfig);
+    updateAlpineStores(window.cutomizationConfig);
   }
 
 }
@@ -963,16 +963,16 @@ function setupFormEventListeners() {
       }
 
       // Update state
-      setValueByPath(window.builderConfig, path, val);
+      setValueByPath(window.cutomizationConfig, path, val);
 
       // Update JSON textarea
       const jsonTextarea = document.getElementById('raw-json-textarea');
       if (jsonTextarea) {
-        jsonTextarea.value = JSON.stringify(window.builderConfig, null, 2);
+        jsonTextarea.value = JSON.stringify(window.cutomizationConfig, null, 2);
       }
 
       // Update Alpine Stores
-      updateAlpineStores(window.builderConfig);
+      updateAlpineStores(window.cutomizationConfig);
       updateColorPickerStates();
       updateDisabledAccordionStates();
     };
@@ -992,16 +992,16 @@ function setupFormEventListeners() {
       const left = parseFloat(grid.querySelector('[data-pad="left"]')?.value || 0);
       const formatted = formatPaddingString(top, right, bottom, left);
       
-      setValueByPath(window.builderConfig, path, formatted);
+      setValueByPath(window.cutomizationConfig, path, formatted);
       
       // Update JSON textarea
       const jsonTextarea = document.getElementById('raw-json-textarea');
       if (jsonTextarea) {
-        jsonTextarea.value = JSON.stringify(window.builderConfig, null, 2);
+        jsonTextarea.value = JSON.stringify(window.cutomizationConfig, null, 2);
       }
       
       // Update Alpine Stores
-      updateAlpineStores(window.builderConfig);
+      updateAlpineStores(window.cutomizationConfig);
     };
     inputs.forEach(input => {
       input.addEventListener('input', handlePadInput);
@@ -1027,14 +1027,14 @@ function setupFormEventListeners() {
       welcomeCardBgOpacityLabel.textContent = Math.round(opacity * 100) + '%';
     }
     const rgba = formatCardBg(welcomeCardBgPick.value, opacity);
-    setValueByPath(window.builderConfig, 'chatWindow.welcome.cardBg', rgba);
+    setValueByPath(window.cutomizationConfig, 'chatWindow.welcome.cardBg', rgba);
     
     // Update JSON textarea
     const jsonTextarea = document.getElementById('raw-json-textarea');
     if (jsonTextarea) {
-      jsonTextarea.value = JSON.stringify(window.builderConfig, null, 2);
+      jsonTextarea.value = JSON.stringify(window.cutomizationConfig, null, 2);
     }
-    updateAlpineStores(window.builderConfig);
+    updateAlpineStores(window.cutomizationConfig);
   };
 
   if (welcomeCardBgPick) {
@@ -1074,14 +1074,14 @@ function setupFormEventListeners() {
       welcomeBorderPick.value,
       opacity
     );
-    setValueByPath(window.builderConfig, 'chatWindow.welcome.cardBorder', borderVal);
+    setValueByPath(window.cutomizationConfig, 'chatWindow.welcome.cardBorder', borderVal);
 
     // Update JSON textarea
     const jsonTextarea = document.getElementById('raw-json-textarea');
     if (jsonTextarea) {
-      jsonTextarea.value = JSON.stringify(window.builderConfig, null, 2);
+      jsonTextarea.value = JSON.stringify(window.cutomizationConfig, null, 2);
     }
-    updateAlpineStores(window.builderConfig);
+    updateAlpineStores(window.cutomizationConfig);
   };
 
   if (welcomeBorderWidth) welcomeBorderWidth.addEventListener('input', handleWelcomeBorderChange);
@@ -1114,16 +1114,16 @@ function setupFormEventListeners() {
         opacityLabel.textContent = Math.round(opacity * 100) + '%';
       }
       
-      const currentVal = getValueByPath(window.builderConfig, path) || '';
+      const currentVal = getValueByPath(window.cutomizationConfig, path) || '';
       const updated = updateShadowColor(currentVal, pickInput.value, opacity);
-      setValueByPath(window.builderConfig, path, updated);
+      setValueByPath(window.cutomizationConfig, path, updated);
       
       // Update JSON textarea
       const jsonTextarea = document.getElementById('raw-json-textarea');
       if (jsonTextarea) {
-        jsonTextarea.value = JSON.stringify(window.builderConfig, null, 2);
+        jsonTextarea.value = JSON.stringify(window.cutomizationConfig, null, 2);
       }
-      updateAlpineStores(window.builderConfig);
+      updateAlpineStores(window.cutomizationConfig);
     };
 
     if (pickInput) {
@@ -1185,13 +1185,13 @@ function setupJsonEditorEventListeners() {
       jsonStatus.className = 'json-status valid';
       jsonStatus.innerHTML = '✓ Valid JSON config. Live updates active.';
       
-      window.builderConfig = parsed;
+      window.cutomizationConfig = parsed;
 
       // Update Visual Form Inputs without interrupting active focus if possible
-      syncConfigToVisualForm(window.builderConfig);
+      syncConfigToVisualForm(window.cutomizationConfig);
 
       // Update Alpine Stores
-      updateAlpineStores(window.builderConfig);
+      updateAlpineStores(window.cutomizationConfig);
     } catch (err) {
       // Mark as invalid
       jsonTextarea.classList.add('invalid');
@@ -1222,11 +1222,11 @@ function updateAlpineStores(config) {
     let greetWindowConfig = JSON.parse(JSON.stringify(config.greetWindow));
     if (greetWindowConfig.inputBox) {
       greetWindowConfig.inputBox = { ...Alpine.store('greetWindow').inputBox, ...greetWindowConfig.inputBox };
-      // Always force input box to be visible in builder mode
+      // Always force input box to be visible in customization mode
       greetWindowConfig.inputBox.visible = true;
     }
     
-    // Always force greet card to be visible and active in builder mode
+    // Always force greet card to be visible and active in customization mode
     greetWindowConfig.visible = true;
     greetWindowConfig.dismissed = false;
     
@@ -1382,11 +1382,11 @@ function restartChatSession() {
   if (!window.Alpine) return;
   const chatStore = Alpine.store('chat');
   if (chatStore) {
-    chatStore.state = window.builderConfig.chatWindow?.welcome?.enabled ? 'welcome' : 'active';
+    chatStore.state = window.cutomizationConfig.chatWindow?.welcome?.enabled ? 'welcome' : 'active';
     chatStore.hasSentMessage = false;
     chatStore.panelOpen = false;
     chatStore.messages = [
-      { key: 'm1', senderType: 'AGENT', senderName: window.builderConfig.chatWindow?.agentName || 'Sarah', body: 'Hi! How can I help you today?', created: new Date(Date.now() - 300000).toISOString() },
+      { key: 'm1', senderType: 'AGENT', senderName: window.cutomizationConfig.chatWindow?.agentName || 'Sarah', body: 'Hi! How can I help you today?', created: new Date(Date.now() - 300000).toISOString() },
       { key: 'm2', senderType: 'VISITOR', body: 'I need help with my order', created: new Date(Date.now() - 240000).toISOString(), status: 'read' }
     ];
     window.dispatchEvent(new CustomEvent('close-contact-widget'));
@@ -1418,7 +1418,7 @@ function setupHostPageThemeControls() {
     if (hostSecondaryInput) document.documentElement.style.setProperty('--secondary-color', hostSecondaryInput.value);
     
     // Re-evaluate theme and update Alpine stores
-    updateAlpineStores(window.builderConfig);
+    updateAlpineStores(window.cutomizationConfig);
   };
 
   if (hostPrimaryInput) {
@@ -1439,24 +1439,24 @@ function setupHostPageThemeControls() {
         previewArea.classList.remove('dark-mode');
       }
       // Notify widget stores about background mode change
-      updateAlpineStores(window.builderConfig);
+      updateAlpineStores(window.cutomizationConfig);
     });
   }
 }
 
 // Custom handler for visual color-picker stops updating bubble/chatbar configuration arrays
 window.setGradientStop = function(section, index, color) {
-  if (!window.builderConfig[section]) {
-    window.builderConfig[section] = {};
+  if (!window.cutomizationConfig[section]) {
+    window.cutomizationConfig[section] = {};
   }
-  if (!window.builderConfig[section].gradientStops) {
-    window.builderConfig[section].gradientStops = [
+  if (!window.cutomizationConfig[section].gradientStops) {
+    window.cutomizationConfig[section].gradientStops = [
       { color: '#0b5fff', pos: 0 },
       { color: '#22D3EE', pos: 100 }
     ];
   }
-  if (window.builderConfig[section].gradientStops[index]) {
-    window.builderConfig[section].gradientStops[index].color = color;
+  if (window.cutomizationConfig[section].gradientStops[index]) {
+    window.cutomizationConfig[section].gradientStops[index].color = color;
   }
   
   // Keep the UI color inputs and text boxes in sync
@@ -1469,16 +1469,16 @@ window.setGradientStop = function(section, index, color) {
   // Sync to JSON editor
   const jsonTextarea = document.getElementById('raw-json-textarea');
   if (jsonTextarea) {
-    jsonTextarea.value = JSON.stringify(window.builderConfig, null, 2);
+    jsonTextarea.value = JSON.stringify(window.cutomizationConfig, null, 2);
   }
   
   // Update Alpine
-  updateAlpineStores(window.builderConfig);
+  updateAlpineStores(window.cutomizationConfig);
 };
 
 // Enable/Disable Accordion sections dynamically based on toggles
 function updateDisabledAccordionStates() {
-  const config = window.builderConfig;
+  const config = window.cutomizationConfig;
   if (!config) return;
 
   // 1. Greet Card Popup (Section 2) -> Enabled if greetWindow.enabled is true

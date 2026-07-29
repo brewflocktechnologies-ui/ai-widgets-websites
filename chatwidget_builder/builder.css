@@ -1,12 +1,12 @@
 /* ==========================================================================
-   WIDGET BUILDER MAIN STYLES
+   WIDGET Customization MAIN STYLES
    Curated Dark Theme UI with Glassmorphism & Accent Highlights
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap');
 
 :root {
-  /* Builder Theme Colors (Dark Theme) */
+  /* Customization Theme Colors (Dark Theme) */
   --bg-main: #090d16;
   --bg-card: #0f172a;
   --bg-input: #1e293b;
@@ -57,7 +57,7 @@ body {
 /* ==========================================================================
    LAYOUT SPLIT PANELS
    ========================================================================== */
-.builder-layout {
+.customization-layout {
   display: flex;
   min-height: 100vh;
   width: 100%;
@@ -947,7 +947,7 @@ input[type="range"] {
 }
 
 /* Layout transition overrides */
-.builder-layout {
+.customization-layout {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1016,7 +1016,7 @@ input[type="range"] {
 }
 
 @media (max-width: 768px) {
-  .builder-layout {
+  .customization-layout {
     flex-direction: column;
   }
   .sidebar-editor {
@@ -1279,7 +1279,7 @@ input[type="range"] {
   gap: 16px;
 }
 
-/* Hide mock website sections inside the builder to show a clean white background instead */
+/* Hide mock website sections inside the customization to show a clean white background instead */
 .mock-header,
 .mock-hero,
 .mock-features,
