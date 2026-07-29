@@ -479,6 +479,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       previewArea.classList.remove('mode-mobile');
       desktopBtn.classList.add('active');
       mobileBtn.classList.remove('active');
+      // Set desktop zoom to 100%
+      if (typeof window.updatePreviewZoom === 'function') {
+        window.updatePreviewZoom(1.0);
+      }
       // Re-trigger store update to correctly calculate styles
       updateAlpineStores(window.cutomizationConfig);
     });
@@ -487,6 +491,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       previewArea.classList.add('mode-mobile');
       mobileBtn.classList.add('active');
       desktopBtn.classList.remove('active');
+      // Set mobile zoom to 80%
+      if (typeof window.updatePreviewZoom === 'function') {
+        window.updatePreviewZoom(0.8);
+      }
       // Re-trigger store update to correctly calculate styles
       updateAlpineStores(window.cutomizationConfig);
     });
@@ -506,10 +514,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     document.querySelectorAll('.live-preview-dropdown .dropdown-item').forEach(item => {
-      item.addEventListener('click', () => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
         // Save the currently active editor config to localStorage
         localStorage.setItem('zotly_temp_preview_config', JSON.stringify(window.cutomizationConfig));
         dropdownWrapper.classList.remove('active');
+        window.open(item.href, '_blank');
       });
     });
   }
@@ -630,6 +640,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       zoomText.textContent = `${Math.round(currentZoom * 100)}%`;
     }
   }
+  window.updatePreviewZoom = updateZoom;
 
   zoomOutBtn?.addEventListener('click', () => {
     updateZoom(currentZoom - 0.1);
@@ -1001,12 +1012,6 @@ function updateColorPickerStates() {
       colorPick: document.getElementById('chatbar-bg-color-pick'),
       colorText: document.getElementById('chatbar-bg-color'),
       hint: document.getElementById('chatbar-bg-color-hint')
-    },
-    {
-      checkbox: document.getElementById('greet-use-theme'),
-      colorPick: document.getElementById('greet-bg-color-pick'),
-      colorText: document.getElementById('greet-bg-color'),
-      hint: document.getElementById('greet-bg-color-hint')
     }
   ];
 
@@ -1032,6 +1037,36 @@ function updateColorPickerStates() {
       p.hint.style.display = isChecked ? 'block' : 'none';
     }
   });
+
+  // Explicit handling for greet-use-theme which affects multiple targets (Icon Color, Submit Button, Button Icon)
+  const greetUseTheme = document.getElementById('greet-use-theme');
+  if (greetUseTheme) {
+    const isChecked = greetUseTheme.checked;
+    const targets = [
+      { pick: document.getElementById('greet-icon-color-pick'), text: document.getElementById('greet-icon-color'), hint: document.getElementById('greet-icon-color-hint') },
+      { pick: document.getElementById('greet-ib-btn-pick'), text: document.getElementById('greet-ib-btn'), hint: document.getElementById('greet-ib-btn-hint') },
+      { pick: document.getElementById('greet-ib-btnicon-pick'), text: document.getElementById('greet-ib-btnicon'), hint: document.getElementById('greet-ib-btnicon-hint') }
+    ];
+
+    targets.forEach(t => {
+      if (!t.pick || !t.text) return;
+      t.pick.disabled = isChecked;
+      t.text.disabled = isChecked;
+      const wrapper = t.pick.parentElement;
+      if (wrapper) {
+        if (isChecked) {
+          wrapper.style.opacity = '0.4';
+          wrapper.style.pointerEvents = 'none';
+        } else {
+          wrapper.style.opacity = '1';
+          wrapper.style.pointerEvents = 'auto';
+        }
+      }
+      if (t.hint) {
+        t.hint.style.display = isChecked ? 'block' : 'none';
+      }
+    });
+  }
 }
 
 // Form Event Listeners (Sync form input edits back to config and Alpine)
