@@ -470,7 +470,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Viewport Toggles (Desktop vs Mobile)
-  const previewArea = document.querySelector('.preview-area');
+  const previewArea = document.querySelector('.preview-panel');
   const desktopBtn = document.getElementById('viewport-desktop-btn');
   const mobileBtn = document.getElementById('viewport-mobile-btn');
 
@@ -558,6 +558,108 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Host Page Theme controls
   setupHostPageThemeControls();
+
+  // --- TOP TAB NAVIGATION ---
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+      tab.classList.add('active');
+      const targetTab = document.getElementById(tab.dataset.tab);
+      if (targetTab) targetTab.classList.add('active');
+    });
+  });
+
+  // --- SAVE CONFIG BUTTON ---
+  document.getElementById('btn-save-config')?.addEventListener('click', () => {
+    const data = JSON.stringify(window.cutomizationConfig, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${window.cutomizationConfig.clientId || 'widget'}-config.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // --- RESET BUTTON IN HEADER ---
+  document.getElementById('btn-reset-chat-header')?.addEventListener('click', restartChatSession);
+
+  // --- RETRIGGER BUTTONS ---
+  document.getElementById('btn-retrigger-greet-toolbar')?.addEventListener('click', retriggerGreetCard);
+
+  // --- COPY SNIPPET BUTTON ---
+  document.getElementById('btn-copy-snippet')?.addEventListener('click', () => {
+    const ta = document.getElementById('code-snippet-text');
+    if (ta) {
+      ta.select();
+      document.execCommand('copy');
+      const btn = document.getElementById('btn-copy-snippet');
+      const oldText = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = oldText; }, 2000);
+    }
+  });
+
+  // --- COPY SHARE LINK BUTTON ---
+  document.getElementById('btn-copy-share')?.addEventListener('click', () => {
+    const inp = document.getElementById('share-link-input');
+    if (inp) {
+      inp.select();
+      document.execCommand('copy');
+      const btn = document.getElementById('btn-copy-share');
+      const oldText = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = oldText; }, 2000);
+    }
+  });
+
+  // --- PREVIEW ZOOM CONTROLS ---
+  let currentZoom = 1.0;
+  const zoomOutBtn = document.getElementById('btn-zoom-out');
+  const zoomInBtn = document.getElementById('btn-zoom-in');
+  const zoomText = document.getElementById('zoom-level-text');
+  const previewWrapper = document.getElementById('preview-viewport-wrapper');
+
+  function updateZoom(newZoom) {
+    currentZoom = Math.min(1.5, Math.max(0.5, newZoom));
+    if (previewWrapper) {
+      previewWrapper.style.zoom = currentZoom;
+    }
+    if (zoomText) {
+      zoomText.textContent = `${Math.round(currentZoom * 100)}%`;
+    }
+  }
+
+  zoomOutBtn?.addEventListener('click', () => {
+    updateZoom(currentZoom - 0.1);
+  });
+
+  zoomInBtn?.addEventListener('click', () => {
+    updateZoom(currentZoom + 0.1);
+  });
+
+  zoomText?.addEventListener('click', () => {
+    updateZoom(1.0);
+  });
+
+  // --- APPLY JSON BUTTON ---
+  document.getElementById('btn-apply-json')?.addEventListener('click', () => {
+    const ta = document.getElementById('raw-json-textarea');
+    if (!ta) return;
+    try {
+      window.cutomizationConfig = JSON.parse(ta.value);
+      syncConfigToVisualForm(window.cutomizationConfig);
+      updateAlpineStores(window.cutomizationConfig);
+      const js = document.getElementById('json-status');
+      if (js) {
+        js.className = 'json-status valid';
+        js.innerHTML = '✓ JSON changes applied successfully.';
+      }
+    } catch(e) {
+      alert('Invalid JSON: ' + e.message);
+    }
+  });
 });
 
 // Bootstrap modular widget manually
@@ -1270,7 +1372,7 @@ function updateAlpineStores(config) {
   // 4. Update Chat Window & Welcome Store
   if (Alpine.store('chatWindow') && config.chatWindow) {
     let chatConfig = JSON.parse(JSON.stringify(config.chatWindow));
-    const isDark = document.documentElement.classList.contains('dark') || document.querySelector('.preview-area').classList.contains('dark-mode');
+    const isDark = document.documentElement.classList.contains('dark') || document.querySelector('.preview-panel').classList.contains('dark-mode');
 
     if (chatConfig.useWebsiteTheme === true) {
       chatConfig.accentColor = theme.primary;
@@ -1410,7 +1512,7 @@ function formatRawJson() {
 function setupHostPageThemeControls() {
   const hostPrimaryInput = document.getElementById('host-primary-color');
   const hostSecondaryInput = document.getElementById('host-secondary-color');
-  const previewArea = document.querySelector('.preview-area');
+  const previewArea = document.querySelector('.preview-panel');
   const hostDarkModeToggle = document.getElementById('host-dark-mode');
 
   const updateHostColors = () => {

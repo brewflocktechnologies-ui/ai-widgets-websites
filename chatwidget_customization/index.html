@@ -6,21 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Widget Customization</title>
 
-  <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="../chatwidget_modular/public/style.css">
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Font imports (Outfit for widget preview styling) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
-
-  <!-- Tailwind CSS (optional fallback styling for layout structure) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -35,7 +28,6 @@
     }
   </script>
 
-  <!-- Widgets Bootstrap Config & Previews -->
   <script src="../chatwidget_modular/utils.js" defer></script>
   <script src="../chatwidget_modular/config.js" defer></script>
   <script src="../chatwidget_modular/alpine/chat.js" defer></script>
@@ -47,157 +39,104 @@
   <script src="../chatwidget_modular/previews/welcome.js" defer></script>
   <script src="../chatwidget_modular/previews/offline.js" defer></script>
 
-  <!-- Alpine.js (used to drive the modular widget templates) -->
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
-  <!-- Customization Main Script -->
   <script src="scripts.js" defer></script>
 </head>
 
 <body>
 
-  <div class="customization-layout">
-
-    <!-- Left Side: Sidebar Configurator -->
-    <aside class="sidebar-editor">
-      <div class="sidebar-header">
-        <span class="sidebar-logo">🎨</span>
-        <h1 class="sidebar-title">Widget Customization</h1>
+  <!-- TOP HEADER -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="header-logo">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
       </div>
+      <div>
+        <h1 class="header-title">Widget Appearance</h1>
+        <p class="header-subtitle">Customize the branding and look of the customer support widget.</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="header-btn" id="btn-reset-chat-header" title="Reset Preview">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+        Reset Preview
+      </button>
+      <button class="header-btn header-btn-primary" id="btn-save-config">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        Save Config
+      </button>
+    </div>
+  </header>
 
-      <div class="sidebar-scrollable">
+  <!-- TOP NAVIGATION -->
+  <nav class="app-nav">
+    <button class="nav-tab active" data-tab="tab-appearance">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1-2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      Appearance
+    </button>
+    <button class="nav-tab" data-tab="tab-layout">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+      Layout & Toggles
+    </button>
+    <button class="nav-tab" data-tab="tab-messages">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Custom Messages
+    </button>
+    <button class="nav-tab" data-tab="tab-features">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+      Widget Features
+    </button>
+    <button class="nav-tab" data-tab="tab-forms">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      Forms
+    </button>
+    <button class="nav-tab" data-tab="tab-snippet">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+      Code Snippet
+    </button>
+    <button class="nav-tab" data-tab="tab-share">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+      Quick Share
+    </button>
+    <button class="nav-tab" data-tab="tab-notifications">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      Notifications
+    </button>
+  </nav>
 
-        <!-- Preset Theme Selector -->
-        <label>Select Preset Template</label>
-        <div class="preset-grid">
-          <div class="preset-card active" data-preset="emerald">
-            <span class="preset-dot" style="background-color: #059669;"></span>
-            <span class="preset-name">EcoSphere (Emerald)</span>
+  <!-- MAIN LAYOUT: SETTINGS + PREVIEW -->
+  <div class="main-layout">
+
+    <!-- LEFT: SETTINGS PANEL -->
+    <aside class="settings-panel" id="settings-panel">
+
+      <!-- TAB: APPEARANCE -->
+      <div class="tab-content active" id="tab-appearance">
+        <div class="settings-header">
+          <h2>Appearance Settings</h2>
+          <div class="tab-switch">
+            <button id="tab-form-btn" class="tab-switch-btn active">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"></path></svg>
+              Visual Form
+            </button>
+            <button id="tab-json-btn" class="tab-switch-btn">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+              JSON
+            </button>
           </div>
         </div>
 
-        <!-- Editor Tab Toggle -->
-        <div class="tab-container">
-          <button id="tab-form-btn" class="tab-btn active">Visual Form</button>
-          <button id="tab-json-btn" class="tab-btn">Raw JSON Code</button>
+        <!-- Preset Selector -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Preset Template
+          </div>
+          <div class="preset-grid"></div>
         </div>
 
-        <!-- Tab 1: Visual Form Configurator -->
+        <!-- VISUAL EDITOR -->
         <div id="visual-editor-section">
-
-          <!-- Section 0: Master Layout & Switches -->
-          <div class="accordion-section">
-            <div class="accordion-header">
-              <div class="accordion-title"><span>⚙️</span> Layout Control & Master Toggles</div>
-            </div>
-            <div class="accordion-content"
-              style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; padding-top: 16px;">
-              <div class="toggle-group" style="margin: 0;">
-                <span class="switch-label" style="font-size: 12px;">Greet Card Popup</span>
-                <label class="switch">
-                  <input type="checkbox" id="master-greet-enabled" data-path="greetWindow.enabled">
-                  <span class="slider"></span>
-                </label>
-              </div>
-              <div class="toggle-group" style="margin: 0;">
-                <span class="switch-label" style="font-size: 12px;">Quick Greet Input</span>
-                <label class="switch">
-                  <input type="checkbox" id="master-greet-input-enabled" data-path="greetWindow.inputBox.enabled">
-                  <span class="slider"></span>
-                </label>
-              </div>
-              <div class="toggle-group" style="margin: 0;">
-                <span class="switch-label" style="font-size: 12px;">Welcome Dashboard</span>
-                <label class="switch">
-                  <input type="checkbox" id="master-welcome-enabled" data-path="chatWindow.welcome.enabled">
-                  <span class="slider"></span>
-                </label>
-              </div>
-
-              <div class="form-group" style="margin: 0; grid-column: span 2;">
-                <label style="font-size: 10px; margin-bottom: 4px;">Launcher Style</label>
-                <div class="segmented-control">
-                  <input type="checkbox" id="master-chatbar-enabled" data-path="chatbar.enabled" style="display: none;">
-                  <button type="button" id="launcher-chatbar-btn" class="segmented-btn">Chatbar</button>
-                  <button type="button" id="launcher-bubble-btn" class="segmented-btn">Bubble</button>
-                </div>
-              </div>
-
-              <!-- Dynamic Launcher Offsets -->
-              <div id="layout-bubble-offsets" class="form-group" style="margin: 0; grid-column: span 2; display: none;">
-                <label style="font-size: 10px; margin-bottom: 4px;">Bubble Position Offset</label>
-                <div class="form-row" style="margin-top: 6px;">
-                  <div class="form-group" style="margin-top: 0;">
-                    <label>Offset Bottom (px)</label>
-                    <input type="number" data-path="bubble.offsetBottom" placeholder="12">
-                  </div>
-                  <div class="form-group" style="margin-top: 0;">
-                    <label>Offset Right (px)</label>
-                    <input type="number" data-path="bubble.offsetRight" placeholder="16">
-                  </div>
-                </div>
-              </div>
-
-              <div id="layout-chatbar-offsets" class="form-group"
-                style="margin: 0; grid-column: span 2; display: none;">
-                <label style="font-size: 10px; margin-bottom: 4px;">Chatbar Position Offset</label>
-                <div class="form-row" style="margin-top: 6px;">
-                  <div class="form-group" style="margin-top: 0;">
-                    <label>Card Offset Right (px)</label>
-                    <input type="number" data-path="chatbar.cardOffsetRight" placeholder="16">
-                  </div>
-                  <div class="form-group" style="margin-top: 0;">
-                    <label>Card Offset Bottom (px)</label>
-                    <input type="number" data-path="chatbar.cardOffsetBottom" placeholder="12">
-                  </div>
-                </div>
-                <div class="form-row" style="margin-top: 12px;">
-                  <div class="form-group" style="margin-top: 0;">
-                    <label>Bar Offset Right (px)</label>
-                    <input type="number" data-path="chatbar.barOffsetRight" placeholder="16">
-                  </div>
-                  <div class="form-group" style="margin-top: 0;">
-                    <label>Bar Offset Bottom (px)</label>
-                    <input type="number" data-path="chatbar.barOffsetBottom" placeholder="12">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Section 1: Host Website Colors -->
-          <div class="accordion-section">
-            <div class="accordion-header">
-              <div class="accordion-title"><span>🌐</span> Host Page Brand Sync</div>
-            </div>
-            <div class="accordion-content">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="host-primary-color">Primary CSS Var</label>
-                  <div class="color-picker-wrapper">
-                    <input type="color" id="host-primary-color-pick" value="#059669"
-                      oninput="document.getElementById('host-primary-color').value = this.value; document.getElementById('host-primary-color').dispatchEvent(new Event('change'))">
-                    <input type="text" id="host-primary-color" class="color-picker-text" value="#059669">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="host-secondary-color">Secondary CSS Var</label>
-                  <div class="color-picker-wrapper">
-                    <input type="color" id="host-secondary-color-pick" value="#0d9488"
-                      oninput="document.getElementById('host-secondary-color').value = this.value; document.getElementById('host-secondary-color').dispatchEvent(new Event('change'))">
-                    <input type="text" id="host-secondary-color" class="color-picker-text" value="#0d9488">
-                  </div>
-                </div>
-              </div>
-              <div class="toggle-group">
-                <span class="switch-label">Host Page Dark Mode</span>
-                <label class="switch">
-                  <input type="checkbox" id="host-dark-mode">
-                  <span class="slider"></span>
-                </label>
-              </div>
-            </div>
-          </div>
 
           <!-- Section 2: Greet Card Configurations -->
           <div class="accordion-section" id="accordion-greet-card">
@@ -2181,60 +2120,280 @@
 
         </div>
 
-        <!-- Tab 2: Raw JSON Editor -->
-        <div id="json-editor-section" style="display: none;">
-          <div class="json-editor-wrapper">
-            <div id="json-status" class="json-status valid">✓ Live syncing with editor state.</div>
-            <textarea id="raw-json-textarea" class="json-textarea" spellcheck="false"
-              placeholder="Loading config JSON..."></textarea>
-            <button id="btn-format-json" class="btn-secondary">⚙ Format JSON</button>
+        <!-- JSON EDITOR -->
+        <div id="json-editor-section" style="display:none;">
+          <div class="json-toolbar">
+            <span class="json-status" id="json-status">JSON ready</span>
+            <div class="json-actions">
+              <button class="btn-secondary" id="btn-format-json">Format</button>
+            </div>
+          </div>
+          <textarea id="raw-json-textarea" class="json-textarea" spellcheck="false" placeholder="Loading config JSON..."></textarea>
+          <div class="json-footer">
+            <button class="btn-primary" id="btn-apply-json">Apply Changes</button>
           </div>
         </div>
 
       </div>
+      <!-- TAB: LAYOUT CONTROL & MASTER TOGGLES -->
+      <div class="tab-content" id="tab-layout">
+        <div class="settings-header">
+          <h2>Layout Control & Master Toggles</h2>
+        </div>
+        <div class="section-card">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px;">
+            <div class="toggle-group" style="margin: 0;">
+              <span class="switch-label" style="font-size: 12px;">Greet Card Popup</span>
+              <label class="switch">
+                <input type="checkbox" id="master-greet-enabled" data-path="greetWindow.enabled">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-group" style="margin: 0;">
+              <span class="switch-label" style="font-size: 12px;">Quick Greet Input</span>
+              <label class="switch">
+                <input type="checkbox" id="master-greet-input-enabled" data-path="greetWindow.inputBox.enabled">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-group" style="margin: 0;">
+              <span class="switch-label" style="font-size: 12px;">Welcome Dashboard</span>
+              <label class="switch">
+                <input type="checkbox" id="master-welcome-enabled" data-path="chatWindow.welcome.enabled">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="form-group" style="margin: 0; grid-column: span 2;">
+              <label style="font-size: 10px; margin-bottom: 4px;">Launcher Style</label>
+              <div class="segmented-control">
+                <input type="checkbox" id="master-chatbar-enabled" data-path="chatbar.enabled" style="display: none;">
+                <button type="button" id="launcher-chatbar-btn" class="segmented-btn">Chatbar</button>
+                <button type="button" id="launcher-bubble-btn" class="segmented-btn">Bubble</button>
+              </div>
+            </div>
+
+            <!-- Dynamic Launcher Offsets -->
+            <div id="layout-bubble-offsets" class="form-group" style="margin: 0; grid-column: span 2; display: none;">
+              <label style="font-size: 10px; margin-bottom: 4px;">Bubble Position Offset</label>
+              <div class="form-row" style="margin-top: 6px;">
+                <div class="form-group" style="margin-top: 0;">
+                  <label>Offset Bottom (px)</label>
+                  <input type="number" data-path="bubble.offsetBottom" placeholder="12">
+                </div>
+                <div class="form-group" style="margin-top: 0;">
+                  <label>Offset Right (px)</label>
+                  <input type="number" data-path="bubble.offsetRight" placeholder="16">
+                </div>
+              </div>
+            </div>
+
+            <div id="layout-chatbar-offsets" class="form-group" style="margin: 0; grid-column: span 2; display: none;">
+              <label style="font-size: 10px; margin-bottom: 4px;">Chatbar Position Offset</label>
+              <div class="form-row" style="margin-top: 6px;">
+                <div class="form-group" style="margin-top: 0;">
+                  <label>Card Offset Right (px)</label>
+                  <input type="number" data-path="chatbar.cardOffsetRight" placeholder="16">
+                </div>
+                <div class="form-group" style="margin-top: 0;">
+                  <label>Card Offset Bottom (px)</label>
+                  <input type="number" data-path="chatbar.cardOffsetBottom" placeholder="12">
+                </div>
+              </div>
+              <div class="form-row" style="margin-top: 12px;">
+                <div class="form-group" style="margin-top: 0;">
+                  <label>Bar Offset Right (px)</label>
+                  <input type="number" data-path="chatbar.barOffsetRight" placeholder="16">
+                </div>
+                <div class="form-group" style="margin-top: 0;">
+                  <label>Bar Offset Bottom (px)</label>
+                  <input type="number" data-path="chatbar.barOffsetBottom" placeholder="12">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: CUSTOM MESSAGES -->
+      <div class="tab-content" id="tab-messages">
+        <div class="settings-header">
+          <h2>Custom Messages</h2>
+        </div>
+        <div class="section-card">
+          <p class="tab-placeholder">Configure automated chat messages for greet card, welcome screen, and offline states.</p>
+          <div class="form-group">
+            <label>Greet Title</label>
+            <input type="text" data-path="greetWindow.title" placeholder="Hi there!">
+          </div>
+          <div class="form-group">
+            <label>Greet Description</label>
+            <textarea rows="2" data-path="greetWindow.description" placeholder="How can we help?"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Offline Message</label>
+            <textarea rows="2" placeholder="We're not around right now. Leave a message!"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: WIDGET FEATURES -->
+      <div class="tab-content" id="tab-features">
+        <div class="settings-header">
+          <h2>Widget Features</h2>
+        </div>
+        <div class="section-card">
+          <p class="tab-placeholder">Enable or disable widget functionality.</p>
+          <div class="toggle-row">
+            <span class="toggle-label">Modern UI</span>
+            <label class="switch">
+              <input type="checkbox" data-path="chatWindow.modernUi">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">Typing Indicator</span>
+            <label class="switch">
+              <input type="checkbox" data-path="chatWindow.typingIndicator">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">Attachments</span>
+            <label class="switch">
+              <input type="checkbox" data-path="chatWindow.attachmentsEnabled">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">Message Sounds</span>
+            <label class="switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: FORMS -->
+      <div class="tab-content" id="tab-forms">
+        <div class="settings-header">
+          <h2>Forms</h2>
+        </div>
+        <div class="section-card">
+          <p class="tab-placeholder">Configure pre-chat and offline forms.</p>
+          <div class="form-group">
+            <label>Pre-chat Form</label>
+            <select>
+              <option>Enabled</option>
+              <option>Disabled</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Offline Form</label>
+            <select>
+              <option>Enabled</option>
+              <option>Disabled</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: CODE SNIPPET -->
+      <div class="tab-content" id="tab-snippet">
+        <div class="settings-header">
+          <h2>Code Snippet</h2>
+        </div>
+        <div class="section-card">
+          <p class="tab-placeholder">Copy the installation code to embed this widget on your website.</p>
+          <textarea class="snippet-box" readonly rows="4" id="code-snippet-text">&lt;script src="../chatwidget_modular/widget.js" data-client-id="default" defer&gt;&lt;/script&gt;</textarea>
+          <button class="btn-primary" id="btn-copy-snippet">Copy Code</button>
+        </div>
+      </div>
+
+      <!-- TAB: QUICK SHARE -->
+      <div class="tab-content" id="tab-share">
+        <div class="settings-header">
+          <h2>Quick Share</h2>
+        </div>
+        <div class="section-card">
+          <p class="tab-placeholder">Share widget preview link with your team.</p>
+          <div class="field-group">
+            <label>Share Link</label>
+            <input type="text" readonly value="https://yourdomain.com/widget-preview?client=default" id="share-link-input">
+          </div>
+          <div class="field-row">
+            <button class="btn-primary" id="btn-copy-share">Copy Link</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: NOTIFICATIONS -->
+      <div class="tab-content" id="tab-notifications">
+        <div class="settings-header">
+          <h2>Notifications</h2>
+        </div>
+        <div class="section-card">
+          <p class="tab-placeholder">Configure notification preferences for incoming messages.</p>
+          <div class="toggle-row">
+            <span class="toggle-label">Sound Alerts</span>
+            <label class="switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">Unread Badge</span>
+            <label class="switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">Desktop Notifications</span>
+            <label class="switch">
+              <input type="checkbox">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
     </aside>
 
-    <!-- Right Side: Live Mock Website Container -->
-    <main class="preview-area">
-
-      <!-- Preview Pane Controls Toolbar -->
+    <!-- RIGHT: LIVE PREVIEW -->
+    <main class="preview-panel">
       <div class="preview-toolbar">
-        <button id="sidebar-toggle-btn" class="toolbar-btn">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" class="sidebar-toggle-icon">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="9" y1="3" x2="9" y2="21"></line>
-          </svg>
-          <span class="sidebar-toggle-text">Hide Editor</span>
-        </button>
+        <div class="preview-toolbar-left">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          Live Preview
+        </div>
+        <div class="preview-toolbar-right">
+          <!-- Zoom Controls -->
+          <div class="zoom-controls">
+            <button id="btn-zoom-out" class="zoom-btn" title="Zoom Out">-</button>
+            <span id="zoom-level-text" class="zoom-text" title="Reset Zoom">100%</span>
+            <button id="btn-zoom-in" class="zoom-btn" title="Zoom In">+</button>
+          </div>
 
-        <div class="toolbar-actions">
-          <!-- Viewport Toggle Button Group -->
           <div class="viewport-toggles">
-            <button type="button" id="viewport-desktop-btn" class="viewport-btn active" title="Desktop View">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                <line x1="8" y1="21" x2="16" y2="21"></line>
-                <line x1="12" y1="17" x2="12" y2="21"></line>
-              </svg>
+            <button id="viewport-desktop-btn" class="viewport-btn active" title="Desktop">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
             </button>
-            <button type="button" id="viewport-mobile-btn" class="viewport-btn" title="Mobile View">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                <line x1="12" y1="18" x2="12.01" y2="18"></line>
-              </svg>
+            <button id="viewport-mobile-btn" class="viewport-btn" title="Mobile">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
             </button>
           </div>
 
           <!-- Live Preview Dropdown Selector -->
           <div class="live-preview-dropdown">
-            <button id="btn-live-preview-trigger" type="button" class="toolbar-btn primary-btn">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <button id="btn-live-preview-trigger" type="button" class="toolbar-action-btn" style="display: flex; align-items: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                 <polyline points="15 3 21 3 21 9"></polyline>
                 <line x1="10" y1="14" x2="21" y2="3"></line>
               </svg>
               <span>Live Test Site</span>
-              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 2px;">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
             </button>
@@ -2245,78 +2404,76 @@
               <a href="../clientwebsites/site-phonepe.html?test=true" target="_blank" data-site="phonepe" class="dropdown-item">📱 Pay (PhonePe)</a>
             </div>
           </div>
+
+          <button class="toolbar-action-btn" id="btn-retrigger-greet-toolbar" title="Re-trigger Greet Card">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          </button>
+          <span class="preview-client-badge" id="preview-client-badge">amber</span>
         </div>
       </div>
+      <div class="preview-viewport-container">
+        <div class="preview-viewport" id="preview-viewport-wrapper">
+          <div id="preview-scrollable-content">
+            <!-- Mock Top Header Navigation bar -->
+            <header class="mock-header">
+              <div class="mock-logo">
+                <div class="mock-logo-icon">🌱</div>
+                <span>EcoSphere Global</span>
+              </div>
+              <nav class="mock-nav">
+                <a href="#">Solutions</a>
+                <a href="#">Carbon Offsetting</a>
+                <a href="#">Enterprise</a>
+                <a href="#">Pricing</a>
+              </nav>
+              <button class="mock-btn">Get Started</button>
+            </header>
 
-      <div id="preview-viewport-wrapper">
-        <div id="preview-scrollable-content">
-          <!-- Mock Top Header Navigation bar -->
-          <header class="mock-header">
-        <div class="mock-logo">
-          <div class="mock-logo-icon">🌱</div>
-          <span>EcoSphere Global</span>
-        </div>
-        <nav class="mock-nav">
-          <a href="#">Solutions</a>
-          <a href="#">Carbon Offsetting</a>
-          <a href="#">Enterprise</a>
-          <a href="#">Pricing</a>
-        </nav>
-        <button class="mock-btn">Get Started</button>
-      </header>
+            <!-- Mock Hero Section -->
+            <section class="mock-hero">
+              <div class="mock-badge">🌱 Mockup Host Page: CSS Variables Linked</div>
+              <h1>Sustainable Energy Solutions<br>Built For <span class="mock-gradient-text">Tomorrow</span></h1>
+              <p>Empowering forward-thinking enterprises with real-time carbon intelligence, emission offsets, and automated customer support integration.</p>
+              <div class="mock-hero-buttons">
+                <button class="mock-btn">Explore Framework</button>
+                <button class="mock-btn" style="background: transparent; color: #475569; border: 1px solid #cbd5e1; box-shadow: none;">Request Quote</button>
+              </div>
+            </section>
 
-      <!-- Mock Hero Section -->
-      <section class="mock-hero">
-        <div class="mock-badge">🌱 Mockup Host Page: CSS Variables Linked</div>
-        <h1>Sustainable Energy Solutions<br>Built For <span class="mock-gradient-text">Tomorrow</span></h1>
-        <p>Empowering forward-thinking enterprises with real-time carbon intelligence, emission offsets, and automated
-          customer support integration.</p>
-        <div class="mock-hero-buttons">
-          <button class="mock-btn">Explore Framework</button>
-          <button class="mock-btn"
-            style="background: transparent; color: #475569; border: 1px solid #cbd5e1; box-shadow: none;">Request
-            Quote</button>
-        </div>
-      </section>
+            <!-- Mock Features Grid -->
+            <section class="mock-features">
+              <div class="mock-feature-card">
+                <div class="mock-feature-icon">⚡</div>
+                <h3>Real-time Tracking</h3>
+                <p>Monitor your project's metrics with instant WebSocket feedback data.</p>
+              </div>
+              <div class="mock-feature-card">
+                <div class="mock-feature-icon">🛡️</div>
+                <h3>Secure Offsets</h3>
+                <p>Verified ledger credits ensuring transparent climate accountability.</p>
+              </div>
+              <div class="mock-feature-card">
+                <div class="mock-feature-icon">🤖</div>
+                <h3>AI Support Desk</h3>
+                <p>Dynamic AI chatbot assisting customers directly on your host environment.</p>
+              </div>
+            </section>
 
-      <!-- Mock Features Grid -->
-      <section class="mock-features">
-        <div class="mock-feature-card">
-          <div class="mock-feature-icon">⚡</div>
-          <h3>Real-time Tracking</h3>
-          <p>Monitor your project's metrics with instant WebSocket feedback data.</p>
-        </div>
-        <div class="mock-feature-card">
-          <div class="mock-feature-icon">🛡️</div>
-          <h3>Secure Offsets</h3>
-          <p>Verified ledger credits ensuring transparent climate accountability.</p>
-        </div>
-        <div class="mock-feature-card">
-          <div class="mock-feature-icon">🤖</div>
-          <h3>AI Support Desk</h3>
-          <p>Dynamic AI chatbot assisting customers directly on your host environment.</p>
-        </div>
-      </section>
+            <!-- Mock Page Footer -->
+            <footer class="mock-footer">
+              &copy; 2026 EcoSphere Global Inc. All rights reserved. Powered by modular widgets sandbox.
+            </footer>
 
-      <!-- Mock Page Footer -->
-      <footer class="mock-footer">
-        &copy; 2026 EcoSphere Global Inc. All rights reserved. Powered by modular widgets sandbox.
-      </footer>
-
-      <!-- Floating Settings Action panel for mockup website -->
-      <div class="mock-host-controls">
-        <label>Theme Sync: <span id="host-theme-active-status"
-            style="font-weight: bold; color: var(--primary-color);">Emerald Active</span></label>
+            <!-- Floating Settings Action panel for mockup website -->
+            <div class="mock-host-controls">
+              <label>Theme Sync: <span id="host-theme-active-status" style="font-weight: bold; color: var(--primary-color);">Emerald Active</span></label>
+            </div>
+          </div>
+        </div>
       </div>
-
-      </div> <!-- End of #preview-scrollable-content -->
-
-      </div> <!-- End of #preview-viewport-wrapper -->
-
     </main>
 
   </div>
 
 </body>
-
 </html>
