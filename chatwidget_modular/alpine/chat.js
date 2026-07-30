@@ -119,6 +119,9 @@
           chatStore.agentName = chatConfig.agentName;
           if (chatStore.messages && chatStore.messages[0]) { chatStore.messages[0].senderName = chatConfig.agentName; }
         }
+        if (!chatStore.hasSentMessage && chatConfig.welcome && chatConfig.welcome.enabled === true) {
+          chatStore.state = 'welcome';
+        }
       }
     }
   };
