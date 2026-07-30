@@ -678,7 +678,7 @@ async function bootstrapWidgetPreview() {
   // Override getWidgetBaseUrl to point to modular widget directory
   if (window.ZotlyUtils) {
     window.ZotlyUtils.getWidgetBaseUrl = function() {
-      return '../chatwidget_modular/';
+      return '../chatwidget_components/';
     };
   }
 
@@ -745,7 +745,7 @@ async function selectPreset(presetName) {
 
   // Fetch JSON config
   try {
-    const res = await fetch(`../chatwidget_modular/public/clients/${presetName}.json`);
+    const res = await fetch(`../chatwidget_components/public/clients/${presetName}.json`);
     if (res.ok) {
       window.cutomizationConfig = await res.json();
     } else {

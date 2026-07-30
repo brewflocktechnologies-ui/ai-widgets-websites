@@ -8,8 +8,8 @@
      ========================================================================== */
   function getWidgetBaseUrl() {
     let scriptTag = document.currentScript;
-    if (!scriptTag || !scriptTag.src || !scriptTag.src.includes('widget.js')) {
-      scriptTag = document.querySelector('script[data-client-id]') || document.querySelector('script[src*="widget.js"]');
+    if (!scriptTag || !scriptTag.src || !scriptTag.src.includes('utils.js')) {
+      scriptTag = document.querySelector('script[src*="utils.js"]');
     }
     if (scriptTag && scriptTag.src) {
       try {
@@ -17,7 +17,7 @@
         return new URL('./', scriptUrl).href;
       } catch (e) { }
     }
-    return './';
+    return '../chatwidget_components/';
   }
 
   // Ensure CSS is loaded
