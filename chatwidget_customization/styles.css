@@ -1596,4 +1596,18 @@ input:checked+.slider::before {
   }
 }
 
+/* Dim controls that are overridden while Website Theme Synchronization is active */
+.form-section-body select:disabled,
+.form-section-body input[type="number"]:disabled,
+.form-section-body input[type="text"]:disabled,
+.form-section-body input[type="color"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-section-body .switch input:disabled + .slider {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 

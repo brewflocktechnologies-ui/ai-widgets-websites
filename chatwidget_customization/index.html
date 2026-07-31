@@ -198,7 +198,7 @@
             <div class="accordion-content">
 
               <!-- Top Banner: Theme Sync -->
-              <div class="top-theme-banner-card">
+              <div class="top-theme-banner-card" id="greet-theme-banner">
                 <div class="setting-info">
                   <div class="setting-title" style="display: flex; align-items: center; gap: 8px;">
                     <span class="theme-badge-icon">✨</span> Website Theme Synchronization
@@ -735,13 +735,29 @@
             </div>
             <div class="accordion-content">
 
+              <!-- Top Banner: Theme Sync -->
+              <div class="top-theme-banner-card" id="bubble-theme-banner">
+                <div class="setting-info">
+                  <div class="setting-title" style="display: flex; align-items: center; gap: 8px;">
+                    <span class="theme-badge-icon">✨</span> Website Theme Synchronization
+                  </div>
+                  <div class="setting-desc">Automatically align bubble colors with your site's main brand color palette.</div>
+                </div>
+                <div class="setting-control" style="width: auto;">
+                  <label class="switch">
+                    <input type="checkbox" id="bubble-use-theme" data-path="bubble.useWebsiteTheme">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
               <!-- General Settings -->
               <div class="form-section-card active">
                 <div class="form-section-header">
                   <div class="section-badge-icon">⚙️</div>
                   <div style="flex: 1;">
                     <div class="form-section-title">General Settings</div>
-                    <div class="form-section-desc">Core size, theme behavior, and display rules for the launcher bubble.</div>
+                    <div class="form-section-desc">Core size and display rules for the launcher bubble.</div>
                   </div>
                   <div class="sub-accordion-chevron">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -751,18 +767,6 @@
                 </div>
                 <div class="form-section-collapse">
                   <div class="form-section-body">
-                    <div class="setting-row">
-                      <div class="setting-info">
-                        <div class="setting-title">Use Website Theme Color</div>
-                        <div class="setting-desc">Automatically inherit your site's brand accent color for the bubble.</div>
-                      </div>
-                      <div class="setting-control">
-                        <label class="switch">
-                          <input type="checkbox" id="bubble-use-theme" data-path="bubble.useWebsiteTheme">
-                          <span class="slider"></span>
-                        </label>
-                      </div>
-                    </div>
                     <div class="setting-row">
                       <div class="setting-info">
                         <div class="setting-title">Bubble Size (Width x Height)</div>
@@ -781,10 +785,10 @@
                         <div class="setting-desc">Automatically hide the bubble while the chat panel is open.</div>
                       </div>
                       <div class="setting-control">
-                        <select data-path="bubble.hideOnOpen">
-                          <option value="true">True</option>
-                          <option value="false">False</option>
-                        </select>
+                        <label class="switch">
+                          <input type="checkbox" data-path="bubble.hideOnOpen">
+                          <span class="slider"></span>
+                        </label>
                       </div>
                     </div>
                   </div>
@@ -1556,10 +1560,13 @@
                             <span class="range-val shadow-opacity-label" style="font-size: 11px; min-width: 32px;">8%</span>
                           </div>
                         </div>
-                        <select data-path="bubble.tooltip.arrowEnabled" style="margin-top: 8px;">
-                          <option value="false">False</option>
-                          <option value="true">True</option>
-                        </select>
+                        <div style="margin-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                          <span style="font-size: 11px; color: var(--text-muted);">Show Arrow</span>
+                          <label class="switch">
+                            <input type="checkbox" data-path="bubble.tooltip.arrowEnabled">
+                            <span class="slider"></span>
+                          </label>
+                        </div>
                       </div>
                     </div>
                     <div class="setting-row">
@@ -1590,13 +1597,29 @@
             </div>
             <div class="accordion-content">
 
+              <!-- Top Banner: Theme Sync -->
+              <div class="top-theme-banner-card" id="chatbar-theme-banner">
+                <div class="setting-info">
+                  <div class="setting-title" style="display: flex; align-items: center; gap: 8px;">
+                    <span class="theme-badge-icon">✨</span> Website Theme Synchronization
+                  </div>
+                  <div class="setting-desc">Automatically align chatbar colors with your site's main brand color palette.</div>
+                </div>
+                <div class="setting-control" style="width: auto;">
+                  <label class="switch">
+                    <input type="checkbox" id="chatbar-use-theme" data-path="chatbar.useWebsiteTheme">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
               <!-- General Settings -->
               <div class="form-section-card active">
                 <div class="form-section-header">
                   <div class="section-badge-icon">⚙️</div>
                   <div style="flex: 1;">
                     <div class="form-section-title">General Settings</div>
-                    <div class="form-section-desc">Core layout, theme behavior, size, and spacing of the chatbar launcher.</div>
+                    <div class="form-section-desc">Core layout, size, and spacing of the chatbar launcher.</div>
                   </div>
                   <div class="sub-accordion-chevron">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1606,18 +1629,6 @@
                 </div>
                 <div class="form-section-collapse">
                   <div class="form-section-body">
-                    <div class="setting-row">
-                      <div class="setting-info">
-                        <div class="setting-title">Use Website Theme</div>
-                        <div class="setting-desc">Automatically inherit your site's brand accent color for the chatbar.</div>
-                      </div>
-                      <div class="setting-control">
-                        <label class="switch">
-                          <input type="checkbox" id="chatbar-use-theme" data-path="chatbar.useWebsiteTheme">
-                          <span class="slider"></span>
-                        </label>
-                      </div>
-                    </div>
                     <div class="setting-row">
                       <div class="setting-info">
                         <div class="setting-title">Layout Type</div>
@@ -1667,17 +1678,23 @@
                     </div>
                     <div class="setting-row">
                       <div class="setting-info">
-                        <div class="setting-title">Inner Gap & Hide on Open</div>
-                        <div class="setting-desc">Spacing between inner elements and auto-hide behavior.</div>
+                        <div class="setting-title">Inner Gap (px)</div>
+                        <div class="setting-desc">Spacing between inner elements of the chatbar.</div>
                       </div>
                       <div class="setting-control">
-                        <div style="display: flex; gap: 8px;">
-                          <input type="number" data-path="chatbar.gap" placeholder="0">
-                          <select data-path="chatbar.hideOnOpen" style="flex: 1;">
-                            <option value="true">True</option>
-                            <option value="false">False</option>
-                          </select>
-                        </div>
+                        <input type="number" data-path="chatbar.gap" placeholder="0">
+                      </div>
+                    </div>
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Hide Chatbar on Open</div>
+                        <div class="setting-desc">Automatically hide the chatbar while the chat panel is open.</div>
+                      </div>
+                      <div class="setting-control">
+                        <label class="switch">
+                          <input type="checkbox" data-path="chatbar.hideOnOpen">
+                          <span class="slider"></span>
+                        </label>
                       </div>
                     </div>
                   </div>
@@ -1944,13 +1961,29 @@
             </div>
             <div class="accordion-content">
 
+              <!-- Top Banner: Theme Sync -->
+              <div class="top-theme-banner-card" id="config-theme-banner">
+                <div class="setting-info">
+                  <div class="setting-title" style="display: flex; align-items: center; gap: 8px;">
+                    <span class="theme-badge-icon">✨</span> Website Theme Synchronization
+                  </div>
+                  <div class="setting-desc">Automatically align chat window colors with your site's main brand color palette.</div>
+                </div>
+                <div class="setting-control" style="width: auto;">
+                  <label class="switch">
+                    <input type="checkbox" id="config-use-theme" data-path="chatWindow.useWebsiteTheme">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
               <!-- General Settings -->
               <div class="form-section-card active">
                 <div class="form-section-header">
                   <div class="section-badge-icon">⚙️</div>
                   <div style="flex: 1;">
                     <div class="form-section-title">General Settings</div>
-                    <div class="form-section-desc">Identity, theme behavior, and overall window dimensions.</div>
+                    <div class="form-section-desc">Identity and overall window dimensions.</div>
                   </div>
                   <div class="sub-accordion-chevron">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1960,18 +1993,6 @@
                 </div>
                 <div class="form-section-collapse">
                   <div class="form-section-body">
-                    <div class="setting-row">
-                      <div class="setting-info">
-                        <div class="setting-title">Use Website Theme</div>
-                        <div class="setting-desc">Automatically apply your site's brand colors across the chat window.</div>
-                      </div>
-                      <div class="setting-control">
-                        <label class="switch">
-                          <input type="checkbox" id="config-use-theme" data-path="chatWindow.useWebsiteTheme">
-                          <span class="slider"></span>
-                        </label>
-                      </div>
-                    </div>
                     <div class="setting-row">
                       <div class="setting-info">
                         <div class="setting-title">Widget Client Title</div>
@@ -2959,6 +2980,22 @@
             </div>
             <div class="accordion-content">
 
+              <!-- Top Banner: Theme Sync -->
+              <div class="top-theme-banner-card" id="welcome-theme-banner">
+                <div class="setting-info">
+                  <div class="setting-title" style="display: flex; align-items: center; gap: 8px;">
+                    <span class="theme-badge-icon">✨</span> Website Theme Synchronization
+                  </div>
+                  <div class="setting-desc">Automatically align the welcome card gradient with your site's main brand color palette.</div>
+                </div>
+                <div class="setting-control" style="width: auto;">
+                  <label class="switch">
+                    <input type="checkbox" id="welcome-use-theme" data-path="chatWindow.welcome.useWebsiteTheme">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
               <!-- Card Styling & Layout -->
               <div class="form-section-card active">
                 <div class="form-section-header">
@@ -3105,18 +3142,6 @@
                           <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="10"></div>
                           <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="20"></div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="setting-row">
-                      <div class="setting-info">
-                        <div class="setting-title">Use Website Theme</div>
-                        <div class="setting-desc">Automatically apply the site brand gradient to the welcome card.</div>
-                      </div>
-                      <div class="setting-control">
-                        <label class="switch">
-                          <input type="checkbox" data-path="chatWindow.welcome.useWebsiteTheme">
-                          <span class="slider"></span>
-                        </label>
                       </div>
                     </div>
                   </div>

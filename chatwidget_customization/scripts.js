@@ -1011,8 +1011,15 @@ function syncConfigToVisualForm(config) {
 }
 
 // Smoothly scroll to the top Theme Synchronization toggle card and flash pulse highlight
-function scrollToThemeSyncToggle() {
-  const topBanner = document.querySelector('.top-theme-banner-card');
+function scrollToThemeSyncToggle(target) {
+  let topBanner = null;
+  if (typeof target === 'string') {
+    topBanner = document.querySelector(target);
+  } else if (target && target.querySelector) {
+    topBanner = target;
+  } else {
+    topBanner = document.querySelector('.top-theme-banner-card');
+  }
   if (topBanner) {
     topBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
     topBanner.classList.remove('highlight-pulse');
@@ -1026,93 +1033,175 @@ function scrollToThemeSyncToggle() {
 
 // Disable color inputs and show warning hint text if theme sync is enabled
 function updateColorPickerStates() {
-  const pairs = [
-    {
-      checkbox: document.getElementById('config-use-theme'),
-      colorPick: document.getElementById('config-accent-color-pick'),
-      colorText: document.getElementById('config-accent-color'),
-      hint: document.getElementById('config-accent-color-hint')
-    },
-    {
-      checkbox: document.getElementById('bubble-use-theme'),
-      colorPick: document.getElementById('bubble-bg-color-pick'),
-      colorText: document.getElementById('bubble-bg-color'),
-      hint: document.getElementById('bubble-bg-color-hint')
-    },
-    {
-      checkbox: document.getElementById('chatbar-use-theme'),
-      colorPick: document.getElementById('chatbar-bg-color-pick'),
-      colorText: document.getElementById('chatbar-bg-color'),
-      hint: document.getElementById('chatbar-bg-color-hint')
-    }
-  ];
+  const previewPanel = document.querySelector('.preview-panel');
+  const isDark = document.documentElement.classList.contains('dark') || (previewPanel && previewPanel.classList.contains('dark-mode'));
 
-  pairs.forEach(p => {
-    if (!p.checkbox || !p.colorPick || !p.colorText) return;
-    const isChecked = p.checkbox.checked;
-    p.colorPick.disabled = isChecked;
-    p.colorText.disabled = isChecked;
-    
-    // Dim the color picker wrapper container to show disabled state
-    const wrapper = p.colorPick.parentElement;
+  // Disable/dim a single color control pair and (optionally) its hint
+  function applyControlState(pick, text, hint, disabled, bannerSelector) {
+    if (!pick && !text) return;
+    if (pick) pick.disabled = disabled;
+    if (text) text.disabled = disabled;
+    const wrapper = (pick && pick.parentElement) || (text && text.parentElement);
     if (wrapper) {
-      if (isChecked) {
-        wrapper.style.opacity = '0.4';
-        wrapper.style.pointerEvents = 'none';
+      wrapper.style.opacity = disabled ? '0.4' : '1';
+      wrapper.style.pointerEvents = disabled ? 'none' : '';
+    }
+    if (hint) {
+      hint.style.display = disabled ? 'inline-flex' : 'none';
+      if (disabled) {
+        hint.style.cursor = 'pointer';
+        hint.title = 'Click to go to Theme Synchronization toggle';
+        hint.onclick = (e) => {
+          e.stopPropagation();
+          scrollToThemeSyncToggle(bannerSelector || '.top-theme-banner-card');
+        };
       } else {
-        wrapper.style.opacity = '1';
-        wrapper.style.pointerEvents = 'auto';
+        hint.style.cursor = '';
+        hint.title = '';
+        hint.onclick = null;
       }
     }
-    
-    if (p.hint) {
-      p.hint.style.display = isChecked ? 'block' : 'none';
-    }
-  });
+  }
 
-  // Explicit handling for greet-use-theme which affects multiple targets (Icon Color, Submit Button, Button Icon)
+  function findByPath(path) {
+    return {
+      pick: document.querySelector('input[type="color"][data-path="' + path + '"]'),
+      text: document.querySelector('input.color-picker-text[data-path="' + path + '"]')
+    };
+  }
+
+  function disablePlainControl(el, disabled) {
+    if (el) el.disabled = disabled;
+  }
+
+  // ---------- Bubble theme sync ----------
+  const bubbleUseTheme = document.getElementById('bubble-use-theme');
+  if (bubbleUseTheme) {
+    const on = bubbleUseTheme.checked;
+    const banner = '#bubble-theme-banner';
+    applyControlState(document.getElementById('bubble-bg-color-pick'), document.getElementById('bubble-bg-color'), document.getElementById('bubble-bg-color-hint'), on, banner);
+    applyControlState(document.getElementById('bubble-grad-start-pick'), document.getElementById('bubble-grad-start-text'), null, on, banner);
+    applyControlState(document.getElementById('bubble-grad-end-pick'), document.getElementById('bubble-grad-end-text'), null, on, banner);
+    const ringPair = findByPath('bubble.outlineRing.color');
+    applyControlState(ringPair.pick, ringPair.text, null, on, banner);
+    disablePlainControl(document.querySelector('select[data-path="bubble.gradientType"]'), on);
+    disablePlainControl(document.querySelector('input[data-path="bubble.gradientAngle"]'), on);
+  }
+
+  // ---------- Chatbar theme sync ----------
+  const chatbarUseTheme = document.getElementById('chatbar-use-theme');
+  if (chatbarUseTheme) {
+    const on = chatbarUseTheme.checked;
+    const banner = '#chatbar-theme-banner';
+    applyControlState(document.getElementById('chatbar-bg-color-pick'), document.getElementById('chatbar-bg-color'), document.getElementById('chatbar-bg-color-hint'), on, banner);
+    applyControlState(document.getElementById('chatbar-grad-start-pick'), document.getElementById('chatbar-grad-start-text'), null, on, banner);
+    applyControlState(document.getElementById('chatbar-grad-end-pick'), document.getElementById('chatbar-grad-end-text'), null, on, banner);
+    disablePlainControl(document.querySelector('input[data-path="chatbar.gradientEnabled"]'), on);
+    disablePlainControl(document.querySelector('select[data-path="chatbar.gradientType"]'), on);
+    disablePlainControl(document.querySelector('input[data-path="chatbar.gradientAngle"]'), on);
+  }
+
+  // ---------- Greet window theme sync (Icon Color, Submit Button, Button Icon) ----------
   const greetUseTheme = document.getElementById('greet-use-theme');
   if (greetUseTheme) {
-    const isChecked = greetUseTheme.checked;
-    const targets = [
+    const on = greetUseTheme.checked;
+    const banner = '#greet-theme-banner';
+    const greetTargets = [
       { pick: document.getElementById('greet-icon-color-pick'), text: document.getElementById('greet-icon-color'), hint: document.getElementById('greet-icon-color-hint') },
       { pick: document.getElementById('greet-ib-btn-pick'), text: document.getElementById('greet-ib-btn'), hint: document.getElementById('greet-ib-btn-hint') },
       { pick: document.getElementById('greet-ib-btnicon-pick'), text: document.getElementById('greet-ib-btnicon'), hint: document.getElementById('greet-ib-btnicon-hint') }
     ];
-
-    targets.forEach(t => {
-      if (!t.pick || !t.text) return;
-      t.pick.disabled = isChecked;
-      t.text.disabled = isChecked;
-      const wrapper = t.pick.parentElement;
+    greetTargets.forEach(t => {
+      if (!t.pick && !t.text) return;
+      if (t.pick) t.pick.disabled = on;
+      if (t.text) t.text.disabled = on;
+      const wrapper = (t.pick && t.pick.parentElement) || (t.text && t.text.parentElement);
       if (wrapper) {
-        if (isChecked) {
-          wrapper.style.opacity = '0.5';
-          wrapper.style.cursor = 'pointer';
-          wrapper.title = 'Click to go to Theme Synchronization toggle';
-          wrapper.onclick = (e) => {
-            e.stopPropagation();
-            scrollToThemeSyncToggle();
-          };
-        } else {
-          wrapper.style.opacity = '1';
-          wrapper.style.cursor = 'default';
-          wrapper.title = '';
-          wrapper.onclick = null;
-        }
+        wrapper.style.opacity = on ? '0.5' : '1';
+        wrapper.style.cursor = on ? 'pointer' : 'default';
+        wrapper.title = on ? 'Click to go to Theme Synchronization toggle' : '';
+        wrapper.onclick = on ? (e) => { e.stopPropagation(); scrollToThemeSyncToggle(banner); } : null;
       }
       if (t.hint) {
-        t.hint.style.display = isChecked ? 'inline-flex' : 'none';
-        if (isChecked) {
+        t.hint.style.display = on ? 'inline-flex' : 'none';
+        if (on) {
           t.hint.style.cursor = 'pointer';
           t.hint.title = 'Click to go to Theme Synchronization toggle';
-          t.hint.onclick = (e) => {
-            e.stopPropagation();
-            scrollToThemeSyncToggle();
-          };
+          t.hint.onclick = (e) => { e.stopPropagation(); scrollToThemeSyncToggle(banner); };
+        } else {
+          t.hint.style.cursor = '';
+          t.hint.title = '';
+          t.hint.onclick = null;
         }
       }
     });
+  }
+
+  // ---------- Chat Window theme sync ----------
+  const chatUseTheme = document.getElementById('config-use-theme');
+  if (chatUseTheme) {
+    const on = chatUseTheme.checked;
+    const banner = '#config-theme-banner';
+    applyControlState(document.getElementById('config-accent-color-pick'), document.getElementById('config-accent-color'), document.getElementById('config-accent-color-hint'), on, banner);
+
+    // Overridden regardless of preview theme (light-mode values are forced)
+    const alwaysOverriddenPaths = [
+      'chatWindow.visitorBubbleBg', 'chatWindow.visitorBubbleColor',
+      'chatWindow.headerBg', 'chatWindow.headerTextColor',
+      'chatWindow.headerAvatarBg', 'chatWindow.headerAvatarColor',
+      'chatWindow.agentAvatarBg', 'chatWindow.agentAvatarColor',
+      'chatWindow.inputFocusBorderColor', 'chatWindow.sendButtonBgActive',
+      'chatWindow.poweredByColor', 'chatWindow.endChatConfirmBg',
+      'chatWindow.endChatConfirmTextColor'
+    ];
+    alwaysOverriddenPaths.forEach(path => {
+      const pair = findByPath(path);
+      applyControlState(pair.pick, pair.text, null, on, banner);
+    });
+
+    // Overridden only while the preview host is in dark mode
+    const darkOnlyOverriddenPaths = [
+      'chatWindow.bodyBg', 'chatWindow.inputBg',
+      'chatWindow.agentBubbleBg', 'chatWindow.agentBubbleColor', 'chatWindow.agentBubbleBorderColor',
+      'chatWindow.footerBg', 'chatWindow.footerTextColor',
+      'chatWindow.inputTextColor', 'chatWindow.inputBorderColor',
+      'chatWindow.attachButtonBg', 'chatWindow.attachButtonColor',
+      'chatWindow.emojiButtonColor', 'chatWindow.modalCardBg', 'chatWindow.modalMessageColor',
+      'chatWindow.endChatCancelBg', 'chatWindow.endChatCancelTextColor', 'chatWindow.endChatCancelBorderColor'
+    ];
+    const darkOn = on && isDark;
+    darkOnlyOverriddenPaths.forEach(path => {
+      const pair = findByPath(path);
+      applyControlState(pair.pick, pair.text, null, darkOn, banner);
+    });
+  }
+
+  // ---------- Welcome Dashboard theme sync (bg gradient editor + button icon color) ----------
+  const welcomeUseTheme = document.getElementById('welcome-use-theme');
+  if (welcomeUseTheme) {
+    const on = welcomeUseTheme.checked;
+    const banner = '#welcome-theme-banner';
+
+    // The whole background editor (type/angle/colors) feeds welcome.bgGradient which is forced by theme sync
+    const bgEditorIds = [
+      'welcome-bg-type', 'welcome-bg-angle',
+      'welcome-bg-solid-pick', 'welcome-bg-solid-text',
+      'welcome-bg-grad-start-pick', 'welcome-bg-grad-start-text',
+      'welcome-bg-grad-end-pick', 'welcome-bg-grad-end-text'
+    ];
+    const hiddenBg = document.getElementById('welcome-bg-gradient-hidden');
+    const editorCard = hiddenBg ? hiddenBg.closest('.gradient-editor-card') : null;
+    if (editorCard) {
+      editorCard.style.opacity = on ? '0.45' : '1';
+      editorCard.style.pointerEvents = on ? 'none' : '';
+    }
+    bgEditorIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.disabled = on;
+    });
+
+    const iconPair = findByPath('chatWindow.welcome.buttonIconColor');
+    applyControlState(iconPair.pick, iconPair.text, null, on, banner);
   }
 }
 
@@ -1139,6 +1228,9 @@ function setupFormEventListeners() {
         if (valSpan) valSpan.textContent = val + (input.dataset.unit || '');
       } else {
         val = input.value;
+        // Coerce boolean-looking string values from selects to real booleans
+        if (val === 'true') val = true;
+        else if (val === 'false') val = false;
       }
 
       // Sync color inputs
@@ -1608,6 +1700,7 @@ function setupHostPageThemeControls() {
     
     // Re-evaluate theme and update Alpine stores
     updateAlpineStores(window.cutomizationConfig);
+    updateColorPickerStates();
   };
 
   if (hostPrimaryInput) {
@@ -1629,6 +1722,7 @@ function setupHostPageThemeControls() {
       }
       // Notify widget stores about background mode change
       updateAlpineStores(window.cutomizationConfig);
+      updateColorPickerStates();
     });
   }
 }
