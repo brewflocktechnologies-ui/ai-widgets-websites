@@ -455,7 +455,7 @@
                           <div class="setting-desc">Cycle duration for motion animation, e.g. 2.5s.</div>
                         </div>
                         <div class="setting-control">
-                          <input type="text" data-path="greetWindow.iconAnimationDuration" placeholder="2.5s">
+                          <input type="number" step="0.1" data-path="greetWindow.iconAnimationDuration" data-unit="s" placeholder="2.5">
                         </div>
                       </div>
                     </div>
@@ -555,7 +555,7 @@
                               oninput="document.getElementById('greet-title-color').value = this.value; document.getElementById('greet-title-color').dispatchEvent(new Event('change'))">
                             <input type="text" id="greet-title-color" class="color-picker-text" data-path="greetWindow.titleColor">
                           </div>
-                          <input type="text" data-path="greetWindow.titleFontSize" placeholder="15px" style="width: 80px;">
+                          <input type="number" step="1" data-path="greetWindow.titleFontSize" data-unit="px" placeholder="15" style="width: 80px;">
                         </div>
                       </div>
                     </div>
@@ -582,7 +582,7 @@
                               oninput="document.getElementById('greet-desc-color').value = this.value; document.getElementById('greet-desc-color').dispatchEvent(new Event('change'))">
                             <input type="text" id="greet-desc-color" class="color-picker-text" data-path="greetWindow.descriptionColor">
                           </div>
-                          <input type="text" data-path="greetWindow.descriptionFontSize" placeholder="14px" style="width: 80px;">
+                          <input type="number" step="1" data-path="greetWindow.descriptionFontSize" data-unit="px" placeholder="14" style="width: 80px;">
                         </div>
                       </div>
                     </div>
@@ -1590,11 +1590,11 @@
               <div class="form-row">
                 <div class="form-group">
                   <label>Title Font Size</label>
-                  <input type="text" data-path="chatWindow.headerTitleFontSize" placeholder="14px">
+                  <input type="number" step="1" data-path="chatWindow.headerTitleFontSize" data-unit="px" placeholder="14">
                 </div>
                 <div class="form-group">
                   <label>Subtitle Size</label>
-                  <input type="text" data-path="chatWindow.headerSubtitleFontSize" placeholder="11px">
+                  <input type="number" step="1" data-path="chatWindow.headerSubtitleFontSize" data-unit="px" placeholder="11">
                 </div>
               </div>
               <div class="form-row">
@@ -1649,11 +1649,11 @@
               <div class="form-row">
                 <div class="form-group">
                   <label>Font Size</label>
-                  <input type="text" data-path="chatWindow.visitorBubbleFontSize" placeholder="14px">
+                  <input type="number" step="1" data-path="chatWindow.visitorBubbleFontSize" data-unit="px" placeholder="14">
                 </div>
                 <div class="form-group">
                   <label>Border Radius</label>
-                  <input type="text" data-path="chatWindow.visitorBubbleBorderRadius" placeholder="16px">
+                  <input type="number" step="1" data-path="chatWindow.visitorBubbleBorderRadius" data-unit="px" placeholder="16">
                 </div>
               </div>
               <div class="form-group">
@@ -1687,7 +1687,7 @@
                 </div>
                 <div class="form-group">
                   <label>Font Size</label>
-                  <input type="text" data-path="chatWindow.agentBubbleFontSize" placeholder="14px">
+                  <input type="number" step="1" data-path="chatWindow.agentBubbleFontSize" data-unit="px" placeholder="14">
                 </div>
               </div>
               <div class="form-group">
@@ -1703,7 +1703,7 @@
               </div>
               <div class="form-group">
                 <label>Border Radius</label>
-                <input type="text" data-path="chatWindow.agentBubbleBorderRadius" placeholder="16px">
+                <input type="number" step="1" data-path="chatWindow.agentBubbleBorderRadius" data-unit="px" placeholder="16">
               </div>
 
               <div style="margin-top: 14px; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: var(--text-main);">Agent Avatar</div>
@@ -1768,7 +1768,7 @@
                   </div>
                   <div class="form-group">
                     <label>Border Radius</label>
-                    <input type="text" data-path="chatWindow.inputBorderRadius" placeholder="9999px">
+                    <input type="number" step="1" data-path="chatWindow.inputBorderRadius" data-unit="px" placeholder="9999">
                   </div>
                 </div>
               </div>
@@ -1796,7 +1796,7 @@
               </div>
               <div class="form-group">
                 <label>Textarea Font Size</label>
-                <input type="text" data-path="chatWindow.textareaFontSize" placeholder="14px">
+                <input type="number" step="1" data-path="chatWindow.textareaFontSize" data-unit="px" placeholder="14">
               </div>
 
               <div style="margin-top: 14px; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: var(--text-main);">Input Action Buttons</div>
@@ -1858,11 +1858,11 @@
               <div class="form-row">
                 <div class="form-group">
                   <label>Text Size</label>
-                  <input type="text" data-path="chatWindow.footerFontSize" placeholder="12px">
+                  <input type="number" step="1" data-path="chatWindow.footerFontSize" data-unit="px" placeholder="12">
                 </div>
                 <div class="form-group">
                   <label>Padding Bottom</label>
-                  <input type="text" data-path="chatWindow.footerPaddingBottom" placeholder="16px">
+                  <input type="number" step="1" data-path="chatWindow.footerPaddingBottom" data-unit="px" placeholder="16">
                 </div>
               </div>
               <div class="form-group">
@@ -2201,7 +2201,7 @@
                 </div>
                 <div class="form-group">
                   <label>Title Size</label>
-                  <input type="text" data-path="chatWindow.welcome.titleFontSize" placeholder="26px">
+                  <input type="number" step="1" data-path="chatWindow.welcome.titleFontSize" data-unit="px" placeholder="26">
                 </div>
               </div>
               <div class="form-group">
@@ -2216,7 +2216,7 @@
                 </div>
                 <div class="form-group">
                   <label>Description Size</label>
-                  <input type="text" data-path="chatWindow.welcome.descriptionFontSize" placeholder="15px">
+                  <input type="number" step="1" data-path="chatWindow.welcome.descriptionFontSize" data-unit="px" placeholder="15">
                 </div>
               </div>
               <!-- Upgraded Welcome Background Editor -->
@@ -2276,7 +2276,7 @@
               </div>
               <div class="form-group">
                 <label>Footer Padding Bottom</label>
-                <input type="text" data-path="chatWindow.welcome.footerPaddingBottom" placeholder="0px">
+                <input type="number" step="1" data-path="chatWindow.welcome.footerPaddingBottom" data-unit="px" placeholder="0">
               </div>
 
               <h3 class="section-subtitle">Online Agents Avatars</h3>

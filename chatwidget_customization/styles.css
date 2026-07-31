@@ -541,6 +541,12 @@ textarea:hover {
   border-color: #cbd5e1;
 }
 
+input[type="text"],
+input[type="number"] {
+  height: 36px;
+  padding: 6px 12px;
+}
+
 select {
   appearance: none;
   -webkit-appearance: none;
@@ -548,17 +554,13 @@ select {
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 13px;
-  padding-right: 32px;
+  padding: 6px 32px 6px 12px;
   cursor: pointer;
   height: 36px;
 }
 
-input[type="text"],
-input[type="number"] {
-  height: 36px;
-}
-
 textarea {
+  padding: 10px 12px;
   resize: vertical;
   min-height: 64px;
   line-height: 1.5;
@@ -1091,20 +1093,10 @@ input:checked+.slider::before {
   background: transparent !important;
   text-align: center;
   font-size: 11px;
-  padding: 2px 0 !important;
+  padding: 2px 2px !important;
   box-shadow: none !important;
   outline: none !important;
   color: var(--text-main);
-}
-
-.pad-input input::-webkit-outer-spin-button,
-.pad-input input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.pad-input input[type=number] {
-  -moz-appearance: textfield;
 }
 
 /* Shadow editor */

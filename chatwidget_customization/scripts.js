@@ -822,6 +822,13 @@ function syncConfigToVisualForm(config) {
       input.value = val;
       const textInput = input.parentElement.querySelector('.color-picker-text');
       if (textInput) textInput.value = val;
+    } else if (input.type === 'number') {
+      if (val !== undefined && val !== null) {
+        const num = parseFloat(val);
+        input.value = isNaN(num) ? '' : num;
+      } else {
+        input.value = '';
+      }
     } else {
       input.value = val;
       
@@ -1119,7 +1126,12 @@ function setupFormEventListeners() {
       if (input.type === 'checkbox') {
         val = input.checked;
       } else if (input.type === 'number') {
-        val = input.value === '' ? undefined : parseFloat(input.value);
+        if (input.value === '') {
+          val = undefined;
+        } else {
+          const num = parseFloat(input.value);
+          val = input.dataset.unit ? (num + input.dataset.unit) : num;
+        }
       } else if (input.type === 'range') {
         val = parseFloat(input.value);
         // Update slider value labels
