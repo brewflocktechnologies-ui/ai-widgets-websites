@@ -1062,6 +1062,11 @@ input:checked+.slider::before {
   pointer-events: none;
 }
 
+.form-section-card.disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
 /* Padding grid */
 .padding-grid {
   display: flex;
