@@ -3749,7 +3749,7 @@
           </div>
 
           <!-- 4. Busy Message (Expanded in screenshot) -->
-          <div class="msg-accordion-card active">
+          <div class="msg-accordion-card">
             <div class="msg-accordion-header">
               <div class="msg-header-icon">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -4019,13 +4019,84 @@
 
       <!-- TAB: CODE SNIPPET -->
       <div class="tab-content" id="tab-snippet">
-        <div class="settings-header">
-          <h2>Code Snippet</h2>
-        </div>
-        <div class="section-card">
-          <p class="tab-placeholder">Copy the installation code to embed this widget on your website.</p>
-          <textarea class="snippet-box" readonly rows="4" id="code-snippet-text">&lt;script src="https://brewflocktechnologies-ui.github.io/ai-widgets-websites/chatwidget/widget.js" data-client-id="default" defer&gt;&lt;/script&gt;</textarea>
-          <button class="btn-primary" id="btn-copy-snippet">Copy Code</button>
+        <div class="snippet-card-wrapper">
+          <!-- Top Card Header -->
+          <div class="snippet-card-header">
+            <div class="snippet-header-left">
+              <div class="snippet-header-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#475467" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+              </div>
+              <div class="snippet-header-info">
+                <h3 class="snippet-title">Website Widget Script</h3>
+                <p class="snippet-subtitle">Use the following code snippet to seamlessly integrate this widget into your website.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="snippet-card-divider"></div>
+
+          <!-- Instruction Line -->
+          <div class="snippet-instruction-row">
+            <div class="snippet-code-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#475467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+              </svg>
+            </div>
+            <div class="snippet-instruction-text">
+              Copy and paste this code before the <span class="snippet-tag-highlight">&lt;/body&gt;</span> tag on every page of your website.
+            </div>
+          </div>
+
+          <!-- Code Snippet Box -->
+          <div class="snippet-code-box">
+            <pre class="snippet-code-pre"><code id="code-snippet-highlighted">&lt;<span class="code-tag">script</span> <span class="code-attr">src</span>=<span class="code-str">"https://brewflocktechnologies-ui.github.io/ai-widgets-websites/chatwidget/widget.js"</span> <span class="code-attr">data-client-id</span>=<span class="code-str">"default"</span> <span class="code-attr">defer</span>&gt;&lt;/<span class="code-tag">script</span>&gt;</code></pre>
+
+            <!-- Hidden textarea for easy clipboard copying -->
+            <textarea id="code-snippet-text" style="position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px;"><script src="https://brewflocktechnologies-ui.github.io/ai-widgets-websites/chatwidget/widget.js" data-client-id="default" defer></script></textarea>
+
+            <!-- Copy Code Button -->
+            <div class="snippet-btn-wrapper">
+              <button type="button" class="snippet-copy-btn" id="btn-copy-snippet">
+                <span class="btn-copy-label">Copy Code</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Bottom Footer Links Divider -->
+          <div class="snippet-card-divider" style="margin-top: 24px;"></div>
+
+          <!-- Helpful Links Row -->
+          <div class="snippet-footer-links">
+            <div class="snippet-footer-item">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#475467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+              <span>Need Help? <a href="#" class="snippet-link snippet-link-underline">Watch Video tutorial</a></span>
+            </div>
+
+            <div class="snippet-footer-item">
+              <a href="#" class="snippet-link">Check Install Guide <span class="snippet-arrow">&gt;</span></a>
+            </div>
+
+            <div class="snippet-footer-item">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#475467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <a href="#" class="snippet-link">Email Code to Developer <span class="snippet-arrow">&gt;</span></a>
+            </div>
+          </div>
         </div>
       </div>
 

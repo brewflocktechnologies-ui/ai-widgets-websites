@@ -708,10 +708,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (ta) {
       ta.select();
       document.execCommand('copy');
+      const label = document.querySelector('#btn-copy-snippet .btn-copy-label');
       const btn = document.getElementById('btn-copy-snippet');
-      const oldText = btn.textContent;
-      btn.textContent = 'Copied!';
-      setTimeout(() => { btn.textContent = oldText; }, 2000);
+      if (label) {
+        const oldText = label.textContent;
+        label.textContent = 'Copied!';
+        setTimeout(() => { label.textContent = oldText; }, 2000);
+      } else if (btn) {
+        const oldText = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = oldText; }, 2000);
+      }
     }
   });
 

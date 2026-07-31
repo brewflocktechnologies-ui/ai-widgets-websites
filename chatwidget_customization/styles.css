@@ -2339,4 +2339,252 @@ input:checked+.slider::before {
   font-family: monospace, monospace;
 }
 
+/* ==========================================================================
+   CODE SNIPPET TAB UI (NON-ACCORDION MATCHING SCREENSHOT)
+   ========================================================================== */
+.snippet-card-wrapper {
+  background: #ffffff;
+  border: 1px solid #eaecf0;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.03), 0 1px 2px rgba(16, 24, 40, 0.02);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+
+.snippet-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.snippet-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.snippet-header-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.snippet-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.snippet-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #101828;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.snippet-subtitle {
+  font-size: 13.5px;
+  color: #667085;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.snippet-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.snippet-hand-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.snippet-hand-icon:hover {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.snippet-card-divider {
+  height: 1px;
+  background-color: #eaecf0;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.snippet-instruction-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.snippet-code-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.snippet-instruction-text {
+  font-size: 14px;
+  color: #475467;
+  line-height: 1.4;
+}
+
+.snippet-tag-highlight {
+  font-family: inherit;
+  font-weight: 600;
+  color: #d92d20;
+  background: transparent;
+  padding: 0;
+}
+
+.snippet-code-box {
+  background: #f9fafb;
+  border: 1px solid #eaecf0;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.snippet-code-pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #344054;
+}
+
+/* Syntax Highlighting Colors matching reference */
+.snippet-code-pre .code-comment {
+  color: #98a2b3;
+  font-style: italic;
+}
+
+.snippet-code-pre .code-tag {
+  color: #d97706;
+  font-weight: 600;
+}
+
+.snippet-code-pre .code-attr {
+  color: #d97706;
+}
+
+.snippet-code-pre .code-str {
+  color: #2563eb;
+}
+
+.snippet-code-pre .code-keyword {
+  color: #ec4899;
+  font-weight: 600;
+}
+
+.snippet-code-pre .code-var {
+  color: #2563eb;
+}
+
+.snippet-code-pre .code-arg {
+  color: #8b5cf6;
+}
+
+.snippet-code-pre .code-num {
+  color: #059669;
+}
+
+.snippet-code-pre .code-bool {
+  color: #059669;
+}
+
+.snippet-btn-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.snippet-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #00974e;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.snippet-copy-btn:hover {
+  background: #008042;
+}
+
+.snippet-copy-btn:active {
+  transform: scale(0.98);
+}
+
+.snippet-footer-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+.snippet-footer-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: #475467;
+  font-weight: 500;
+}
+
+.snippet-link {
+  color: #175cd3;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.snippet-link:hover {
+  color: #154294;
+}
+
+.snippet-link-underline {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.snippet-arrow {
+  display: inline-block;
+  margin-left: 2px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
 
