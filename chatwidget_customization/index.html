@@ -196,306 +196,535 @@
               <div class="accordion-title"><span>👋</span> Floating Greet Card Details</div>
             </div>
             <div class="accordion-content">
-              <div class="toggle-group" style="margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
-                <span class="switch-label">Use Website Theme</span>
-                <label class="switch">
-                  <input type="checkbox" id="greet-use-theme" data-path="greetWindow.useWebsiteTheme">
-                  <span class="slider"></span>
-                </label>
-              </div>
-              <h3 class="section-subtitle">Behavior & Delays</h3>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Initial Load Delay (s)</label>
-                  <input type="number" step="0.1" data-path="greetWindow.openingTimeAfterInitialLoadSec"
-                    placeholder="2.0">
+
+              <!-- Top Banner: Theme Sync -->
+              <div class="top-theme-banner-card">
+                <div class="setting-info">
+                  <div class="setting-title" style="display: flex; align-items: center; gap: 8px;">
+                    <span class="theme-badge-icon">✨</span> Website Theme Synchronization
+                  </div>
+                  <div class="setting-desc">Automatically align greet card icon and action button colors with your site's main brand color palette.</div>
                 </div>
-                <div class="form-group">
-                  <label>Opening Transition (s)</label>
-                  <input type="number" step="0.1" data-path="greetWindow.animationOpeningSec" placeholder="0.5">
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Closing Transition (s)</label>
-                  <input type="number" step="0.1" data-path="greetWindow.animationClosingSec" placeholder="0.3">
-                </div>
-                <div class="form-group">
-                  <label>Spacing Bottom (px)</label>
-                  <input type="number" data-path="greetWindow.spacing" placeholder="16">
+                <div class="setting-control" style="width: auto;">
+                  <label class="switch">
+                    <input type="checkbox" id="greet-use-theme" data-path="greetWindow.useWebsiteTheme">
+                    <span class="slider"></span>
+                  </label>
                 </div>
               </div>
 
-              <h3 class="section-subtitle">Card Styling</h3>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Card BG Color</label>
-                  <div class="color-picker-wrapper">
-                    <input type="color" id="greet-bg-color-pick" value="#ffffff"
-                      oninput="document.getElementById('greet-bg-color').value = this.value; document.getElementById('greet-bg-color').dispatchEvent(new Event('change'))">
-                    <input type="text" id="greet-bg-color" class="color-picker-text"
-                      data-path="greetWindow.backgroundColor">
+              <!-- Section 1: Timing & Display Behavior -->
+              <div class="form-section-card active">
+                <div class="form-section-header">
+                  <div class="section-badge-icon">⏱️</div>
+                  <div style="flex: 1;">
+                    <div class="form-section-title">Timing & Display Behavior</div>
+                    <div class="form-section-desc">Control when and how smoothly the greeting popup appears to site visitors.</div>
                   </div>
-
-                </div>
-                <div class="form-group">
-                  <label>Card Width (px)</label>
-                  <input type="number" data-path="greetWindow.width" placeholder="320">
-                </div>
-              </div>
-
-
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Border Radius (px)</label>
-                  <input type="number" data-path="greetWindow.borderRadius" placeholder="16">
-                </div>
-                <div class="form-group">
-                  <label>Box Shadow Color & Opacity</label>
-                  <div class="shadow-editor-wrapper" data-shadow-path="greetWindow.boxShadow">
-                    <div class="color-picker-wrapper">
-                      <input type="color" class="shadow-color-pick" value="#000000">
-                      <input type="text" class="color-picker-text shadow-color-text" value="#000000">
-                    </div>
-                    <div class="slider-wrapper" style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
-                      <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
-                      <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.15"
-                        style="flex: 1;">
-                      <span class="range-val shadow-opacity-label" style="font-size: 11px; min-width: 32px;">15%</span>
-                    </div>
+                  <div class="sub-accordion-chevron">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
                   </div>
                 </div>
-              </div>
-              <div class="form-group">
-                <label>Card Padding</label>
-                <div class="padding-grid" data-padding-path="greetWindow.padding">
-                  <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="24"></div>
-                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="20">
-                  </div>
-                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="24">
-                  </div>
-                  <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="20"></div>
-                </div>
-              </div>
-
-              <h3 class="section-subtitle">Image & Icon</h3>
-              <div class="form-group">
-                <label>Custom Image URL</label>
-                <input type="text" data-path="greetWindow.imageUrl" placeholder="https://...">
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Image Width (px)</label>
-                  <input type="text" data-path="greetWindow.imageWidth" placeholder="Auto">
-                </div>
-                <div class="form-group">
-                  <label>Image Height (px)</label>
-                  <input type="number" data-path="greetWindow.imageHeight" placeholder="70">
-                </div>
-              </div>
-              <div class="form-group">
-                <label>Image Padding</label>
-                <div class="padding-grid" data-padding-path="greetWindow.imagePadding">
-                  <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="0"></div>
-                  <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="0">
-                  </div>
-                  <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="0">
-                  </div>
-                  <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="0"></div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label>Icon Alignment</label>
-                <select data-path="greetWindow.iconAlign">
-                  <option value="center">Center</option>
-                  <option value="left">Left</option>
-                  <option value="right">Right</option>
-                </select>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Icon Type</label>
-                  <select data-path="greetWindow.iconType">
-                    <option value="lucide">Lucide Icon</option>
-                    <option value="image">Custom Image</option>
-                    <option value="customSvg">Custom SVG</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Lucide Icon Name</label>
-                  <input type="text" data-path="greetWindow.lucideIcon" placeholder="Sparkles">
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Icon Size (px)</label>
-                  <input type="number" data-path="greetWindow.iconSize" placeholder="52">
-                </div>
-                <div class="form-group">
-                  <label>Icon Color</label>
-                  <div class="color-picker-wrapper">
-                    <input type="color" id="greet-icon-color-pick" value="#d97706"
-                      oninput="document.getElementById('greet-icon-color').value = this.value; document.getElementById('greet-icon-color').dispatchEvent(new Event('change'))">
-                    <input type="text" id="greet-icon-color" class="color-picker-text"
-                      data-path="greetWindow.iconColor">
-                  </div>
-                  <div class="theme-color-hint" id="greet-icon-color-hint" style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable 'Use Website Theme' to customize color</div>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Icon Animation</label>
-                  <select data-path="greetWindow.iconAnimation">
-                    <option value="none">None</option>
-                    <option value="wiggle">Wiggle</option>
-                    <option value="pulse">Pulse</option>
-                    <option value="bounce">Bounce</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Animation Duration</label>
-                  <input type="text" data-path="greetWindow.iconAnimationDuration" placeholder="2.5s">
-                </div>
-              </div>
-
-              <h3 class="section-subtitle">Text & Font Sizes</h3>
-              <div class="form-group">
-                <label>Title Text</label>
-                <input type="text" data-path="greetWindow.title" placeholder="Hi there! 👋">
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Title Text Color</label>
-                  <div class="color-picker-wrapper">
-                    <input type="color" id="greet-title-color-pick" value="#1e293b"
-                      oninput="document.getElementById('greet-title-color').value = this.value; document.getElementById('greet-title-color').dispatchEvent(new Event('change'))">
-                    <input type="text" id="greet-title-color" class="color-picker-text"
-                      data-path="greetWindow.titleColor">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>Title Size (px/rem)</label>
-                  <input type="text" data-path="greetWindow.titleFontSize" placeholder="15px">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label>Description Text</label>
-                <textarea data-path="greetWindow.description" rows="2" placeholder="Let's chat!"></textarea>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Description Color</label>
-                  <div class="color-picker-wrapper">
-                    <input type="color" id="greet-desc-color-pick" value="#475569"
-                      oninput="document.getElementById('greet-desc-color').value = this.value; document.getElementById('greet-desc-color').dispatchEvent(new Event('change'))">
-                    <input type="text" id="greet-desc-color" class="color-picker-text"
-                      data-path="greetWindow.descriptionColor">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>Description Size</label>
-                  <input type="text" data-path="greetWindow.descriptionFontSize" placeholder="14px">
-                </div>
-              </div>
-
-              <div id="sub-section-greet-input" class="sub-section-group">
-                <h3 class="section-subtitle">Quick Input Box</h3>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Input Delay (s)</label>
-                    <input type="number" step="0.1" data-path="greetWindow.inputBox.openingTimeAfterInitialLoadSec"
-                      placeholder="4.0">
-                  </div>
-                  <div class="form-group">
-                    <label>Input Transition (s)</label>
-                    <input type="number" step="0.1" data-path="greetWindow.inputBox.animationOpeningSec"
-                      placeholder="0.5">
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Input Layout</label>
-                    <select data-path="greetWindow.inputBox.layout">
-                      <option value="separated">Separated Row</option>
-                      <option value="integrated">Integrated Box</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Placeholder Text</label>
-                    <input type="text" data-path="greetWindow.inputBox.placeholder" placeholder="Write your message...">
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Input BG Color</label>
-                    <div class="color-picker-wrapper">
-                      <input type="color" id="greet-ib-bg-pick" value="#ffffff"
-                        oninput="document.getElementById('greet-ib-bg').value = this.value; document.getElementById('greet-ib-bg').dispatchEvent(new Event('change'))">
-                      <input type="text" id="greet-ib-bg" class="color-picker-text"
-                        data-path="greetWindow.inputBox.backgroundColor">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Input Text Color</label>
-                    <div class="color-picker-wrapper">
-                      <input type="color" id="greet-ib-text-pick" value="#1e293b"
-                        oninput="document.getElementById('greet-ib-text').value = this.value; document.getElementById('greet-ib-text').dispatchEvent(new Event('change'))">
-                      <input type="text" id="greet-ib-text" class="color-picker-text"
-                        data-path="greetWindow.inputBox.textColor">
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Border Radius (px)</label>
-                    <input type="number" data-path="greetWindow.inputBox.borderRadius" placeholder="24">
-                  </div>
-                  <div class="form-group">
-                    <label>Box Shadow Color & Opacity</label>
-                    <div class="shadow-editor-wrapper" data-shadow-path="greetWindow.inputBox.boxShadow">
-                      <div class="color-picker-wrapper">
-                        <input type="color" class="shadow-color-pick" value="#000000">
-                        <input type="text" class="color-picker-text shadow-color-text" value="#000000">
+                <div class="form-section-collapse">
+                  <div class="form-section-body">
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Appearance Delay (seconds)</div>
+                        <div class="setting-desc">Seconds to wait after page load before displaying the greeting card.</div>
                       </div>
-                      <div class="slider-wrapper"
-                        style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
-                        <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
-                        <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.12"
-                          style="flex: 1;">
-                        <span class="range-val shadow-opacity-label"
-                          style="font-size: 11px; min-width: 32px;">12%</span>
+                      <div class="setting-control">
+                        <input type="number" step="0.1" data-path="greetWindow.openingTimeAfterInitialLoadSec" placeholder="2.0">
+                      </div>
+                    </div>
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Fade-In Speed (seconds)</div>
+                        <div class="setting-desc">Transition duration when card slides or fades into view.</div>
+                      </div>
+                      <div class="setting-control">
+                        <input type="number" step="0.1" data-path="greetWindow.animationOpeningSec" placeholder="0.5">
+                      </div>
+                    </div>
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Fade-Out Speed (seconds)</div>
+                        <div class="setting-desc">Transition duration when card is closed or dismissed.</div>
+                      </div>
+                      <div class="setting-control">
+                        <input type="number" step="0.1" data-path="greetWindow.animationClosingSec" placeholder="0.3">
+                      </div>
+                    </div>
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Bottom Clearance Gap (px)</div>
+                        <div class="setting-desc">Vertical spacing distance between card and screen bottom.</div>
+                      </div>
+                      <div class="setting-control">
+                        <input type="number" data-path="greetWindow.spacing" placeholder="16">
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Submit Button Color</label>
-                    <div class="color-picker-wrapper">
-                      <input type="color" id="greet-ib-btn-pick" value="#d97706"
-                        oninput="document.getElementById('greet-ib-btn').value = this.value; document.getElementById('greet-ib-btn').dispatchEvent(new Event('change'))">
-                      <input type="text" id="greet-ib-btn" class="color-picker-text"
-                        data-path="greetWindow.inputBox.buttonColor">
-                    </div>
-                    <div class="theme-color-hint" id="greet-ib-btn-hint" style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable 'Use Website Theme' to customize color</div>
+              </div>
+
+              <!-- Section 2: Card Appearance & Styling -->
+              <div class="form-section-card active">
+                <div class="form-section-header">
+                  <div class="section-badge-icon">🎨</div>
+                  <div style="flex: 1;">
+                    <div class="form-section-title">Card Container & Styling</div>
+                    <div class="form-section-desc">Customize card background fill color, width, corner roundness, drop shadow, and cushioning.</div>
                   </div>
-                  <div class="form-group">
-                    <label>Button Icon Color</label>
-                    <div class="color-picker-wrapper">
-                      <input type="color" id="greet-ib-btnicon-pick" value="#ffffff"
-                        oninput="document.getElementById('greet-ib-btnicon').value = this.value; document.getElementById('greet-ib-btnicon').dispatchEvent(new Event('change'))">
-                      <input type="text" id="greet-ib-btnicon" class="color-picker-text"
-                        data-path="greetWindow.inputBox.buttonIconColor">
+                  <div class="sub-accordion-chevron">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                <div class="form-section-collapse">
+                  <div class="form-section-body">
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Card Background Fill</div>
+                        <div class="setting-desc">Main background color of the floating greeting box.</div>
+                      </div>
+                      <div class="setting-control">
+                        <div class="color-picker-wrapper">
+                          <input type="color" id="greet-bg-color-pick" value="#ffffff"
+                            oninput="document.getElementById('greet-bg-color').value = this.value; document.getElementById('greet-bg-color').dispatchEvent(new Event('change'))">
+                          <input type="text" id="greet-bg-color" class="color-picker-text" data-path="greetWindow.backgroundColor">
+                        </div>
+                      </div>
                     </div>
-                    <div class="theme-color-hint" id="greet-ib-btnicon-hint" style="font-size: 11px; color: #a3a3a3; margin-top: 4px; display: none; line-height: 1.3;">Disable 'Use Website Theme' to customize color</div>
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Card Width (px)</div>
+                        <div class="setting-desc">Horizontal size of the greeting card in pixels.</div>
+                      </div>
+                      <div class="setting-control">
+                        <input type="number" data-path="greetWindow.width" placeholder="320">
+                      </div>
+                    </div>
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Corner Smoothness (px)</div>
+                        <div class="setting-desc">Rounding radius for the card corners.</div>
+                      </div>
+                      <div class="setting-control">
+                        <input type="number" data-path="greetWindow.borderRadius" placeholder="16">
+                      </div>
+                    </div>
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Elevation Shadow & Opacity</div>
+                        <div class="setting-desc">Drop shadow color and opacity effect underneath card.</div>
+                      </div>
+                      <div class="setting-control">
+                        <div class="shadow-editor-wrapper" data-shadow-path="greetWindow.boxShadow">
+                          <div class="color-picker-wrapper">
+                            <input type="color" class="shadow-color-pick" value="#000000">
+                            <input type="text" class="color-picker-text shadow-color-text" value="#000000">
+                          </div>
+                          <div class="slider-wrapper" style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
+                            <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.15" style="flex: 1;">
+                            <span class="range-val shadow-opacity-label" style="font-size: 11px; min-width: 32px;">15%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Inner Space Cushion (px)</div>
+                        <div class="setting-desc">Internal margins surrounding text and media (Top, Right, Bottom, Left).</div>
+                      </div>
+                      <div class="setting-control">
+                        <div class="padding-grid" data-padding-path="greetWindow.padding">
+                          <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="24"></div>
+                          <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="20"></div>
+                          <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="24"></div>
+                          <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="20"></div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              <!-- Section 3: Visual Badge & Media -->
+              <div class="form-section-card active">
+                <div class="form-section-header">
+                  <div class="section-badge-icon">🌟</div>
+                  <div style="flex: 1;">
+                    <div class="form-section-title">Visual Badge & Media</div>
+                    <div class="form-section-desc">Select and customize an Icon symbol, uploaded Custom Image, or SVG graphic.</div>
+                  </div>
+                  <div class="sub-accordion-chevron">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                <div class="form-section-collapse">
+                  <div class="form-section-body">
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Header Media Type</div>
+                        <div class="setting-desc">Choose whether to display a Lucide icon symbol, uploaded image, or custom SVG code.</div>
+                      </div>
+                      <div class="setting-control">
+                        <select data-path="greetWindow.iconType" id="greet-media-type-select">
+                          <option value="lucide">Lucide Icon Symbol</option>
+                          <option value="image">Custom Uploaded Image</option>
+                          <option value="customSvg">Custom SVG Graphic</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Visual Alignment</div>
+                        <div class="setting-desc">Position the header graphic on Left, Center, or Right inside the card.</div>
+                      </div>
+                      <div class="setting-control">
+                        <select data-path="greetWindow.iconAlign">
+                          <option value="center">Center</option>
+                          <option value="left">Left</option>
+                          <option value="right">Right</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <!-- DYNAMIC MEDIA GROUP 1: LUCIDE ICON FIELDS -->
+                    <div class="media-group-container media-group-lucide">
+                      <div class="setting-row">
+                        <div class="setting-info">
+                          <div class="setting-title">Icon Symbol Name</div>
+                          <div class="setting-desc">Name of Lucide icon symbol (e.g. Sparkles, MessageCircle, Bot, Hand, Smile).</div>
+                        </div>
+                        <div class="setting-control">
+                          <input type="text" data-path="greetWindow.lucideIcon" placeholder="Sparkles">
+                        </div>
+                      </div>
+
+                      <div class="setting-row">
+                        <div class="setting-info">
+                          <div class="setting-title">Icon Graphic Size (px)</div>
+                          <div class="setting-desc">Display width and height of icon symbol in pixels.</div>
+                        </div>
+                        <div class="setting-control">
+                          <input type="number" data-path="greetWindow.iconSize" placeholder="52">
+                        </div>
+                      </div>
+
+                      <div class="setting-row">
+                        <div class="setting-info">
+                          <div class="setting-title">Icon Symbol Color</div>
+                          <div class="setting-desc">Custom accent color for the icon.</div>
+                        </div>
+                        <div class="setting-control">
+                          <div class="color-picker-wrapper">
+                            <input type="color" id="greet-icon-color-pick" value="#d97706"
+                              oninput="document.getElementById('greet-icon-color').value = this.value; document.getElementById('greet-icon-color').dispatchEvent(new Event('change'))">
+                            <input type="text" id="greet-icon-color" class="color-picker-text" data-path="greetWindow.iconColor">
+                          </div>
+                          <div class="theme-color-hint" id="greet-icon-color-hint"><span class="hint-tag">⚡ Theme Sync Active</span> <span class="hint-link">Click to disable Theme Sync & edit color ↗</span></div>
+                        </div>
+                      </div>
+
+                      <div class="setting-row">
+                        <div class="setting-info">
+                          <div class="setting-title">Eye-Catcher Motion Animation</div>
+                          <div class="setting-desc">Attention-grabbing animated movement for the icon.</div>
+                        </div>
+                        <div class="setting-control">
+                          <select data-path="greetWindow.iconAnimation">
+                            <option value="none">None (Static)</option>
+                            <option value="wiggle">Wiggle Motion</option>
+                            <option value="pulse">Pulse Scaling</option>
+                            <option value="bounce">Bounce Jump</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="setting-row">
+                        <div class="setting-info">
+                          <div class="setting-title">Motion Loop Duration (seconds)</div>
+                          <div class="setting-desc">Cycle duration for motion animation, e.g. 2.5s.</div>
+                        </div>
+                        <div class="setting-control">
+                          <input type="text" data-path="greetWindow.iconAnimationDuration" placeholder="2.5s">
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- DYNAMIC MEDIA GROUP 2: CUSTOM IMAGE FIELDS -->
+                    <div class="media-group-container media-group-image" style="display: none;">
+                      <div class="setting-row">
+                        <div class="setting-info">
+                          <div class="setting-title">Custom Image Web URL</div>
+                          <div class="setting-desc">Direct HTTPS web URL to your logo, photo, or brand illustration image.</div>
+                        </div>
+                        <div class="setting-control">
+                          <input type="text" data-path="greetWindow.imageUrl" placeholder="https://domain.com/logo.png">
+                        </div>
+                      </div>
+
+                      <div class="setting-row">
+                        <div class="setting-info">
+                          <div class="setting-title">Image Dimensions (Width x Height)</div>
+                          <div class="setting-desc">Width (or 'Auto') and height in pixels for custom image.</div>
+                        </div>
+                        <div class="setting-control">
+                          <div style="display: flex; gap: 8px;">
+                            <input type="text" data-path="greetWindow.imageWidth" placeholder="Width (Auto)">
+                            <input type="number" data-path="greetWindow.imageHeight" placeholder="Height (70)">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="setting-row">
+                        <div class="setting-info">
+                          <div class="setting-title">Image Margin Cushioning (px)</div>
+                          <div class="setting-desc">Outer margin spacing cushion surrounding custom image.</div>
+                        </div>
+                        <div class="setting-control">
+                          <div class="padding-grid" data-padding-path="greetWindow.imagePadding">
+                            <div class="pad-input"><label>Top</label><input type="number" data-pad="top" placeholder="0"></div>
+                            <div class="pad-input"><label>Right</label><input type="number" data-pad="right" placeholder="0"></div>
+                            <div class="pad-input"><label>Bottom</label><input type="number" data-pad="bottom" placeholder="0"></div>
+                            <div class="pad-input"><label>Left</label><input type="number" data-pad="left" placeholder="0"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- DYNAMIC MEDIA GROUP 3: CUSTOM SVG FIELDS -->
+                    <div class="media-group-container media-group-customSvg" style="display: none;">
+                      <div class="setting-row">
+                        <div class="setting-info">
+                          <div class="setting-title">Custom SVG Markup / Code</div>
+                          <div class="setting-desc">Paste raw &lt;svg&gt; XML markup code to render custom vector graphics.</div>
+                        </div>
+                        <div class="setting-control">
+                          <textarea data-path="greetWindow.customSvg" rows="3" placeholder="<svg viewBox='0 0 24 24'>...</svg>"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section 4: Greeting Headline & Sub-Message -->
+              <div class="form-section-card active">
+                <div class="form-section-header">
+                  <div class="section-badge-icon">💬</div>
+                  <div style="flex: 1;">
+                    <div class="form-section-title">Headline & Message Text</div>
+                    <div class="form-section-desc">Draft the welcoming headline and detailed intro message shown to visitors.</div>
+                  </div>
+                  <div class="sub-accordion-chevron">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                <div class="form-section-collapse">
+                  <div class="form-section-body">
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Greeting Headline Title</div>
+                        <div class="setting-desc">Main headline title displayed prominently in the card.</div>
+                      </div>
+                      <div class="setting-control">
+                        <input type="text" data-path="greetWindow.title" placeholder="Hi there! 👋">
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Headline Styling (Color & Size)</div>
+                        <div class="setting-desc">Color and font size of main headline text.</div>
+                      </div>
+                      <div class="setting-control">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                          <div class="color-picker-wrapper" style="flex: 1;">
+                            <input type="color" id="greet-title-color-pick" value="#1e293b"
+                              oninput="document.getElementById('greet-title-color').value = this.value; document.getElementById('greet-title-color').dispatchEvent(new Event('change'))">
+                            <input type="text" id="greet-title-color" class="color-picker-text" data-path="greetWindow.titleColor">
+                          </div>
+                          <input type="text" data-path="greetWindow.titleFontSize" placeholder="15px" style="width: 80px;">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Sub-Greeting Message</div>
+                        <div class="setting-desc">Detailed greeting body message inviting user interaction.</div>
+                      </div>
+                      <div class="setting-control">
+                        <textarea data-path="greetWindow.description" rows="2" placeholder="Let's chat!"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Body Message Styling (Color & Size)</div>
+                        <div class="setting-desc">Color and font size for sub-greeting body text.</div>
+                      </div>
+                      <div class="setting-control">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                          <div class="color-picker-wrapper" style="flex: 1;">
+                            <input type="color" id="greet-desc-color-pick" value="#475569"
+                              oninput="document.getElementById('greet-desc-color').value = this.value; document.getElementById('greet-desc-color').dispatchEvent(new Event('change'))">
+                            <input type="text" id="greet-desc-color" class="color-picker-text" data-path="greetWindow.descriptionColor">
+                          </div>
+                          <input type="text" data-path="greetWindow.descriptionFontSize" placeholder="14px" style="width: 80px;">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section 5: Interactive Quick Chat Input -->
+              <div class="form-section-card active" id="sub-section-greet-input">
+                <div class="form-section-header">
+                  <div class="section-badge-icon">⚡</div>
+                  <div style="flex: 1;">
+                    <div class="form-section-title">Interactive Quick Reply Bar</div>
+                    <div class="form-section-desc">Enable visitors to type a message directly inside the card to start talking instantly.</div>
+                  </div>
+                  <div class="sub-accordion-chevron">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                <div class="form-section-collapse">
+                  <div class="form-section-body">
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Input Reveal Delay (seconds)</div>
+                        <div class="setting-desc">Delay before showing reply bar after card opens.</div>
+                      </div>
+                      <div class="setting-control">
+                        <input type="number" step="0.1" data-path="greetWindow.inputBox.openingTimeAfterInitialLoadSec" placeholder="4.0">
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Input Reveal Speed (seconds)</div>
+                        <div class="setting-desc">Transition duration when quick reply bar slides in.</div>
+                      </div>
+                      <div class="setting-control">
+                        <input type="number" step="0.1" data-path="greetWindow.inputBox.animationOpeningSec" placeholder="0.5">
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Reply Bar Layout Style</div>
+                        <div class="setting-desc">Choose between separated button row or integrated inline text box.</div>
+                      </div>
+                      <div class="setting-control">
+                        <select data-path="greetWindow.inputBox.layout">
+                          <option value="separated">Separated Row</option>
+                          <option value="integrated">Integrated Inline Box</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Placeholder Prompt Text</div>
+                        <div class="setting-desc">Instructional prompt shown inside reply bar before visitor types.</div>
+                      </div>
+                      <div class="setting-control">
+                        <input type="text" data-path="greetWindow.inputBox.placeholder" placeholder="Write your message...">
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Input Bar Fill & Text Color</div>
+                        <div class="setting-desc">Background color and typed text color for reply bar.</div>
+                      </div>
+                      <div class="setting-control">
+                        <div style="display: flex; gap: 8px;">
+                          <div class="color-picker-wrapper" style="flex: 1;" title="Background Fill Color">
+                            <input type="color" id="greet-ib-bg-pick" value="#ffffff"
+                              oninput="document.getElementById('greet-ib-bg').value = this.value; document.getElementById('greet-ib-bg').dispatchEvent(new Event('change'))">
+                            <input type="text" id="greet-ib-bg" class="color-picker-text" data-path="greetWindow.inputBox.backgroundColor">
+                          </div>
+                          <div class="color-picker-wrapper" style="flex: 1;" title="Typed Text Color">
+                            <input type="color" id="greet-ib-text-pick" value="#1e293b"
+                              oninput="document.getElementById('greet-ib-text').value = this.value; document.getElementById('greet-ib-text').dispatchEvent(new Event('change'))">
+                            <input type="text" id="greet-ib-text" class="color-picker-text" data-path="greetWindow.inputBox.textColor">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Corner Smoothness (px)</div>
+                        <div class="setting-desc">Rounding radius for the quick reply bar corners.</div>
+                      </div>
+                      <div class="setting-control">
+                        <input type="number" data-path="greetWindow.inputBox.borderRadius" placeholder="24">
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Shadow Depth & Opacity</div>
+                        <div class="setting-desc">Drop shadow color and opacity for the quick reply bar.</div>
+                      </div>
+                      <div class="setting-control">
+                        <div class="shadow-editor-wrapper" data-shadow-path="greetWindow.inputBox.boxShadow">
+                          <div class="color-picker-wrapper">
+                            <input type="color" class="shadow-color-pick" value="#000000">
+                            <input type="text" class="color-picker-text shadow-color-text" value="#000000">
+                          </div>
+                          <div class="slider-wrapper" style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 11px; color: var(--text-muted);">Opacity:</span>
+                            <input type="range" class="shadow-opacity" min="0" max="1" step="0.01" value="0.12" style="flex: 1;">
+                            <span class="range-val shadow-opacity-label" style="font-size: 11px; min-width: 32px;">12%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="setting-row">
+                      <div class="setting-info">
+                        <div class="setting-title">Action Button & Icon Color</div>
+                        <div class="setting-desc">Colors for send action button and send arrow icon.</div>
+                      </div>
+                      <div class="setting-control">
+                        <div style="display: flex; gap: 8px;">
+                          <div class="color-picker-wrapper" style="flex: 1;" title="Button Fill Color">
+                            <input type="color" id="greet-ib-btn-pick" value="#d97706"
+                              oninput="document.getElementById('greet-ib-btn').value = this.value; document.getElementById('greet-ib-btn').dispatchEvent(new Event('change'))">
+                            <input type="text" id="greet-ib-btn" class="color-picker-text" data-path="greetWindow.inputBox.buttonColor">
+                          </div>
+                          <div class="color-picker-wrapper" style="flex: 1;" title="Button Icon Color">
+                            <input type="color" id="greet-ib-btnicon-pick" value="#ffffff"
+                              oninput="document.getElementById('greet-ib-btnicon').value = this.value; document.getElementById('greet-ib-btnicon').dispatchEvent(new Event('change'))">
+                            <input type="text" id="greet-ib-btnicon" class="color-picker-text" data-path="greetWindow.inputBox.buttonIconColor">
+                          </div>
+                        </div>
+                        <div class="theme-color-hint" id="greet-ib-btn-hint"><span class="hint-tag">⚡ Theme Sync Active</span> <span class="hint-link">Click to disable Theme Sync & edit color ↗</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 

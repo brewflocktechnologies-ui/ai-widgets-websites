@@ -452,6 +452,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
+  // Setup Sub-Section Accordion toggles for Greet Form Cards
+  document.querySelectorAll('.form-section-card').forEach(card => {
+    const header = card.querySelector('.form-section-header');
+    if (!header) return;
+
+    header.addEventListener('click', (e) => {
+      if (e.target.closest('input, select, button, label, .color-picker-wrapper')) return;
+      card.classList.toggle('active');
+    });
+  });
+
   // 2. Setup Sidebar Toggle FAB
   const layout = document.querySelector('.customization-layout');
   const toggleBtn = document.getElementById('sidebar-toggle-btn');
@@ -992,6 +1003,20 @@ function syncConfigToVisualForm(config) {
   updateDisabledAccordionStates();
 }
 
+// Smoothly scroll to the top Theme Synchronization toggle card and flash pulse highlight
+function scrollToThemeSyncToggle() {
+  const topBanner = document.querySelector('.top-theme-banner-card');
+  if (topBanner) {
+    topBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    topBanner.classList.remove('highlight-pulse');
+    void topBanner.offsetWidth; // Force reflow
+    topBanner.classList.add('highlight-pulse');
+    setTimeout(() => {
+      topBanner.classList.remove('highlight-pulse');
+    }, 2000);
+  }
+}
+
 // Disable color inputs and show warning hint text if theme sync is enabled
 function updateColorPickerStates() {
   const pairs = [
@@ -1055,15 +1080,30 @@ function updateColorPickerStates() {
       const wrapper = t.pick.parentElement;
       if (wrapper) {
         if (isChecked) {
-          wrapper.style.opacity = '0.4';
-          wrapper.style.pointerEvents = 'none';
+          wrapper.style.opacity = '0.5';
+          wrapper.style.cursor = 'pointer';
+          wrapper.title = 'Click to go to Theme Synchronization toggle';
+          wrapper.onclick = (e) => {
+            e.stopPropagation();
+            scrollToThemeSyncToggle();
+          };
         } else {
           wrapper.style.opacity = '1';
-          wrapper.style.pointerEvents = 'auto';
+          wrapper.style.cursor = 'default';
+          wrapper.title = '';
+          wrapper.onclick = null;
         }
       }
       if (t.hint) {
-        t.hint.style.display = isChecked ? 'block' : 'none';
+        t.hint.style.display = isChecked ? 'inline-flex' : 'none';
+        if (isChecked) {
+          t.hint.style.cursor = 'pointer';
+          t.hint.title = 'Click to go to Theme Synchronization toggle';
+          t.hint.onclick = (e) => {
+            e.stopPropagation();
+            scrollToThemeSyncToggle();
+          };
+        }
       }
     });
   }
@@ -1613,10 +1653,28 @@ window.setGradientStop = function(section, index, color) {
   updateAlpineStores(window.cutomizationConfig);
 };
 
+// Toggle media field groups (Lucide vs Custom Image vs SVG) dynamically
+function updateGreetMediaFieldsVisibility() {
+  const mediaSelect = document.getElementById('greet-media-type-select') || document.querySelector('[data-path="greetWindow.iconType"]');
+  if (!mediaSelect) return;
+  const currentType = mediaSelect.value || 'lucide';
+
+  const lucideGroup = document.querySelector('.media-group-lucide');
+  const imageGroup = document.querySelector('.media-group-image');
+  const svgGroup = document.querySelector('.media-group-customSvg');
+
+  if (lucideGroup) lucideGroup.style.display = (currentType === 'lucide') ? 'flex' : 'none';
+  if (imageGroup) imageGroup.style.display = (currentType === 'image') ? 'flex' : 'none';
+  if (svgGroup) svgGroup.style.display = (currentType === 'customSvg') ? 'flex' : 'none';
+}
+
 // Enable/Disable Accordion sections dynamically based on toggles
 function updateDisabledAccordionStates() {
   const config = window.cutomizationConfig;
   if (!config) return;
+
+  // Update Greet Card header media visibility (Icon vs Custom Image vs SVG)
+  updateGreetMediaFieldsVisibility();
 
   // 1. Greet Card Popup (Section 2) -> Enabled if greetWindow.enabled is true
   const greetEnabled = !!getValueByPath(config, 'greetWindow.enabled');
