@@ -160,19 +160,48 @@ button {
   display: flex;
   align-items: center;
   gap: 0;
-  padding: 0 16px 0 20px;
+  padding: 0;
   height: 48px;
   background: var(--bg-surface);
   border-bottom: 1px solid #f1f1f1;
   flex-shrink: 0;
+  width: 100%;
+  position: relative;
+  z-index: 100;
+}
+
+.nav-left-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding-left: 20px;
+  padding-right: 16px;
+  border-right: 1px solid var(--border-color);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.nav-left-section::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-right-section {
+  width: 40%;
+  min-width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: visible;
 }
 
 .nav-divider {
-  width: 1px;
-  height: 28px;
-  background: var(--border-color);
-  margin: 0 12px;
-  flex-shrink: 0;
+  display: none;
 }
 
 .nav-live-label {
@@ -209,6 +238,15 @@ button {
   cursor: pointer;
   transition: color .15s;
   position: relative;
+  flex-shrink: 0;
+}
+
+.tab-label-full {
+  display: inline;
+}
+
+.tab-label-short {
+  display: none;
 }
 
 .nav-tab svg {
@@ -1255,6 +1293,84 @@ input:checked+.slider::before {
   padding: 0 4px;
 }
 
+/* Responsive Header Nav Breakpoints */
+@media (max-width: 1450px) {
+  .nav-left-section {
+    padding-left: 12px;
+    padding-right: 8px;
+  }
+
+  .nav-tab {
+    padding: 0 8px;
+    font-size: 12.5px;
+    gap: 3.5px;
+  }
+
+  .nav-right-section {
+    padding: 0 12px;
+  }
+
+  .nav-preview-controls {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 1300px) {
+  .nav-left-section {
+    padding-left: 8px;
+    padding-right: 6px;
+  }
+
+  .nav-tab {
+    padding: 0 6px;
+    font-size: 12px;
+    gap: 3px;
+  }
+
+  .tab-label-full {
+    display: none !important;
+  }
+
+  .tab-label-short {
+    display: inline !important;
+  }
+
+  .preview-client-badge {
+    display: none;
+  }
+
+  .nav-live-label span {
+    display: inline;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .nav-left-section {
+    padding-left: 6px;
+    padding-right: 4px;
+  }
+
+  .nav-tab {
+    padding: 0 4px;
+    font-size: 11.5px;
+    gap: 2.5px;
+  }
+
+  .nav-tab svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+
+  .zoom-controls {
+    display: none;
+  }
+
+  .nav-live-label span {
+    display: none;
+  }
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .main-layout {
@@ -1263,9 +1379,21 @@ input:checked+.slider::before {
   }
 
   .app-nav-sidebar {
-    padding: 0 8px;
+    padding: 0;
     height: 42px;
     gap: 0;
+  }
+
+  .nav-left-section {
+    width: 100%;
+    flex: none;
+    border-right: none;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .nav-right-section {
+    display: none;
   }
 
   .nav-tab {
@@ -2014,4 +2142,201 @@ input:checked+.slider::before {
   color: #94a3b8;
   font-weight: 500;
 }
+
+/* ==========================================================================
+   CUSTOM MESSAGES ACCORDION TAB (LEFT SIDE UI)
+   ========================================================================== */
+.msg-accordion-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding-bottom: 20px;
+}
+
+.msg-accordion-card {
+  background: #ffffff;
+  border: 1px solid #eaecf0;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.03), 0 1px 2px rgba(16, 24, 40, 0.02);
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.msg-accordion-card:hover {
+  border-color: #d0d5dd;
+  box-shadow: 0 4px 8px -2px rgba(16, 24, 40, 0.05);
+}
+
+.msg-accordion-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  background: #ffffff;
+  transition: background-color 0.15s ease;
+}
+
+.msg-accordion-header:hover {
+  background: #f9fafb;
+}
+
+.msg-header-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #344054;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.msg-header-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.msg-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #101828;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.msg-desc {
+  font-size: 13.5px;
+  color: #667085;
+  line-height: 1.45;
+}
+
+.msg-chevron-icon {
+  color: #667085;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: transform 0.25s ease, color 0.2s ease;
+}
+
+.msg-accordion-card.active .msg-chevron-icon {
+  transform: rotate(180deg);
+  color: #101828;
+}
+
+.msg-accordion-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, visibility 0.2s ease;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.msg-accordion-card.active .msg-accordion-collapse {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+}
+
+.msg-accordion-body {
+  min-height: 0;
+  overflow: hidden;
+  padding: 4px 20px 20px 20px;
+  transition: padding 0.25s ease;
+}
+
+.msg-accordion-card:not(.active) .msg-accordion-body {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Soft light-purple/gray input box container as seen in screenshot */
+.msg-input-box-wrapper {
+  background: #f8f9fe;
+  border: 1px solid #edf0f8;
+  border-radius: 12px;
+  padding: 16px 20px 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.msg-input-box-wrapper:focus-within {
+  border-color: #6366f1;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
+}
+
+.msg-textarea {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: #101828;
+  min-height: 60px;
+  padding: 0;
+}
+
+.msg-textarea::placeholder {
+  color: #98a2b3;
+}
+
+.msg-box-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  user-select: none;
+  padding-top: 4px;
+  border-top: 1px solid transparent;
+}
+
+.msg-tool-btn {
+  background: transparent;
+  border: none;
+  color: #667085;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.msg-tool-btn:hover {
+  color: #101828;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.msg-char-counter {
+  font-size: 13px;
+  font-weight: 500;
+  color: #667085;
+  font-feature-settings: "tnum";
+}
+
+.msg-tool-var-tag {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  font-family: monospace, monospace;
+}
+
 

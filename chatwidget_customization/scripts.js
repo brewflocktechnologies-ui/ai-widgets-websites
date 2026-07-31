@@ -463,6 +463,68 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
+  // Setup Accordion toggles & interactive tools for Message Tab Cards
+  document.querySelectorAll('.msg-accordion-card').forEach(card => {
+    const header = card.querySelector('.msg-accordion-header');
+    if (!header) return;
+
+    header.addEventListener('click', (e) => {
+      if (e.target.closest('input, textarea, button, label, .msg-tool-btn')) return;
+      card.classList.toggle('active');
+    });
+
+    const textarea = card.querySelector('.msg-textarea');
+    const counterEl = card.querySelector('.msg-char-counter .current-count');
+
+    if (textarea && counterEl) {
+      const updateCount = () => {
+        counterEl.textContent = textarea.value.length;
+      };
+      textarea.addEventListener('input', updateCount);
+      updateCount();
+    }
+
+    // Emoji button handler
+    const emojiBtn = card.querySelector('.msg-tool-emoji');
+    if (emojiBtn && textarea) {
+      emojiBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const emojis = ['😊', '👋', '💬', '⏳', '✨', '👍'];
+        const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+        const start = textarea.selectionStart || textarea.value.length;
+        const end = textarea.selectionEnd || textarea.value.length;
+        textarea.value = textarea.value.substring(0, start) + randomEmoji + textarea.value.substring(end);
+        textarea.selectionStart = textarea.selectionEnd = start + randomEmoji.length;
+        textarea.focus();
+        textarea.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    }
+
+    // Variable tag handler
+    const varBtn = card.querySelector('.msg-tool-variable');
+    if (varBtn && textarea) {
+      varBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const variableTag = '{agent_name}';
+        const start = textarea.selectionStart || textarea.value.length;
+        const end = textarea.selectionEnd || textarea.value.length;
+        textarea.value = textarea.value.substring(0, start) + variableTag + textarea.value.substring(end);
+        textarea.selectionStart = textarea.selectionEnd = start + variableTag.length;
+        textarea.focus();
+        textarea.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    }
+
+    // Formatting / Type button handler
+    const typeBtn = card.querySelector('.msg-tool-type');
+    if (typeBtn && textarea) {
+      typeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        textarea.focus();
+      });
+    }
+  });
+
   // 2. Setup Sidebar Toggle FAB
   const layout = document.querySelector('.customization-layout');
   const toggleBtn = document.getElementById('sidebar-toggle-btn');
