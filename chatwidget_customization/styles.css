@@ -926,11 +926,12 @@ input:checked+.slider::before {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: auto;
-  background: #f0f2f5;
-  padding: 24px;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow: hidden;
+  background: #ffffff;
+  padding: 0;
+  position: relative;
 }
 
 .preview-viewport {
@@ -941,11 +942,12 @@ input:checked+.slider::before {
   position: relative;
   overflow: hidden;
   background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
+  transition: zoom 0.15s ease-out;
 }
 
 #preview-scrollable-content {
@@ -960,9 +962,9 @@ input:checked+.slider::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 0;
+  padding: 16px;
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .preview-panel.mode-mobile #preview-viewport-wrapper {
@@ -980,6 +982,8 @@ input:checked+.slider::before {
   flex-shrink: 0;
   max-height: none;
   max-width: none;
+  transform-origin: center center;
+  transition: zoom 0.15s ease-out;
 }
 
 .preview-panel.mode-mobile #preview-scrollable-content {
@@ -998,7 +1002,7 @@ input:checked+.slider::before {
   display: none;
 }
 
-.preview-panel.mode-mobile #zotly-widget-embed {
+#zotly-widget-embed {
   position: absolute;
   top: 0;
   left: 0;

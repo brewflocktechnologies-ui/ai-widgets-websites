@@ -502,9 +502,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       previewArea.classList.add('mode-mobile');
       mobileBtn.classList.add('active');
       desktopBtn.classList.remove('active');
-      // Set mobile zoom to 80%
+      // Set mobile zoom multiplier to 1.0 (auto-fit)
       if (typeof window.updatePreviewZoom === 'function') {
-        window.updatePreviewZoom(0.8);
+        window.updatePreviewZoom(1.0);
       }
       // Re-trigger store update to correctly calculate styles
       updateAlpineStores(window.cutomizationConfig);
@@ -635,35 +635,85 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // --- PREVIEW ZOOM CONTROLS ---
-  let currentZoom = 1.0;
+  // --- PREVIEW ZOOM & AUTO-RESPONSIVE FIT CONTROLS ---
+  let userZoomLevel = 1.0;
   const zoomOutBtn = document.getElementById('btn-zoom-out');
   const zoomInBtn = document.getElementById('btn-zoom-in');
   const zoomText = document.getElementById('zoom-level-text');
   const previewWrapper = document.getElementById('preview-viewport-wrapper');
+  const previewContainer = document.querySelector('.preview-viewport-container');
 
-  function updateZoom(newZoom) {
-    currentZoom = Math.min(1.5, Math.max(0.5, newZoom));
-    if (previewWrapper) {
-      previewWrapper.style.zoom = currentZoom;
+  function calculateAndApplyPreviewScale() {
+    if (!previewContainer || !previewWrapper || !previewArea) return;
+
+    const isMobile = previewArea.classList.contains('mode-mobile');
+
+    if (isMobile) {
+      // Container available space minus safety padding
+      const paddingX = 32;
+      const paddingY = 32;
+
+      const containerW = previewContainer.clientWidth - paddingX;
+      const containerH = previewContainer.clientHeight - paddingY;
+
+      if (containerW > 0 && containerH > 0) {
+        const targetW = 391; // 375px phone + 16px frame border
+        const targetH = 736; // 720px phone + 16px frame border
+
+        const scaleX = containerW / targetW;
+        const scaleY = containerH / targetH;
+
+        // Auto-fit scale factor for 100% visible mobile phone frame
+        const autoFitScale = Math.min(scaleX, scaleY);
+        const finalScale = autoFitScale * userZoomLevel;
+
+        previewWrapper.style.zoom = finalScale;
+      }
+    } else {
+      // Desktop View: Container fills 100% preview panel, widget renders crisp at 1:1 scale
+      previewWrapper.style.zoom = userZoomLevel;
     }
+
     if (zoomText) {
-      zoomText.textContent = `${Math.round(currentZoom * 100)}%`;
+      zoomText.textContent = `${Math.round(userZoomLevel * 100)}%`;
     }
   }
+
+  function updateZoom(newZoomMultiplier) {
+    if (newZoomMultiplier !== undefined) {
+      userZoomLevel = Math.min(2.0, Math.max(0.3, newZoomMultiplier));
+    }
+    calculateAndApplyPreviewScale();
+  }
+
   window.updatePreviewZoom = updateZoom;
 
   zoomOutBtn?.addEventListener('click', () => {
-    updateZoom(currentZoom - 0.1);
+    updateZoom(userZoomLevel - 0.1);
   });
 
   zoomInBtn?.addEventListener('click', () => {
-    updateZoom(currentZoom + 0.1);
+    updateZoom(userZoomLevel + 0.1);
   });
 
   zoomText?.addEventListener('click', () => {
-    updateZoom(1.0);
+    updateZoom(1.0); // Reset to 100% auto-fit
   });
+
+  // Watch for preview container size changes (screen resize / sidebar toggle)
+  if (previewContainer) {
+    const resizeObserver = new ResizeObserver(() => {
+      calculateAndApplyPreviewScale();
+    });
+    resizeObserver.observe(previewContainer);
+  }
+
+  window.addEventListener('resize', () => {
+    calculateAndApplyPreviewScale();
+  });
+
+  // Initial auto-scale calculation
+  setTimeout(calculateAndApplyPreviewScale, 100);
 
   // --- APPLY JSON BUTTON ---
   document.getElementById('btn-apply-json')?.addEventListener('click', () => {
