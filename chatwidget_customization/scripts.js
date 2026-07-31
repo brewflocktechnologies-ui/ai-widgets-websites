@@ -580,6 +580,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Host Page Theme controls
   setupHostPageThemeControls();
 
+  // Variable to cache the original host website mockup HTML
+  let originalHostWebsiteHTML = '';
+
   // --- TOP TAB NAVIGATION ---
   document.querySelectorAll('.nav-tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -588,6 +591,34 @@ document.addEventListener('DOMContentLoaded', async () => {
       tab.classList.add('active');
       const targetTab = document.getElementById(tab.dataset.tab);
       if (targetTab) targetTab.classList.add('active');
+
+      const widgetEmbed = document.getElementById('zotly-widget-embed');
+      const previewContent = document.getElementById('preview-scrollable-content');
+
+      // Store original host page content if not already cached
+      if (previewContent && !originalHostWebsiteHTML && !previewContent.querySelector('.phone-preview-card-container')) {
+        originalHostWebsiteHTML = previewContent.innerHTML;
+      }
+
+      if (tab.dataset.tab === 'tab-forms') {
+        // Hide chat widget overlay on Forms tab
+        if (widgetEmbed) {
+          widgetEmbed.style.display = 'none';
+        }
+        // Render Form preview inside preview area ONLY on forms tab
+        if (window.FormsPreview && previewContent) {
+          window.FormsPreview.renderPreChatPreview('preview-scrollable-content');
+        }
+      } else {
+        // Show chat widget overlay on all other tabs
+        if (widgetEmbed) {
+          widgetEmbed.style.display = 'block';
+        }
+        // Restore normal host website content on all other tabs
+        if (previewContent && originalHostWebsiteHTML) {
+          previewContent.innerHTML = originalHostWebsiteHTML;
+        }
+      }
     });
   });
 
@@ -768,6 +799,10 @@ async function bootstrapWidgetPreview() {
   } else {
     document.body.appendChild(widgetContainer);
   }
+
+  // Ensure widget container is hidden if starting on Forms tab, otherwise shown
+  const isFormsActive = document.querySelector('.nav-tab[data-tab="tab-forms"]')?.classList.contains('active');
+  widgetContainer.style.display = isFormsActive ? 'none' : 'block';
 
   // Initialize Alpine Stores
   if (window.Alpine) {
@@ -1905,3 +1940,137 @@ function updateDisabledAccordionStates() {
     }
   }
 }
+
+/* ==========================================================================
+   FORMS COMPONENT & PREVIEW INTERACTIVITY
+   ========================================================================== */
+
+// Helper to toggle form section accordion cards
+function toggleFormSectionCard(cardId) {
+  const card = document.getElementById(cardId);
+  if (card) {
+    card.classList.toggle('active');
+  }
+}
+
+// Global initialization for imported forms component
+async function loadAndInitFormsComponent() {
+  const formsContainer = document.getElementById('tab-forms');
+  if (!formsContainer) return;
+
+  // Try to dynamically fetch forms.html if data-include is present
+  const includeFile = formsContainer.getAttribute('data-include');
+  if (includeFile) {
+    try {
+      const response = await fetch(includeFile);
+      if (response.ok) {
+        formsContainer.innerHTML = await response.text();
+      }
+    } catch (err) {
+      console.log('Using pre-rendered/embedded forms template fallback:', err);
+    }
+  }
+
+  const isFormsTabActive = () => {
+    return document.querySelector('.nav-tab[data-tab="tab-forms"]')?.classList.contains('active');
+  };
+
+  // Bind character counters & live preview
+  const headingInput = document.getElementById('ticket-form-heading-input');
+  const headingCounter = document.getElementById('heading-char-count');
+  const subheadingInput = document.getElementById('ticket-form-subheading-input');
+  const subheadingCounter = document.getElementById('subheading-char-count');
+
+  const triggerTicketPreview = () => {
+    if (isFormsTabActive() && window.FormsPreview) {
+      window.FormsPreview.renderTicketPreview('preview-scrollable-content', headingInput?.value, subheadingInput?.value);
+    }
+  };
+
+  if (headingInput && headingCounter) {
+    const updateHeadingCount = () => {
+      headingCounter.textContent = `${headingInput.value.length}/65`;
+      triggerTicketPreview();
+    };
+    headingInput.addEventListener('input', updateHeadingCount);
+    headingInput.addEventListener('focus', triggerTicketPreview);
+    updateHeadingCount();
+  }
+
+  if (subheadingInput && subheadingCounter) {
+    const updateSubheadingCount = () => {
+      subheadingCounter.textContent = `${subheadingInput.value.length}/65`;
+      triggerTicketPreview();
+    };
+    subheadingInput.addEventListener('input', updateSubheadingCount);
+    subheadingInput.addEventListener('focus', triggerTicketPreview);
+    updateSubheadingCount();
+  }
+
+  // Post chat form toggle select visibility & preview trigger
+  const postchatToggle = document.getElementById('postchat-form-toggle');
+  const postchatSelectContainer = document.getElementById('postchat-select-container');
+  if (postchatToggle && postchatSelectContainer) {
+    postchatToggle.addEventListener('change', () => {
+      postchatSelectContainer.style.display = postchatToggle.checked ? 'block' : 'none';
+      if (isFormsTabActive() && postchatToggle.checked && window.FormsPreview) {
+        window.FormsPreview.renderPostChatPreview('preview-scrollable-content');
+      }
+    });
+  }
+
+  // Pre chat form toggle select visibility & preview trigger
+  const prechatToggle = document.getElementById('prechat-form-toggle');
+  const prechatSelectContainer = document.getElementById('prechat-select-container');
+  if (prechatToggle && prechatSelectContainer) {
+    prechatToggle.addEventListener('change', () => {
+      prechatSelectContainer.style.opacity = prechatToggle.checked ? '1' : '0.5';
+      prechatSelectContainer.style.pointerEvents = prechatToggle.checked ? 'auto' : 'none';
+      if (isFormsTabActive() && prechatToggle.checked && window.FormsPreview) {
+        window.FormsPreview.renderPreChatPreview('preview-scrollable-content');
+      }
+    });
+  }
+
+  // Initial render if forms tab is active on page load
+  if (isFormsTabActive() && window.FormsPreview) {
+    const widgetEmbed = document.getElementById('zotly-widget-embed');
+    if (widgetEmbed) widgetEmbed.style.display = 'none';
+    window.FormsPreview.renderPreChatPreview('preview-scrollable-content');
+  }
+
+  // Form builder modal logic
+  const modal = document.getElementById('modal-form-builder');
+  const btnOpen = document.getElementById('btn-open-form-builder');
+  const btnClose = document.getElementById('btn-close-form-builder');
+  const btnCancel = document.getElementById('btn-cancel-form-builder');
+  const btnSave = document.getElementById('btn-save-custom-form');
+
+  if (modal) {
+    const closeModal = () => { modal.style.display = 'none'; };
+    if (btnOpen) btnOpen.addEventListener('click', () => { modal.style.display = 'flex'; });
+    if (btnClose) btnClose.addEventListener('click', closeModal);
+    if (btnCancel) btnCancel.addEventListener('click', closeModal);
+    if (btnSave) {
+      btnSave.addEventListener('click', () => {
+        const formName = document.getElementById('new-form-name')?.value || 'Custom Form';
+        const prechatSelect = document.getElementById('prechat-form-select');
+        if (prechatSelect) {
+          const opt = document.createElement('option');
+          opt.value = `custom-${Date.now()}`;
+          opt.textContent = formName;
+          opt.selected = true;
+          prechatSelect.appendChild(opt);
+        }
+        closeModal();
+        alert(`Form "${formName}" created and assigned to Pre-chat selection!`);
+      });
+    }
+  }
+}
+
+// Run loader on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+  loadAndInitFormsComponent();
+});
+
