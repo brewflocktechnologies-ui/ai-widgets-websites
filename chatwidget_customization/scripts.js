@@ -503,6 +503,10 @@ function setupWelcomeBgPickerListeners() {
     }
   };
 
+  document.getElementById('feature-voice-master')?.addEventListener('change', updateFeatureNestedState);
+  document.getElementById('feature-video-master')?.addEventListener('change', updateFeatureNestedState);
+  updateFeatureNestedState();
+
   // Attach change listeners
   typeSelect.addEventListener('change', () => {
     updateVisibility();
@@ -938,15 +942,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (msgDropdownBar) {
         if (tab.dataset.tab === 'tab-messages') {
           msgDropdownBar.style.display = 'flex';
-          if (window.Alpine && Alpine.store('chat')) {
-            const widgetContainer = document.getElementById('zotly-widget-embed');
-            if (widgetContainer && widgetContainer._x_dataStack && widgetContainer._x_dataStack[0]) {
-              widgetContainer._x_dataStack[0].openContactWidget = true;
-            }
-            Alpine.store('chat').panelOpen = true;
-          }
         } else {
           msgDropdownBar.style.display = 'none';
+        }
+      }
+
+      // Auto open chat panel on Messages and Features tabs so user can see live preview
+      if (tab.dataset.tab === 'tab-messages' || tab.dataset.tab === 'tab-features') {
+        if (window.Alpine && Alpine.store('chat')) {
+          const widgetContainer = document.getElementById('zotly-widget-embed');
+          if (widgetContainer && widgetContainer._x_dataStack && widgetContainer._x_dataStack[0]) {
+            widgetContainer._x_dataStack[0].openContactWidget = true;
+          }
+          Alpine.store('chat').panelOpen = true;
         }
       }
     });
@@ -1230,6 +1238,23 @@ async function selectPreset(presetName) {
 // Populate visual controls from active config object
 function syncConfigToVisualForm(config) {
   if (!config) return;
+
+  if (!config.features) {
+    config.features = {
+      voiceCallMaster: false,
+      voiceCallAgents: false,
+      voiceCallVisitors: false,
+      videoCallMaster: false,
+      videoCallAgents: false,
+      videoCallVisitors: false,
+      disableVisitorCamera: false,
+      closeChatVisitor: false
+    };
+  }
+  if (!config.chatWindow) {
+    config.chatWindow = {};
+  }
+  config.chatWindow.features = config.features;
 
   if (!config.notification) {
     config.notification = {
@@ -1759,6 +1784,7 @@ function setupFormEventListeners() {
       updateAlpineStores(window.cutomizationConfig);
       updateColorPickerStates();
       updateDisabledAccordionStates();
+      if (typeof updateFeatureNestedState === 'function') updateFeatureNestedState();
     };
 
     input.addEventListener('input', handleInput);
@@ -2109,6 +2135,24 @@ function updateAlpineStores(config) {
       Object.assign(chatConfig, chatConfig.dark);
     }
 
+    // Sync features at both top-level and chatWindow level
+    if (!config.features) {
+      config.features = chatConfig.features || {
+        voiceCallMaster: false,
+        voiceCallAgents: false,
+        voiceCallVisitors: false,
+        videoCallMaster: false,
+        videoCallAgents: false,
+        videoCallVisitors: false,
+        disableVisitorCamera: false,
+        closeChatVisitor: false
+      };
+    }
+    chatConfig.features = config.features;
+    if (Alpine.store('features')) {
+      Object.assign(Alpine.store('features'), config.features);
+    }
+
     Object.assign(Alpine.store('chatWindow'), chatConfig);
     if (Alpine.store('chatcontactv2')) {
       Object.assign(Alpine.store('chatcontactv2'), chatConfig);
@@ -2365,6 +2409,31 @@ function toggleFormSectionCard(cardId) {
   const card = document.getElementById(cardId);
   if (card) {
     card.classList.toggle('active');
+  }
+}
+
+// Helper to toggle Key Features card
+function toggleFeaturesCard(cardId) {
+  const card = document.getElementById(cardId);
+  if (card) {
+    card.classList.toggle('collapsed');
+  }
+}
+
+// Update nested options state for Key Features
+function updateFeatureNestedState() {
+  const voiceMaster = document.getElementById('feature-voice-master');
+  const voiceNested = document.getElementById('voice-nested-options');
+  if (voiceMaster && voiceNested) {
+    voiceNested.style.opacity = voiceMaster.checked ? '1' : '0.4';
+    voiceNested.style.pointerEvents = voiceMaster.checked ? 'auto' : 'none';
+  }
+
+  const videoMaster = document.getElementById('feature-video-master');
+  const videoNested = document.getElementById('video-nested-options');
+  if (videoMaster && videoNested) {
+    videoNested.style.opacity = videoMaster.checked ? '1' : '0.4';
+    videoNested.style.pointerEvents = videoMaster.checked ? 'auto' : 'none';
   }
 }
 

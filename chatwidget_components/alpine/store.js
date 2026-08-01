@@ -42,6 +42,19 @@
       Alpine.store('chatcontactv2', Alpine.store('chatWindow'));
     }
 
+    if (!Alpine.store('features')) {
+      Alpine.store('features', {
+        voiceCallMaster: false,
+        voiceCallAgents: false,
+        voiceCallVisitors: false,
+        videoCallMaster: false,
+        videoCallAgents: false,
+        videoCallVisitors: false,
+        disableVisitorCamera: false,
+        closeChatVisitor: false
+      });
+    }
+
     if (!Alpine.store('chat')) {
       window.ZotlyRegisterChatStore({});
     }

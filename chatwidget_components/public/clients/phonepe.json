@@ -1,6 +1,16 @@
 {
   "clientId": "phonepe",
   "clientName": "PhonePe Business Support",
+      "features": {
+    "voiceCallMaster": false,
+    "voiceCallAgents": false,
+    "voiceCallVisitors": false,
+    "videoCallMaster": false,
+    "videoCallAgents": false,
+    "videoCallVisitors": false,
+    "disableVisitorCamera": false,
+    "closeChatVisitor": true
+  },
 
   "messages": [
     {

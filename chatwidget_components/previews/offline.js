@@ -119,7 +119,32 @@
             </div>
           </div>
           <div style="display: flex; gap: 8px; align-items: center; flex-shrink: 0;">
-            <button type="button" class="icon-btn" aria-label="End chat session" :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }" @click="$store.chat.askEndChat()">
+            <!-- Voice Call Header Action Button -->
+            <button type="button" class="icon-btn" aria-label="Start voice call" title="Voice call"
+                    :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.9' }"
+                    x-show="($store.features?.voiceCallMaster || $store.chatWindow.features?.voiceCallMaster) && (($store.features?.voiceCallAgents || $store.chatWindow.features?.voiceCallAgents) || ($store.features?.voiceCallVisitors || $store.chatWindow.features?.voiceCallVisitors))"
+                    @click="alert('Initiating voice call...')">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+            </button>
+
+            <!-- Video Call Header Action Button -->
+            <button type="button" class="icon-btn" aria-label="Start video call" title="Video call"
+                    :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.9' }"
+                    x-show="($store.features?.videoCallMaster || $store.chatWindow.features?.videoCallMaster) && (($store.features?.videoCallAgents || $store.chatWindow.features?.videoCallAgents) || ($store.features?.videoCallVisitors || $store.chatWindow.features?.videoCallVisitors))"
+                    @click="alert('Initiating video call...')">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                <rect x="1" y="5" width="15" height="14" rx="3" ry="3"></rect>
+              </svg>
+            </button>
+
+            <!-- End Chat Session Button (Controlled by closeChatVisitor feature toggle) -->
+            <button type="button" class="icon-btn" aria-label="End chat session" title="End chat"
+                    :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }"
+                    x-show="$store.features?.closeChatVisitor || $store.chatWindow.features?.closeChatVisitor"
+                    @click="$store.chat.askEndChat()">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10" /></svg>
             </button>
             <button type="button" class="icon-btn" aria-label="Chat options" :style="{ color: $store.chatWindow.headerTextColor || '#fff', opacity: '0.7' }" x-show="$store.chat.flag('widget.modernUi', true)" @click="$store.chat.menuOpen = !$store.chat.menuOpen">

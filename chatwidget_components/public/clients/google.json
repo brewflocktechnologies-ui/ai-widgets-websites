@@ -1,6 +1,16 @@
 {
   "clientId": "google",
   "clientName": "Google Cloud Support",
+      "features": {
+    "voiceCallMaster": false,
+    "voiceCallAgents": false,
+    "voiceCallVisitors": false,
+    "videoCallMaster": false,
+    "videoCallAgents": false,
+    "videoCallVisitors": false,
+    "disableVisitorCamera": false,
+    "closeChatVisitor": true
+  },
 
   "messages": [
     {
