@@ -82,6 +82,7 @@ function applyMessagePreview(key) {
   const msg = { key: 'm1', senderType: entry.senderType, body: entry.body || '', created: new Date().toISOString() };
   if (entry.senderType === 'AGENT') msg.senderName = agentName;
   chatStore.messages = [msg];
+  chatStore.state = 'active';
   if (chatStore.hasSentMessage !== undefined) chatStore.hasSentMessage = false;
   setTimeout(() => { try { if (chatStore.scrollDown) chatStore.scrollDown(); } catch (e) {} }, 60);
 }
@@ -947,7 +948,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       }
 
-      // Auto open chat panel on Messages and Features tabs so user can see live preview
+      // Display chat window (active chat view) at first ONLY on Messages and Features tabs
       if (tab.dataset.tab === 'tab-messages' || tab.dataset.tab === 'tab-features') {
         if (window.Alpine && Alpine.store('chat')) {
           const widgetContainer = document.getElementById('zotly-widget-embed');
@@ -955,6 +956,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             widgetContainer._x_dataStack[0].openContactWidget = true;
           }
           Alpine.store('chat').panelOpen = true;
+          Alpine.store('chat').state = 'active';
+        }
+        if (tab.dataset.tab === 'tab-messages') {
+          applyMessagePreview(window.activeMessagePreviewKey || 'welcome');
+        }
+      } else if (tab.dataset.tab !== 'tab-forms' && tab.dataset.tab !== 'tab-notifications') {
+        // Normal tabs (Appearance, Layout, Snippet, Share): work as normal with bubble/chatbar
+        if (window.Alpine && Alpine.store('chat')) {
+          const widgetContainer = document.getElementById('zotly-widget-embed');
+          if (widgetContainer && widgetContainer._x_dataStack && widgetContainer._x_dataStack[0]) {
+            widgetContainer._x_dataStack[0].openContactWidget = false;
+          }
+          Alpine.store('chat').panelOpen = false;
+        }
+        if (Alpine.store('bubble') && window.cutomizationConfig?.bubble) {
+          Alpine.store('bubble').hideOnOpen = window.cutomizationConfig.bubble.hideOnOpen !== false;
+        }
+        if (Alpine.store('chatbar') && window.cutomizationConfig?.chatbar) {
+          Alpine.store('chatbar').hideOnOpen = window.cutomizationConfig.chatbar.hideOnOpen !== false;
         }
       }
     });
@@ -1172,6 +1192,18 @@ async function bootstrapWidgetPreview() {
       window.Alpine.initTree(widgetContainer);
       applyMessagePreview(window.activeMessagePreviewKey || 'welcome');
     });
+  }
+
+  // Auto open chat window active panel if starting on Messages or Features tab
+  const activeTabName = document.querySelector('.nav-tab.active')?.dataset.tab;
+  if (activeTabName === 'tab-messages' || activeTabName === 'tab-features') {
+    if (window.Alpine && Alpine.store('chat')) {
+      if (widgetContainer._x_dataStack && widgetContainer._x_dataStack[0]) {
+        widgetContainer._x_dataStack[0].openContactWidget = true;
+      }
+      Alpine.store('chat').panelOpen = true;
+      Alpine.store('chat').state = 'active';
+    }
   }
 }
 
