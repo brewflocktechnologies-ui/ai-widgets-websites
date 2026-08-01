@@ -33,6 +33,86 @@ function setValueByPath(obj, path, value) {
   current[lastPart] = value;
 }
 
+/* ==========================================================================
+   MESSAGE PRESETS (Messages tab -> chat window preview)
+   ========================================================================== */
+const MSG_LABELS = { welcome: 'Welcome', queueing: 'Queueing', waiting: 'Waiting', busy: 'Busy', offline: 'Offline' };
+const MSG_DEFAULTS = [
+  { key: 'welcome', senderType: 'AGENT', body: 'Welcome! How can we assist you today?' },
+  { key: 'queueing', senderType: 'SYSTEM', body: 'You are currently in queue. An agent will be with you shortly.' },
+  { key: 'waiting', senderType: 'SYSTEM', body: 'Connecting your chat request... Please stay on this page.' },
+  { key: 'busy', senderType: 'SYSTEM', body: "All of our agents are currently engaged. Please hold on, and we'll connect you shortly." },
+  { key: 'offline', senderType: 'SYSTEM', body: "We are currently offline. Please leave us a message and we'll get back to you soon." }
+];
+
+// Normalize config.messages into an array of { key, senderType, body }, migrating the legacy object form
+function getMessagesConfig() {
+  const cfg = window.cutomizationConfig;
+  if (!cfg) return [];
+  let arr = Array.isArray(cfg.messages) ? cfg.messages : null;
+  if (!arr) {
+    const legacy = cfg.messages && typeof cfg.messages === 'object' ? cfg.messages : null;
+    arr = MSG_DEFAULTS.map(d => {
+      const l = legacy ? legacy[d.key] : undefined;
+      return { key: d.key, senderType: d.senderType, body: (l !== undefined && l !== null) ? l : d.body };
+    });
+    cfg.messages = arr;
+  }
+  MSG_DEFAULTS.forEach(d => {
+    if (!arr.some(m => m && m.key === d.key)) {
+      arr.push({ key: d.key, senderType: d.senderType, body: d.body });
+    }
+  });
+  return arr;
+}
+
+// Show a single selected message config at the top of the chat window preview
+function applyMessagePreview(key) {
+  if (!window.Alpine) return;
+  const arr = getMessagesConfig();
+  const entry = arr.find(m => m && m.key === key) || arr.find(m => m && m.key === 'welcome') || arr[0];
+  if (!entry) return;
+  window.activeMessagePreviewKey = entry.key;
+  const chatStore = Alpine.store('chat');
+  if (!chatStore) return;
+  const dropdown = document.getElementById('msg-preview-select');
+  if (dropdown && dropdown.value !== entry.key) dropdown.value = entry.key;
+  const chatConfig = window.cutomizationConfig || {};
+  const agentName = (chatConfig.chatWindow && chatConfig.chatWindow.agentName) || chatStore.agentName || 'Sarah';
+  const msg = { key: 'm1', senderType: entry.senderType, body: entry.body || '', created: new Date().toISOString() };
+  if (entry.senderType === 'AGENT') msg.senderName = agentName;
+  chatStore.messages = [msg];
+  if (chatStore.hasSentMessage !== undefined) chatStore.hasSentMessage = false;
+  setTimeout(() => { try { if (chatStore.scrollDown) chatStore.scrollDown(); } catch (e) {} }, 60);
+}
+
+// Fill the Messages-tab textareas from the config messages array
+function syncMessageTextareas() {
+  const arr = getMessagesConfig();
+  document.querySelectorAll('.msg-textarea[data-msg-key]').forEach(ta => {
+    const entry = arr.find(m => m && m.key === ta.dataset.msgKey);
+    if (!entry) return;
+    ta.value = entry.body || '';
+    const body = ta.closest('.msg-accordion-body');
+    const counter = body ? body.querySelector('.msg-char-counter .current-count') : null;
+    if (counter) counter.textContent = ta.value.length;
+  });
+}
+
+// Populate the preview dropdown and wire up switching
+function setupMessagePreviewControls() {
+  const dropdown = document.getElementById('msg-preview-select');
+  if (!dropdown) return;
+  const arr = getMessagesConfig();
+  dropdown.innerHTML = arr.map(m => {
+    const label = MSG_LABELS[m.key] || m.key;
+    const hint = m.senderType === 'AGENT' ? 'Agent' : 'Centered';
+    return '<option value="' + m.key + '">' + label + ' (' + hint + ')</option>';
+  }).join('');
+  dropdown.addEventListener('change', () => applyMessagePreview(dropdown.value));
+  applyMessagePreview(window.activeMessagePreviewKey || 'welcome');
+}
+
 // Parse CSS padding/margin shorthand strings to numeric top, right, bottom, left components
 function parsePaddingString(str) {
   if (!str || typeof str !== 'string') {
@@ -631,6 +711,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Watch for visual form input changes
   setupFormEventListeners();
 
+  // Messages-tab preview dropdown (switch which message shows in the chat window)
+  setupMessagePreviewControls();
+
   // Watch for raw JSON changes
   setupJsonEditorEventListeners();
 
@@ -883,6 +966,7 @@ async function bootstrapWidgetPreview() {
       await window.ZotlyInitStores();
       updateAlpineStores(window.cutomizationConfig);
       window.Alpine.initTree(widgetContainer);
+      applyMessagePreview(window.activeMessagePreviewKey || 'welcome');
     });
   }
 }
@@ -1160,6 +1244,9 @@ function syncConfigToVisualForm(config) {
     }
   }
 
+  // Sync Messages-tab textareas from the config messages array
+  syncMessageTextareas();
+
   updateColorPickerStates();
   updateDisabledAccordionStates();
 }
@@ -1361,6 +1448,22 @@ function updateColorPickerStates() {
 
 // Form Event Listeners (Sync form input edits back to config and Alpine)
 function setupFormEventListeners() {
+  // Messages-tab textareas write into the config.messages array
+  document.querySelectorAll('.msg-textarea[data-msg-key]').forEach(input => {
+    const handleMsgInput = () => {
+      const key = input.dataset.msgKey;
+      const entry = getMessagesConfig().find(m => m && m.key === key);
+      if (entry) entry.body = input.value;
+      const jsonTextarea = document.getElementById('raw-json-textarea');
+      if (jsonTextarea) jsonTextarea.value = JSON.stringify(window.cutomizationConfig, null, 2);
+      if (window.activeMessagePreviewKey === key) {
+        applyMessagePreview(key);
+      }
+    };
+    input.addEventListener('input', handleMsgInput);
+    input.addEventListener('change', handleMsgInput);
+  });
+
   document.querySelectorAll('[data-path]').forEach(input => {
     const handleInput = () => {
       const path = input.dataset.path;
@@ -1771,7 +1874,7 @@ function updateAlpineStores(config) {
       if (chatConfig.clientName) chatStore.clientName = chatConfig.clientName;
       if (chatConfig.agentName) {
         chatStore.agentName = chatConfig.agentName;
-        if (chatStore.messages && chatStore.messages[0]) { chatStore.messages[0].senderName = chatConfig.agentName; }
+        if (chatStore.messages && chatStore.messages[0] && chatStore.messages[0].senderType === 'AGENT') { chatStore.messages[0].senderName = chatConfig.agentName; }
       }
       
       // Dynamically switch active view to welcome or active based on checkbox toggle if user hasn't sent messages
@@ -1820,10 +1923,7 @@ function restartChatSession() {
     chatStore.state = window.cutomizationConfig.chatWindow?.welcome?.enabled ? 'welcome' : 'active';
     chatStore.hasSentMessage = false;
     chatStore.panelOpen = false;
-    chatStore.messages = [
-      { key: 'm1', senderType: 'AGENT', senderName: window.cutomizationConfig.chatWindow?.agentName || 'Sarah', body: 'Hi! How can I help you today?', created: new Date(Date.now() - 300000).toISOString() },
-      { key: 'm2', senderType: 'VISITOR', body: 'I need help with my order', created: new Date(Date.now() - 240000).toISOString(), status: 'read' }
-    ];
+    applyMessagePreview(window.activeMessagePreviewKey || 'welcome');
     window.dispatchEvent(new CustomEvent('close-contact-widget'));
     retriggerGreetCard();
   }

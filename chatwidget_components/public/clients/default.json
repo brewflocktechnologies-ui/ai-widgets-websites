@@ -2,8 +2,36 @@
   "clientId": "amber",
   "clientName": "Vortex Studio Amber",
 
+  "messages": [
+    {
+      "key": "welcome",
+      "senderType": "AGENT",
+      "body": "Welcome! How can we assist you today?"
+    },
+    {
+      "key": "queueing",
+      "senderType": "SYSTEM",
+      "body": "You are currently in queue. An agent will be with you shortly."
+    },
+    {
+      "key": "waiting",
+      "senderType": "SYSTEM",
+      "body": "Connecting your chat request... Please stay on this page."
+    },
+    {
+      "key": "busy",
+      "senderType": "SYSTEM",
+      "body": "All of our agents are currently engaged. Please hold on, and we'll connect you shortly."
+    },
+    {
+      "key": "offline",
+      "senderType": "SYSTEM",
+      "body": "We are currently offline. Please leave us a message and we'll get back to you soon."
+    }
+  ],
+
     "greetWindow": {
-    "enabled": false,
+    "enabled": true,
     "openingTimeAfterInitialLoadSec": 2.0,
     "animationOpeningSec": 0.5,
     "animationClosingSec": 0.3,
@@ -77,8 +105,8 @@
     "backgroundOverlayType": "none",
     "backgroundLucideColor": "#FFFFFF",
     "backgroundLucideSize": 24,
-    "backgroundLucideOpacity": 0.2,
-    "backgroundLucideIcon": "Star",
+    "backgroundLucideOpacity": 1,
+    "backgroundLucideIcon": "MessageCircle",
     "backgroundImageUrl": "",
     "backgroundImageSize": "contain",
     "backgroundImageOpacity": 0.25,
@@ -314,7 +342,7 @@
     "poweredByColor": "#d97706",
     "poweredByLogo": "",
     "welcome": {
-      "enabled": false,
+      "enabled": true,
       "useWebsiteTheme": true,
       "cardLayout": "glassy",
       "cardAlign": "center",

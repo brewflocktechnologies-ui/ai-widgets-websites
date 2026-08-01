@@ -3613,6 +3613,26 @@
 
       <!-- TAB: CUSTOM MESSAGES -->
       <div class="tab-content" id="tab-messages">
+        <div class="msg-preview-selector">
+          <div class="msg-preview-header">
+            <div class="msg-header-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </div>
+            <div class="msg-header-text">
+              <div class="msg-title">Chat Window Preview</div>
+              <div class="msg-desc">Pick a message to show at the top of the chat window. Welcome appears as the agent's greeting; the other messages are centered notices.</div>
+            </div>
+          </div>
+          <select id="msg-preview-select" class="msg-preview-select">
+            <option value="welcome">Welcome (Agent)</option>
+            <option value="queueing">Queueing (Centered)</option>
+            <option value="waiting">Waiting (Centered)</option>
+            <option value="busy">Busy (Centered)</option>
+            <option value="offline">Offline (Centered)</option>
+          </select>
+        </div>
         <div class="msg-accordion-container">
           <!-- 1. Welcome Message -->
           <div class="msg-accordion-card">
@@ -3638,7 +3658,7 @@
             <div class="msg-accordion-collapse">
               <div class="msg-accordion-body">
                 <div class="msg-input-box-wrapper">
-                  <textarea class="msg-textarea" data-path="messages.welcome" maxlength="1000" rows="3" placeholder="Set your custom Welcome message...">Welcome! How can we assist you today?</textarea>
+                  <textarea class="msg-textarea" data-msg-key="welcome" maxlength="1000" rows="3" placeholder="Set your custom Welcome message...">Welcome! How can we assist you today?</textarea>
                   <div class="msg-box-toolbar">
                     <button type="button" class="msg-tool-btn msg-tool-type" title="Formatting">T</button>
                     <span class="msg-char-counter"><span class="current-count">36</span>/1000</span>
@@ -3682,7 +3702,7 @@
             <div class="msg-accordion-collapse">
               <div class="msg-accordion-body">
                 <div class="msg-input-box-wrapper">
-                  <textarea class="msg-textarea" data-path="messages.queueing" maxlength="1000" rows="3" placeholder="Set your custom queueing message...">You are currently in queue. An agent will be with you shortly.</textarea>
+                  <textarea class="msg-textarea" data-msg-key="queueing" maxlength="1000" rows="3" placeholder="Set your custom queueing message...">You are currently in queue. An agent will be with you shortly.</textarea>
                   <div class="msg-box-toolbar">
                     <button type="button" class="msg-tool-btn msg-tool-type" title="Formatting">T</button>
                     <span class="msg-char-counter"><span class="current-count">61</span>/1000</span>
@@ -3727,7 +3747,7 @@
             <div class="msg-accordion-collapse">
               <div class="msg-accordion-body">
                 <div class="msg-input-box-wrapper">
-                  <textarea class="msg-textarea" data-path="messages.waiting" maxlength="1000" rows="3" placeholder="Set your custom waiting message...">Connecting your chat request... Please stay on this page.</textarea>
+                  <textarea class="msg-textarea" data-msg-key="waiting" maxlength="1000" rows="3" placeholder="Set your custom waiting message...">Connecting your chat request... Please stay on this page.</textarea>
                   <div class="msg-box-toolbar">
                     <button type="button" class="msg-tool-btn msg-tool-type" title="Formatting">T</button>
                     <span class="msg-char-counter"><span class="current-count">58</span>/1000</span>
@@ -3769,7 +3789,7 @@
             <div class="msg-accordion-collapse">
               <div class="msg-accordion-body">
                 <div class="msg-input-box-wrapper">
-                  <textarea class="msg-textarea" data-path="messages.busy" maxlength="1000" rows="3" placeholder="Set your custom busy message...">All of our agents are currently engaged. Please hold on, and we'll connect you shortly.</textarea>
+                  <textarea class="msg-textarea" data-msg-key="busy" maxlength="1000" rows="3" placeholder="Set your custom busy message...">All of our agents are currently engaged. Please hold on, and we'll connect you shortly.</textarea>
                   <div class="msg-box-toolbar">
                     <button type="button" class="msg-tool-btn msg-tool-type" title="Formatting">T</button>
                     <span class="msg-char-counter"><span class="current-count">87</span>/1000</span>
@@ -3812,7 +3832,7 @@
             <div class="msg-accordion-collapse">
               <div class="msg-accordion-body">
                 <div class="msg-input-box-wrapper">
-                  <textarea class="msg-textarea" data-path="messages.offline" maxlength="1000" rows="3" placeholder="Set your offline message...">We are currently offline. Please leave us a message and we'll get back to you soon.</textarea>
+                  <textarea class="msg-textarea" data-msg-key="offline" maxlength="1000" rows="3" placeholder="Set your offline message...">We are currently offline. Please leave us a message and we'll get back to you soon.</textarea>
                   <div class="msg-box-toolbar">
                     <button type="button" class="msg-tool-btn msg-tool-type" title="Formatting">T</button>
                     <span class="msg-char-counter"><span class="current-count">83</span>/1000</span>
