@@ -901,7 +901,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                   </div>
                 </div>
                 <div class="notif-preview-content">
-                  <h3 class="notif-preview-title" id="notif-preview-title">Notifications Headscassascer</h3>
+                  <h3 class="notif-preview-title" id="notif-preview-title">Notifications Head</h3>
                   <p class="notif-preview-desc" id="notif-preview-desc">Would you like to receive notifications on latest updates?</p>
                   <div class="notif-preview-actions">
                     <button type="button" class="notif-btn-cancel" id="notif-preview-cancel-btn">Not Yet</button>
@@ -966,15 +966,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // --- COPY SHARE LINK BUTTON ---
   document.getElementById('btn-copy-share')?.addEventListener('click', () => {
-    const inp = document.getElementById('share-link-input');
-    if (inp) {
-      inp.select();
-      document.execCommand('copy');
-      const btn = document.getElementById('btn-copy-share');
-      const oldText = btn.textContent;
-      btn.textContent = 'Copied!';
-      setTimeout(() => { btn.textContent = oldText; }, 2000);
-    }
+    const shareUrl = document.getElementById('share-link-input')?.value || 'https://brewflocktechnologies-ui.github.io/ai-widgets-websites/clientwebsites/site-amber.html';
+    const btnText = document.querySelector('#btn-copy-share .btn-copy-text');
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      if (btnText) {
+        const oldText = btnText.textContent;
+        btnText.textContent = 'Copied!';
+        setTimeout(() => { btnText.textContent = oldText; }, 2000);
+      }
+    }).catch(() => {
+      const inp = document.getElementById('share-link-input');
+      if (inp) {
+        inp.select();
+        document.execCommand('copy');
+      }
+      if (btnText) {
+        const oldText = btnText.textContent;
+        btnText.textContent = 'Copied!';
+        setTimeout(() => { btnText.textContent = oldText; }, 2000);
+      }
+    });
   });
 
   // --- PREVIEW ZOOM & AUTO-RESPONSIVE FIT CONTROLS ---
@@ -1199,7 +1210,7 @@ function syncConfigToVisualForm(config) {
       enabled: true,
       icon: "building",
       iconUrl: "",
-      headline: "Notifications Headscassascer",
+      headline: "Notifications Head",
       description: "Would you like to receive notifications on latest updates?",
       approveText: "OK",
       cancelText: "Not Yet",
@@ -1278,6 +1289,14 @@ function syncConfigToVisualForm(config) {
   }
 
   triggerNotifPreviewUpdate();
+
+  // Sync Share by Link URL
+  const presetName = config.clientId || 'amber';
+  const shareUrl = `https://brewflocktechnologies-ui.github.io/ai-widgets-websites/clientwebsites/site-${presetName}.html`;
+  const shareInput = document.getElementById('share-link-input');
+  const shareText = document.getElementById('share-link-url-text');
+  if (shareInput) shareInput.value = shareUrl;
+  if (shareText) shareText.textContent = shareUrl;
 
   // Sync padding-grids
   document.querySelectorAll('.padding-grid[data-padding-path]').forEach(grid => {

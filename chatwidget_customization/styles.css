@@ -3057,5 +3057,63 @@ input:checked+.slider::before {
   background: #0046d5;
 }
 
+/* Share by Link Card */
+.share-by-link-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.share-card-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.share-card-sub {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.share-url-text {
+  font-family: 'Inter', monospace, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+  word-break: break-all;
+  margin-top: 6px;
+  padding: 4px 0;
+  user-select: all;
+}
+
+.btn-green-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background: #00a651;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 166, 81, 0.2);
+  transition: all 0.2s ease;
+}
+
+.btn-green-copy:hover {
+  background: #008f45;
+  transform: translateY(-1px);
+}
+
+.btn-green-copy:active {
+  transform: translateY(0);
+}
+
 
 

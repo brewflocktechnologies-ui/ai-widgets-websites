@@ -4122,17 +4122,24 @@
 
       <!-- TAB: QUICK SHARE -->
       <div class="tab-content" id="tab-share">
-        <div class="settings-header">
-          <h2>Quick Share</h2>
-        </div>
-        <div class="section-card">
-          <p class="tab-placeholder">Share widget preview link with your team.</p>
-          <div class="field-group">
-            <label>Share Link</label>
-            <input type="text" readonly value="https://yourdomain.com/widget-preview?client=default" id="share-link-input">
+        <div class="section-card share-by-link-card">
+          <div class="share-card-header">
+            <h3 class="share-card-title">Share by Link</h3>
+            <p class="share-card-sub">Copy and Share this link directly to your user to initiate chatting.</p>
           </div>
-          <div class="field-row">
-            <button class="btn-primary" id="btn-copy-share">Copy Link</button>
+          <div class="form-divider" style="margin: 18px 0 16px 0;"></div>
+          <div class="share-link-body">
+            <div class="share-url-text" id="share-link-url-text">https://brewflocktechnologies-ui.github.io/ai-widgets-websites/clientwebsites/site-amber.html</div>
+            <input type="hidden" id="share-link-input" value="https://brewflocktechnologies-ui.github.io/ai-widgets-websites/clientwebsites/site-amber.html">
+            <div style="margin-top: 16px;">
+              <button type="button" class="btn-green-copy" id="btn-copy-share">
+                <span class="btn-copy-text">Copy Code</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -4183,7 +4190,7 @@
                 <div class="notif-form-group" style="margin-top: 20px;">
                   <label class="notif-label-title" for="notif-headline-input">Headline</label>
                   <div class="input-with-counter-wrapper">
-                    <input type="text" id="notif-headline-input" class="form-text-input" value="Notifications Headscassascer" maxlength="30" data-path="notification.headline" oninput="updateNotifCounter(this, 'headline-counter'); triggerNotifPreviewUpdate();">
+                    <input type="text" id="notif-headline-input" class="form-text-input" value="Notifications Head" maxlength="30" data-path="notification.headline" oninput="updateNotifCounter(this, 'headline-counter'); triggerNotifPreviewUpdate();">
                     <span class="char-count-indicator" id="headline-counter">28/30</span>
                   </div>
                 </div>
