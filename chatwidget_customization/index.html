@@ -172,6 +172,21 @@
 
       <!-- TAB: APPEARANCE -->
       <div class="tab-content active" id="tab-appearance">
+        <!-- Sticky Section & Widget Breadcrumb Header -->
+        <div class="sticky-section-indicator" id="sticky-appearance-breadcrumb">
+          <div class="indicator-icon">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2 2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </div>
+          <span class="indicator-main-title" id="breadcrumb-main-title">Floating Greet Card Details</span>
+          <svg class="indicator-separator" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+          <span class="indicator-sub-title" id="breadcrumb-sub-title">Timing & Display Behavior</span>
+        </div>
+
         <div class="settings-header">
           <h2>Appearance Settings</h2>
           <div class="tab-switch">
@@ -3963,6 +3978,45 @@
                 </div>
               </div>
 
+            </div>
+          </div>
+
+          <!-- 2. OTHER FEATURES CARD -->
+          <div class="features-card" id="card-other-features" style="margin-top: 16px;">
+            <!-- Accordion Header -->
+            <div class="features-card-header" onclick="toggleFeaturesCard('card-other-features')">
+              <div class="features-card-title">Other Features</div>
+              <div class="features-card-chevron">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="features-card-body">
+              <div class="feature-block">
+                <div class="feature-name" style="font-size: 15px; font-weight: 700; color: #0f172a;">Queueing</div>
+                <div class="feature-desc" style="font-size: 13px; color: #64748b; margin-top: 3px; margin-bottom: 20px;">
+                  In case of high website traffic, provide information to the visitors regarding their waiting time in the chat queue
+                </div>
+
+                <div class="features-input-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+                  <span class="input-row-label" style="font-size: 14px; font-weight: 600; color: #1e293b;">Average Queue Time</span>
+                  <div class="input-with-unit" style="display: flex; align-items: center; gap: 8px;">
+                    <input type="number" min="1" max="120" data-path="features.averageQueueTime" value="1" class="form-input-number" style="width: 72px; height: 38px; padding: 0 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-weight: 600; color: #0f172a; text-align: center; font-family: inherit;">
+                    <span style="font-size: 13px; color: #64748b; font-weight: 500;">minute(s)</span>
+                  </div>
+                </div>
+
+                <div class="features-input-row" style="display: flex; align-items: center; justify-content: space-between;">
+                  <span class="input-row-label" style="font-size: 14px; font-weight: 600; color: #1e293b;">Chat Acceptance Time</span>
+                  <div class="input-with-unit" style="display: flex; align-items: center; gap: 8px;">
+                    <input type="number" min="1" max="120" data-path="features.chatAcceptanceTime" value="5" class="form-input-number" style="width: 72px; height: 38px; padding: 0 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-weight: 600; color: #0f172a; text-align: center; font-family: inherit;">
+                    <span style="font-size: 13px; color: #64748b; font-weight: 500;">minute(s)</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -293,6 +293,82 @@ button {
   padding: 20px 24px 24px;
 }
 
+/* STICKY BREADCRUMB HEADER INDICATOR */
+.sticky-section-indicator {
+  position: sticky;
+  top: -20px;
+  z-index: 999;
+  margin-left: -24px;
+  margin-right: -24px;
+  margin-top: -20px;
+  margin-bottom: 0;
+  padding: 0 24px;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: none;
+  transition: height 0.25s ease, opacity 0.2s ease, padding 0.25s ease, margin-bottom 0.25s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.sticky-section-indicator.is-scrolled {
+  height: 42px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  padding: 10px 24px;
+  margin-bottom: 16px;
+  border-bottom-color: rgba(226, 232, 240, 0.85);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+.dark .sticky-section-indicator.is-scrolled {
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom-color: rgba(51, 65, 85, 0.85);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.indicator-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent, #0b5fff);
+  flex-shrink: 0;
+}
+
+.indicator-main-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+}
+
+.dark .indicator-main-title {
+  color: #f8fafc;
+}
+
+.indicator-separator {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.indicator-sub-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent, #0b5fff);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .preview-panel {
   width: 40%;
   min-width: 300px;

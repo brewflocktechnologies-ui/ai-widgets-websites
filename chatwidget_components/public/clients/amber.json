@@ -9,7 +9,9 @@
     "videoCallAgents": false,
     "videoCallVisitors": false,
     "disableVisitorCamera": false,
-    "closeChatVisitor": true
+        "closeChatVisitor": true,
+    "averageQueueTime": 1,
+    "chatAcceptanceTime": 5
   },
 
   "messages": [

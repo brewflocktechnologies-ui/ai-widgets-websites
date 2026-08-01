@@ -865,6 +865,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Host Page Theme controls
   setupHostPageThemeControls();
 
+  // Initialize Sticky Section Breadcrumb Tracker
+  initStickyBreadcrumbTracker();
+
   // Variable to cache the original host website mockup HTML
   let originalHostWebsiteHTML = '';
 
@@ -1280,7 +1283,9 @@ function syncConfigToVisualForm(config) {
       videoCallAgents: false,
       videoCallVisitors: false,
       disableVisitorCamera: false,
-      closeChatVisitor: false
+      closeChatVisitor: false,
+      averageQueueTime: 1,
+      chatAcceptanceTime: 5
     };
   }
   if (!config.chatWindow) {
@@ -2177,7 +2182,9 @@ function updateAlpineStores(config) {
         videoCallAgents: false,
         videoCallVisitors: false,
         disableVisitorCamera: false,
-        closeChatVisitor: false
+        closeChatVisitor: false,
+        averageQueueTime: 1,
+        chatAcceptanceTime: 5
       };
     }
     chatConfig.features = config.features;
@@ -2301,6 +2308,96 @@ function setupHostPageThemeControls() {
       updateColorPickerStates();
     });
   }
+}
+
+// Live Sticky Header Breadcrumb Tracker on Settings Panel Scroll
+function initStickyBreadcrumbTracker() {
+  const panel = document.getElementById('settings-panel');
+  if (!panel) return;
+
+  const mainTitleEl = document.getElementById('breadcrumb-main-title');
+  const subTitleEl = document.getElementById('breadcrumb-sub-title');
+  if (!mainTitleEl || !subTitleEl) return;
+
+  let ticking = false;
+
+  function updateBreadcrumbs() {
+    const activeTab = document.querySelector('.tab-content.active');
+    if (!activeTab) return;
+
+    // Get all sections and cards in active tab
+    const sections = activeTab.querySelectorAll('.accordion-section, .features-card, .section-card, .form-section-card');
+    if (!sections.length) return;
+
+    const panelRect = panel.getBoundingClientRect();
+    let currentMain = '';
+    let currentSub = '';
+
+    sections.forEach(sec => {
+      const rect = sec.getBoundingClientRect();
+      // Check if section top is near top of panel
+      if (rect.top - panelRect.top <= 140 && rect.bottom - panelRect.top > 40) {
+        if (sec.classList.contains('accordion-section')) {
+          const mainTitle = sec.querySelector('.accordion-title')?.textContent?.trim();
+          if (mainTitle) currentMain = mainTitle.replace(/^[^\w\s]+/, '').trim(); // Strip emoji
+          
+          // Check for sub section card inside accordion
+          const subCards = sec.querySelectorAll('.form-section-card');
+          subCards.forEach(sub => {
+            const subRect = sub.getBoundingClientRect();
+            if (subRect.top - panelRect.top <= 180 && subRect.bottom - panelRect.top > 50) {
+              const subTitle = sub.querySelector('.form-section-title')?.textContent?.trim();
+              if (subTitle) currentSub = subTitle;
+            }
+          });
+        } else if (sec.classList.contains('features-card')) {
+          const mainTitle = sec.querySelector('.features-card-title')?.textContent?.trim();
+          if (mainTitle) currentMain = mainTitle;
+          const subTitle = sec.querySelector('.feature-name')?.textContent?.trim();
+          if (subTitle) currentSub = subTitle;
+        } else if (sec.classList.contains('section-card')) {
+          const mainTitle = sec.querySelector('.section-card-header')?.textContent?.trim();
+          if (mainTitle) currentMain = mainTitle;
+        }
+      }
+    });
+
+    const indicator = document.getElementById('sticky-appearance-breadcrumb');
+    if (indicator) {
+      if (panel.scrollTop > 30) {
+        indicator.classList.add('is-scrolled');
+      } else {
+        indicator.classList.remove('is-scrolled');
+      }
+    }
+
+    if (currentMain) {
+      if (mainTitleEl.textContent !== currentMain) mainTitleEl.textContent = currentMain;
+      if (currentSub) {
+        if (subTitleEl.textContent !== currentSub) subTitleEl.textContent = currentSub;
+        subTitleEl.style.display = 'inline';
+        const sep = document.querySelector('.indicator-separator');
+        if (sep) sep.style.display = 'inline';
+      } else {
+        subTitleEl.style.display = 'none';
+        const sep = document.querySelector('.indicator-separator');
+        if (sep) sep.style.display = 'none';
+      }
+    }
+  }
+
+  panel.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        updateBreadcrumbs();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  // Run initial check
+  updateBreadcrumbs();
 }
 
 // Custom handler for visual color-picker stops updating bubble/chatbar configuration arrays

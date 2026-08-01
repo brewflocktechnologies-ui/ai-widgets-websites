@@ -51,7 +51,9 @@
         videoCallAgents: false,
         videoCallVisitors: false,
         disableVisitorCamera: false,
-        closeChatVisitor: false
+        closeChatVisitor: false,
+        averageQueueTime: 1,
+        chatAcceptanceTime: 5
       });
     }
 
