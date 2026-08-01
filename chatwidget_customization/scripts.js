@@ -36,7 +36,7 @@ function setValueByPath(obj, path, value) {
 /* ==========================================================================
    MESSAGE PRESETS (Messages tab -> chat window preview)
    ========================================================================== */
-const MSG_LABELS = { welcome: 'Welcome', queueing: 'Queueing', waiting: 'Waiting', busy: 'Busy', offline: 'Offline' };
+const MSG_LABELS = { welcome: 'Greeting', queueing: 'Queueing', waiting: 'Waiting', busy: 'Busy', offline: 'Offline' };
 const MSG_DEFAULTS = [
   { key: 'welcome', senderType: 'AGENT', body: 'Welcome! How can we assist you today?' },
   { key: 'queueing', senderType: 'SYSTEM', body: 'You are currently in queue. An agent will be with you shortly.' },
@@ -232,10 +232,19 @@ function setupMessagePreviewControls() {
   const arr = getMessagesConfig();
   dropdown.innerHTML = arr.map(m => {
     const label = MSG_LABELS[m.key] || m.key;
-    const hint = m.senderType === 'AGENT' ? 'Agent' : 'Centered';
-    return '<option value="' + m.key + '">' + label + ' (' + hint + ')</option>';
+    return '<option value="' + m.key + '">' + label + '</option>';
   }).join('');
-  dropdown.addEventListener('change', () => applyMessagePreview(dropdown.value));
+  dropdown.addEventListener('change', () => {
+    applyMessagePreview(dropdown.value);
+    // Ensure chat window panel is open when user changes dropdown selection
+    if (window.Alpine && Alpine.store('chat')) {
+      const widgetContainer = document.getElementById('zotly-widget-embed');
+      if (widgetContainer && widgetContainer._x_dataStack && widgetContainer._x_dataStack[0]) {
+        widgetContainer._x_dataStack[0].openContactWidget = true;
+      }
+      Alpine.store('chat').panelOpen = true;
+    }
+  });
   applyMessagePreview(window.activeMessagePreviewKey || 'welcome');
 }
 
@@ -921,6 +930,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Restore normal host website content on all other tabs
         if (previewContent && originalHostWebsiteHTML) {
           previewContent.innerHTML = originalHostWebsiteHTML;
+        }
+      }
+
+      // Handle visibility of minimal message preview dropdown inside preview container
+      const msgDropdownBar = document.getElementById('preview-msg-dropdown-bar');
+      if (msgDropdownBar) {
+        if (tab.dataset.tab === 'tab-messages') {
+          msgDropdownBar.style.display = 'flex';
+          if (window.Alpine && Alpine.store('chat')) {
+            const widgetContainer = document.getElementById('zotly-widget-embed');
+            if (widgetContainer && widgetContainer._x_dataStack && widgetContainer._x_dataStack[0]) {
+              widgetContainer._x_dataStack[0].openContactWidget = true;
+            }
+            Alpine.store('chat').panelOpen = true;
+          }
+        } else {
+          msgDropdownBar.style.display = 'none';
         }
       }
     });

@@ -3613,25 +3613,8 @@
 
       <!-- TAB: CUSTOM MESSAGES -->
       <div class="tab-content" id="tab-messages">
-        <div class="msg-preview-selector">
-          <div class="msg-preview-header">
-            <div class="msg-header-icon">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-            </div>
-            <div class="msg-header-text">
-              <div class="msg-title">Chat Window Preview</div>
-              <div class="msg-desc">Pick a message to show at the top of the chat window. Welcome appears as the agent's greeting; the other messages are centered notices.</div>
-            </div>
-          </div>
-          <select id="msg-preview-select" class="msg-preview-select">
-            <option value="welcome">Welcome (Agent)</option>
-            <option value="queueing">Queueing (Centered)</option>
-            <option value="waiting">Waiting (Centered)</option>
-            <option value="busy">Busy (Centered)</option>
-            <option value="offline">Offline (Centered)</option>
-          </select>
+        <div class="settings-header">
+          <h2>Custom Messages</h2>
         </div>
         <div class="msg-accordion-container">
           <!-- 1. Welcome Message -->
@@ -4392,6 +4375,17 @@
     <!-- RIGHT: LIVE PREVIEW -->
     <main class="preview-panel">
       <div class="preview-viewport-container">
+        <!-- Minimal Message Preview Dropdown in Preview Container -->
+        <div class="preview-msg-dropdown-bar" id="preview-msg-dropdown-bar" style="display: none;">
+          <select id="msg-preview-select" class="msg-preview-select-minimal">
+            <option value="welcome">Greeting</option>
+            <option value="queueing">Queueing</option>
+            <option value="waiting">Waiting</option>
+            <option value="busy">Busy</option>
+            <option value="offline">Offline</option>
+          </select>
+        </div>
+
         <div class="preview-viewport" id="preview-viewport-wrapper">
           <!-- Mock Browser Chrome Top Bar -->
           <div class="mock-browser-chrome">

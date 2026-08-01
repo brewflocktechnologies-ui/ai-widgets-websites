@@ -2181,6 +2181,47 @@ input:checked+.slider::before {
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
 }
 
+/* Minimal Message Preview Dropdown in Preview Container */
+.preview-msg-dropdown-bar {
+  position: absolute;
+  top: 48px;
+  left: 16px;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+}
+
+.msg-preview-select-minimal {
+  appearance: auto;
+  -webkit-appearance: auto;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f172a;
+  padding: 4px 10px;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.15s ease;
+}
+
+.msg-preview-select-minimal:hover {
+  border-color: #94a3b8;
+}
+
+.msg-preview-select-minimal:focus {
+  border-color: #6366f1;
+}
+
+.msg-preview-select-minimal option {
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 500;
+}
+
 .msg-accordion-card {
   background: #ffffff;
   border: 1px solid #eaecf0;
