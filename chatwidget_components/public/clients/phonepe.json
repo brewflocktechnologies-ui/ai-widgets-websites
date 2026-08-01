@@ -384,5 +384,20 @@
     "stackGap": 0,
     "padding": "24px 16px",
     "gap": 12
+  },
+  "notification": {
+    "enabled": true,
+    "icon": "building",
+    "iconUrl": "",
+    "headline": "Notifications Headscassascer",
+    "description": "Would you like to receive notifications on latest updates?",
+    "approveText": "OK",
+    "cancelText": "Not Yet",
+    "delayValue": 5,
+    "delayUnit": "Seconds",
+    "promptStyle": "box2",
+    "animationStyle": "drop-in",
+    "position": "top",
+    "repromptDelay": 1
   }
 }

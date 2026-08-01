@@ -4139,32 +4139,245 @@
 
       <!-- TAB: NOTIFICATIONS -->
       <div class="tab-content" id="tab-notifications">
-        <div class="settings-header">
-          <h2>Notifications</h2>
-        </div>
-        <div class="section-card">
-          <p class="tab-placeholder">Configure notification preferences for incoming messages.</p>
-          <div class="toggle-row">
-            <span class="toggle-label">Sound Alerts</span>
-            <label class="switch">
-              <input type="checkbox" checked>
-              <span class="slider"></span>
-            </label>
+        <div class="msg-accordion-container">
+          
+          <!-- 1. CUSTOMIZE NOTIFICATION CARD -->
+          <div class="msg-accordion-card active" id="card-customize-notification">
+            <div class="msg-accordion-header" onclick="toggleNotifCard('card-customize-notification')">
+              <div class="msg-header-text">
+                <div class="msg-title" style="font-weight: 700; color: #0f172a;">Customize Notification</div>
+              </div>
+              <div class="msg-chevron-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </div>
+            <div class="msg-accordion-collapse">
+              <div class="msg-accordion-body" style="padding: 20px;">
+                
+                <!-- UPLOAD ICON SECTION -->
+                <div class="notif-form-group">
+                  <label class="notif-label-title">Upload Icon</label>
+                  <p class="notif-sub-desc">Supported formats: JPG, PNG, SVG. Icon size: 60 × 60 px or 1:1 ratio. Max file size: 2 MB</p>
+                  <div class="notif-icon-picker-row">
+                    <label class="notif-upload-box" title="Upload custom icon">
+                      <input type="file" id="notif-icon-file-input" accept="image/*" style="display:none;" onchange="handleNotifIconUpload(this)">
+                      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0b5fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+                        <path d="M12 12v9"></path>
+                        <path d="m16 16-4-4-4 4"></path>
+                      </svg>
+                    </label>
+                    <div class="notif-preset-icon-box active" onclick="selectNotifPresetIcon('building')" id="notif-icon-building">
+                      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#94a3b8" stroke-width="1.5">
+                        <rect x="4" y="2" width="10" height="20" rx="1"></rect>
+                        <path d="M14 10h6a1 1 0 0 1 1 1v11H14"></path>
+                        <path d="M7 6h1M10 6h1M7 10h1M10 10h1M7 14h1M10 14h1M7 18h1M10 18h1"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- HEADLINE FIELD -->
+                <div class="notif-form-group" style="margin-top: 20px;">
+                  <label class="notif-label-title" for="notif-headline-input">Headline</label>
+                  <div class="input-with-counter-wrapper">
+                    <input type="text" id="notif-headline-input" class="form-text-input" value="Notifications Headscassascer" maxlength="30" data-path="notification.headline" oninput="updateNotifCounter(this, 'headline-counter'); triggerNotifPreviewUpdate();">
+                    <span class="char-count-indicator" id="headline-counter">28/30</span>
+                  </div>
+                </div>
+
+                <!-- DESCRIPTION FIELD -->
+                <div class="notif-form-group" style="margin-top: 24px;">
+                  <label class="notif-label-title" for="notif-desc-input">Description</label>
+                  <div class="input-with-counter-wrapper">
+                    <input type="text" id="notif-desc-input" class="form-text-input" value="Would you like to receive notifications on latest updates?" maxlength="60" data-path="notification.description" oninput="updateNotifCounter(this, 'desc-counter'); triggerNotifPreviewUpdate();">
+                    <span class="char-count-indicator" id="desc-counter">58/60</span>
+                  </div>
+                </div>
+
+                <!-- APPROVE BUTTON TEXT FIELD -->
+                <div class="notif-form-group" style="margin-top: 24px;">
+                  <label class="notif-label-title" for="notif-approve-btn-input">Approve Button Text</label>
+                  <div class="input-with-counter-wrapper">
+                    <input type="text" id="notif-approve-btn-input" class="form-text-input" value="OK" maxlength="10" data-path="notification.approveText" oninput="updateNotifCounter(this, 'approve-counter'); triggerNotifPreviewUpdate();">
+                    <span class="char-count-indicator" id="approve-counter">2/10</span>
+                  </div>
+                </div>
+
+                <!-- CANCEL BUTTON TEXT FIELD -->
+                <div class="notif-form-group" style="margin-top: 24px;">
+                  <label class="notif-label-title" for="notif-cancel-btn-input">Cancel Button Text</label>
+                  <div class="input-with-counter-wrapper">
+                    <input type="text" id="notif-cancel-btn-input" class="form-text-input" value="Not Yet" maxlength="10" data-path="notification.cancelText" oninput="updateNotifCounter(this, 'cancel-counter'); triggerNotifPreviewUpdate();">
+                    <span class="char-count-indicator" id="cancel-counter">7/10</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
           </div>
-          <div class="toggle-row">
-            <span class="toggle-label">Unread Badge</span>
-            <label class="switch">
-              <input type="checkbox" checked>
-              <span class="slider"></span>
-            </label>
+
+          <!-- 2. NOTIFICATION SETTINGS CARD -->
+          <div class="msg-accordion-card active" id="card-notification-settings" style="margin-top: 16px;">
+            <div class="msg-accordion-header" onclick="toggleNotifCard('card-notification-settings')">
+              <div class="msg-header-text">
+                <div class="msg-title" style="font-weight: 700; color: #0f172a;">Notification Settings</div>
+              </div>
+              <div class="msg-chevron-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </div>
+            <div class="msg-accordion-collapse">
+              <div class="msg-accordion-body" style="padding: 20px;">
+
+                <!-- NOTIFICATION PERMISSION -->
+                <div class="notif-form-group">
+                  <div class="toggle-row-clean" style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                      <div class="notif-label-title">Notification Permission</div>
+                      <p class="notif-sub-desc">Web push notifications won't work if this permission is turned off</p>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" id="notif-permission-toggle" checked data-path="notification.enabled" onchange="triggerNotifPreviewUpdate()">
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-divider" style="margin: 20px 0;"></div>
+
+                <!-- WHEN TO SHOW -->
+                <div class="notif-form-group">
+                  <label class="notif-label-title">When to show</label>
+                  <div class="notif-stepper-row" style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                    <span style="font-size: 13px; color: #475569; font-weight: 500;">After</span>
+                    <div class="stepper-input-container">
+                      <button type="button" class="stepper-btn" onclick="adjustNotifStepper('notif-show-delay-val', -1)">-</button>
+                      <input type="number" id="notif-show-delay-val" class="stepper-val-input" value="5" min="1" max="999" data-path="notification.delayValue" onchange="triggerNotifPreviewUpdate()">
+                      <button type="button" class="stepper-btn" onclick="adjustNotifStepper('notif-show-delay-val', 1)">+</button>
+                    </div>
+                    <div class="select-wrapper-clean">
+                      <select class="form-control-select" id="notif-delay-unit-select" data-path="notification.delayUnit" onchange="triggerNotifPreviewUpdate()">
+                        <option value="Seconds" selected>Seconds</option>
+                        <option value="Page Visits">Page Visits</option>
+                        <option value="Minutes">Minutes</option>
+                      </select>
+                      <div class="select-arrow-icon">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-divider" style="margin: 20px 0;"></div>
+
+                <!-- PROMPT STYLE -->
+                <div class="notif-form-group">
+                  <label class="notif-label-title">Prompt Style</label>
+                  <div class="notif-prompt-style-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px;">
+                    
+                    <!-- BOX 1 (HORIZONTAL) -->
+                    <div class="notif-style-card" id="style-card-box1" onclick="selectNotifPromptStyle('box1')">
+                      <div class="style-card-thumb">
+                        <div class="thumb-box1-inner">
+                          <div class="thumb-icon-side"></div>
+                          <div class="thumb-lines-side">
+                            <div class="thumb-line w-80"></div>
+                            <div class="thumb-line w-50"></div>
+                            <div class="thumb-btn-row">
+                              <div class="thumb-mini-btn btn-cancel"></div>
+                              <div class="thumb-mini-btn btn-ok"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="style-card-radio-label">
+                        <input type="radio" name="promptStyle" id="radio-style-box1" value="box1" onchange="triggerNotifPreviewUpdate()">
+                        <label for="radio-style-box1">Notification box 1</label>
+                      </div>
+                    </div>
+
+                    <!-- BOX 2 (VERTICAL CENTERED - DEFAULT SELECTED) -->
+                    <div class="notif-style-card active" id="style-card-box2" onclick="selectNotifPromptStyle('box2')">
+                      <div class="style-card-thumb">
+                        <div class="thumb-box2-inner">
+                          <div class="thumb-icon-center"></div>
+                          <div class="thumb-line w-70 center"></div>
+                          <div class="thumb-line w-90 center"></div>
+                          <div class="thumb-btn-row center">
+                            <div class="thumb-mini-btn btn-cancel"></div>
+                            <div class="thumb-mini-btn btn-ok"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="style-card-radio-label">
+                        <input type="radio" name="promptStyle" id="radio-style-box2" value="box2" checked onchange="triggerNotifPreviewUpdate()">
+                        <label for="radio-style-box2">Notification box 2</label>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="form-divider" style="margin: 20px 0;"></div>
+
+                <!-- ANIMATION STYLE -->
+                <div class="notif-form-group">
+                  <label class="notif-label-title">Animation Style</label>
+                  <div class="radio-options-row" style="display: flex; gap: 24px; margin-top: 8px;">
+                    <label class="radio-label-clean">
+                      <input type="radio" name="notifAnimation" value="drop-in" checked onchange="triggerNotifPreviewUpdate()">
+                      <span>Drop-in</span>
+                    </label>
+                    <label class="radio-label-clean">
+                      <input type="radio" name="notifAnimation" value="slide-in" onchange="triggerNotifPreviewUpdate()">
+                      <span>Slide-in</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-divider" style="margin: 20px 0;"></div>
+
+                <!-- POSITION -->
+                <div class="notif-form-group">
+                  <label class="notif-label-title">Position</label>
+                  <p class="notif-sub-desc">Choose the ideal spot for the prompt to maximize visibility.</p>
+                  <div class="radio-options-row" style="display: flex; gap: 24px; margin-top: 8px;">
+                    <label class="radio-label-clean">
+                      <input type="radio" name="notifPosition" value="top" checked onchange="triggerNotifPreviewUpdate()">
+                      <span>Top of the page</span>
+                    </label>
+                    <label class="radio-label-clean">
+                      <input type="radio" name="notifPosition" value="center" onchange="triggerNotifPreviewUpdate()">
+                      <span>Center of the page</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-divider" style="margin: 20px 0;"></div>
+
+                <!-- RE-PROMPT DELAY -->
+                <div class="notif-form-group">
+                  <label class="notif-label-title">Re-prompt Delay</label>
+                  <p class="notif-sub-desc">The number of days to wait before the custom prompt is re-shown to users who have previously dismissed it. We recommend 1 day.</p>
+                  <div class="notif-stepper-row" style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                    <div class="stepper-input-container">
+                      <button type="button" class="stepper-btn" onclick="adjustNotifStepper('notif-reprompt-delay-val', -1)">-</button>
+                      <input type="number" id="notif-reprompt-delay-val" class="stepper-val-input" value="1" min="0" max="365" data-path="notification.repromptDelay" onchange="triggerNotifPreviewUpdate()">
+                      <button type="button" class="stepper-btn" onclick="adjustNotifStepper('notif-reprompt-delay-val', 1)">+</button>
+                    </div>
+                    <span style="font-size: 13px; color: #475569; font-weight: 500;">days</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
           </div>
-          <div class="toggle-row">
-            <span class="toggle-label">Desktop Notifications</span>
-            <label class="switch">
-              <input type="checkbox">
-              <span class="slider"></span>
-            </label>
-          </div>
+
         </div>
       </div>
     </aside>

@@ -86,6 +86,132 @@ function applyMessagePreview(key) {
   setTimeout(() => { try { if (chatStore.scrollDown) chatStore.scrollDown(); } catch (e) {} }, 60);
 }
 
+/* ==========================================================================
+   NOTIFICATION TAB MANAGEMENT & LIVE PREVIEW HELPERS
+   ========================================================================== */
+function toggleNotifCard(cardId) {
+  const card = document.getElementById(cardId);
+  if (card) {
+    card.classList.toggle('active');
+  }
+}
+
+function updateNotifCounter(inputEl, counterId) {
+  const counterEl = document.getElementById(counterId);
+  if (inputEl && counterEl) {
+    const max = inputEl.getAttribute('maxlength') || 30;
+    counterEl.textContent = `${inputEl.value.length}/${max}`;
+  }
+}
+
+function adjustNotifStepper(inputId, delta) {
+  const input = document.getElementById(inputId);
+  if (input) {
+    let current = parseInt(input.value) || 0;
+    const min = parseInt(input.getAttribute('min')) || 0;
+    const max = parseInt(input.getAttribute('max')) || 999;
+    current = Math.max(min, Math.min(max, current + delta));
+    input.value = current;
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+}
+
+function selectNotifPromptStyle(styleKey) {
+  document.querySelectorAll('.notif-style-card').forEach(c => c.classList.remove('active'));
+  const targetCard = document.getElementById(`style-card-${styleKey}`);
+  if (targetCard) targetCard.classList.add('active');
+  
+  const radio = document.getElementById(`radio-style-${styleKey}`);
+  if (radio) {
+    radio.checked = true;
+    radio.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+}
+
+function selectNotifPresetIcon(iconType) {
+  window.customNotifUploadedIcon = null;
+  document.querySelectorAll('.notif-preset-icon-box').forEach(b => b.classList.remove('active'));
+  const target = document.getElementById(`notif-icon-${iconType}`);
+  if (target) target.classList.add('active');
+  triggerNotifPreviewUpdate();
+}
+
+function handleNotifIconUpload(fileInput) {
+  if (fileInput.files && fileInput.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      window.customNotifUploadedIcon = e.target.result;
+      document.querySelectorAll('.notif-preset-icon-box').forEach(b => b.classList.remove('active'));
+      triggerNotifPreviewUpdate();
+    };
+    reader.readAsDataURL(fileInput.files[0]);
+  }
+}
+
+function triggerNotifPreviewUpdate() {
+  const notifTabActive = document.querySelector('.nav-tab[data-tab="tab-notifications"]')?.classList.contains('active');
+  if (!notifTabActive) return;
+
+  const headline = document.getElementById('notif-headline-input')?.value || 'Notifications';
+  const desc = document.getElementById('notif-desc-input')?.value || 'Would you like to receive notifications on latest updates?';
+  const approveText = document.getElementById('notif-approve-btn-input')?.value || 'OK';
+  const cancelText = document.getElementById('notif-cancel-btn-input')?.value || 'Not Yet';
+  const style = document.querySelector('input[name="promptStyle"]:checked')?.value || 'box2';
+  const position = document.querySelector('input[name="notifPosition"]:checked')?.value || 'top';
+  const enabled = document.getElementById('notif-permission-toggle')?.checked !== false;
+
+  const notifCard = document.getElementById('notif-preview-card');
+  const titleEl = document.getElementById('notif-preview-title');
+  const descEl = document.getElementById('notif-preview-desc');
+  const approveBtn = document.getElementById('notif-preview-approve-btn');
+  const cancelBtn = document.getElementById('notif-preview-cancel-btn');
+  const imgIcon = document.getElementById('notif-preview-img-icon');
+  const svgIcon = document.getElementById('notif-preview-svg-icon');
+  const overlay = document.getElementById('notif-preview-overlay');
+
+  if (titleEl) titleEl.textContent = headline;
+  if (descEl) descEl.textContent = desc;
+  if (approveBtn) approveBtn.textContent = approveText;
+  if (cancelBtn) cancelBtn.textContent = cancelText;
+
+  if (notifCard) {
+    if (!enabled) {
+      notifCard.style.opacity = '0.3';
+    } else {
+      notifCard.style.opacity = '1';
+    }
+    
+    if (style === 'box1') {
+      notifCard.className = 'notif-preview-card box-1';
+    } else {
+      notifCard.className = 'notif-preview-card box-2';
+    }
+  }
+
+  if (overlay) {
+    if (position === 'center') {
+      overlay.style.justifyContent = 'center';
+      overlay.style.paddingTop = '30px';
+    } else {
+      overlay.style.justifyContent = 'flex-start';
+      overlay.style.paddingTop = '60px';
+    }
+  }
+
+  if (window.customNotifUploadedIcon && imgIcon && svgIcon) {
+    imgIcon.src = window.customNotifUploadedIcon;
+    imgIcon.style.display = 'block';
+    imgIcon.style.width = '48px';
+    imgIcon.style.height = '48px';
+    imgIcon.style.borderRadius = '12px';
+    imgIcon.style.objectFit = 'cover';
+    svgIcon.style.display = 'none';
+  } else if (imgIcon && svgIcon) {
+    imgIcon.style.display = 'none';
+    svgIcon.style.display = 'block';
+  }
+}
+
 // Fill the Messages-tab textareas from the config messages array
 function syncMessageTextareas() {
   const arr = getMessagesConfig();
@@ -754,6 +880,39 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (window.FormsPreview && previewContent) {
           window.FormsPreview.renderPreChatPreview('preview-scrollable-content');
         }
+      } else if (tab.dataset.tab === 'tab-notifications') {
+        // Hide chat widget overlay on Notifications tab
+        if (widgetEmbed) {
+          widgetEmbed.style.display = 'none';
+        }
+        // Render Notification prompt preview inside preview area
+        if (previewContent) {
+          previewContent.innerHTML = `
+            <div class="notif-preview-overlay" id="notif-preview-overlay">
+              <div class="notif-preview-card box-2" id="notif-preview-card">
+                <div class="notif-preview-icon-wrapper">
+                  <img id="notif-preview-img-icon" src="" style="display:none;" />
+                  <div id="notif-preview-svg-icon">
+                    <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="#94a3b8" stroke-width="1.3">
+                      <rect x="4" y="2" width="10" height="20" rx="1"></rect>
+                      <path d="M14 10h6a1 1 0 0 1 1 1v11H14"></path>
+                      <path d="M7 6h1M10 6h1M7 10h1M10 10h1M7 14h1M10 14h1M7 18h1M10 18h1"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="notif-preview-content">
+                  <h3 class="notif-preview-title" id="notif-preview-title">Notifications Headscassascer</h3>
+                  <p class="notif-preview-desc" id="notif-preview-desc">Would you like to receive notifications on latest updates?</p>
+                  <div class="notif-preview-actions">
+                    <button type="button" class="notif-btn-cancel" id="notif-preview-cancel-btn">Not Yet</button>
+                    <button type="button" class="notif-btn-ok" id="notif-preview-approve-btn">OK</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          triggerNotifPreviewUpdate();
+        }
       } else {
         // Show chat widget overlay on all other tabs
         if (widgetEmbed) {
@@ -1033,6 +1192,26 @@ async function selectPreset(presetName) {
 
 // Populate visual controls from active config object
 function syncConfigToVisualForm(config) {
+  if (!config) return;
+
+  if (!config.notification) {
+    config.notification = {
+      enabled: true,
+      icon: "building",
+      iconUrl: "",
+      headline: "Notifications Headscassascer",
+      description: "Would you like to receive notifications on latest updates?",
+      approveText: "OK",
+      cancelText: "Not Yet",
+      delayValue: 5,
+      delayUnit: "Seconds",
+      promptStyle: "box2",
+      animationStyle: "drop-in",
+      position: "top",
+      repromptDelay: 1
+    };
+  }
+
   document.querySelectorAll('[data-path]').forEach(input => {
     const path = input.dataset.path;
     let val = getValueByPath(config, path);
@@ -1077,6 +1256,28 @@ function syncConfigToVisualForm(config) {
       }
     }
   });
+
+  // Sync notification character counters & style radio options
+  const notifHeadline = document.getElementById('notif-headline-input');
+  if (notifHeadline) updateNotifCounter(notifHeadline, 'headline-counter');
+  const notifDesc = document.getElementById('notif-desc-input');
+  if (notifDesc) updateNotifCounter(notifDesc, 'desc-counter');
+  const notifApprove = document.getElementById('notif-approve-btn-input');
+  if (notifApprove) updateNotifCounter(notifApprove, 'approve-counter');
+  const notifCancel = document.getElementById('notif-cancel-btn-input');
+  if (notifCancel) updateNotifCounter(notifCancel, 'cancel-counter');
+
+  if (config.notification) {
+    const styleKey = config.notification.promptStyle || 'box2';
+    selectNotifPromptStyle(styleKey);
+
+    const animRadio = document.querySelector(`input[name="notifAnimation"][value="${config.notification.animationStyle || 'drop-in'}"]`);
+    if (animRadio) animRadio.checked = true;
+    const posRadio = document.querySelector(`input[name="notifPosition"][value="${config.notification.position || 'top'}"]`);
+    if (posRadio) posRadio.checked = true;
+  }
+
+  triggerNotifPreviewUpdate();
 
   // Sync padding-grids
   document.querySelectorAll('.padding-grid[data-padding-path]').forEach(grid => {
