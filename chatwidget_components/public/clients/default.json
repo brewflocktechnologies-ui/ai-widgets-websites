@@ -60,7 +60,7 @@
     "descriptionColor": "#475569",
     "descriptionFontSize": "14px",
     "inputBox": {
-      "enabled": false,
+      "enabled": true,
       "openingTimeAfterInitialLoadSec": 4.0,
       "animationOpeningSec": 0.5,
       "layout":"separated",      
