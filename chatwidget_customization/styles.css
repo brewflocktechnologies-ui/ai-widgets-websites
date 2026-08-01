@@ -81,7 +81,7 @@ button {
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 10000;
 }
 
 .header-left {
@@ -167,7 +167,7 @@ button {
   flex-shrink: 0;
   width: 100%;
   position: relative;
-  z-index: 100;
+  z-index: 10000;
 }
 
 .nav-left-section {
@@ -1918,7 +1918,7 @@ input:checked+.slider::before {
   height: 100vh;
   background: rgba(15, 23, 42, 0.45);
   backdrop-filter: blur(4px);
-  z-index: 9999;
+  z-index: 20000;
   display: flex;
   align-items: center;
   justify-content: center;
