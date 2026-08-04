@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { ChatWindowState, FeaturesState, chatStore, chatWindowStore, featuresStore, subscribeAll } from '../../store/chat-store.js';
+import type { ChatWindowState, FeaturesState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
 import '../atoms/cw-avatar.js';
 
@@ -12,18 +12,7 @@ export class CwChatHeader extends LitElement {
   @property({ type: String }) clientName = 'Support';
   @property({ type: String }) agentName = 'Sarah';
   @property({ type: String }) state = 'active';
-
-  private unsub?: () => void;
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.unsub = subscribeAll(() => this.requestUpdate());
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.unsub?.();
-  }
+  @property({ type: Number }) rev = 0;
 
   static styles = [
     GLOBAL_STYLES,
@@ -88,33 +77,34 @@ export class CwChatHeader extends LitElement {
     `
   ];
 
+  private emit(name: string) {
+    this.dispatchEvent(new CustomEvent(name, { bubbles: true, composed: true }));
+  }
+
   private toggleExpand() {
-    chatStore.toggleExpand();
+    this.emit('cw:toggle-expand');
   }
 
   private toggleMenu() {
-    chatStore.get().menuOpen = !chatStore.get().menuOpen;
-    chatStore.get();
+    this.emit('cw:open-menu');
   }
 
   private closePanel() {
-    chatStore.closePanel();
-    window.dispatchEvent(new CustomEvent('close-contact-widget'));
+    this.emit('cw:close-panel');
   }
 
   private askEndChat() {
-    chatStore.askEndChat();
+    this.emit('cw:end-chat');
   }
 
   render() {
-    const cs = chatStore.get();
-    const currentState = this.state || cs.state;
+    const currentState = this.state || 'active';
 
     // In welcome mode, header is hidden
     if (currentState === 'welcome') return html``;
 
-    const cw = (this.config && Object.keys(this.config).length > 0) ? this.config : chatWindowStore.get();
-    const feats = (this.features && Object.keys(this.features).length > 0) ? this.features : featuresStore.get();
+    const cw = this.config || {};
+    const feats = this.features || {};
     const headerTextColor = cw.headerTextColor || '#ffffff';
 
     const showVoice = (feats.voiceCallMaster || cw.features?.voiceCallMaster) &&
@@ -125,8 +115,8 @@ export class CwChatHeader extends LitElement {
 
     const showCloseSession = feats.closeChatVisitor || cw.features?.closeChatVisitor;
 
-    const currentAgentName = this.agentName || cw.agentName || cs.agentName;
-    const currentClientName = this.clientName || cw.clientName || cs.clientName || 'Support';
+    const currentAgentName = this.agentName || cw.agentName || '';
+    const currentClientName = this.clientName || cw.clientName || 'Support';
 
     const subtitleText = currentState === 'active'
       ? currentAgentName ? `${currentAgentName} · Online` : 'Online'

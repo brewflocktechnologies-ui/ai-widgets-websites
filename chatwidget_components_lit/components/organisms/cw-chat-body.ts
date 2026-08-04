@@ -1,31 +1,30 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import { ChatState, ChatWindowState, chatStore, chatWindowStore, subscribe } from '../../store/chat-store.js';
+import { customElement, property, state } from 'lit/decorators.js';
+import type { ChatState, ChatWindowState, Message } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
 import '../molecules/cw-welcome-card.js';
 import '../molecules/cw-message-bubble.js';
 import '../molecules/cw-composer.js';
 import '../atoms/cw-typing-dots.js';
 
+/**
+ * cw-chat-body
+ * Pure presentational organism. Reads state via props and pushes ALL user
+ * actions up as composed CustomEvents (`cw:*`). Never touches the store.
+ * A `rev` (revision) prop from the container guarantees re-render when the
+ * store mutates config objects in place.
+ */
 @customElement('cw-chat-body')
 export class CwChatBody extends LitElement {
   @property({ type: Object }) chatState!: ChatState;
   @property({ type: Object }) chatWindowConfig!: ChatWindowState;
+  @property({ type: Number }) rev = 0;
 
-  private unsub?: () => void;
+  @state() private offlineName = '';
+  @state() private offlineEmail = '';
+  @state() private offlineMessage = '';
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.unsub = subscribe('store:chat', () => {
-      this.requestUpdate();
-      this.scrollToBottom();
-    });
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.unsub?.();
-  }
+  private lastCount = -1;
 
   static styles = [
     GLOBAL_STYLES,
@@ -292,6 +291,22 @@ export class CwChatBody extends LitElement {
     `
   ];
 
+  private emit(name: string, detail?: unknown) {
+    this.dispatchEvent(
+      new CustomEvent(name, { detail, bubbles: true, composed: true })
+    );
+  }
+
+  updated(changed: Map<string, unknown>) {
+    if (changed.has('rev') && this.chatState) {
+      const count = this.chatState.messages?.length || 0;
+      if (count !== this.lastCount) {
+        this.lastCount = count;
+        this.scrollToBottom();
+      }
+    }
+  }
+
   private scrollToBottom() {
     setTimeout(() => {
       const el = this.shadowRoot?.querySelector('.messages-area');
@@ -299,17 +314,28 @@ export class CwChatBody extends LitElement {
     }, 50);
   }
 
-  private handleDraftChange(e: CustomEvent<string>) {
-    chatStore.get().draft = e.detail;
+  private flag(key: string, def = true): boolean {
+    const f = this.chatState?.flags || {};
+    return f[key] !== undefined ? f[key] : def;
   }
 
-  private handleSendMessage(e: CustomEvent<string>) {
-    chatStore.send();
+  private groupStart(i: number, msgs: Message[]): boolean {
+    return i === 0 || msgs[i].senderType !== msgs[i - 1].senderType;
+  }
+
+  private groupEnd(i: number, msgs: Message[]): boolean {
+    return i === msgs.length - 1 || msgs[i].senderType !== msgs[i + 1].senderType;
+  }
+
+  private handleFileSelect(e: Event) {
+    this.emit('cw:attach-files', e.target);
   }
 
   render() {
-    const cs = this.chatState || chatStore.get();
-    const cw = this.chatWindowConfig || chatWindowStore.get();
+    const cs = this.chatState;
+    const cw = this.chatWindowConfig;
+
+    if (!cs || !cw) return html``;
 
     const isWelcome = cs.state === 'welcome';
     const isBoot = cs.state === 'boot';
@@ -319,6 +345,8 @@ export class CwChatBody extends LitElement {
     const isQueued = cs.state === 'queued';
     const isActive = cs.state === 'active';
     const isClosed = cs.state === 'closed';
+
+    const msgs = cs.messages || [];
 
     return html`
       <div
@@ -351,7 +379,7 @@ export class CwChatBody extends LitElement {
                 </div>
                 <h2>Hi there 👋</h2>
                 <p class="muted">Tell us who you are and we'll connect you with an agent right away.</p>
-                <form @submit="${(e: Event) => { e.preventDefault(); cs.state = 'active'; chatStore.get().state = 'active'; this.requestUpdate(); }}">
+                <form @submit="${(e: Event) => { e.preventDefault(); this.emit('cw:start-chat'); }}">
                   <label>Name</label>
                   <input required maxlength="120" placeholder="Your name" />
                   <label>Email</label>
@@ -375,14 +403,14 @@ export class CwChatBody extends LitElement {
                 </div>
                 <h2>We're not around right now</h2>
                 <p class="muted">Our agents are offline. Leave your details and a message — we'll pick it up the moment someone is back.</p>
-                <form @submit="${(e: Event) => { e.preventDefault(); chatStore.submitOffline(); }}">
+                <form @submit="${(e: Event) => { e.preventDefault(); this.emit('cw:submit-offline', { name: this.offlineName, email: this.offlineEmail, message: this.offlineMessage }); }}">
                   <label>Name</label>
                   <input
                     required
                     maxlength="120"
                     placeholder="Your name"
-                    .value="${cs.offlineName}"
-                    @input="${(e: Event) => (cs.offlineName = (e.target as HTMLInputElement).value)}"
+                    .value="${this.offlineName}"
+                    @input="${(e: Event) => (this.offlineName = (e.target as HTMLInputElement).value)}"
                   />
                   <label>Email</label>
                   <input
@@ -390,8 +418,8 @@ export class CwChatBody extends LitElement {
                     required
                     maxlength="160"
                     placeholder="you@example.com"
-                    .value="${cs.offlineEmail}"
-                    @input="${(e: Event) => (cs.offlineEmail = (e.target as HTMLInputElement).value)}"
+                    .value="${this.offlineEmail}"
+                    @input="${(e: Event) => (this.offlineEmail = (e.target as HTMLInputElement).value)}"
                   />
                   <label>Message</label>
                   <textarea
@@ -400,8 +428,8 @@ export class CwChatBody extends LitElement {
                     required
                     maxlength="4000"
                     placeholder="How can we help?"
-                    .value="${cs.offlineMessage}"
-                    @input="${(e: Event) => (cs.offlineMessage = (e.target as HTMLTextAreaElement).value)}"
+                    .value="${this.offlineMessage}"
+                    @input="${(e: Event) => (this.offlineMessage = (e.target as HTMLTextAreaElement).value)}"
                   ></textarea>
                   <button type="submit" class="primary" ?disabled="${cs.offlineSending}">
                     ${cs.offlineSending ? 'Sending…' : 'Leave message'}
@@ -424,7 +452,7 @@ export class CwChatBody extends LitElement {
                   </div>
                   <h2>Message received</h2>
                   <p class="muted">
-                    Thanks${cs.offlineName ? `, ${cs.offlineName}` : ''}! We've saved your message and will reply to <strong>${cs.offlineEmail}</strong> as soon as an agent is back.
+                    Thanks${this.offlineName ? `, ${this.offlineName}` : ''}! We've saved your message and will reply to <strong>${this.offlineEmail}</strong> as soon as an agent is back.
                   </p>
                 </div>
               </div>
@@ -450,13 +478,20 @@ export class CwChatBody extends LitElement {
         ${isActive || isClosed
           ? html`
               <div class="messages-area" style="background: ${cw.bodyBg || 'var(--cw-bg)'}">
-                ${cs.messages.map((m, i) => {
-                  const showDivider = chatStore.dividerBefore(i);
-                  const isGroupEnd = chatStore.groupEnd(i);
-                  const isGroupStart = chatStore.groupStart(i);
+                <input
+                  type="file"
+                  id="cw-file-input"
+                  accept="image/png,image/jpeg,image/gif,image/webp"
+                  style="display: none"
+                  @change="${this.handleFileSelect}"
+                />
+                ${msgs.map((m, i) => {
+                  const showDivider = i === 0;
+                  const isGroupEnd = this.groupEnd(i, msgs);
+                  const isGroupStart = this.groupStart(i, msgs);
 
                   return html`
-                    ${showDivider ? html`<div class="day-divider">${chatStore.dayLabel()}</div>` : ''}
+                    ${showDivider ? html`<div class="day-divider">Today</div>` : ''}
 
                     <cw-message-bubble
                       .message="${m}"
@@ -468,7 +503,7 @@ export class CwChatBody extends LitElement {
                   `;
                 })}
 
-                ${cs.typingName && chatStore.flag('chat.typingIndicator', true)
+                ${cs.typingName && this.flag('chat.typingIndicator', true)
                   ? html`
                       <div class="bubble-row from-agent g-start g-end" style="margin-top: 4px">
                         <div class="bubble typing-bubble">
@@ -482,11 +517,11 @@ export class CwChatBody extends LitElement {
               </div>
 
               <!-- CONSENT BANNER -->
-              ${isActive && !cs.consentDismissed && chatStore.flag('widget.modernUi', true)
+              ${isActive && !cs.consentDismissed && this.flag('widget.modernUi', true)
                 ? html`
                     <div class="consent">
                       <p>By chatting here you agree this conversation may be processed and recorded to provide support.</p>
-                      <button type="button" class="consent-x" aria-label="Dismiss" @click="${() => chatStore.dismissConsent()}">✕</button>
+                      <button type="button" class="consent-x" aria-label="Dismiss" @click="${() => this.emit('cw:dismiss-consent')}">✕</button>
                     </div>
                   `
                 : ''
@@ -496,7 +531,7 @@ export class CwChatBody extends LitElement {
               ${cs.attachOpen
                 ? html`
                     <div class="attach-pop">
-                      <button type="button" class="menu-item" @click="${() => { cs.attachOpen = false; this.shadowRoot?.querySelector<HTMLInputElement>('#cw-file-input')?.click(); }}">
+                      <button type="button" class="menu-item" @click="${() => { this.shadowRoot?.querySelector<HTMLInputElement>('#cw-file-input')?.click(); }}">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                           <rect x="3" y="5" width="18" height="14" rx="2" />
                           <circle cx="8.5" cy="10" r="1.5" />
@@ -504,7 +539,7 @@ export class CwChatBody extends LitElement {
                         </svg>
                         Send an image
                       </button>
-                      <button type="button" class="menu-item" @click="${() => chatStore.captureScreenshot()}">
+                      <button type="button" class="menu-item" @click="${() => this.emit('cw:capture-screenshot')}">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                           <path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2" />
                           <circle cx="12" cy="12" r="3" />
@@ -520,13 +555,13 @@ export class CwChatBody extends LitElement {
               ${cs.menuOpen
                 ? html`
                     <div class="menu-pop">
-                      <button type="button" class="menu-item" @click="${() => chatStore.downloadTranscript()}">
+                      <button type="button" class="menu-item" @click="${() => this.emit('cw:download-transcript')}">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                           <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
                         </svg>
                         Download transcript
                       </button>
-                      <button type="button" class="menu-item" @click="${() => chatStore.toggleSounds()}">
+                      <button type="button" class="menu-item" @click="${() => this.emit('cw:toggle-sounds')}">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                           <path d="M11 5L6 9H3v6h3l5 4V5zM16 9a4 4 0 010 6" />
                         </svg>
@@ -543,7 +578,7 @@ export class CwChatBody extends LitElement {
                     <div class="emoji-row">
                       ${['😀','😂','😊','😍','👍','👎','🙏','🎉','❤️','😢','😮','👌'].map(
                         (e) => html`
-                          <button type="button" class="emoji-btn" @click="${() => { cs.draft += e; this.requestUpdate(); }}">${e}</button>
+                          <button type="button" class="emoji-btn" @click="${() => this.emit('cw:insert-emoji', e)}">${e}</button>
                         `
                       )}
                     </div>
@@ -556,21 +591,18 @@ export class CwChatBody extends LitElement {
                 ? html`
                     <cw-composer
                       .config="${cw}"
-                      .draft="${cs.draft}"
-                      .attachmentsEnabled="${chatStore.flag('attachments.enabled', true)}"
-                      .modernUi="${chatStore.flag('widget.modernUi', true)}"
+                      .draft="${cs.draft || ''}"
+                      .attachmentsEnabled="${this.flag('attachments.enabled', true)}"
+                      .modernUi="${this.flag('widget.modernUi', true)}"
                       .uploading="${cs.uploading}"
-                      @draft-change="${this.handleDraftChange}"
-                      @send-message="${this.handleSendMessage}"
-                      @toggle-attach="${() => { cs.attachOpen = !cs.attachOpen; cs.emojiOpen = false; this.requestUpdate(); }}"
-                      @toggle-emoji="${() => { cs.emojiOpen = !cs.emojiOpen; cs.attachOpen = false; this.requestUpdate(); }}"
+                      .rev="${this.rev}"
                     ></cw-composer>
 
                     <div
                       class="panel-footer"
                       style="padding-bottom: ${cw.footerPaddingBottom || '16px'}; background: ${cw.footerBg || cw.bodyBg || '#ffffff'}; border-bottom-left-radius: ${(cw.widgetBorderRadius || 24)}px; border-bottom-right-radius: ${(cw.widgetBorderRadius || 24)}px"
                     >
-                      ${chatStore.flag('widget.modernUi', true)
+                      ${this.flag('widget.modernUi', true)
                         ? html`
                             <div class="powered" style="font-size: ${cw.footerFontSize || '11px'}; color: ${cw.footerTextColor || 'var(--cw-muted)'}">
                               <span>Powered by</span>
@@ -591,7 +623,7 @@ export class CwChatBody extends LitElement {
                 ? html`
                     <div class="closed-note">
                       <p>Chat ended</p>
-                      <button type="button" class="primary" @click="${() => chatStore.startNew()}">Start new chat</button>
+                      <button type="button" class="primary" @click="${() => this.emit('cw:start-new')}">Start new chat</button>
                     </div>
                   `
                 : ''

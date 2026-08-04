@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { BubbleState, chatStore, bubbleStore, subscribe } from '../../store/chat-store.js';
+import type { BubbleState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
 import {
   getBorderRadius,
@@ -19,20 +19,9 @@ export class CwBubble extends LitElement {
   @property({ type: Boolean }) panelOpen = false;
   @property({ type: Number }) unreadCount = 0;
   @property({ type: Boolean }) hasSentMessage = false;
+  @property({ type: Number }) rev = 0;
 
   @state() hovered = false;
-
-  private unsub?: () => void;
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.unsub = subscribe('store:bubble', () => this.requestUpdate());
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.unsub?.();
-  }
 
   static styles = [
     GLOBAL_STYLES,
@@ -102,12 +91,15 @@ export class CwBubble extends LitElement {
   ];
 
   private handleClick() {
-    window.dispatchEvent(new CustomEvent('toggle-contact-widget'));
+    this.dispatchEvent(
+      new CustomEvent('cw:toggle', { bubbles: true, composed: true })
+    );
   }
 
   render() {
-    const settings = this.config || bubbleStore.get();
+    const settings = this.config;
 
+    if (!settings) return html``;
     if (settings.hideOnOpen && this.panelOpen) return html``;
 
     const widthVal = settings.width || 60;

@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { GreetWindowState, ChatbarState, BubbleState, chatStore, greetWindowStore, chatbarStore, bubbleStore, subscribe } from '../../store/chat-store.js';
+import type { GreetWindowState, ChatbarState, BubbleState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
 import { getAnimClass } from '../../utils/style-helpers.js';
 import '../atoms/cw-icon.js';
@@ -13,18 +13,9 @@ export class CwGreetWindow extends LitElement {
   @property({ type: Object }) bubbleConfig?: BubbleState;
   @property({ type: Boolean }) panelOpen = false;
   @property({ type: Boolean }) hasSentMessage = false;
-
-  private unsub?: () => void;
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.unsub = subscribe('store:greetWindow', () => this.requestUpdate());
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.unsub?.();
-  }
+  @property({ type: Boolean }) visible = false;
+  @property({ type: Boolean }) dismissed = false;
+  @property({ type: Number }) rev = 0;
 
   static styles = [
     GLOBAL_STYLES,
@@ -86,44 +77,44 @@ export class CwGreetWindow extends LitElement {
 
   private handleDismiss(e: Event) {
     e.stopPropagation();
-    if (this.config) {
-      this.config.dismissed = true;
-      greetWindowStore.get().dismissed = true;
-      this.requestUpdate();
-    }
+    this.dispatchEvent(
+      new CustomEvent('cw:greet-dismiss', { bubbles: true, composed: true })
+    );
   }
 
   private handleCardClick() {
-    window.dispatchEvent(new CustomEvent('toggle-contact-widget'));
+    this.dispatchEvent(
+      new CustomEvent('cw:toggle', { bubbles: true, composed: true })
+    );
   }
 
   render() {
-    const g = this.config || greetWindowStore.get();
-    const cb = this.chatbarConfig || chatbarStore.get();
-    const bb = this.bubbleConfig || bubbleStore.get();
+    const g = this.config;
+    const cb = this.chatbarConfig;
+    const bb = this.bubbleConfig;
 
-    const chatbarEnabled = cb.enabled;
-    const hideOnOpen = chatbarEnabled ? cb.hideOnOpen : bb.hideOnOpen;
+    const chatbarEnabled = !!cb?.enabled;
+    const hideOnOpen = chatbarEnabled ? (cb?.hideOnOpen ?? true) : (bb?.hideOnOpen ?? true);
     const shouldShowTrigger = !hideOnOpen || !this.panelOpen;
 
-    if (!shouldShowTrigger || this.hasSentMessage || !g || !g.enabled || g.dismissed || !g.visible) {
+    if (!shouldShowTrigger || this.hasSentMessage || !g || !g.enabled || this.dismissed || !this.visible) {
       return html``;
     }
 
     const baseBottom = chatbarEnabled
-      ? cb.offsetBottom !== undefined ? cb.offsetBottom : 12
-      : bb.offsetBottom !== undefined ? bb.offsetBottom : 12;
+      ? cb?.offsetBottom !== undefined ? cb.offsetBottom : 12
+      : bb?.offsetBottom !== undefined ? bb.offsetBottom : 12;
 
     const triggerHeight = chatbarEnabled
-      ? cb.height || (cb.layout === 'card' ? 220 : 40)
-      : bb.height || 60;
+      ? cb?.height || (cb?.layout === 'card' ? 220 : 40)
+      : bb?.height || 60;
 
     const spacing = g.spacing !== undefined ? g.spacing : 16;
     const bottomPx = baseBottom + triggerHeight + spacing;
 
     const rawRight = chatbarEnabled
-      ? cb.offsetRight !== undefined ? parseInt(String(cb.offsetRight)) : 16
-      : bb.offsetRight !== undefined ? parseInt(String(bb.offsetRight)) : 16;
+      ? cb?.offsetRight !== undefined ? parseInt(String(cb.offsetRight)) : 16
+      : bb?.offsetRight !== undefined ? parseInt(String(bb.offsetRight)) : 16;
 
     const widthVal = g.width || 320;
     const iconAlign = g.iconAlign === 'left' ? 'flex-start' : g.iconAlign === 'right' ? 'flex-end' : 'center';

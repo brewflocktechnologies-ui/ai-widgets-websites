@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { ChatWindowState, ChatState, FeaturesState, ChatbarState, BubbleState, chatStore, chatWindowStore, featuresStore, chatbarStore, bubbleStore, subscribeAll } from '../../store/chat-store.js';
+import type { ChatWindowState, ChatState, FeaturesState, ChatbarState, BubbleState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
 import './cw-chat-header.js';
 import './cw-chat-body.js';
@@ -13,18 +13,7 @@ export class CwChatPanel extends LitElement {
   @property({ type: Object }) chatbarConfig?: ChatbarState;
   @property({ type: Object }) bubbleConfig?: BubbleState;
   @property({ type: Boolean }) panelOpen = false;
-
-  private unsub?: () => void;
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.unsub = subscribeAll(() => this.requestUpdate());
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.unsub?.();
-  }
+  @property({ type: Number }) rev = 0;
 
   static styles = [
     GLOBAL_STYLES,
@@ -98,14 +87,20 @@ export class CwChatPanel extends LitElement {
     `
   ];
 
+  private emit(name: string) {
+    this.dispatchEvent(new CustomEvent(name, { bubbles: true, composed: true }));
+  }
+
   render() {
     if (!this.panelOpen) return html``;
 
-    const cw = this.chatWindowConfig || chatWindowStore.get();
-    const cs = this.chatState || chatStore.get();
-    const feats = this.features || featuresStore.get();
-    const cb = this.chatbarConfig || chatbarStore.get();
-    const bb = this.bubbleConfig || bubbleStore.get();
+    const cw = this.chatWindowConfig;
+    const cs = this.chatState;
+    const feats = this.features || {};
+    const cb = this.chatbarConfig;
+    const bb = this.bubbleConfig;
+
+    if (!cw || !cs) return html``;
 
     const isExpanded = cs.isExpanded;
     const widthVal = isExpanded
@@ -116,14 +111,14 @@ export class CwChatPanel extends LitElement {
 
     const defaultBottom = (cw.offsetBottom !== undefined && cw.offsetBottom !== null && (cw.offsetBottom as any) !== '')
       ? Number(cw.offsetBottom)
-      : (cb.enabled ? (cb.offsetBottom !== undefined ? cb.offsetBottom : 12) : (bb.offsetBottom !== undefined ? bb.offsetBottom : 12));
+      : (cb?.enabled ? (cb.offsetBottom !== undefined ? cb.offsetBottom : 12) : (bb?.offsetBottom !== undefined ? bb.offsetBottom : 12));
 
     let bottomPx = defaultBottom;
-    if (cb.enabled && !cb.hideOnOpen) {
+    if (cb?.enabled && !cb.hideOnOpen) {
       const h = cb.height || (cb.layout === 'card' ? 220 : 40);
       const gap = cb.stackGap !== undefined ? cb.stackGap : 12;
       bottomPx = defaultBottom + h + gap;
-    } else if (!cb.enabled && !bb.hideOnOpen) {
+    } else if (!cb?.enabled && bb && !bb.hideOnOpen) {
       const h = bb.height || 60;
       const gap = bb.stackGap !== undefined ? bb.stackGap : 12;
       bottomPx = defaultBottom + h + gap;
@@ -131,7 +126,7 @@ export class CwChatPanel extends LitElement {
 
     const rawRight = (cw.offsetRight !== undefined && cw.offsetRight !== null && (cw.offsetRight as any) !== '')
       ? Number(cw.offsetRight)
-      : (cb.enabled ? (cb.offsetRight !== undefined ? cb.offsetRight : 16) : (bb.offsetRight !== undefined ? bb.offsetRight : 16));
+      : (cb?.enabled ? (cb.offsetRight !== undefined ? cb.offsetRight : 16) : (bb?.offsetRight !== undefined ? bb.offsetRight : 16));
 
     const shadow = cw.widgetShadow
       ? `0 8px ${cw.widgetShadowBlur || 30}px ${cw.widgetShadowColor || 'rgba(0,0,0,0.12)'}`
@@ -161,10 +156,11 @@ export class CwChatPanel extends LitElement {
             .clientName="${cs.clientName}"
             .agentName="${cs.agentName}"
             .state="${cs.state}"
+            .rev="${this.rev}"
           ></cw-chat-header>
 
           <!-- BODY -->
-          <cw-chat-body .chatState="${cs}" .chatWindowConfig="${cw}"></cw-chat-body>
+          <cw-chat-body .chatState="${cs}" .chatWindowConfig="${cw}" .rev="${this.rev}"></cw-chat-body>
 
           <!-- RECONNECTING BANNER -->
           ${cs.reconnecting
@@ -175,7 +171,7 @@ export class CwChatPanel extends LitElement {
           <!-- CONFIRM MODAL OVERLAY -->
           ${cs.confirmBox
             ? html`
-                <div class="modal-overlay" @click="${(e: Event) => { if (e.target === e.currentTarget) cs.confirmBox = null; }}">
+                <div class="modal-overlay" @click="${(e: Event) => { if (e.target === e.currentTarget) this.emit('cw:confirm-cancel'); }}">
                   <div class="modal-card" style="background: ${cw.modalCardBg || '#ffffff'}; border-radius: ${(cw.modalBorderRadius || 24)}px">
                     <p class="modal-message" style="color: ${cw.modalMessageColor || '#101828'}">${cs.confirmBox.message}</p>
                     <div class="modal-actions">
@@ -183,7 +179,7 @@ export class CwChatPanel extends LitElement {
                         type="button"
                         class="btn-ghost"
                         style="background: ${cw.endChatCancelBg || 'var(--cw-surface)'}; color: ${cw.endChatCancelTextColor || 'var(--cw-muted)'}; border-color: ${cw.endChatCancelBorderColor || 'var(--cw-border)'}"
-                        @click="${() => { cs.confirmBox = null; this.requestUpdate(); }}"
+                        @click="${() => this.emit('cw:confirm-cancel')}"
                       >
                         ${cs.confirmBox.cancelLabel || 'Cancel'}
                       </button>
@@ -192,7 +188,7 @@ export class CwChatPanel extends LitElement {
                         type="button"
                         class="btn-confirm"
                         style="background: ${cw.endChatConfirmBg || 'var(--cw-grad)'}; color: ${cw.endChatConfirmTextColor || '#ffffff'}"
-                        @click="${() => chatStore.confirmEnd()}"
+                        @click="${() => this.emit('cw:confirm-end')}"
                       >
                         ${cs.confirmBox.confirmLabel || 'Confirm'}
                       </button>

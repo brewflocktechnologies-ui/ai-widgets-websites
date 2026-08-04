@@ -1,12 +1,18 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import { InputBoxConfig, chatStore } from '../../store/chat-store.js';
+import { customElement, property, state } from 'lit/decorators.js';
+import type { InputBoxConfig } from '../../store/types.js';
 
+/**
+ * cw-greet-input
+ * Pure presentational molecule. Mirrors keystrokes via `cw:greet-input`
+ * and submits via `cw:greet-submit`. Never touches the store.
+ */
 @customElement('cw-greet-input')
 export class CwGreetInput extends LitElement {
   @property({ type: Object }) config?: InputBoxConfig;
   @property({ type: String }) accentColor = '#9333EA';
-  @property({ type: String }) draft = '';
+
+  @state() draft = '';
 
   static styles = css`
     :host {
@@ -44,6 +50,12 @@ export class CwGreetInput extends LitElement {
     }
   `;
 
+  private emit(name: string, detail?: unknown) {
+    this.dispatchEvent(
+      new CustomEvent(name, { detail, bubbles: true, composed: true })
+    );
+  }
+
   private handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Enter') {
       this.submit();
@@ -52,15 +64,13 @@ export class CwGreetInput extends LitElement {
 
   private handleInput(e: Event) {
     this.draft = (e.target as HTMLInputElement).value;
-    chatStore.get().draft = this.draft;
+    this.emit('cw:greet-input', this.draft);
   }
 
   private submit() {
-    window.dispatchEvent(new CustomEvent('toggle-contact-widget'));
-    chatStore.get().state = 'active';
-    if (this.draft) {
-      setTimeout(() => chatStore.send(), 200);
-    }
+    this.emit('cw:greet-submit', this.draft.trim());
+    this.draft = '';
+    this.requestUpdate();
   }
 
   render() {

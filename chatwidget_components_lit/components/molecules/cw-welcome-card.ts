@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { WelcomeConfig, chatStore } from '../../store/chat-store.js';
+import type { WelcomeConfig } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
 
 @customElement('cw-welcome-card')
@@ -145,11 +145,15 @@ export class CwWelcomeCard extends LitElement {
   ];
 
   private start() {
-    chatStore.startFromWelcome();
+    this.dispatchEvent(
+      new CustomEvent('cw:start-chat', { bubbles: true, composed: true })
+    );
   }
 
   private close() {
-    chatStore.closePanel();
+    this.dispatchEvent(
+      new CustomEvent('cw:close-panel', { bubbles: true, composed: true })
+    );
   }
 
   render() {

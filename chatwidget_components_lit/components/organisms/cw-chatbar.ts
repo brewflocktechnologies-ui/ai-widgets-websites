@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { ChatbarState, subscribe } from '../../store/chat-store.js';
+import type { ChatbarState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
 import {
   getBorderRadius,
@@ -16,20 +16,9 @@ export class CwChatbar extends LitElement {
   @property({ type: Object }) config?: ChatbarState;
   @property({ type: Boolean }) panelOpen = false;
   @property({ type: Number }) unreadCount = 0;
+  @property({ type: Number }) rev = 0;
 
   @state() hovered = false;
-
-  private unsub?: () => void;
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.unsub = subscribe('store:chatbar', () => this.requestUpdate());
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.unsub?.();
-  }
 
   static styles = [
     GLOBAL_STYLES,
@@ -104,7 +93,9 @@ export class CwChatbar extends LitElement {
   ];
 
   private handleClick() {
-    window.dispatchEvent(new CustomEvent('toggle-contact-widget'));
+    this.dispatchEvent(
+      new CustomEvent('cw:toggle', { bubbles: true, composed: true })
+    );
   }
 
   render() {

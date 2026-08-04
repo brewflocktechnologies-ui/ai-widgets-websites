@@ -1,8 +1,14 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { ChatWindowState, chatStore } from '../../store/chat-store.js';
+import type { ChatWindowState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
 
+/**
+ * cw-composer
+ * Pure presentational molecule. Sends data UP via composed CustomEvents
+ * (`cw:draft-change`, `cw:send`, `cw:toggle-attach`, `cw:toggle-emoji`).
+ * It never reads or mutates the store.
+ */
 @customElement('cw-composer')
 export class CwComposer extends LitElement {
   @property({ type: Object }) config: Partial<ChatWindowState> = {};
@@ -10,6 +16,7 @@ export class CwComposer extends LitElement {
   @property({ type: Boolean }) attachmentsEnabled = true;
   @property({ type: Boolean }) modernUi = true;
   @property({ type: Boolean }) uploading = false;
+  @property({ type: Number }) rev = 0;
 
   @state() focused = false;
 
@@ -70,12 +77,18 @@ export class CwComposer extends LitElement {
     `
   ];
 
+  private emit(name: string, detail?: unknown) {
+    this.dispatchEvent(
+      new CustomEvent(name, { detail, bubbles: true, composed: true })
+    );
+  }
+
   private handleInput(e: Event) {
     const target = e.target as HTMLTextAreaElement;
     this.draft = target.value;
     target.style.height = 'auto';
     target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
-    this.dispatchEvent(new CustomEvent('draft-change', { detail: this.draft }));
+    this.emit('cw:draft-change', this.draft);
   }
 
   private handleKeyDown(e: KeyboardEvent) {
@@ -87,22 +100,15 @@ export class CwComposer extends LitElement {
 
   private send() {
     if (!this.draft.trim()) return;
-    this.dispatchEvent(new CustomEvent('send-message', { detail: this.draft.trim() }));
+    this.emit('cw:send', this.draft.trim());
   }
 
   private toggleAttach() {
-    this.dispatchEvent(new CustomEvent('toggle-attach'));
+    this.emit('cw:toggle-attach');
   }
 
   private toggleEmoji() {
-    this.dispatchEvent(new CustomEvent('toggle-emoji'));
-  }
-
-  private handleFileSelect(e: Event) {
-    const input = e.target as HTMLInputElement;
-    if (input) {
-      chatStore.uploadImage(input);
-    }
+    this.emit('cw:toggle-emoji');
   }
 
   render() {
@@ -144,15 +150,6 @@ export class CwComposer extends LitElement {
         class="composer"
         style="padding: ${padding}; margin: ${margin}; background: ${bg}; border-radius: ${borderRadius}; border: 1px solid ${borderColor}; box-shadow: ${boxShadow}; --placeholder-color: ${placeholderColor}"
       >
-        <input
-          type="file"
-          id="cw-file-input"
-          class="file-input"
-          accept="image/png,image/jpeg,image/gif,image/webp"
-          style="display: none"
-          @change="${this.handleFileSelect}"
-        />
-
         ${this.attachmentsEnabled
           ? html`
               <button

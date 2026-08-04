@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { BadgeConfig } from '../../store/chat-store.js';
+import type { BadgeConfig } from '../../store/types.js';
 
 @customElement('cw-badge')
 export class CwBadge extends LitElement {

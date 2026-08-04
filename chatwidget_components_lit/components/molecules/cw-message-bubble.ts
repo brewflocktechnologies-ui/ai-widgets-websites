@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { Message, ChatWindowState } from '../../store/chat-store.js';
+import type { Message, ChatWindowState } from '../../store/types.js';
 import '../atoms/cw-message-tick.js';
 
 @customElement('cw-message-bubble')
