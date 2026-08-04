@@ -2,21 +2,21 @@
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */var et,rr,er,tr,nr,or,ir,ar,sr,lr,cr,dr,pr,hr,fr,gr,ur,br;const T=globalThis,Dr=T.ShadowRoot&&(T.ShadyCSS===void 0||T.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,Hr=Symbol(),ge=new WeakMap;let ue=class{constructor(r,e,n){if(this._$cssResult$=!0,n!==Hr)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=r,this.t=e}get styleSheet(){let r=this.o;const e=this.t;if(Dr&&r===void 0){const n=e!==void 0&&e.length===1;n&&(r=ge.get(e)),r===void 0&&((this.o=r=new CSSStyleSheet).replaceSync(this.cssText),n&&ge.set(e,r))}return r}toString(){return this.cssText}};const be=t=>new ue(typeof t=="string"?t:t+"",void 0,Hr),S=(t,...r)=>{const e=t.length===1?t[0]:r.reduce((n,i,o)=>n+(a=>{if(a._$cssResult$===!0)return a.cssText;if(typeof a=="number")return a;throw Error("Value passed to 'css' function must be a 'css' function result: "+a+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+t[o+1],t[0]);return new ue(e,t,Hr)},at=(t,r)=>{if(Dr)t.adoptedStyleSheets=r.map(e=>e instanceof CSSStyleSheet?e:e.styleSheet);else for(const e of r){const n=document.createElement("style"),i=T.litNonce;i!==void 0&&n.setAttribute("nonce",i),n.textContent=e.cssText,t.appendChild(n)}},we=Dr?t=>t:t=>t instanceof CSSStyleSheet?(r=>{let e="";for(const n of r.cssRules)e+=n.cssText;return be(e)})(t):t;/**
+ */var Ie;const T=globalThis,Sr=T.ShadowRoot&&(T.ShadyCSS===void 0||T.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,Br=Symbol(),Xr=new WeakMap;let Jr=class{constructor(r,e,o){if(this._$cssResult$=!0,o!==Br)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=r,this.t=e}get styleSheet(){let r=this.o;const e=this.t;if(Sr&&r===void 0){const o=e!==void 0&&e.length===1;o&&(r=Xr.get(e)),r===void 0&&((this.o=r=new CSSStyleSheet).replaceSync(this.cssText),o&&Xr.set(e,r))}return r}toString(){return this.cssText}};const Qr=t=>new Jr(typeof t=="string"?t:t+"",void 0,Br),S=(t,...r)=>{const e=t.length===1?t[0]:r.reduce((o,n,i)=>o+(a=>{if(a._$cssResult$===!0)return a.cssText;if(typeof a=="number")return a;throw Error("Value passed to 'css' function must be a 'css' function result: "+a+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(n)+t[i+1],t[0]);return new Jr(e,t,Br)},He=(t,r)=>{if(Sr)t.adoptedStyleSheets=r.map(e=>e instanceof CSSStyleSheet?e:e.styleSheet);else for(const e of r){const o=document.createElement("style"),n=T.litNonce;n!==void 0&&o.setAttribute("nonce",n),o.textContent=e.cssText,t.appendChild(o)}},re=Sr?t=>t:t=>t instanceof CSSStyleSheet?(r=>{let e="";for(const o of r.cssRules)e+=o.cssText;return Qr(e)})(t):t;/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const{is:st,defineProperty:lt,getOwnPropertyDescriptor:ct,getOwnPropertyNames:dt,getOwnPropertySymbols:pt,getPrototypeOf:ht}=Object,R=globalThis,me=R.trustedTypes,ft=me?me.emptyScript:"",Fr=R.reactiveElementPolyfillSupport,mr=(t,r)=>t,Er={toAttribute(t,r){switch(r){case Boolean:t=t?ft:null;break;case Object:case Array:t=t==null?t:JSON.stringify(t)}return t},fromAttribute(t,r){let e=t;switch(r){case Boolean:e=t!==null;break;case Number:e=t===null?null:Number(t);break;case Object:case Array:try{e=JSON.parse(t)}catch{e=null}}return e}},qr=(t,r)=>!st(t,r),xe={attribute:!0,type:String,converter:Er,reflect:!1,useDefault:!1,hasChanged:qr};Symbol.metadata??(Symbol.metadata=Symbol("metadata")),R.litPropertyMetadata??(R.litPropertyMetadata=new WeakMap);let V=class extends HTMLElement{static addInitializer(r){this._$Ei(),(this.l??(this.l=[])).push(r)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(r,e=xe){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(r)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(r,e),!e.noAccessor){const n=Symbol(),i=this.getPropertyDescriptor(r,n,e);i!==void 0&&lt(this.prototype,r,i)}}static getPropertyDescriptor(r,e,n){const{get:i,set:o}=ct(this.prototype,r)??{get(){return this[e]},set(a){this[e]=a}};return{get:i,set(a){const l=i==null?void 0:i.call(this);o==null||o.call(this,a),this.requestUpdate(r,l,n)},configurable:!0,enumerable:!0}}static getPropertyOptions(r){return this.elementProperties.get(r)??xe}static _$Ei(){if(this.hasOwnProperty(mr("elementProperties")))return;const r=ht(this);r.finalize(),r.l!==void 0&&(this.l=[...r.l]),this.elementProperties=new Map(r.elementProperties)}static finalize(){if(this.hasOwnProperty(mr("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(mr("properties"))){const e=this.properties,n=[...dt(e),...pt(e)];for(const i of n)this.createProperty(i,e[i])}const r=this[Symbol.metadata];if(r!==null){const e=litPropertyMetadata.get(r);if(e!==void 0)for(const[n,i]of e)this.elementProperties.set(n,i)}this._$Eh=new Map;for(const[e,n]of this.elementProperties){const i=this._$Eu(e,n);i!==void 0&&this._$Eh.set(i,e)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(r){const e=[];if(Array.isArray(r)){const n=new Set(r.flat(1/0).reverse());for(const i of n)e.unshift(we(i))}else r!==void 0&&e.push(we(r));return e}static _$Eu(r,e){const n=e.attribute;return n===!1?void 0:typeof n=="string"?n:typeof r=="string"?r.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){var r;this._$ES=new Promise(e=>this.enableUpdating=e),this._$AL=new Map,this._$E_(),this.requestUpdate(),(r=this.constructor.l)==null||r.forEach(e=>e(this))}addController(r){var e;(this._$EO??(this._$EO=new Set)).add(r),this.renderRoot!==void 0&&this.isConnected&&((e=r.hostConnected)==null||e.call(r))}removeController(r){var e;(e=this._$EO)==null||e.delete(r)}_$E_(){const r=new Map,e=this.constructor.elementProperties;for(const n of e.keys())this.hasOwnProperty(n)&&(r.set(n,this[n]),delete this[n]);r.size>0&&(this._$Ep=r)}createRenderRoot(){const r=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return at(r,this.constructor.elementStyles),r}connectedCallback(){var r;this.renderRoot??(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),(r=this._$EO)==null||r.forEach(e=>{var n;return(n=e.hostConnected)==null?void 0:n.call(e)})}enableUpdating(r){}disconnectedCallback(){var r;(r=this._$EO)==null||r.forEach(e=>{var n;return(n=e.hostDisconnected)==null?void 0:n.call(e)})}attributeChangedCallback(r,e,n){this._$AK(r,n)}_$ET(r,e){var o;const n=this.constructor.elementProperties.get(r),i=this.constructor._$Eu(r,n);if(i!==void 0&&n.reflect===!0){const a=(((o=n.converter)==null?void 0:o.toAttribute)!==void 0?n.converter:Er).toAttribute(e,n.type);this._$Em=r,a==null?this.removeAttribute(i):this.setAttribute(i,a),this._$Em=null}}_$AK(r,e){var o,a;const n=this.constructor,i=n._$Eh.get(r);if(i!==void 0&&this._$Em!==i){const l=n.getPropertyOptions(i),d=typeof l.converter=="function"?{fromAttribute:l.converter}:((o=l.converter)==null?void 0:o.fromAttribute)!==void 0?l.converter:Er;this._$Em=i;const g=d.fromAttribute(e,l.type);this[i]=g??((a=this._$Ej)==null?void 0:a.get(i))??g,this._$Em=null}}requestUpdate(r,e,n,i=!1,o){var a;if(r!==void 0){const l=this.constructor;if(i===!1&&(o=this[r]),n??(n=l.getPropertyOptions(r)),!((n.hasChanged??qr)(o,e)||n.useDefault&&n.reflect&&o===((a=this._$Ej)==null?void 0:a.get(r))&&!this.hasAttribute(l._$Eu(r,n))))return;this.C(r,e,n)}this.isUpdatePending===!1&&(this._$ES=this._$EP())}C(r,e,{useDefault:n,reflect:i,wrapped:o},a){n&&!(this._$Ej??(this._$Ej=new Map)).has(r)&&(this._$Ej.set(r,a??e??this[r]),o!==!0||a!==void 0)||(this._$AL.has(r)||(this.hasUpdated||n||(e=void 0),this._$AL.set(r,e)),i===!0&&this._$Em!==r&&(this._$Eq??(this._$Eq=new Set)).add(r))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(e){Promise.reject(e)}const r=this.scheduleUpdate();return r!=null&&await r,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){var n;if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??(this.renderRoot=this.createRenderRoot()),this._$Ep){for(const[o,a]of this._$Ep)this[o]=a;this._$Ep=void 0}const i=this.constructor.elementProperties;if(i.size>0)for(const[o,a]of i){const{wrapped:l}=a,d=this[o];l!==!0||this._$AL.has(o)||d===void 0||this.C(o,void 0,a,d)}}let r=!1;const e=this._$AL;try{r=this.shouldUpdate(e),r?(this.willUpdate(e),(n=this._$EO)==null||n.forEach(i=>{var o;return(o=i.hostUpdate)==null?void 0:o.call(i)}),this.update(e)):this._$EM()}catch(i){throw r=!1,this._$EM(),i}r&&this._$AE(e)}willUpdate(r){}_$AE(r){var e;(e=this._$EO)==null||e.forEach(n=>{var i;return(i=n.hostUpdated)==null?void 0:i.call(n)}),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(r)),this.updated(r)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(r){return!0}update(r){this._$Eq&&(this._$Eq=this._$Eq.forEach(e=>this._$ET(e,this[e]))),this._$EM()}updated(r){}firstUpdated(r){}};V.elementStyles=[],V.shadowRootOptions={mode:"open"},V[mr("elementProperties")]=new Map,V[mr("finalized")]=new Map,Fr==null||Fr({ReactiveElement:V}),(R.reactiveElementVersions??(R.reactiveElementVersions=[])).push("2.1.2");/**
+ */const{is:Fe,defineProperty:Ge,getOwnPropertyDescriptor:qe,getOwnPropertyNames:Ve,getOwnPropertySymbols:Ye,getPrototypeOf:Ke}=Object,P=globalThis,ee=P.trustedTypes,Ze=ee?ee.emptyScript:"",Or=P.reactiveElementPolyfillSupport,er=(t,r)=>t,ur={toAttribute(t,r){switch(r){case Boolean:t=t?Ze:null;break;case Object:case Array:t=t==null?t:JSON.stringify(t)}return t},fromAttribute(t,r){let e=t;switch(r){case Boolean:e=t!==null;break;case Number:e=t===null?null:Number(t);break;case Object:case Array:try{e=JSON.parse(t)}catch{e=null}}return e}},zr=(t,r)=>!Fe(t,r),te={attribute:!0,type:String,converter:ur,reflect:!1,useDefault:!1,hasChanged:zr};Symbol.metadata??(Symbol.metadata=Symbol("metadata")),P.litPropertyMetadata??(P.litPropertyMetadata=new WeakMap);let V=class extends HTMLElement{static addInitializer(r){this._$Ei(),(this.l??(this.l=[])).push(r)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(r,e=te){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(r)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(r,e),!e.noAccessor){const o=Symbol(),n=this.getPropertyDescriptor(r,o,e);n!==void 0&&Ge(this.prototype,r,n)}}static getPropertyDescriptor(r,e,o){const{get:n,set:i}=qe(this.prototype,r)??{get(){return this[e]},set(a){this[e]=a}};return{get:n,set(a){const p=n==null?void 0:n.call(this);i==null||i.call(this,a),this.requestUpdate(r,p,o)},configurable:!0,enumerable:!0}}static getPropertyOptions(r){return this.elementProperties.get(r)??te}static _$Ei(){if(this.hasOwnProperty(er("elementProperties")))return;const r=Ke(this);r.finalize(),r.l!==void 0&&(this.l=[...r.l]),this.elementProperties=new Map(r.elementProperties)}static finalize(){if(this.hasOwnProperty(er("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(er("properties"))){const e=this.properties,o=[...Ve(e),...Ye(e)];for(const n of o)this.createProperty(n,e[n])}const r=this[Symbol.metadata];if(r!==null){const e=litPropertyMetadata.get(r);if(e!==void 0)for(const[o,n]of e)this.elementProperties.set(o,n)}this._$Eh=new Map;for(const[e,o]of this.elementProperties){const n=this._$Eu(e,o);n!==void 0&&this._$Eh.set(n,e)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(r){const e=[];if(Array.isArray(r)){const o=new Set(r.flat(1/0).reverse());for(const n of o)e.unshift(re(n))}else r!==void 0&&e.push(re(r));return e}static _$Eu(r,e){const o=e.attribute;return o===!1?void 0:typeof o=="string"?o:typeof r=="string"?r.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){var r;this._$ES=new Promise(e=>this.enableUpdating=e),this._$AL=new Map,this._$E_(),this.requestUpdate(),(r=this.constructor.l)==null||r.forEach(e=>e(this))}addController(r){var e;(this._$EO??(this._$EO=new Set)).add(r),this.renderRoot!==void 0&&this.isConnected&&((e=r.hostConnected)==null||e.call(r))}removeController(r){var e;(e=this._$EO)==null||e.delete(r)}_$E_(){const r=new Map,e=this.constructor.elementProperties;for(const o of e.keys())this.hasOwnProperty(o)&&(r.set(o,this[o]),delete this[o]);r.size>0&&(this._$Ep=r)}createRenderRoot(){const r=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return He(r,this.constructor.elementStyles),r}connectedCallback(){var r;this.renderRoot??(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),(r=this._$EO)==null||r.forEach(e=>{var o;return(o=e.hostConnected)==null?void 0:o.call(e)})}enableUpdating(r){}disconnectedCallback(){var r;(r=this._$EO)==null||r.forEach(e=>{var o;return(o=e.hostDisconnected)==null?void 0:o.call(e)})}attributeChangedCallback(r,e,o){this._$AK(r,o)}_$ET(r,e){var i;const o=this.constructor.elementProperties.get(r),n=this.constructor._$Eu(r,o);if(n!==void 0&&o.reflect===!0){const a=(((i=o.converter)==null?void 0:i.toAttribute)!==void 0?o.converter:ur).toAttribute(e,o.type);this._$Em=r,a==null?this.removeAttribute(n):this.setAttribute(n,a),this._$Em=null}}_$AK(r,e){var i,a;const o=this.constructor,n=o._$Eh.get(r);if(n!==void 0&&this._$Em!==n){const p=o.getPropertyOptions(n),c=typeof p.converter=="function"?{fromAttribute:p.converter}:((i=p.converter)==null?void 0:i.fromAttribute)!==void 0?p.converter:ur;this._$Em=n;const g=c.fromAttribute(e,p.type);this[n]=g??((a=this._$Ej)==null?void 0:a.get(n))??g,this._$Em=null}}requestUpdate(r,e,o,n=!1,i){var a;if(r!==void 0){const p=this.constructor;if(n===!1&&(i=this[r]),o??(o=p.getPropertyOptions(r)),!((o.hasChanged??zr)(i,e)||o.useDefault&&o.reflect&&i===((a=this._$Ej)==null?void 0:a.get(r))&&!this.hasAttribute(p._$Eu(r,o))))return;this.C(r,e,o)}this.isUpdatePending===!1&&(this._$ES=this._$EP())}C(r,e,{useDefault:o,reflect:n,wrapped:i},a){o&&!(this._$Ej??(this._$Ej=new Map)).has(r)&&(this._$Ej.set(r,a??e??this[r]),i!==!0||a!==void 0)||(this._$AL.has(r)||(this.hasUpdated||o||(e=void 0),this._$AL.set(r,e)),n===!0&&this._$Em!==r&&(this._$Eq??(this._$Eq=new Set)).add(r))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(e){Promise.reject(e)}const r=this.scheduleUpdate();return r!=null&&await r,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){var o;if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??(this.renderRoot=this.createRenderRoot()),this._$Ep){for(const[i,a]of this._$Ep)this[i]=a;this._$Ep=void 0}const n=this.constructor.elementProperties;if(n.size>0)for(const[i,a]of n){const{wrapped:p}=a,c=this[i];p!==!0||this._$AL.has(i)||c===void 0||this.C(i,void 0,a,c)}}let r=!1;const e=this._$AL;try{r=this.shouldUpdate(e),r?(this.willUpdate(e),(o=this._$EO)==null||o.forEach(n=>{var i;return(i=n.hostUpdate)==null?void 0:i.call(n)}),this.update(e)):this._$EM()}catch(n){throw r=!1,this._$EM(),n}r&&this._$AE(e)}willUpdate(r){}_$AE(r){var e;(e=this._$EO)==null||e.forEach(o=>{var n;return(n=o.hostUpdated)==null?void 0:n.call(o)}),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(r)),this.updated(r)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(r){return!0}update(r){this._$Eq&&(this._$Eq=this._$Eq.forEach(e=>this._$ET(e,this[e]))),this._$EM()}updated(r){}firstUpdated(r){}};V.elementStyles=[],V.shadowRootOptions={mode:"open"},V[er("elementProperties")]=new Map,V[er("finalized")]=new Map,Or==null||Or({ReactiveElement:V}),(P.reactiveElementVersions??(P.reactiveElementVersions=[])).push("2.1.2");/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const xr=globalThis,ve=t=>t,Tr=xr.trustedTypes,ye=Tr?Tr.createPolicy("lit-html",{createHTML:t=>t}):void 0,$e="$lit$",M=`lit$${Math.random().toFixed(9).slice(2)}$`,ke="?"+M,gt=`<${ke}>`,I=document,vr=()=>I.createComment(""),yr=t=>t===null||typeof t!="object"&&typeof t!="function",Gr=Array.isArray,ut=t=>Gr(t)||typeof(t==null?void 0:t[Symbol.iterator])=="function",Vr=`[ 	
-\f\r]`,$r=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,Ce=/-->/g,Se=/>/g,U=RegExp(`>|${Vr}(?:([^\\s"'>=/]+)(${Vr}*=${Vr}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`,"g"),Be=/'/g,ze=/"/g,Oe=/^(?:script|style|textarea|title)$/i,bt=t=>(r,...e)=>({_$litType$:t,strings:r,values:e}),c=bt(1),Y=Symbol.for("lit-noChange"),C=Symbol.for("lit-nothing"),Ae=new WeakMap,L=I.createTreeWalker(I,129);function je(t,r){if(!Gr(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return ye!==void 0?ye.createHTML(r):r}const wt=(t,r)=>{const e=t.length-1,n=[];let i,o=r===2?"<svg>":r===3?"<math>":"",a=$r;for(let l=0;l<e;l++){const d=t[l];let g,b,p=-1,u=0;for(;u<d.length&&(a.lastIndex=u,b=a.exec(d),b!==null);)u=a.lastIndex,a===$r?b[1]==="!--"?a=Ce:b[1]!==void 0?a=Se:b[2]!==void 0?(Oe.test(b[2])&&(i=RegExp("</"+b[2],"g")),a=U):b[3]!==void 0&&(a=U):a===U?b[0]===">"?(a=i??$r,p=-1):b[1]===void 0?p=-2:(p=a.lastIndex-b[2].length,g=b[1],a=b[3]===void 0?U:b[3]==='"'?ze:Be):a===ze||a===Be?a=U:a===Ce||a===Se?a=$r:(a=U,i=void 0);const x=a===U&&t[l+1].startsWith("/>")?" ":"";o+=a===$r?d+gt:p>=0?(n.push(g),d.slice(0,p)+$e+d.slice(p)+M+x):d+M+(p===-2?l:x)}return[je(t,o+(t[e]||"<?>")+(r===2?"</svg>":r===3?"</math>":"")),n]};class kr{constructor({strings:r,_$litType$:e},n){let i;this.parts=[];let o=0,a=0;const l=r.length-1,d=this.parts,[g,b]=wt(r,e);if(this.el=kr.createElement(g,n),L.currentNode=this.el.content,e===2||e===3){const p=this.el.content.firstChild;p.replaceWith(...p.childNodes)}for(;(i=L.nextNode())!==null&&d.length<l;){if(i.nodeType===1){if(i.hasAttributes())for(const p of i.getAttributeNames())if(p.endsWith($e)){const u=b[a++],x=i.getAttribute(p).split(M),k=/([.?@])?(.*)/.exec(u);d.push({type:1,index:o,name:k[2],strings:x,ctor:k[1]==="."?xt:k[1]==="?"?vt:k[1]==="@"?yt:Rr}),i.removeAttribute(p)}else p.startsWith(M)&&(d.push({type:6,index:o}),i.removeAttribute(p));if(Oe.test(i.tagName)){const p=i.textContent.split(M),u=p.length-1;if(u>0){i.textContent=Tr?Tr.emptyScript:"";for(let x=0;x<u;x++)i.append(p[x],vr()),L.nextNode(),d.push({type:2,index:++o});i.append(p[u],vr())}}}else if(i.nodeType===8)if(i.data===ke)d.push({type:2,index:o});else{let p=-1;for(;(p=i.data.indexOf(M,p+1))!==-1;)d.push({type:7,index:o}),p+=M.length-1}o++}}static createElement(r,e){const n=I.createElement("template");return n.innerHTML=r,n}}function K(t,r,e=t,n){var a,l;if(r===Y)return r;let i=n!==void 0?(a=e._$Co)==null?void 0:a[n]:e._$Cl;const o=yr(r)?void 0:r._$litDirective$;return(i==null?void 0:i.constructor)!==o&&((l=i==null?void 0:i._$AO)==null||l.call(i,!1),o===void 0?i=void 0:(i=new o(t),i._$AT(t,e,n)),n!==void 0?(e._$Co??(e._$Co=[]))[n]=i:e._$Cl=i),i!==void 0&&(r=K(t,i._$AS(t,r.values),i,n)),r}class mt{constructor(r,e){this._$AV=[],this._$AN=void 0,this._$AD=r,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(r){const{el:{content:e},parts:n}=this._$AD,i=((r==null?void 0:r.creationScope)??I).importNode(e,!0);L.currentNode=i;let o=L.nextNode(),a=0,l=0,d=n[0];for(;d!==void 0;){if(a===d.index){let g;d.type===2?g=new Cr(o,o.nextSibling,this,r):d.type===1?g=new d.ctor(o,d.name,d.strings,this,r):d.type===6&&(g=new $t(o,this,r)),this._$AV.push(g),d=n[++l]}a!==(d==null?void 0:d.index)&&(o=L.nextNode(),a++)}return L.currentNode=I,i}p(r){let e=0;for(const n of this._$AV)n!==void 0&&(n.strings!==void 0?(n._$AI(r,n,e),e+=n.strings.length-2):n._$AI(r[e])),e++}}class Cr{get _$AU(){var r;return((r=this._$AM)==null?void 0:r._$AU)??this._$Cv}constructor(r,e,n,i){this.type=2,this._$AH=C,this._$AN=void 0,this._$AA=r,this._$AB=e,this._$AM=n,this.options=i,this._$Cv=(i==null?void 0:i.isConnected)??!0}get parentNode(){let r=this._$AA.parentNode;const e=this._$AM;return e!==void 0&&(r==null?void 0:r.nodeType)===11&&(r=e.parentNode),r}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(r,e=this){r=K(this,r,e),yr(r)?r===C||r==null||r===""?(this._$AH!==C&&this._$AR(),this._$AH=C):r!==this._$AH&&r!==Y&&this._(r):r._$litType$!==void 0?this.$(r):r.nodeType!==void 0?this.T(r):ut(r)?this.k(r):this._(r)}O(r){return this._$AA.parentNode.insertBefore(r,this._$AB)}T(r){this._$AH!==r&&(this._$AR(),this._$AH=this.O(r))}_(r){this._$AH!==C&&yr(this._$AH)?this._$AA.nextSibling.data=r:this.T(I.createTextNode(r)),this._$AH=r}$(r){var o;const{values:e,_$litType$:n}=r,i=typeof n=="number"?this._$AC(r):(n.el===void 0&&(n.el=kr.createElement(je(n.h,n.h[0]),this.options)),n);if(((o=this._$AH)==null?void 0:o._$AD)===i)this._$AH.p(e);else{const a=new mt(i,this),l=a.u(this.options);a.p(e),this.T(l),this._$AH=a}}_$AC(r){let e=Ae.get(r.strings);return e===void 0&&Ae.set(r.strings,e=new kr(r)),e}k(r){Gr(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let n,i=0;for(const o of r)i===e.length?e.push(n=new Cr(this.O(vr()),this.O(vr()),this,this.options)):n=e[i],n._$AI(o),i++;i<e.length&&(this._$AR(n&&n._$AB.nextSibling,i),e.length=i)}_$AR(r=this._$AA.nextSibling,e){var n;for((n=this._$AP)==null?void 0:n.call(this,!1,!0,e);r!==this._$AB;){const i=ve(r).nextSibling;ve(r).remove(),r=i}}setConnected(r){var e;this._$AM===void 0&&(this._$Cv=r,(e=this._$AP)==null||e.call(this,r))}}class Rr{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(r,e,n,i,o){this.type=1,this._$AH=C,this._$AN=void 0,this.element=r,this.name=e,this._$AM=i,this.options=o,n.length>2||n[0]!==""||n[1]!==""?(this._$AH=Array(n.length-1).fill(new String),this.strings=n):this._$AH=C}_$AI(r,e=this,n,i){const o=this.strings;let a=!1;if(o===void 0)r=K(this,r,e,0),a=!yr(r)||r!==this._$AH&&r!==Y,a&&(this._$AH=r);else{const l=r;let d,g;for(r=o[0],d=0;d<o.length-1;d++)g=K(this,l[n+d],e,d),g===Y&&(g=this._$AH[d]),a||(a=!yr(g)||g!==this._$AH[d]),g===C?r=C:r!==C&&(r+=(g??"")+o[d+1]),this._$AH[d]=g}a&&!i&&this.j(r)}j(r){r===C?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,r??"")}}class xt extends Rr{constructor(){super(...arguments),this.type=3}j(r){this.element[this.name]=r===C?void 0:r}}class vt extends Rr{constructor(){super(...arguments),this.type=4}j(r){this.element.toggleAttribute(this.name,!!r&&r!==C)}}class yt extends Rr{constructor(r,e,n,i,o){super(r,e,n,i,o),this.type=5}_$AI(r,e=this){if((r=K(this,r,e,0)??C)===Y)return;const n=this._$AH,i=r===C&&n!==C||r.capture!==n.capture||r.once!==n.once||r.passive!==n.passive,o=r!==C&&(n===C||i);i&&this.element.removeEventListener(this.name,this,n),o&&this.element.addEventListener(this.name,this,r),this._$AH=r}handleEvent(r){var e;typeof this._$AH=="function"?this._$AH.call(((e=this.options)==null?void 0:e.host)??this.element,r):this._$AH.handleEvent(r)}}class $t{constructor(r,e,n){this.element=r,this.type=6,this._$AN=void 0,this._$AM=e,this.options=n}get _$AU(){return this._$AM._$AU}_$AI(r){K(this,r)}}const Yr=xr.litHtmlPolyfillSupport;Yr==null||Yr(kr,Cr),(xr.litHtmlVersions??(xr.litHtmlVersions=[])).push("3.3.3");const kt=(t,r,e)=>{const n=(e==null?void 0:e.renderBefore)??r;let i=n._$litPart$;if(i===void 0){const o=(e==null?void 0:e.renderBefore)??null;n._$litPart$=i=new Cr(r.insertBefore(vr(),o),o,void 0,e??{})}return i._$AI(t),i};/**
+ */const tr=globalThis,ne=t=>t,br=tr.trustedTypes,oe=br?br.createPolicy("lit-html",{createHTML:t=>t}):void 0,ie="$lit$",M=`lit$${Math.random().toFixed(9).slice(2)}$`,ae="?"+M,Xe=`<${ae}>`,N=document,nr=()=>N.createComment(""),or=t=>t===null||typeof t!="object"&&typeof t!="function",_r=Array.isArray,Je=t=>_r(t)||typeof(t==null?void 0:t[Symbol.iterator])=="function",Ar=`[ 	
+\f\r]`,ir=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,se=/-->/g,le=/>/g,D=RegExp(`>|${Ar}(?:([^\\s"'>=/]+)(${Ar}*=${Ar}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`,"g"),ce=/'/g,de=/"/g,pe=/^(?:script|style|textarea|title)$/i,Qe=t=>(r,...e)=>({_$litType$:t,strings:r,values:e}),l=Qe(1),Y=Symbol.for("lit-noChange"),C=Symbol.for("lit-nothing"),he=new WeakMap,U=N.createTreeWalker(N,129);function ge(t,r){if(!_r(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return oe!==void 0?oe.createHTML(r):r}const rt=(t,r)=>{const e=t.length-1,o=[];let n,i=r===2?"<svg>":r===3?"<math>":"",a=ir;for(let p=0;p<e;p++){const c=t[p];let g,b,d=-1,u=0;for(;u<c.length&&(a.lastIndex=u,b=a.exec(c),b!==null);)u=a.lastIndex,a===ir?b[1]==="!--"?a=se:b[1]!==void 0?a=le:b[2]!==void 0?(pe.test(b[2])&&(n=RegExp("</"+b[2],"g")),a=D):b[3]!==void 0&&(a=D):a===D?b[0]===">"?(a=n??ir,d=-1):b[1]===void 0?d=-2:(d=a.lastIndex-b[2].length,g=b[1],a=b[3]===void 0?D:b[3]==='"'?de:ce):a===de||a===ce?a=D:a===se||a===le?a=ir:(a=D,n=void 0);const v=a===D&&t[p+1].startsWith("/>")?" ":"";i+=a===ir?c+Xe:d>=0?(o.push(g),c.slice(0,d)+ie+c.slice(d)+M+v):c+M+(d===-2?p:v)}return[ge(t,i+(t[e]||"<?>")+(r===2?"</svg>":r===3?"</math>":"")),o]};class ar{constructor({strings:r,_$litType$:e},o){let n;this.parts=[];let i=0,a=0;const p=r.length-1,c=this.parts,[g,b]=rt(r,e);if(this.el=ar.createElement(g,o),U.currentNode=this.el.content,e===2||e===3){const d=this.el.content.firstChild;d.replaceWith(...d.childNodes)}for(;(n=U.nextNode())!==null&&c.length<p;){if(n.nodeType===1){if(n.hasAttributes())for(const d of n.getAttributeNames())if(d.endsWith(ie)){const u=b[a++],v=n.getAttribute(d).split(M),k=/([.?@])?(.*)/.exec(u);c.push({type:1,index:i,name:k[2],strings:v,ctor:k[1]==="."?tt:k[1]==="?"?nt:k[1]==="@"?ot:wr}),n.removeAttribute(d)}else d.startsWith(M)&&(c.push({type:6,index:i}),n.removeAttribute(d));if(pe.test(n.tagName)){const d=n.textContent.split(M),u=d.length-1;if(u>0){n.textContent=br?br.emptyScript:"";for(let v=0;v<u;v++)n.append(d[v],nr()),U.nextNode(),c.push({type:2,index:++i});n.append(d[u],nr())}}}else if(n.nodeType===8)if(n.data===ae)c.push({type:2,index:i});else{let d=-1;for(;(d=n.data.indexOf(M,d+1))!==-1;)c.push({type:7,index:i}),d+=M.length-1}i++}}static createElement(r,e){const o=N.createElement("template");return o.innerHTML=r,o}}function K(t,r,e=t,o){var a,p;if(r===Y)return r;let n=o!==void 0?(a=e._$Co)==null?void 0:a[o]:e._$Cl;const i=or(r)?void 0:r._$litDirective$;return(n==null?void 0:n.constructor)!==i&&((p=n==null?void 0:n._$AO)==null||p.call(n,!1),i===void 0?n=void 0:(n=new i(t),n._$AT(t,e,o)),o!==void 0?(e._$Co??(e._$Co=[]))[o]=n:e._$Cl=n),n!==void 0&&(r=K(t,n._$AS(t,r.values),n,o)),r}class et{constructor(r,e){this._$AV=[],this._$AN=void 0,this._$AD=r,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(r){const{el:{content:e},parts:o}=this._$AD,n=((r==null?void 0:r.creationScope)??N).importNode(e,!0);U.currentNode=n;let i=U.nextNode(),a=0,p=0,c=o[0];for(;c!==void 0;){if(a===c.index){let g;c.type===2?g=new sr(i,i.nextSibling,this,r):c.type===1?g=new c.ctor(i,c.name,c.strings,this,r):c.type===6&&(g=new it(i,this,r)),this._$AV.push(g),c=o[++p]}a!==(c==null?void 0:c.index)&&(i=U.nextNode(),a++)}return U.currentNode=N,n}p(r){let e=0;for(const o of this._$AV)o!==void 0&&(o.strings!==void 0?(o._$AI(r,o,e),e+=o.strings.length-2):o._$AI(r[e])),e++}}class sr{get _$AU(){var r;return((r=this._$AM)==null?void 0:r._$AU)??this._$Cv}constructor(r,e,o,n){this.type=2,this._$AH=C,this._$AN=void 0,this._$AA=r,this._$AB=e,this._$AM=o,this.options=n,this._$Cv=(n==null?void 0:n.isConnected)??!0}get parentNode(){let r=this._$AA.parentNode;const e=this._$AM;return e!==void 0&&(r==null?void 0:r.nodeType)===11&&(r=e.parentNode),r}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(r,e=this){r=K(this,r,e),or(r)?r===C||r==null||r===""?(this._$AH!==C&&this._$AR(),this._$AH=C):r!==this._$AH&&r!==Y&&this._(r):r._$litType$!==void 0?this.$(r):r.nodeType!==void 0?this.T(r):Je(r)?this.k(r):this._(r)}O(r){return this._$AA.parentNode.insertBefore(r,this._$AB)}T(r){this._$AH!==r&&(this._$AR(),this._$AH=this.O(r))}_(r){this._$AH!==C&&or(this._$AH)?this._$AA.nextSibling.data=r:this.T(N.createTextNode(r)),this._$AH=r}$(r){var i;const{values:e,_$litType$:o}=r,n=typeof o=="number"?this._$AC(r):(o.el===void 0&&(o.el=ar.createElement(ge(o.h,o.h[0]),this.options)),o);if(((i=this._$AH)==null?void 0:i._$AD)===n)this._$AH.p(e);else{const a=new et(n,this),p=a.u(this.options);a.p(e),this.T(p),this._$AH=a}}_$AC(r){let e=he.get(r.strings);return e===void 0&&he.set(r.strings,e=new ar(r)),e}k(r){_r(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let o,n=0;for(const i of r)n===e.length?e.push(o=new sr(this.O(nr()),this.O(nr()),this,this.options)):o=e[n],o._$AI(i),n++;n<e.length&&(this._$AR(o&&o._$AB.nextSibling,n),e.length=n)}_$AR(r=this._$AA.nextSibling,e){var o;for((o=this._$AP)==null?void 0:o.call(this,!1,!0,e);r!==this._$AB;){const n=ne(r).nextSibling;ne(r).remove(),r=n}}setConnected(r){var e;this._$AM===void 0&&(this._$Cv=r,(e=this._$AP)==null||e.call(this,r))}}class wr{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(r,e,o,n,i){this.type=1,this._$AH=C,this._$AN=void 0,this.element=r,this.name=e,this._$AM=n,this.options=i,o.length>2||o[0]!==""||o[1]!==""?(this._$AH=Array(o.length-1).fill(new String),this.strings=o):this._$AH=C}_$AI(r,e=this,o,n){const i=this.strings;let a=!1;if(i===void 0)r=K(this,r,e,0),a=!or(r)||r!==this._$AH&&r!==Y,a&&(this._$AH=r);else{const p=r;let c,g;for(r=i[0],c=0;c<i.length-1;c++)g=K(this,p[o+c],e,c),g===Y&&(g=this._$AH[c]),a||(a=!or(g)||g!==this._$AH[c]),g===C?r=C:r!==C&&(r+=(g??"")+i[c+1]),this._$AH[c]=g}a&&!n&&this.j(r)}j(r){r===C?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,r??"")}}class tt extends wr{constructor(){super(...arguments),this.type=3}j(r){this.element[this.name]=r===C?void 0:r}}class nt extends wr{constructor(){super(...arguments),this.type=4}j(r){this.element.toggleAttribute(this.name,!!r&&r!==C)}}class ot extends wr{constructor(r,e,o,n,i){super(r,e,o,n,i),this.type=5}_$AI(r,e=this){if((r=K(this,r,e,0)??C)===Y)return;const o=this._$AH,n=r===C&&o!==C||r.capture!==o.capture||r.once!==o.once||r.passive!==o.passive,i=r!==C&&(o===C||n);n&&this.element.removeEventListener(this.name,this,o),i&&this.element.addEventListener(this.name,this,r),this._$AH=r}handleEvent(r){var e;typeof this._$AH=="function"?this._$AH.call(((e=this.options)==null?void 0:e.host)??this.element,r):this._$AH.handleEvent(r)}}class it{constructor(r,e,o){this.element=r,this.type=6,this._$AN=void 0,this._$AM=e,this.options=o}get _$AU(){return this._$AM._$AU}_$AI(r){K(this,r)}}const Er=tr.litHtmlPolyfillSupport;Er==null||Er(ar,sr),(tr.litHtmlVersions??(tr.litHtmlVersions=[])).push("3.3.3");const at=(t,r,e)=>{const o=(e==null?void 0:e.renderBefore)??r;let n=o._$litPart$;if(n===void 0){const i=(e==null?void 0:e.renderBefore)??null;o._$litPart$=n=new sr(r.insertBefore(nr(),i),i,void 0,e??{})}return n._$AI(t),n};/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const D=globalThis;class $ extends V{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){var e;const r=super.createRenderRoot();return(e=this.renderOptions).renderBefore??(e.renderBefore=r.firstChild),r}update(r){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(r),this._$Do=kt(e,this.renderRoot,this.renderOptions)}connectedCallback(){var r;super.connectedCallback(),(r=this._$Do)==null||r.setConnected(!0)}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this._$Do)==null||r.setConnected(!1)}render(){return Y}}$._$litElement$=!0,$.finalized=!0,(et=D.litElementHydrateSupport)==null||et.call(D,{LitElement:$});const Kr=D.litElementPolyfillSupport;Kr==null||Kr({LitElement:$}),(D.litElementVersions??(D.litElementVersions=[])).push("4.2.2");const A=be(`/* ==========================================================================\r
+ */const L=globalThis;class $ extends V{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){var e;const r=super.createRenderRoot();return(e=this.renderOptions).renderBefore??(e.renderBefore=r.firstChild),r}update(r){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(r),this._$Do=at(e,this.renderRoot,this.renderOptions)}connectedCallback(){var r;super.connectedCallback(),(r=this._$Do)==null||r.setConnected(!0)}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this._$Do)==null||r.setConnected(!1)}render(){return Y}}$._$litElement$=!0,$.finalized=!0,(Ie=L.litElementHydrateSupport)==null||Ie.call(L,{LitElement:$});const jr=L.litElementPolyfillSupport;jr==null||jr({LitElement:$}),(L.litElementVersions??(L.litElementVersions=[])).push("4.2.2");const _=Qr(`/* ==========================================================================\r
    Zotly Dashboard - Pure Vanilla CSS Stylesheet\r
    Self-contained styling for layout, components, widgets, responsive & dark mode\r
    ========================================================================== */\r
@@ -3065,7 +3065,7 @@ button.primary:active {\r
     max-width: none;\r
   }\r
 }\r
-`),Zr="--cw-bg",Xr="--cw-surface",Jr="--cw-border",Qr="--cw-ink",re="--cw-muted",ee="--cw-grad",te="--cw-accent",ne="--cw-accent-tint",oe="--cw-accent-deep",_e={[Zr]:"#ffffff",[Xr]:"#f8fafc",[Jr]:"#e5e7eb",[Qr]:"#0f172a",[re]:"#71717a",[ee]:"linear-gradient(135deg, #0b5fff, #22d3ee)",[te]:"#0b5fff",[ne]:"rgba(11,95,255,0.1)",[oe]:"#0040cc"},Ee={[Zr]:"#18181b",[Xr]:"#27272a",[Jr]:"#3f3f46",[Qr]:"#f4f4f5",[re]:"#a1a1aa",[ee]:"linear-gradient(135deg, #0b5fff, #22d3ee)",[te]:"#0b5fff",[ne]:"rgba(11,95,255,0.15)",[oe]:"#3b82f6"},Te=`
+`),Tr="--cw-bg",Pr="--cw-surface",Mr="--cw-border",Wr="--cw-ink",Rr="--cw-muted",Ir="--cw-grad",Nr="--cw-accent",Dr="--cw-accent-tint",Ur="--cw-accent-deep",fe={[Tr]:"#ffffff",[Pr]:"#f8fafc",[Mr]:"#e5e7eb",[Wr]:"#0f172a",[Rr]:"#71717a",[Ir]:"linear-gradient(135deg, #0b5fff, #22d3ee)",[Nr]:"#0b5fff",[Dr]:"rgba(11,95,255,0.1)",[Ur]:"#0040cc"},ue={[Tr]:"#18181b",[Pr]:"#27272a",[Mr]:"#3f3f46",[Wr]:"#f4f4f5",[Rr]:"#a1a1aa",[Ir]:"linear-gradient(135deg, #0b5fff, #22d3ee)",[Nr]:"#0b5fff",[Dr]:"rgba(11,95,255,0.15)",[Ur]:"#3b82f6"},be=`
   #zotly-widget-embed, #zotly-widget-embed *, .panel, .panel * {
     font-family: inherit !important;
   }
@@ -3127,8 +3127,8 @@ button.primary:active {\r
   .anim-zotly-bounce { animation: zotly-bounce 2s infinite ease-in-out; }
   .anim-zotly-float { animation: zotly-float 3s infinite ease-in-out; }
   .anim-zotly-spin { animation: zotly-spin 4s infinite linear; }
-`;function Re(t){return Object.entries(t).map(([r,e])=>`${r}: ${e};`).join(`
-  `)}function Ct(t=!1){return`:host { ${Re(t?Ee:_e)} }`}function ie(){const t=getComputedStyle(document.documentElement),r=document.body?getComputedStyle(document.body):null;let e=t.getPropertyValue("--primary-color").trim()||(r?r.getPropertyValue("--primary-color").trim():""),n=t.getPropertyValue("--secondary-color").trim()||(r?r.getPropertyValue("--secondary-color").trim():"");const i=document.querySelector("script[data-client-id]")||document.querySelector('script[src*="index.es.js"]')||document.querySelector('script[src*="index.js"]')||document.querySelector('script[src*="widget.js"]'),o=i?i.getAttribute("data-accent"):null;return!e&&o&&(e=o),e||(e="#0b5fff"),n||(n=e),{primary:e,secondary:n}}function Me(){const t=document.querySelector('script[src*="index.es.js"]')||document.querySelector('script[src*="index.umd.js"]')||document.querySelector('script[src*="index.js"]')||document.querySelector('script[src*="widget.js"]');if(t&&t.src)try{const r=new URL(t.src,window.location.href);return r.pathname.includes("/dist/")?new URL("../",r).href:new URL("./",r).href}catch{}return window.location.pathname.includes("/chatwidget_components_lit/")?"./":"./chatwidget_components_lit/"}function ae(){return document.documentElement.classList.contains("dark")}function Pe(t){const r=new MutationObserver(()=>t(ae()));return r.observe(document.documentElement,{attributes:!0,attributeFilter:["class"]}),()=>r.disconnect()}function We(){if(window.ZOTLY_CLIENT_ID)return window.ZOTLY_CLIENT_ID;const t=document.querySelector("script[data-client-id]")||document.querySelector('script[src*="index.es.js"]')||document.querySelector('script[src*="index.umd.js"]')||document.querySelector('script[src*="index.js"]')||document.querySelector('script[src*="widget.js"]');if(t){const r=t.getAttribute("data-client-id");if(r)return r;try{const e=new URL(t.src,window.location.href),n=e.searchParams.get("client_id")||e.searchParams.get("clientId");if(n)return n}catch{}}return"default"}async function Ne(t){if(window.location.search.includes("test=true")){const n=localStorage.getItem("zotly_temp_preview_config");if(n)try{const i=JSON.parse(n);return{bubbleConfig:i.bubble||{},chatConfig:i.chatWindow||i.chat||{},chatbarConfig:i.chatbar||{},greetWindowConfig:i.greetWindow||{}}}catch(i){console.warn("Failed to parse temporary preview configuration:",i)}}const r=Me(),e=[`${r}public/clients/${t}.json`,`${r}public/clients/default.json`,`./chatwidget_components_lit/public/clients/${t}.json`,"./chatwidget_components_lit/public/clients/default.json",`./public/clients/${t}.json`,"./public/clients/default.json"];for(const n of e)try{const i=await fetch(n);if(i.ok){const o=await i.json();if(o&&typeof o=="object")return{bubbleConfig:o.bubble||{},chatConfig:o.chatWindow||o.chat||{},chatbarConfig:o.chatbar||{},greetWindowConfig:o.greetWindow||{}}}}catch{}return{bubbleConfig:{},chatConfig:{},chatbarConfig:{},greetWindowConfig:{}}}function Ie(t,r=1){if(!t)return"";if(t.startsWith("#")){const e=t.replace("#",""),n=e.length===3?e.split("").map(o=>o+o).join(""):e,i=parseInt(n,16);if(!isNaN(i))return`rgba(${i>>16&255},${i>>8&255},${i&255},${r})`}return t}function se(t,r="50%"){if(t==null)return r;if(typeof t=="number")return`${t}px`;if(typeof t=="object"){const{tl:e=50,tr:n=50,br:i=50,bl:o=50}=t;return`${e}px ${n}px ${i}px ${o}px`}return r}function Ue(t,r,e=135,n="#0b5fff"){if(!t||t==="none")return"";if(!r||r.length===0)return n;const i=r.map(o=>`${o.color} ${o.pos}%`).join(", ");return t==="radial"?`radial-gradient(circle, ${i})`:t==="conic"?`conic-gradient(from ${e}deg, ${i})`:`linear-gradient(${e}deg, ${i})`}function Le(t){const{boxShadowOffsetX:r=0,boxShadowOffsetY:e=8,boxShadowSpread:n=0,boxShadowBlur:i=20,boxShadowOpacity:o=.25}=t;return`${r}px ${e}px ${n}px ${i}px rgba(0,0,0,${o})`}function De(t){return!t.innerShadow||!t.innerShadow.enabled?"":`inset 0 6px ${t.innerShadow.blur??12}px rgba(0,0,0,${t.innerShadow.opacity??.25})`}function He(t){return t.useWebsiteTheme?t.backgroundColor||"#0b5fff":t.gradientType&&t.gradientType!=="none"?Ue(t.gradientType,t.gradientStops||[],t.gradientAngle??135,t.backgroundColor||"#0b5fff"):t.backgroundColor||"#0b5fff"}function Fe(t){if(t.useWebsiteTheme)return t.accentColor||"#0b5fff";if(!t.gradientEnabled)return t.bgColor||"#007bff";const r=t.gradientStops||[];if(r.length===0)return t.bgColor||"#007bff";const e=r.map(n=>`${n.color} ${n.pos}%`).join(", ");switch(t.gradientType){case"linear":return`linear-gradient(${t.gradientAngle??90}deg, ${e})`;case"radial":return`radial-gradient(circle, ${e})`;case"conic":return`conic-gradient(from ${t.gradientAngle??90}deg, ${e})`;default:return t.bgColor||"#007bff"}}function qe(t=14,r=40){return Math.min(t,Math.max(12,Math.floor(r*.35)))+"px"}function Mr(t=20,r=40,e="lucide"){return Math.min(t,Math.max(16,Math.floor(r*(e==="customSvg"?.55:.5))))}function Ge(t=20,r=40,e="lucide"){return Math.min(t,Math.max(16,Math.floor(r*(e==="customSvg"?.55:.5))))}function Ve(t,r){if(t!==void 0){if(typeof t=="object"){const{tl:e=20,tr:n=20,br:i=20,bl:o=20}=t;return`${e}px ${n}px ${i}px ${o}px`}return typeof t=="number"?t+"px":String(t)}return r==="left"?"20px 20px 4px 20px":r==="right"?"20px 20px 20px 4px":"20px"}function le(t){return!t||t==="none"?"":`anim-zotly-${t}`}function St(t){return(t?new Date(t):new Date).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}const ce=new EventTarget;function m(t){ce.dispatchEvent(new CustomEvent(t))}function Ye(t){return{useWebsiteTheme:!0,position:"bottom-right",offsetLeft:16,offsetRight:16,offsetBottom:12,width:60,height:60,borderRadius:{tl:50,tr:50,bl:50,br:50},backgroundColor:t.primary,gradientType:"none",gradientStops:[{color:t.primary,pos:0},{color:t.secondary,pos:100}],backgroundOverlayType:"image",backgroundImageUrl:"",backgroundImageSize:"contain",backgroundImageOpacity:.25,backgroundBlendMode:"normal",border:{width:0,color:t.primary,style:"solid"},outlineRing:{enabled:!0,width:3,color:t.secondary,opacity:.4},boxShadowBlur:20,boxShadowSpread:0,boxShadowOffsetX:0,boxShadowOffsetY:8,boxShadowOpacity:.25,dots:{color:"#F8FAFC",size:6,spacing:6,animation:"bounce"},hideOnOpen:!0,tooltip:{enabled:!1,text:"Chat with us",position:"",backgroundColor:"#ffffff",textColor:"#374151",fontSize:14,borderRadius:{tl:20,tr:20,br:4,bl:20},padding:"8px 16px",boxShadow:"0 4px 12px rgba(0,0,0,0.1)",arrowEnabled:!0,borderColor:"transparent",borderWidth:0},badge:{position:"top-right",offsetX:-6,offsetY:-6,size:20,backgroundColor:"#dc2626",textColor:"#ffffff",fontSize:11,borderWidth:2,borderColor:"#ffffff",borderRadius:"9999px",fontWeight:"700",boxShadow:"0 1px 3px rgba(0,0,0,0.15)",padding:"0px",animation:"pulse 1.5s infinite"}}}function Ke(t){return{enabled:!1,dismissed:!1,useWebsiteTheme:!1,width:320,spacing:16,backgroundColor:"#ffffff",borderRadius:16,padding:"24px 20px",boxShadow:"0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)",imageUrl:"",imageHeight:70,imageWidth:"",iconAlign:"center",imagePadding:"0px",iconType:"lucide",lucideIcon:"Sparkles",iconSize:52,iconColor:t.primary,iconAnimation:"wiggle",iconAnimationDuration:"2.5s",title:"Hi there! 👋 Need help growing your business using AI?",titleColor:"#1e293b",titleFontSize:"15px",description:"Let's chat & find the right solution for you!",descriptionColor:"#475569",descriptionFontSize:"14px",inputBox:{enabled:!0,layout:"separated",placeholder:"Write your message...",backgroundColor:"#ffffff",textColor:"#1e293b",borderRadius:24,boxShadow:"0 6px 16px rgba(0,0,0,0.12)",buttonColor:t.primary,buttonIconColor:"#ffffff"}}}function Ze(t){return{useWebsiteTheme:!0,offsetRight:null,offsetBottom:null,clientName:"Zotly Support",agentName:"Sarah",accentColor:t.primary,widgetWidth:400,widgetHeight:650,expandedWidth:550,widgetBorderRadius:28,widgetShadow:!0,widgetShadowBlur:20,widgetShadowColor:"rgba(0,0,0,0.15)",widgetBorderEnabled:!0,widgetBorderWidth:1,widgetBorderColor:"#e5e7eb",modernUi:!0,typingIndicator:!0,attachmentsEnabled:!0,ticksEnabled:!0,readTickColor:"#34b7f1",headerBg:t.primary,headerTextColor:"#ffffff",headerBorderColor:"rgba(0,0,0,0.08)",headerPadding:"14px 16px",headerTitleFontSize:"14px",headerSubtitleFontSize:"11px",headerAvatarBg:"rgba(255,255,255,0.2)",headerAvatarColor:"#ffffff",activeDot:{color:"#22c55e",animate:!0,borderWidth:0,borderColor:"transparent",size:8},endChatConfirmMessage:"Are you sure you want to end this chat session?",endChatConfirmLabel:"End chat",endChatCancelLabel:"Cancel",modalCardBg:"#ffffff",modalMessageColor:"#101828",modalBorderRadius:28,endChatConfirmBg:t.primary,endChatConfirmTextColor:"#ffffff",endChatCancelBg:"#ffffff",endChatCancelTextColor:"#667085",endChatCancelBorderColor:"#e9ecf1",bodyBg:"#f4f4f5",visitorBubbleBg:t.primary,visitorBubbleColor:"#ffffff",visitorBubbleFontSize:"14px",visitorBubblePadding:"10px 14px",visitorBubbleBorderRadius:"16px",agentBubbleBg:"#ffffff",agentBubbleColor:"#111827",agentBubbleBorderColor:"#d1d5db",agentBubbleFontSize:"14px",agentBubblePadding:"10px 14px",agentBubbleBorderRadius:"16px",agentAvatarBg:t.primary,agentAvatarColor:"#ffffff",inputBg:"#ffffff",inputTextColor:"#18181b",inputPlaceholderColor:"#6b7280",inputBorderColor:"#d1d5db",inputFocusBorderColor:t.primary,inputFocusShadow:`0 0 0 3px ${t.primary}26`,inputBorderRadius:"9999px",inputPadding:"6px 8px",inputMargin:"12px 16px",textareaFontSize:"14px",attachButtonBg:"#ffffff",attachButtonColor:"#6b7280",emojiButtonColor:"#6b7280",sendButtonBgActive:t.primary,sendButtonColorActive:"#ffffff",sendButtonBgInactive:"#e5e7eb",sendButtonColorInactive:"#9ca3af",sendIconType:"arrow",footerBg:"#f9fafb",footerTextColor:"#6b7280",footerFontSize:"12px",footerPaddingBottom:"16px",poweredByText:"vAInatheya.ai",poweredByLink:"#",poweredByColor:t.primary,welcome:{enabled:!1,useWebsiteTheme:!0,cardLayout:"glassy",cardAlign:"center",textAlign:"center",logoAlign:"center",avatarAlign:"center",cardBg:"rgba(255, 255, 255, 0.12)",cardBorder:"1px solid rgba(255, 255, 255, 0.22)",cardBorderRadius:24,cardPadding:"28px 24px",cardBlur:16,cardShadow:"0 12px 40px 0 rgba(0, 0, 0, 0.15)",title:"Hi there! 👋 How can we help you today?",titleFontSize:"26px",description:"Our support heroes are here to assist you.",descriptionFontSize:"15px",bgGradient:`linear-gradient(135deg, ${t.primary}, ${t.secondary})`,headerTextColor:"#ffffff",subtextColor:"rgba(255, 255, 255, 0.85)",padding:"32px 20px 10px 20px",footerPaddingBottom:"0px",avatarBorderColor:"rgba(255, 255, 255, 0.2)",avatars:[{name:"Sarah",bg:"#059669",color:"#ffffff"},{name:"Alex",bg:"#0284c7",color:"#ffffff"},{name:"Emily",bg:"#7c3aed",color:"#ffffff"}],buttonText:"Start Conversation",buttonBg:"#ffffff",buttonTextColor:"#111827",buttonIconColor:t.primary}}}function Xe(){return{voiceCallMaster:!1,voiceCallAgents:!1,voiceCallVisitors:!1,videoCallMaster:!1,videoCallAgents:!1,videoCallVisitors:!1,disableVisitorCamera:!1,closeChatVisitor:!0,averageQueueTime:1,chatAcceptanceTime:5}}function Je(t){return{enabled:!1,useWebsiteTheme:!0,position:"bottom-right",offsetLeft:16,offsetRight:16,offsetBottom:12,cardOffsetRight:null,cardOffsetBottom:null,barOffsetRight:null,barOffsetBottom:null,text:"Chat with us",cardText:"",barText:"Chat with us",bgColor:t.primary,textColor:"#ffffff",textSize:14,letterSpacing:0,gradientEnabled:!1,gradientStops:[{color:t.primary,pos:0},{color:t.secondary,pos:100}],gradientType:"linear",gradientAngle:90,iconType:"lucide",iconColor:"#ffffff",lucideIcon:"MessageCircle",iconImageUrl:"",iconFit:"contain",iconOpacity:1,iconBlend:"normal",iconWidth:20,iconHeight:20,width:255,height:40,shadow:!0,borderRadius:{tl:20,tr:20,bl:20,br:20},hideOnOpen:!0}}function Qe(t){var n;const r=(t==null?void 0:t.agentName)||"Sarah";return{state:((n=t==null?void 0:t.welcome)==null?void 0:n.enabled)===!0?"welcome":"active",isExpanded:!1,panelOpen:!1,unreadCount:0,isMobile:window.innerWidth<640||window.innerHeight<750,clientName:(t==null?void 0:t.clientName)||"Zotly Support",agentName:r,agentsOnline:!0,token:"visitor-token-demo",position:1,menuOpen:!1,attachOpen:!1,emojiOpen:!1,confirmBox:null,reconnecting:!1,soundsOn:!0,consentDismissed:!1,draft:"",uploading:!1,typingName:"",offlineName:"",offlineEmail:"",offlineMessage:"",offlineSending:!1,hasSentMessage:!1,flags:{},messages:[{key:"msg_welcome",senderType:"AGENT",senderName:r,body:"Welcome! How can we assist you today?",created:new Date().toISOString()}]}}let y=null;function v(){if(!y){const t=ie();y={bubble:Ye(t),greetWindow:Ke(t),chatWindow:Ze(t),features:Xe(),chat:Qe(),chatbar:Je(t)}}return y}function Z(t,r){return ce.addEventListener(t,r),()=>ce.removeEventListener(t,r)}function Pr(t){const e=["store:bubble","store:greetWindow","store:chatWindow","store:chat","store:chatbar","store:features"].map(n=>Z(n,t));return()=>e.forEach(n=>n())}const Sr={get(){return v().bubble}},Wr={get(){return v().greetWindow}},Br={get(){return v().chatWindow}},Nr={get(){return v().features}},Ir={get(){return v().chatbar}},w={get(){return v().chat},flag(t,r=!0){const e=v().chat;return e.flags[t]!==void 0?e.flags[t]:r},send(){var i;const t=v().chat;if(!((i=t.draft)!=null&&i.trim()))return;const r=t.draft.trim(),e={key:"msg_"+Date.now(),senderType:"VISITOR",body:r,created:new Date().toISOString(),status:"sent"};t.messages=[...t.messages,e],t.draft="",t.emojiOpen=!1,t.attachOpen=!1,t.hasSentMessage=!0,m("store:chat");const n=v().greetWindow;n&&(n.dismissed=!0,n.visible=!1,n.inputBox&&(n.inputBox.visible=!1),m("store:greetWindow")),w.resetChatbarLayout(),setTimeout(()=>{const o=t.messages.findIndex(a=>a.key===e.key);o!==-1&&(t.messages=t.messages.map((a,l)=>l===o?{...a,status:"delivered"}:a),m("store:chat"))},2e3),setTimeout(()=>{const o=t.messages.findIndex(a=>a.key===e.key);o!==-1&&(t.messages=t.messages.map((a,l)=>l===o?{...a,status:"read"}:a),m("store:chat"))},4e3)},resetChatbarLayout(){const t=v().chatbar;t.enabled&&t.layout==="card"&&(t.layout="bar",t.height=40,t.width=255,t.offsetRight=t.barOffsetRight!==void 0&&t.barOffsetRight!==null?t.barOffsetRight:16,t.offsetBottom=t.barOffsetBottom!==void 0&&t.barOffsetBottom!==null?t.barOffsetBottom:12,m("store:chatbar"))},askEndChat(){const t=v().chat,r=v().chatWindow;t.confirmBox={message:r.endChatConfirmMessage||"Are you sure you want to end this chat session?",confirmLabel:r.endChatConfirmLabel||"End chat",cancelLabel:r.endChatCancelLabel||"Cancel"},m("store:chat")},confirmEnd(){const t=v().chat;t.state="closed",t.confirmBox=null,m("store:chat")},startNew(){const t=v().chat;t.state="active",t.messages=[{key:"m_new",senderType:"AGENT",senderName:t.agentName||"Sarah",body:"Chat restarted. How can we help you?",created:new Date().toISOString()}],m("store:chat")},startFromWelcome(){const t=v().chat;t.state="active",m("store:chat")},closePanel(){const t=v().chat;t.isExpanded=!1,t.menuOpen=!1,t.attachOpen=!1,t.emojiOpen=!1,t.panelOpen=!1,m("store:chat"),window.dispatchEvent(new CustomEvent("close-contact-widget"))},toggleExpand(){const t=v().chat;t.isExpanded=!t.isExpanded,m("store:chat")},downloadTranscript(){v().chat.menuOpen=!1,m("store:chat"),alert("Downloading transcript...")},toggleSounds(){const t=v().chat;t.soundsOn=!t.soundsOn,m("store:chat")},dismissConsent(){v().chat.consentDismissed=!0,m("store:chat")},submitOffline(){const t=v().chat;t.offlineEmail&&t.offlineMessage&&(t.offlineSending=!0,m("store:chat"),setTimeout(()=>{t.offlineSending=!1,t.state="offline-sent",m("store:chat")},1e3))},uploadImage(t){const r=v().chat;if(t.files&&t.files[0]){const e=URL.createObjectURL(t.files[0]),n={key:"img_"+Date.now(),senderType:"VISITOR",localUrl:e,attachment:!0,body:"",created:new Date().toISOString(),status:"sent"};r.messages=[...r.messages,n],r.attachOpen=!1,r.hasSentMessage=!0,m("store:chat"),w.resetChatbarLayout(),setTimeout(()=>{const i=r.messages.findIndex(o=>o.key===n.key);i!==-1&&(r.messages=r.messages.map((o,a)=>a===i?{...o,status:"delivered"}:o),m("store:chat"))},2e3),setTimeout(()=>{const i=r.messages.findIndex(o=>o.key===n.key);i!==-1&&(r.messages=r.messages.map((o,a)=>a===i?{...o,status:"read"}:o),m("store:chat"))},4e3)}},captureScreenshot(){v().chat.attachOpen=!1,m("store:chat"),alert("Screenshot captured!")},dividerBefore(t){return t===0},dayLabel(){return"Today"},timeLabel(t){return(t.created?new Date(t.created):new Date).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})},groupStart(t){const r=v().chat;return t===0||r.messages[t].senderType!==r.messages[t-1].senderType},groupEnd(t){const r=v().chat;return t===r.messages.length-1||r.messages[t].senderType!==r.messages[t+1].senderType},attachmentUrl(t){return t.localUrl||t.url||""}};async function rt(){var n;const t=ie(),r=We();y={bubble:Ye(t),greetWindow:Ke(t),chatWindow:Ze(t),features:Xe(),chat:Qe(),chatbar:Je(t)},m("store:bubble"),m("store:greetWindow"),m("store:chatWindow"),m("store:features"),m("store:chat"),m("store:chatbar");try{const{bubbleConfig:i,chatConfig:o,chatbarConfig:a,greetWindowConfig:l}=await Ne(r);if(i&&Object.keys(i).length>0){const d=i;d.useWebsiteTheme&&(d.backgroundColor=t.primary,d.gradientType="none",d.outlineRing&&(d.outlineRing.color=t.secondary)),Object.assign(y.bubble,d),d.position&&(y.greetWindow.position=d.position),m("store:bubble"),m("store:greetWindow")}if(l&&Object.keys(l).length>0){const d=l;d.inputBox&&(d.inputBox={...y.greetWindow.inputBox,...d.inputBox}),d.useWebsiteTheme&&(d.iconColor=t.primary,d.inputBox&&(d.inputBox.layout==="separated"?d.inputBox.buttonIconColor=t.primary:d.inputBox.buttonColor=t.primary)),Object.assign(y.greetWindow,d),m("store:greetWindow")}if(a&&Object.keys(a).length>0){Object.assign(y.chatbar,a);const d=y.chatbar;d.layout==="card"?(d.cardOffsetRight!==void 0&&d.cardOffsetRight!==null&&(d.offsetRight=d.cardOffsetRight),d.cardOffsetBottom!==void 0&&d.cardOffsetBottom!==null&&(d.offsetBottom=d.cardOffsetBottom)):(d.barOffsetRight!==void 0&&d.barOffsetRight!==null&&(d.offsetRight=d.barOffsetRight),d.barOffsetBottom!==void 0&&d.barOffsetBottom!==null&&(d.offsetBottom=d.barOffsetBottom)),m("store:chatbar")}if(o&&Object.keys(o).length>0){let g=function(){const b=ae(),p=JSON.parse(JSON.stringify(d));p.useWebsiteTheme&&(p.accentColor=t.primary,p.visitorBubbleBg=t.primary,p.visitorBubbleColor="#ffffff",p.headerBg=t.primary,p.headerTextColor="#ffffff",p.headerAvatarBg="rgba(255,255,255,0.2)",p.headerAvatarColor="#ffffff",p.agentAvatarBg=t.primary,p.agentAvatarColor="#ffffff",p.inputFocusBorderColor=t.primary,p.inputFocusShadow=`0 0 0 2px ${t.primary}26`,p.sendButtonBgActive=t.primary,p.poweredByColor=t.primary,p.endChatConfirmBg=t.primary,p.endChatConfirmTextColor="#ffffff",b&&(p.bodyBg="var(--cw-bg)",p.inputBg="var(--cw-surface)",p.agentBubbleBg="var(--cw-surface)",p.agentBubbleColor="var(--cw-ink)",p.agentBubbleBorderColor="var(--cw-border)",p.footerBg="var(--cw-bg)",p.footerTextColor="var(--cw-muted)",p.inputTextColor="var(--cw-ink)",p.inputBorderColor="var(--cw-border)",p.attachButtonBg="var(--cw-surface)",p.attachButtonColor="var(--cw-muted)",p.emojiButtonColor="var(--cw-muted)",p.modalCardBg="var(--cw-surface)",p.modalMessageColor="var(--cw-ink)",p.endChatCancelBg="var(--cw-surface)",p.endChatCancelTextColor="var(--cw-muted)",p.endChatCancelBorderColor="var(--cw-border)"));const u=p.welcome||y.chatWindow.welcome;if(u&&(u.useWebsiteTheme??p.useWebsiteTheme)){const k=t.secondary&&t.secondary!==t.primary?t.secondary:t.primary;u.bgGradient=`linear-gradient(135deg, ${t.primary}, ${k})`,u.buttonIconColor=t.primary,p.welcome=u}b&&d.dark&&Object.keys(d.dark).length>0&&Object.assign(p,d.dark),Object.assign(y.chatWindow,p),m("store:chatWindow")};const d=o;d.welcome&&(y.chatWindow.welcome={...y.chatWindow.welcome,...d.welcome}),g(),Pe(()=>g()),d.clientName&&(y.chat.clientName=d.clientName),d.agentName&&(y.chat.agentName=d.agentName,y.chat.messages[0]&&(y.chat.messages[0].senderName=d.agentName)),!y.chat.hasSentMessage&&((n=d.welcome)!=null&&n.enabled)&&(y.chat.state="welcome"),m("store:chat")}}catch(i){console.warn("initStore fetchClientConfig warning:",i)}const e=y.greetWindow;if(e&&e.enabled){const i=parseFloat(String(e.openingTimeAfterInitialLoadSec??2));if(setTimeout(()=>{!e.dismissed&&!y.chat.hasSentMessage&&(e.visible=!0,m("store:greetWindow"))},i*1e3),e.inputBox&&e.inputBox.enabled){const o=parseFloat(String(e.inputBox.openingTimeAfterInitialLoadSec??4));setTimeout(()=>{!e.dismissed&&!y.chat.hasSentMessage&&(e.inputBox&&(e.inputBox.visible=!0),m("store:greetWindow"))},o*1e3)}}}/**
+`;function we(t){return Object.entries(t).map(([r,e])=>`${r}: ${e};`).join(`
+  `)}function st(t=!1){return`:host { ${we(t?ue:fe)} }`}function Lr(){const t=getComputedStyle(document.documentElement),r=document.body?getComputedStyle(document.body):null;let e=t.getPropertyValue("--primary-color").trim()||(r?r.getPropertyValue("--primary-color").trim():""),o=t.getPropertyValue("--secondary-color").trim()||(r?r.getPropertyValue("--secondary-color").trim():"");const n=document.querySelector("script[data-client-id]")||document.querySelector('script[src*="index.es.js"]')||document.querySelector('script[src*="index.js"]')||document.querySelector('script[src*="widget.js"]'),i=n?n.getAttribute("data-accent"):null;return!e&&i&&(e=i),e||(e="#0b5fff"),o||(o=e),{primary:e,secondary:o}}function me(){const t=document.querySelector('script[src*="index.es.js"]')||document.querySelector('script[src*="index.umd.js"]')||document.querySelector('script[src*="index.js"]')||document.querySelector('script[src*="widget.js"]');if(t&&t.src)try{const r=new URL(t.src,window.location.href);return r.pathname.includes("/dist/")?new URL("../",r).href:new URL("./",r).href}catch{}return window.location.pathname.includes("/chatwidget_components_lit/")?"./":"./chatwidget_components_lit/"}function Hr(){return document.documentElement.classList.contains("dark")}function ve(t){const r=new MutationObserver(()=>t(Hr()));return r.observe(document.documentElement,{attributes:!0,attributeFilter:["class"]}),()=>r.disconnect()}function xe(){if(window.ZOTLY_CLIENT_ID)return window.ZOTLY_CLIENT_ID;const t=document.querySelector("script[data-client-id]")||document.querySelector('script[src*="index.es.js"]')||document.querySelector('script[src*="index.umd.js"]')||document.querySelector('script[src*="index.js"]')||document.querySelector('script[src*="widget.js"]');if(t){const r=t.getAttribute("data-client-id");if(r)return r;try{const e=new URL(t.src,window.location.href),o=e.searchParams.get("client_id")||e.searchParams.get("clientId");if(o)return o}catch{}}return"default"}async function ye(t){if(window.location.search.includes("test=true")){const o=localStorage.getItem("zotly_temp_preview_config");if(o)try{const n=JSON.parse(o);return{bubbleConfig:n.bubble||{},chatConfig:n.chatWindow||n.chat||{},chatbarConfig:n.chatbar||{},greetWindowConfig:n.greetWindow||{}}}catch(n){console.warn("Failed to parse temporary preview configuration:",n)}}const r=me(),e=[`${r}public/clients/${t}.json`,`${r}public/clients/default.json`,`./chatwidget_components_lit/public/clients/${t}.json`,"./chatwidget_components_lit/public/clients/default.json",`./public/clients/${t}.json`,"./public/clients/default.json"];for(const o of e)try{const n=await fetch(o);if(n.ok){const i=await n.json();if(i&&typeof i=="object")return{bubbleConfig:i.bubble||{},chatConfig:i.chatWindow||i.chat||{},chatbarConfig:i.chatbar||{},greetWindowConfig:i.greetWindow||{}}}}catch{}return{bubbleConfig:{},chatConfig:{},chatbarConfig:{},greetWindowConfig:{}}}function $e(t,r=1){if(!t)return"";if(t.startsWith("#")){const e=t.replace("#",""),o=e.length===3?e.split("").map(i=>i+i).join(""):e,n=parseInt(o,16);if(!isNaN(n))return`rgba(${n>>16&255},${n>>8&255},${n&255},${r})`}return t}function Fr(t,r="50%"){if(t==null)return r;if(typeof t=="number")return`${t}px`;if(typeof t=="object"){const{tl:e=50,tr:o=50,br:n=50,bl:i=50}=t;return`${e}px ${o}px ${n}px ${i}px`}return r}function ke(t,r,e=135,o="#0b5fff"){if(!t||t==="none")return"";if(!r||r.length===0)return o;const n=r.map(i=>`${i.color} ${i.pos}%`).join(", ");return t==="radial"?`radial-gradient(circle, ${n})`:t==="conic"?`conic-gradient(from ${e}deg, ${n})`:`linear-gradient(${e}deg, ${n})`}function Ce(t){const{boxShadowOffsetX:r=0,boxShadowOffsetY:e=8,boxShadowSpread:o=0,boxShadowBlur:n=20,boxShadowOpacity:i=.25}=t;return`${r}px ${e}px ${o}px ${n}px rgba(0,0,0,${i})`}function Se(t){return!t.innerShadow||!t.innerShadow.enabled?"":`inset 0 6px ${t.innerShadow.blur??12}px rgba(0,0,0,${t.innerShadow.opacity??.25})`}function Be(t){return t.useWebsiteTheme?t.backgroundColor||"#0b5fff":t.gradientType&&t.gradientType!=="none"?ke(t.gradientType,t.gradientStops||[],t.gradientAngle??135,t.backgroundColor||"#0b5fff"):t.backgroundColor||"#0b5fff"}function Oe(t){if(t.useWebsiteTheme)return t.accentColor||"#0b5fff";if(!t.gradientEnabled)return t.bgColor||"#007bff";const r=t.gradientStops||[];if(r.length===0)return t.bgColor||"#007bff";const e=r.map(o=>`${o.color} ${o.pos}%`).join(", ");switch(t.gradientType){case"linear":return`linear-gradient(${t.gradientAngle??90}deg, ${e})`;case"radial":return`radial-gradient(circle, ${e})`;case"conic":return`conic-gradient(from ${t.gradientAngle??90}deg, ${e})`;default:return t.bgColor||"#007bff"}}function ze(t=14,r=40){return Math.min(t,Math.max(12,Math.floor(r*.35)))+"px"}function mr(t=20,r=40,e="lucide"){return Math.min(t,Math.max(16,Math.floor(r*(e==="customSvg"?.55:.5))))}function _e(t=20,r=40,e="lucide"){return Math.min(t,Math.max(16,Math.floor(r*(e==="customSvg"?.55:.5))))}function Ae(t,r){if(t!==void 0){if(typeof t=="object"){const{tl:e=20,tr:o=20,br:n=20,bl:i=20}=t;return`${e}px ${o}px ${n}px ${i}px`}return typeof t=="number"?t+"px":String(t)}return r==="left"?"20px 20px 4px 20px":r==="right"?"20px 20px 20px 4px":"20px"}function Gr(t){return!t||t==="none"?"":`anim-zotly-${t}`}function lt(t){return(t?new Date(t):new Date).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}const qr=new EventTarget;function m(t){qr.dispatchEvent(new CustomEvent(t))}function Ee(t){return{useWebsiteTheme:!0,position:"bottom-right",offsetLeft:16,offsetRight:16,offsetBottom:12,width:60,height:60,borderRadius:{tl:50,tr:50,bl:50,br:50},backgroundColor:t.primary,gradientType:"none",gradientStops:[{color:t.primary,pos:0},{color:t.secondary,pos:100}],backgroundOverlayType:"image",backgroundImageUrl:"",backgroundImageSize:"contain",backgroundImageOpacity:.25,backgroundBlendMode:"normal",border:{width:0,color:t.primary,style:"solid"},outlineRing:{enabled:!0,width:3,color:t.secondary,opacity:.4},boxShadowBlur:20,boxShadowSpread:0,boxShadowOffsetX:0,boxShadowOffsetY:8,boxShadowOpacity:.25,dots:{color:"#F8FAFC",size:6,spacing:6,animation:"bounce"},hideOnOpen:!0,tooltip:{enabled:!1,text:"Chat with us",position:"",backgroundColor:"#ffffff",textColor:"#374151",fontSize:14,borderRadius:{tl:20,tr:20,br:4,bl:20},padding:"8px 16px",boxShadow:"0 4px 12px rgba(0,0,0,0.1)",arrowEnabled:!0,borderColor:"transparent",borderWidth:0},badge:{position:"top-right",offsetX:-6,offsetY:-6,size:20,backgroundColor:"#dc2626",textColor:"#ffffff",fontSize:11,borderWidth:2,borderColor:"#ffffff",borderRadius:"9999px",fontWeight:"700",boxShadow:"0 1px 3px rgba(0,0,0,0.15)",padding:"0px",animation:"pulse 1.5s infinite"}}}function je(t){return{enabled:!1,dismissed:!1,useWebsiteTheme:!1,width:320,spacing:16,backgroundColor:"#ffffff",borderRadius:16,padding:"24px 20px",boxShadow:"0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)",imageUrl:"",imageHeight:70,imageWidth:"",iconAlign:"center",imagePadding:"0px",iconType:"lucide",lucideIcon:"Sparkles",iconSize:52,iconColor:t.primary,iconAnimation:"wiggle",iconAnimationDuration:"2.5s",title:"Hi there! 👋 Need help growing your business using AI?",titleColor:"#1e293b",titleFontSize:"15px",description:"Let's chat & find the right solution for you!",descriptionColor:"#475569",descriptionFontSize:"14px",inputBox:{enabled:!0,layout:"separated",placeholder:"Write your message...",backgroundColor:"#ffffff",textColor:"#1e293b",borderRadius:24,boxShadow:"0 6px 16px rgba(0,0,0,0.12)",buttonColor:t.primary,buttonIconColor:"#ffffff"}}}function Te(t){return{useWebsiteTheme:!0,offsetRight:null,offsetBottom:null,clientName:"Zotly Support",agentName:"Sarah",accentColor:t.primary,widgetWidth:400,widgetHeight:650,expandedWidth:550,widgetBorderRadius:28,widgetShadow:!0,widgetShadowBlur:20,widgetShadowColor:"rgba(0,0,0,0.15)",widgetBorderEnabled:!0,widgetBorderWidth:1,widgetBorderColor:"#e5e7eb",modernUi:!0,typingIndicator:!0,attachmentsEnabled:!0,ticksEnabled:!0,readTickColor:"#34b7f1",headerBg:t.primary,headerTextColor:"#ffffff",headerBorderColor:"rgba(0,0,0,0.08)",headerPadding:"14px 16px",headerTitleFontSize:"14px",headerSubtitleFontSize:"11px",headerAvatarBg:"rgba(255,255,255,0.2)",headerAvatarColor:"#ffffff",activeDot:{color:"#22c55e",animate:!0,borderWidth:0,borderColor:"transparent",size:8},endChatConfirmMessage:"Are you sure you want to end this chat session?",endChatConfirmLabel:"End chat",endChatCancelLabel:"Cancel",modalCardBg:"#ffffff",modalMessageColor:"#101828",modalBorderRadius:28,endChatConfirmBg:t.primary,endChatConfirmTextColor:"#ffffff",endChatCancelBg:"#ffffff",endChatCancelTextColor:"#667085",endChatCancelBorderColor:"#e9ecf1",bodyBg:"#f4f4f5",visitorBubbleBg:t.primary,visitorBubbleColor:"#ffffff",visitorBubbleFontSize:"14px",visitorBubblePadding:"10px 14px",visitorBubbleBorderRadius:"16px",agentBubbleBg:"#ffffff",agentBubbleColor:"#111827",agentBubbleBorderColor:"#d1d5db",agentBubbleFontSize:"14px",agentBubblePadding:"10px 14px",agentBubbleBorderRadius:"16px",agentAvatarBg:t.primary,agentAvatarColor:"#ffffff",inputBg:"#ffffff",inputTextColor:"#18181b",inputPlaceholderColor:"#6b7280",inputBorderColor:"#d1d5db",inputFocusBorderColor:t.primary,inputFocusShadow:`0 0 0 3px ${t.primary}26`,inputBorderRadius:"9999px",inputPadding:"6px 8px",inputMargin:"12px 16px",textareaFontSize:"14px",attachButtonBg:"#ffffff",attachButtonColor:"#6b7280",emojiButtonColor:"#6b7280",sendButtonBgActive:t.primary,sendButtonColorActive:"#ffffff",sendButtonBgInactive:"#e5e7eb",sendButtonColorInactive:"#9ca3af",sendIconType:"arrow",footerBg:"#f9fafb",footerTextColor:"#6b7280",footerFontSize:"12px",footerPaddingBottom:"16px",poweredByText:"vAInatheya.ai",poweredByLink:"#",poweredByColor:t.primary,welcome:{enabled:!1,useWebsiteTheme:!0,cardLayout:"glassy",cardAlign:"center",textAlign:"center",logoAlign:"center",avatarAlign:"center",cardBg:"rgba(255, 255, 255, 0.12)",cardBorder:"1px solid rgba(255, 255, 255, 0.22)",cardBorderRadius:24,cardPadding:"28px 24px",cardBlur:16,cardShadow:"0 12px 40px 0 rgba(0, 0, 0, 0.15)",title:"Hi there! 👋 How can we help you today?",titleFontSize:"26px",description:"Our support heroes are here to assist you.",descriptionFontSize:"15px",bgGradient:`linear-gradient(135deg, ${t.primary}, ${t.secondary})`,headerTextColor:"#ffffff",subtextColor:"rgba(255, 255, 255, 0.85)",padding:"32px 20px 10px 20px",footerPaddingBottom:"0px",avatarBorderColor:"rgba(255, 255, 255, 0.2)",avatars:[{name:"Sarah",bg:"#059669",color:"#ffffff"},{name:"Alex",bg:"#0284c7",color:"#ffffff"},{name:"Emily",bg:"#7c3aed",color:"#ffffff"}],buttonText:"Start Conversation",buttonBg:"#ffffff",buttonTextColor:"#111827",buttonIconColor:t.primary}}}function Pe(){return{voiceCallMaster:!1,voiceCallAgents:!1,voiceCallVisitors:!1,videoCallMaster:!1,videoCallAgents:!1,videoCallVisitors:!1,disableVisitorCamera:!1,closeChatVisitor:!0,averageQueueTime:1,chatAcceptanceTime:5}}function Me(t){return{enabled:!1,useWebsiteTheme:!0,position:"bottom-right",offsetLeft:16,offsetRight:16,offsetBottom:12,cardOffsetRight:null,cardOffsetBottom:null,barOffsetRight:null,barOffsetBottom:null,text:"Chat with us",cardText:"",barText:"Chat with us",bgColor:t.primary,textColor:"#ffffff",textSize:14,letterSpacing:0,gradientEnabled:!1,gradientStops:[{color:t.primary,pos:0},{color:t.secondary,pos:100}],gradientType:"linear",gradientAngle:90,iconType:"lucide",iconColor:"#ffffff",lucideIcon:"MessageCircle",iconImageUrl:"",iconFit:"contain",iconOpacity:1,iconBlend:"normal",iconWidth:20,iconHeight:20,width:255,height:40,shadow:!0,borderRadius:{tl:20,tr:20,bl:20,br:20},hideOnOpen:!0}}function We(t){var o;const r=(t==null?void 0:t.agentName)||"Sarah";return{state:((o=t==null?void 0:t.welcome)==null?void 0:o.enabled)===!0?"welcome":"active",isExpanded:!1,panelOpen:!1,unreadCount:0,isMobile:window.innerWidth<640||window.innerHeight<750,clientName:(t==null?void 0:t.clientName)||"Zotly Support",agentName:r,agentsOnline:!0,token:"visitor-token-demo",position:1,menuOpen:!1,attachOpen:!1,emojiOpen:!1,confirmBox:null,reconnecting:!1,soundsOn:!0,consentDismissed:!1,draft:"",uploading:!1,typingName:"",offlineName:"",offlineEmail:"",offlineMessage:"",offlineSending:!1,hasSentMessage:!1,flags:{},messages:[{key:"msg_welcome",senderType:"AGENT",senderName:r,body:"Welcome! How can we assist you today?",created:new Date().toISOString()}]}}let y=null;function x(){if(!y){const t=Lr();y={bubble:Ee(t),greetWindow:je(t),chatWindow:Te(t),features:Pe(),chat:We(),chatbar:Me(t)}}return y}function Z(t,r){return qr.addEventListener(t,r),()=>qr.removeEventListener(t,r)}function vr(t){const e=["store:bubble","store:greetWindow","store:chatWindow","store:chat","store:chatbar","store:features"].map(o=>Z(o,t));return()=>e.forEach(o=>o())}const lr={get(){return x().bubble}},xr={get(){return x().greetWindow}},cr={get(){return x().chatWindow}},yr={get(){return x().features}},$r={get(){return x().chatbar}},w={get(){return x().chat},flag(t,r=!0){const e=x().chat;return e.flags[t]!==void 0?e.flags[t]:r},send(){var n;const t=x().chat;if(!((n=t.draft)!=null&&n.trim()))return;const r=t.draft.trim(),e={key:"msg_"+Date.now(),senderType:"VISITOR",body:r,created:new Date().toISOString(),status:"sent"};t.messages=[...t.messages,e],t.draft="",t.emojiOpen=!1,t.attachOpen=!1,t.hasSentMessage=!0,m("store:chat");const o=x().greetWindow;o&&(o.dismissed=!0,o.visible=!1,o.inputBox&&(o.inputBox.visible=!1),m("store:greetWindow")),w.resetChatbarLayout(),setTimeout(()=>{const i=t.messages.findIndex(a=>a.key===e.key);i!==-1&&(t.messages=t.messages.map((a,p)=>p===i?{...a,status:"delivered"}:a),m("store:chat"))},2e3),setTimeout(()=>{const i=t.messages.findIndex(a=>a.key===e.key);i!==-1&&(t.messages=t.messages.map((a,p)=>p===i?{...a,status:"read"}:a),m("store:chat"))},4e3)},resetChatbarLayout(){const t=x().chatbar;t.enabled&&t.layout==="card"&&(t.layout="bar",t.height=40,t.width=255,t.offsetRight=t.barOffsetRight!==void 0&&t.barOffsetRight!==null?t.barOffsetRight:16,t.offsetBottom=t.barOffsetBottom!==void 0&&t.barOffsetBottom!==null?t.barOffsetBottom:12,m("store:chatbar"))},askEndChat(){const t=x().chat,r=x().chatWindow;t.confirmBox={message:r.endChatConfirmMessage||"Are you sure you want to end this chat session?",confirmLabel:r.endChatConfirmLabel||"End chat",cancelLabel:r.endChatCancelLabel||"Cancel"},m("store:chat")},confirmEnd(){const t=x().chat;t.state="closed",t.confirmBox=null,m("store:chat")},startNew(){const t=x().chat;t.state="active",t.messages=[{key:"m_new",senderType:"AGENT",senderName:t.agentName||"Sarah",body:"Chat restarted. How can we help you?",created:new Date().toISOString()}],m("store:chat")},startFromWelcome(){const t=x().chat;t.state="active",m("store:chat")},closePanel(){const t=x().chat;t.isExpanded=!1,t.menuOpen=!1,t.attachOpen=!1,t.emojiOpen=!1,t.panelOpen=!1,m("store:chat"),window.dispatchEvent(new CustomEvent("close-contact-widget"))},toggleExpand(){const t=x().chat;t.isExpanded=!t.isExpanded,m("store:chat")},downloadTranscript(){x().chat.menuOpen=!1,m("store:chat"),alert("Downloading transcript...")},toggleSounds(){const t=x().chat;t.soundsOn=!t.soundsOn,m("store:chat")},dismissConsent(){x().chat.consentDismissed=!0,m("store:chat")},submitOffline(){const t=x().chat;t.offlineEmail&&t.offlineMessage&&(t.offlineSending=!0,m("store:chat"),setTimeout(()=>{t.offlineSending=!1,t.state="offline-sent",m("store:chat")},1e3))},uploadImage(t){const r=x().chat;if(t.files&&t.files[0]){const e=URL.createObjectURL(t.files[0]),o={key:"img_"+Date.now(),senderType:"VISITOR",localUrl:e,attachment:!0,body:"",created:new Date().toISOString(),status:"sent"};r.messages=[...r.messages,o],r.attachOpen=!1,r.hasSentMessage=!0,m("store:chat"),w.resetChatbarLayout(),setTimeout(()=>{const n=r.messages.findIndex(i=>i.key===o.key);n!==-1&&(r.messages=r.messages.map((i,a)=>a===n?{...i,status:"delivered"}:i),m("store:chat"))},2e3),setTimeout(()=>{const n=r.messages.findIndex(i=>i.key===o.key);n!==-1&&(r.messages=r.messages.map((i,a)=>a===n?{...i,status:"read"}:i),m("store:chat"))},4e3)}},captureScreenshot(){x().chat.attachOpen=!1,m("store:chat"),alert("Screenshot captured!")},dividerBefore(t){return t===0},dayLabel(){return"Today"},timeLabel(t){return(t.created?new Date(t.created):new Date).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})},groupStart(t){const r=x().chat;return t===0||r.messages[t].senderType!==r.messages[t-1].senderType},groupEnd(t){const r=x().chat;return t===r.messages.length-1||r.messages[t].senderType!==r.messages[t+1].senderType},attachmentUrl(t){return t.localUrl||t.url||""}};async function Re(){var o;const t=Lr(),r=xe();y={bubble:Ee(t),greetWindow:je(t),chatWindow:Te(t),features:Pe(),chat:We(),chatbar:Me(t)},m("store:bubble"),m("store:greetWindow"),m("store:chatWindow"),m("store:features"),m("store:chat"),m("store:chatbar");try{const{bubbleConfig:n,chatConfig:i,chatbarConfig:a,greetWindowConfig:p}=await ye(r);if(n&&Object.keys(n).length>0){const c=n;c.useWebsiteTheme&&(c.backgroundColor=t.primary,c.gradientType="none",c.outlineRing&&(c.outlineRing.color=t.secondary)),Object.assign(y.bubble,c),c.position&&(y.greetWindow.position=c.position),m("store:bubble"),m("store:greetWindow")}if(p&&Object.keys(p).length>0){const c=p;c.inputBox&&(c.inputBox={...y.greetWindow.inputBox,...c.inputBox}),c.useWebsiteTheme&&(c.iconColor=t.primary,c.inputBox&&(c.inputBox.layout==="separated"?c.inputBox.buttonIconColor=t.primary:c.inputBox.buttonColor=t.primary)),Object.assign(y.greetWindow,c),m("store:greetWindow")}if(a&&Object.keys(a).length>0){Object.assign(y.chatbar,a);const c=y.chatbar;c.layout==="card"?(c.cardOffsetRight!==void 0&&c.cardOffsetRight!==null&&(c.offsetRight=c.cardOffsetRight),c.cardOffsetBottom!==void 0&&c.cardOffsetBottom!==null&&(c.offsetBottom=c.cardOffsetBottom)):(c.barOffsetRight!==void 0&&c.barOffsetRight!==null&&(c.offsetRight=c.barOffsetRight),c.barOffsetBottom!==void 0&&c.barOffsetBottom!==null&&(c.offsetBottom=c.barOffsetBottom)),m("store:chatbar")}if(i&&Object.keys(i).length>0){let c=function(){const b=Hr(),d=JSON.parse(JSON.stringify(g));d.useWebsiteTheme&&(d.accentColor=t.primary,d.visitorBubbleBg=t.primary,d.visitorBubbleColor="#ffffff",d.headerBg=t.primary,d.headerTextColor="#ffffff",d.headerAvatarBg="rgba(255,255,255,0.2)",d.headerAvatarColor="#ffffff",d.agentAvatarBg=t.primary,d.agentAvatarColor="#ffffff",d.inputFocusBorderColor=t.primary,d.inputFocusShadow=`0 0 0 2px ${t.primary}26`,d.sendButtonBgActive=t.primary,d.poweredByColor=t.primary,d.endChatConfirmBg=t.primary,d.endChatConfirmTextColor="#ffffff",b&&(d.bodyBg="var(--cw-bg)",d.inputBg="var(--cw-surface)",d.agentBubbleBg="var(--cw-surface)",d.agentBubbleColor="var(--cw-ink)",d.agentBubbleBorderColor="var(--cw-border)",d.footerBg="var(--cw-bg)",d.footerTextColor="var(--cw-muted)",d.inputTextColor="var(--cw-ink)",d.inputBorderColor="var(--cw-border)",d.attachButtonBg="var(--cw-surface)",d.attachButtonColor="var(--cw-muted)",d.emojiButtonColor="var(--cw-muted)",d.modalCardBg="var(--cw-surface)",d.modalMessageColor="var(--cw-ink)",d.endChatCancelBg="var(--cw-surface)",d.endChatCancelTextColor="var(--cw-muted)",d.endChatCancelBorderColor="var(--cw-border)"));const u=d.welcome||y.chatWindow.welcome;if(u&&(u.useWebsiteTheme??d.useWebsiteTheme)){const k=t.secondary&&t.secondary!==t.primary?t.secondary:t.primary;u.bgGradient=`linear-gradient(135deg, ${t.primary}, ${k})`,u.buttonIconColor=t.primary,d.welcome=u}b&&g.dark&&Object.keys(g.dark).length>0&&Object.assign(d,g.dark),Object.assign(y.chatWindow,d),m("store:chatWindow")};const g=i;g.welcome&&(y.chatWindow.welcome={...y.chatWindow.welcome,...g.welcome}),c(),ve(()=>c()),g.clientName&&(y.chat.clientName=g.clientName),g.agentName&&(y.chat.agentName=g.agentName,y.chat.messages[0]&&(y.chat.messages[0].senderName=g.agentName)),!y.chat.hasSentMessage&&((o=g.welcome)!=null&&o.enabled)&&(y.chat.state="welcome"),m("store:chat")}}catch(n){console.warn("initStore fetchClientConfig warning:",n)}const e=y.greetWindow;if(e&&e.enabled){const n=parseFloat(String(e.openingTimeAfterInitialLoadSec??2));if(setTimeout(()=>{!e.dismissed&&!y.chat.hasSentMessage&&(e.visible=!0,m("store:greetWindow"))},n*1e3),e.inputBox&&e.inputBox.enabled){const i=parseFloat(String(e.inputBox.openingTimeAfterInitialLoadSec??4));setTimeout(()=>{!e.dismissed&&!y.chat.hasSentMessage&&(e.inputBox&&(e.inputBox.visible=!0),m("store:greetWindow"))},i*1e3)}}}/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
@@ -3136,11 +3136,11 @@ button.primary:active {\r
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const Bt={attribute:!0,type:String,converter:Er,reflect:!1,hasChanged:qr},zt=(t=Bt,r,e)=>{const{kind:n,metadata:i}=e;let o=globalThis.litPropertyMetadata.get(i);if(o===void 0&&globalThis.litPropertyMetadata.set(i,o=new Map),n==="setter"&&((t=Object.create(t)).wrapped=!0),o.set(e.name,t),n==="accessor"){const{name:a}=e;return{set(l){const d=r.get.call(this);r.set.call(this,l),this.requestUpdate(a,d,t,!0,l)},init(l){return l!==void 0&&this.C(a,void 0,t,l),l}}}if(n==="setter"){const{name:a}=e;return function(l){const d=this[a];r.call(this,l),this.requestUpdate(a,d,t,!0,l)}}throw Error("Unsupported decorator location: "+n)};function h(t){return(r,e)=>typeof e=="object"?zt(t,r,e):((n,i,o)=>{const a=i.hasOwnProperty(o);return i.constructor.createProperty(o,n),a?Object.getOwnPropertyDescriptor(i,o):void 0})(t,r,e)}/**
+ */const ct={attribute:!0,type:String,converter:ur,reflect:!1,hasChanged:zr},dt=(t=ct,r,e)=>{const{kind:o,metadata:n}=e;let i=globalThis.litPropertyMetadata.get(n);if(i===void 0&&globalThis.litPropertyMetadata.set(n,i=new Map),o==="setter"&&((t=Object.create(t)).wrapped=!0),i.set(e.name,t),o==="accessor"){const{name:a}=e;return{set(p){const c=r.get.call(this);r.set.call(this,p),this.requestUpdate(a,c,t,!0,p)},init(p){return p!==void 0&&this.C(a,void 0,t,p),p}}}if(o==="setter"){const{name:a}=e;return function(p){const c=this[a];r.call(this,p),this.requestUpdate(a,c,t,!0,p)}}throw Error("Unsupported decorator location: "+o)};function h(t){return(r,e)=>typeof e=="object"?dt(t,r,e):((o,n,i)=>{const a=n.hasOwnProperty(i);return n.constructor.createProperty(i,o),a?Object.getOwnPropertyDescriptor(n,i):void 0})(t,r,e)}/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */function zr(t){return h({...t,state:!0,attribute:!1})}var Or=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwIcon=(rr=class extends ${constructor(){super(...arguments),this.name="MessageCircle",this.size=24,this.color="currentColor",this.customSvg=""}render(){if(this.customSvg)return c`<div class="custom-svg" style="width: ${this.size}px; height: ${this.size}px; color: ${this.color}" .innerHTML=${this.customSvg}></div>`;const r=this.size,e=this.color;switch(this.name){case"Star":return c`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="${e}" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;case"Heart":return c`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="${e}" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;case"Smile":return c`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>`;case"Sparkles":return c`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z"></path><path d="M5 3l.8 1.6L7.4 5l-1.6.8L5 7.4l-.8-1.6L2.6 5l1.6-.8L5 3z"></path><path d="M19 17l.8 1.6 1.6.6-1.6.8-.8 1.6-.8-1.6-1.6-.8 1.6-.6.8-1.6z"></path></svg>`;case"MessageSquare":return c`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;case"Send":return c`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;case"HelpCircle":return c`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;case"Gift":return c`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>`;case"Bell":return c`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>`;case"Info":return c`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;case"MessageCircle":default:return c`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>`}}},rr.styles=S`
+ */function dr(t){return h({...t,state:!0,attribute:!1})}var pt=Object.defineProperty,ht=Object.getOwnPropertyDescriptor,pr=(t,r,e,o)=>{for(var n=o>1?void 0:o?ht(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&pt(r,e,n),n};s.CwIcon=class extends ${constructor(){super(...arguments),this.name="MessageCircle",this.size=24,this.color="currentColor",this.customSvg=""}render(){if(this.customSvg)return l`<div class="custom-svg" style="width: ${this.size}px; height: ${this.size}px; color: ${this.color}" .innerHTML=${this.customSvg}></div>`;const r=this.size,e=this.color;switch(this.name){case"Star":return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="${e}" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;case"Heart":return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="${e}" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;case"Smile":return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>`;case"Sparkles":return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z"></path><path d="M5 3l.8 1.6L7.4 5l-1.6.8L5 7.4l-.8-1.6L2.6 5l1.6-.8L5 3z"></path><path d="M19 17l.8 1.6 1.6.6-1.6.8-.8 1.6-.8-1.6-1.6-.8 1.6-.6.8-1.6z"></path></svg>`;case"MessageSquare":return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;case"Send":return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;case"HelpCircle":return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;case"Gift":return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>`;case"Bell":return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>`;case"Info":return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;case"MessageCircle":default:return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>`}}},s.CwIcon.styles=S`
     :host {
       display: inline-flex;
       align-items: center;
@@ -3157,7 +3157,7 @@ button.primary:active {\r
       height: 100%;
       display: inline-flex;
     }
-  `,rr),Or([h({type:String})],s.CwIcon.prototype,"name",void 0),Or([h({type:Number})],s.CwIcon.prototype,"size",void 0),Or([h({type:String})],s.CwIcon.prototype,"color",void 0),Or([h({type:String})],s.CwIcon.prototype,"customSvg",void 0),s.CwIcon=Or([B("cw-icon")],s.CwIcon);var de=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwBadge=(er=class extends ${constructor(){super(...arguments),this.count=0,this.config={}}render(){if(!this.count||this.count<=0)return c``;const r=this.config||{},e=r.position||"top-right",n=r.offsetX!==void 0?r.offsetX:-6,i=r.offsetY!==void 0?r.offsetY:-6,o=r.size||20,a={position:"absolute",backgroundColor:r.backgroundColor||"#dc2626",color:r.textColor||"#ffffff",fontSize:`${r.fontSize||11}px`,lineHeight:"1",minWidth:`${o}px`,height:`${o}px`,border:`${r.borderWidth!==void 0?r.borderWidth:2}px solid ${r.borderColor||"#ffffff"}`,borderRadius:r.borderRadius!==void 0?r.borderRadius:"9999px",fontWeight:r.fontWeight||"700",boxShadow:r.boxShadow||"0 1px 3px rgba(0,0,0,0.15)",padding:r.padding||"0px",zIndex:"50",animation:r.animation||"none"};e==="top-left"?(a.top=`${i}px`,a.left=`${n}px`):e==="bottom-right"?(a.bottom=`${i}px`,a.right=`${n}px`):e==="bottom-left"?(a.bottom=`${i}px`,a.left=`${n}px`):(a.top=`${i}px`,a.right=`${n}px`);const l=Object.entries(a).map(([d,g])=>`${d.replace(/([A-Z])/g,"-$1").toLowerCase()}: ${g}`).join("; ");return c`<div class="badge" style="${l}">${this.count}</div>`}},er.styles=S`
+  `,pr([h({type:String})],s.CwIcon.prototype,"name",2),pr([h({type:Number})],s.CwIcon.prototype,"size",2),pr([h({type:String})],s.CwIcon.prototype,"color",2),pr([h({type:String})],s.CwIcon.prototype,"customSvg",2),s.CwIcon=pr([B("cw-icon")],s.CwIcon);var gt=Object.defineProperty,ft=Object.getOwnPropertyDescriptor,Vr=(t,r,e,o)=>{for(var n=o>1?void 0:o?ft(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&gt(r,e,n),n};s.CwBadge=class extends ${constructor(){super(...arguments),this.count=0,this.config={}}render(){if(!this.count||this.count<=0)return l``;const r=this.config||{},e=r.position||"top-right",o=r.offsetX!==void 0?r.offsetX:-6,n=r.offsetY!==void 0?r.offsetY:-6,i=r.size||20,a={position:"absolute",backgroundColor:r.backgroundColor||"#dc2626",color:r.textColor||"#ffffff",fontSize:`${r.fontSize||11}px`,lineHeight:"1",minWidth:`${i}px`,height:`${i}px`,border:`${r.borderWidth!==void 0?r.borderWidth:2}px solid ${r.borderColor||"#ffffff"}`,borderRadius:r.borderRadius!==void 0?r.borderRadius:"9999px",fontWeight:r.fontWeight||"700",boxShadow:r.boxShadow||"0 1px 3px rgba(0,0,0,0.15)",padding:r.padding||"0px",zIndex:"50",animation:r.animation||"none"};e==="top-left"?(a.top=`${n}px`,a.left=`${o}px`):e==="bottom-right"?(a.bottom=`${n}px`,a.right=`${o}px`):e==="bottom-left"?(a.bottom=`${n}px`,a.left=`${o}px`):(a.top=`${n}px`,a.right=`${o}px`);const p=Object.entries(a).map(([c,g])=>`${c.replace(/([A-Z])/g,"-$1").toLowerCase()}: ${g}`).join("; ");return l`<div class="badge" style="${p}">${this.count}</div>`}},s.CwBadge.styles=S`
     :host {
       display: inline-flex;
     }
@@ -3168,11 +3168,11 @@ button.primary:active {\r
       box-sizing: border-box;
       white-space: nowrap;
     }
-  `,er),de([h({type:Number})],s.CwBadge.prototype,"count",void 0),de([h({type:Object})],s.CwBadge.prototype,"config",void 0),s.CwBadge=de([B("cw-badge")],s.CwBadge);var Ot=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwTypingDots=(tr=class extends ${render(){return c`
+  `,Vr([h({type:Number})],s.CwBadge.prototype,"count",2),Vr([h({type:Object})],s.CwBadge.prototype,"config",2),s.CwBadge=Vr([B("cw-badge")],s.CwBadge);var ut=Object.getOwnPropertyDescriptor,bt=(t,r,e,o)=>{for(var n=o>1?void 0:o?ut(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=a(n)||n);return n};s.CwTypingDots=class extends ${render(){return l`
       <span class="dot"></span>
       <span class="dot"></span>
       <span class="dot"></span>
-    `}},tr.styles=S`
+    `}},s.CwTypingDots.styles=S`
     :host {
       display: inline-flex;
       align-items: center;
@@ -3206,19 +3206,19 @@ button.primary:active {\r
         opacity: 1;
       }
     }
-  `,tr),s.CwTypingDots=Ot([B("cw-typing-dots")],s.CwTypingDots);var Ar=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwMessageTick=(nr=class extends ${constructor(){super(...arguments),this.status="sent",this.sentColor="",this.deliveredColor="",this.readColor="#34b7f1"}render(){if(!this.status||this.status==="sent"){const r=this.sentColor||"currentColor",e=this.sentColor?"1":"0.7";return c`
+  `,s.CwTypingDots=bt([B("cw-typing-dots")],s.CwTypingDots);var wt=Object.defineProperty,mt=Object.getOwnPropertyDescriptor,hr=(t,r,e,o)=>{for(var n=o>1?void 0:o?mt(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&wt(r,e,n),n};s.CwMessageTick=class extends ${constructor(){super(...arguments),this.status="sent",this.sentColor="",this.deliveredColor="",this.readColor="#34b7f1"}render(){if(!this.status||this.status==="sent"){const r=this.sentColor||"currentColor",e=this.sentColor?"1":"0.7";return l`
         <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke="${r}" style="opacity: ${e}">
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
-      `}if(this.status==="delivered"){const r=this.deliveredColor||"currentColor",e=this.deliveredColor?"1":"0.7";return c`
+      `}if(this.status==="delivered"){const r=this.deliveredColor||"currentColor",e=this.deliveredColor?"1":"0.7";return l`
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke="${r}" style="opacity: ${e}">
           <path d="M17 6L8.5 14.5L5 11M22 6L13.5 14.5L12.5 13.5"></path>
         </svg>
-      `}if(this.status==="read"){const r=this.readColor||"#34b7f1";return c`
+      `}if(this.status==="read"){const r=this.readColor||"#34b7f1";return l`
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke="${r}">
           <path d="M17 6L8.5 14.5L5 11M22 6L13.5 14.5L12.5 13.5"></path>
         </svg>
-      `}return c``}},nr.styles=S`
+      `}return l``}},s.CwMessageTick.styles=S`
     :host {
       display: inline-flex;
       align-items: center;
@@ -3228,17 +3228,17 @@ button.primary:active {\r
     svg {
       display: block;
     }
-  `,nr),Ar([h({type:String})],s.CwMessageTick.prototype,"status",void 0),Ar([h({type:String})],s.CwMessageTick.prototype,"sentColor",void 0),Ar([h({type:String})],s.CwMessageTick.prototype,"deliveredColor",void 0),Ar([h({type:String})],s.CwMessageTick.prototype,"readColor",void 0),s.CwMessageTick=Ar([B("cw-message-tick")],s.CwMessageTick);var P=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwAvatar=(or=class extends ${constructor(){super(...arguments),this.name="Support",this.imageUrl="",this.bg="rgba(255,255,255,0.2)",this.color="#ffffff",this.size=32,this.showOnlineDot=!0}render(){var l,d,g,b,p;const r=(this.name||"S").charAt(0).toUpperCase(),e=((l=this.activeDot)==null?void 0:l.size)!==void 0?this.activeDot.size:8,n=((d=this.activeDot)==null?void 0:d.color)||"#22c55e",i=((g=this.activeDot)==null?void 0:g.animate)!==!1,o=((b=this.activeDot)==null?void 0:b.borderWidth)!==void 0?this.activeDot.borderWidth:0,a=((p=this.activeDot)==null?void 0:p.borderColor)||"transparent";return c`
+  `,hr([h({type:String})],s.CwMessageTick.prototype,"status",2),hr([h({type:String})],s.CwMessageTick.prototype,"sentColor",2),hr([h({type:String})],s.CwMessageTick.prototype,"deliveredColor",2),hr([h({type:String})],s.CwMessageTick.prototype,"readColor",2),s.CwMessageTick=hr([B("cw-message-tick")],s.CwMessageTick);var vt=Object.defineProperty,xt=Object.getOwnPropertyDescriptor,W=(t,r,e,o)=>{for(var n=o>1?void 0:o?xt(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&vt(r,e,n),n};s.CwAvatar=class extends ${constructor(){super(...arguments),this.name="Support",this.imageUrl="",this.bg="rgba(255,255,255,0.2)",this.color="#ffffff",this.size=32,this.showOnlineDot=!0}render(){var p,c,g,b,d;const r=(this.name||"S").charAt(0).toUpperCase(),e=((p=this.activeDot)==null?void 0:p.size)!==void 0?this.activeDot.size:8,o=((c=this.activeDot)==null?void 0:c.color)||"#22c55e",n=((g=this.activeDot)==null?void 0:g.animate)!==!1,i=((b=this.activeDot)==null?void 0:b.borderWidth)!==void 0?this.activeDot.borderWidth:0,a=((d=this.activeDot)==null?void 0:d.borderColor)||"transparent";return l`
       <div class="avatar-box" style="width: ${this.size}px; height: ${this.size}px; font-size: ${Math.floor(this.size*.45)}px; background: ${this.bg}; color: ${this.color}">
-        ${this.imageUrl?c`<img class="avatar-img" src="${this.imageUrl}" alt="${this.name}" />`:c`<span>${r}</span>`}
-        ${this.showOnlineDot?c`
+        ${this.imageUrl?l`<img class="avatar-img" src="${this.imageUrl}" alt="${this.name}" />`:l`<span>${r}</span>`}
+        ${this.showOnlineDot?l`
               <div class="dot-wrapper" style="width: ${e}px; height: ${e}px">
-                ${i?c`<span class="dot-pulse" style="background-color: ${n}"></span>`:""}
-                <span class="dot-solid" style="background-color: ${n}; border: ${o}px solid ${a}"></span>
+                ${n?l`<span class="dot-pulse" style="background-color: ${o}"></span>`:""}
+                <span class="dot-solid" style="background-color: ${o}; border: ${i}px solid ${a}"></span>
               </div>
             `:""}
       </div>
-    `}},or.styles=S`
+    `}},s.CwAvatar.styles=S`
     :host {
       display: inline-flex;
       position: relative;
@@ -3289,19 +3289,19 @@ button.primary:active {\r
       50% { transform: scale(1.6); opacity: 0.3; }
       100% { transform: scale(2.4); opacity: 0; }
     }
-  `,or),P([h({type:String})],s.CwAvatar.prototype,"name",void 0),P([h({type:String})],s.CwAvatar.prototype,"imageUrl",void 0),P([h({type:String})],s.CwAvatar.prototype,"bg",void 0),P([h({type:String})],s.CwAvatar.prototype,"color",void 0),P([h({type:Number})],s.CwAvatar.prototype,"size",void 0),P([h({type:Object})],s.CwAvatar.prototype,"activeDot",void 0),P([h({type:Boolean})],s.CwAvatar.prototype,"showOnlineDot",void 0),s.CwAvatar=P([B("cw-avatar")],s.CwAvatar);var X=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwMessageBubble=(ir=class extends ${constructor(){super(...arguments),this.chatWindowConfig={},this.isGroupEnd=!0,this.isGroupStart=!0,this.agentName="Sarah"}render(){if(!this.message)return c``;const r=this.message,e=this.chatWindowConfig,n=r.senderType==="VISITOR",i=r.senderType==="AGENT",o=n?e.visitorBubbleBg||"var(--cw-grad)":e.agentBubbleBg||"var(--cw-surface)",a=n?e.visitorBubbleColor||"#fff":e.agentBubbleColor||"var(--cw-ink)",l=n?"transparent":e.agentBubbleBorderColor||"var(--cw-border)",d=n?e.visitorBubbleBg?"none":"0 2px 8px color-mix(in srgb, var(--cw-accent) 25%, transparent)":"0 1px 2px rgba(16, 24, 40, 0.05)",g=n?e.visitorBubbleBorderRadius||"16px":e.agentBubbleBorderRadius||"16px",b=n?e.visitorBubblePadding||"10px 14px":e.agentBubblePadding||"10px 14px",p=n?e.visitorBubbleFontSize||"14px":e.agentBubbleFontSize||"14px",u=r.created?new Date(r.created).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}):new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}),x=(r.senderName||this.agentName||"A").charAt(0).toUpperCase();return c`
-      <div class="bubble-row ${n?"from-visitor":"from-agent"}">
-        ${i&&this.isGroupEnd?c`
+  `,W([h({type:String})],s.CwAvatar.prototype,"name",2),W([h({type:String})],s.CwAvatar.prototype,"imageUrl",2),W([h({type:String})],s.CwAvatar.prototype,"bg",2),W([h({type:String})],s.CwAvatar.prototype,"color",2),W([h({type:Number})],s.CwAvatar.prototype,"size",2),W([h({type:Object})],s.CwAvatar.prototype,"activeDot",2),W([h({type:Boolean})],s.CwAvatar.prototype,"showOnlineDot",2),s.CwAvatar=W([B("cw-avatar")],s.CwAvatar);var yt=Object.defineProperty,$t=Object.getOwnPropertyDescriptor,X=(t,r,e,o)=>{for(var n=o>1?void 0:o?$t(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&yt(r,e,n),n};s.CwMessageBubble=class extends ${constructor(){super(...arguments),this.chatWindowConfig={},this.isGroupEnd=!0,this.isGroupStart=!0,this.agentName="Sarah"}render(){if(!this.message)return l``;const r=this.message,e=this.chatWindowConfig,o=r.senderType==="VISITOR",n=r.senderType==="AGENT",i=o?e.visitorBubbleBg||"var(--cw-grad)":e.agentBubbleBg||"var(--cw-surface)",a=o?e.visitorBubbleColor||"#fff":e.agentBubbleColor||"var(--cw-ink)",p=o?"transparent":e.agentBubbleBorderColor||"var(--cw-border)",c=o?e.visitorBubbleBg?"none":"0 2px 8px color-mix(in srgb, var(--cw-accent) 25%, transparent)":"0 1px 2px rgba(16, 24, 40, 0.05)",g=o?e.visitorBubbleBorderRadius||"16px":e.agentBubbleBorderRadius||"16px",b=o?e.visitorBubblePadding||"10px 14px":e.agentBubblePadding||"10px 14px",d=o?e.visitorBubbleFontSize||"14px":e.agentBubbleFontSize||"14px",u=r.created?new Date(r.created).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}):new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}),v=(r.senderName||this.agentName||"A").charAt(0).toUpperCase();return l`
+      <div class="bubble-row ${o?"from-visitor":"from-agent"}">
+        ${n&&this.isGroupEnd?l`
               <div class="msg-avatar" style="background: ${e.agentAvatarBg||"var(--cw-accent-tint)"}; color: ${e.agentAvatarColor||"var(--cw-accent-deep)"}">
-                ${e.agentAvatarUrl?c`<img src="${e.agentAvatarUrl}" alt="avatar" />`:c`<span>${x}</span>`}
+                ${e.agentAvatarUrl?l`<img src="${e.agentAvatarUrl}" alt="avatar" />`:l`<span>${v}</span>`}
               </div>
-            `:i?c`<div class="msg-avatar-placeholder"></div>`:""}
+            `:n?l`<div class="msg-avatar-placeholder"></div>`:""}
 
         <div
           class="bubble ${r.pending?"pending":""}"
-          style="background: ${o}; color: ${a}; border-color: ${l}; border-style: solid; border-width: ${n?"0px":"1px"}; box-shadow: ${d}; border-radius: ${g}; padding: ${b}; font-size: ${p}"
+          style="background: ${i}; color: ${a}; border-color: ${p}; border-style: solid; border-width: ${o?"0px":"1px"}; box-shadow: ${c}; border-radius: ${g}; padding: ${b}; font-size: ${d}"
         >
-          ${r.attachment||r.localUrl?c`
+          ${r.attachment||r.localUrl?l`
                 <img
                   class="bubble-img"
                   alt="attachment"
@@ -3310,12 +3310,12 @@ button.primary:active {\r
                 />
               `:""}
 
-          ${r.body?c`<span>${r.body}</span>`:""}
+          ${r.body?l`<span>${r.body}</span>`:""}
 
-          ${this.isGroupEnd?c`
+          ${this.isGroupEnd?l`
                 <span class="bubble-time">
                   <span>${u}</span>
-                  ${n&&e.ticksEnabled!==!1?c`
+                  ${o&&e.ticksEnabled!==!1?l`
                         <cw-message-tick
                           .status="${r.status||"sent"}"
                           .sentColor="${e.sentTickColor||""}"
@@ -3327,7 +3327,7 @@ button.primary:active {\r
               `:""}
         </div>
       </div>
-    `}},ir.styles=S`
+    `}},s.CwMessageBubble.styles=S`
     :host {
       display: block;
       width: 100%;
@@ -3393,10 +3393,10 @@ button.primary:active {\r
       margin-left: 8px;
       margin-top: 4px;
     }
-  `,ir),X([h({type:Object})],s.CwMessageBubble.prototype,"message",void 0),X([h({type:Object})],s.CwMessageBubble.prototype,"chatWindowConfig",void 0),X([h({type:Boolean})],s.CwMessageBubble.prototype,"isGroupEnd",void 0),X([h({type:Boolean})],s.CwMessageBubble.prototype,"isGroupStart",void 0),X([h({type:String})],s.CwMessageBubble.prototype,"agentName",void 0),s.CwMessageBubble=X([B("cw-message-bubble")],s.CwMessageBubble);var H=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwComposer=(ar=class extends ${constructor(){super(...arguments),this.config={},this.draft="",this.attachmentsEnabled=!0,this.modernUi=!0,this.uploading=!1,this.focused=!1}handleInput(r){const e=r.target;this.draft=e.value,e.style.height="auto",e.style.height=`${Math.min(e.scrollHeight,120)}px`,this.dispatchEvent(new CustomEvent("draft-change",{detail:this.draft}))}handleKeyDown(r){r.key==="Enter"&&!r.shiftKey&&(r.preventDefault(),this.send())}send(){this.draft.trim()&&this.dispatchEvent(new CustomEvent("send-message",{detail:this.draft.trim()}))}toggleAttach(){this.dispatchEvent(new CustomEvent("toggle-attach"))}toggleEmoji(){this.dispatchEvent(new CustomEvent("toggle-emoji"))}handleFileSelect(r){const e=r.target;e&&w.uploadImage(e)}render(){const r=this.config,e=this.focused,n=!!this.draft.trim(),i=r.inputPadding||"6px 8px",o=r.inputMargin||"12px 16px",a=r.inputBg||"var(--cw-surface)",l=r.inputBorderRadius||"9999px",d=e?r.inputFocusBorderColor||r.accentColor||"#0b5fff":r.inputBorderColor||"var(--cw-border)",g=e?r.inputFocusShadow||"0 0 0 2px rgba(11, 95, 255, 0.1)":"none",b=r.inputTextColor||"var(--cw-ink)",p=r.inputPlaceholderColor||"#a1a1aa",u=r.textareaFontSize||"14px",x=r.attachButtonBg||"#ffffff",k=r.attachButtonColor||"#71717a",O=r.emojiButtonColor||"#71717a",f=n?r.sendButtonBgActive||r.accentColor||"#0b5fff":r.sendButtonBgInactive||"#e4e4e7",j=n?r.sendButtonColorActive||"#ffffff":r.sendButtonColorInactive||"#a1a1aa";return c`
+  `,X([h({type:Object})],s.CwMessageBubble.prototype,"message",2),X([h({type:Object})],s.CwMessageBubble.prototype,"chatWindowConfig",2),X([h({type:Boolean})],s.CwMessageBubble.prototype,"isGroupEnd",2),X([h({type:Boolean})],s.CwMessageBubble.prototype,"isGroupStart",2),X([h({type:String})],s.CwMessageBubble.prototype,"agentName",2),s.CwMessageBubble=X([B("cw-message-bubble")],s.CwMessageBubble);var kt=Object.defineProperty,Ct=Object.getOwnPropertyDescriptor,H=(t,r,e,o)=>{for(var n=o>1?void 0:o?Ct(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&kt(r,e,n),n};s.CwComposer=class extends ${constructor(){super(...arguments),this.config={},this.draft="",this.attachmentsEnabled=!0,this.modernUi=!0,this.uploading=!1,this.focused=!1}handleInput(r){const e=r.target;this.draft=e.value,e.style.height="auto",e.style.height=`${Math.min(e.scrollHeight,120)}px`,this.dispatchEvent(new CustomEvent("draft-change",{detail:this.draft}))}handleKeyDown(r){r.key==="Enter"&&!r.shiftKey&&(r.preventDefault(),this.send())}send(){this.draft.trim()&&this.dispatchEvent(new CustomEvent("send-message",{detail:this.draft.trim()}))}toggleAttach(){this.dispatchEvent(new CustomEvent("toggle-attach"))}toggleEmoji(){this.dispatchEvent(new CustomEvent("toggle-emoji"))}handleFileSelect(r){const e=r.target;e&&w.uploadImage(e)}render(){const r=this.config,e=this.focused,o=!!this.draft.trim(),n=r.inputPadding||"6px 8px",i=r.inputMargin||"12px 16px",a=r.inputBg||"var(--cw-surface)",p=r.inputBorderRadius||"9999px",c=e?r.inputFocusBorderColor||r.accentColor||"#0b5fff":r.inputBorderColor||"var(--cw-border)",g=e?r.inputFocusShadow||"0 0 0 2px rgba(11, 95, 255, 0.1)":"none",b=r.inputTextColor||"var(--cw-ink)",d=r.inputPlaceholderColor||"#a1a1aa",u=r.textareaFontSize||"14px",v=r.attachButtonBg||"#ffffff",k=r.attachButtonColor||"#71717a",z=r.emojiButtonColor||"#71717a",f=o?r.sendButtonBgActive||r.accentColor||"#0b5fff":r.sendButtonBgInactive||"#e4e4e7",A=o?r.sendButtonColorActive||"#ffffff":r.sendButtonColorInactive||"#a1a1aa";return l`
       <div
         class="composer"
-        style="padding: ${i}; margin: ${o}; background: ${a}; border-radius: ${l}; border: 1px solid ${d}; box-shadow: ${g}; --placeholder-color: ${p}"
+        style="padding: ${n}; margin: ${i}; background: ${a}; border-radius: ${p}; border: 1px solid ${c}; box-shadow: ${g}; --placeholder-color: ${d}"
       >
         <input
           type="file"
@@ -3407,14 +3407,14 @@ button.primary:active {\r
           @change="${this.handleFileSelect}"
         />
 
-        ${this.attachmentsEnabled?c`
+        ${this.attachmentsEnabled?l`
               <button
                 type="button"
                 class="attach-btn"
                 aria-label="Attach"
                 title="Attach"
                 ?disabled="${this.uploading}"
-                style="background: ${x}; color: ${k}"
+                style="background: ${v}; color: ${k}"
                 @click="${this.toggleAttach}"
               >
                 <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -3436,11 +3436,11 @@ button.primary:active {\r
           @blur="${()=>this.focused=!1}"
         ></textarea>
 
-        ${this.modernUi?c`
+        ${this.modernUi?l`
               <button
                 type="button"
                 aria-label="Emoji"
-                style="background: transparent; color: ${O}; margin-right: 2px"
+                style="background: transparent; color: ${z}; margin-right: 2px"
                 @click="${this.toggleEmoji}"
               >
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
@@ -3455,23 +3455,23 @@ button.primary:active {\r
         <button
           type="button"
           aria-label="Send message"
-          ?disabled="${!n}"
-          style="background: ${f}; color: ${j}"
+          ?disabled="${!o}"
+          style="background: ${f}; color: ${A}"
           @click="${this.send}"
         >
-          ${r.sendIconType==="arrow"?c`
+          ${r.sendIconType==="arrow"?l`
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="12" y1="19" x2="12" y2="5"></line>
                   <polyline points="5 12 12 5 19 12"></polyline>
                 </svg>
-              `:c`
+              `:l`
                 <svg class="send-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                   <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                 </svg>
               `}
         </button>
       </div>
-    `}},ar.styles=[A,S`
+    `}},s.CwComposer.styles=[_,S`
       :host {
         display: block;
         width: 100%;
@@ -3523,7 +3523,7 @@ button.primary:active {\r
         margin-left: 2px;
         margin-top: -2px;
       }
-    `],ar),H([h({type:Object})],s.CwComposer.prototype,"config",void 0),H([h({type:String})],s.CwComposer.prototype,"draft",void 0),H([h({type:Boolean})],s.CwComposer.prototype,"attachmentsEnabled",void 0),H([h({type:Boolean})],s.CwComposer.prototype,"modernUi",void 0),H([h({type:Boolean})],s.CwComposer.prototype,"uploading",void 0),H([zr()],s.CwComposer.prototype,"focused",void 0),s.CwComposer=H([B("cw-composer")],s.CwComposer);var Ur=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwGreetInput=(sr=class extends ${constructor(){super(...arguments),this.accentColor="#9333EA",this.draft=""}handleKeyDown(r){r.key==="Enter"&&this.submit()}handleInput(r){this.draft=r.target.value,w.get().draft=this.draft}submit(){window.dispatchEvent(new CustomEvent("toggle-contact-widget")),w.get().state="active",this.draft&&setTimeout(()=>w.send(),200)}render(){if(!this.config||!this.config.enabled||!this.config.visible)return c``;const r=this.config;if(r.layout==="separated"){const o=r.buttonBgColor||r.buttonColor||"#ffffff",a=r.buttonIconColor||this.accentColor,l=r.buttonSize||42;return c`
+    `],H([h({type:Object})],s.CwComposer.prototype,"config",2),H([h({type:String})],s.CwComposer.prototype,"draft",2),H([h({type:Boolean})],s.CwComposer.prototype,"attachmentsEnabled",2),H([h({type:Boolean})],s.CwComposer.prototype,"modernUi",2),H([h({type:Boolean})],s.CwComposer.prototype,"uploading",2),H([dr()],s.CwComposer.prototype,"focused",2),s.CwComposer=H([B("cw-composer")],s.CwComposer);var St=Object.defineProperty,Bt=Object.getOwnPropertyDescriptor,kr=(t,r,e,o)=>{for(var n=o>1?void 0:o?Bt(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&St(r,e,n),n};s.CwGreetInput=class extends ${constructor(){super(...arguments),this.accentColor="#9333EA",this.draft=""}handleKeyDown(r){r.key==="Enter"&&this.submit()}handleInput(r){this.draft=r.target.value,w.get().draft=this.draft}submit(){window.dispatchEvent(new CustomEvent("toggle-contact-widget")),w.get().state="active",this.draft&&setTimeout(()=>w.send(),200)}render(){if(!this.config||!this.config.enabled||!this.config.visible)return l``;const r=this.config;if(r.layout==="separated"){const i=r.buttonBgColor||r.buttonColor||"#ffffff",a=r.buttonIconColor||this.accentColor,p=r.buttonSize||42;return l`
         <div class="input-container" style="gap: 8px">
           <div
             style="flex: 1; background-color: ${r.backgroundColor||"#ffffff"}; border-radius: ${r.borderRadius||24}px; box-shadow: ${r.boxShadow||"0 6px 16px rgba(0,0,0,0.12)"}; padding: 10px 16px; display: flex; align-items: center"
@@ -3540,7 +3540,7 @@ button.primary:active {\r
 
           <button
             type="button"
-            style="background-color: ${o}; color: ${a}; border-radius: 50%; width: ${l}px; height: ${l}px; box-shadow: ${r.buttonBoxShadow||"0 6px 16px rgba(0,0,0,0.12)"}"
+            style="background-color: ${i}; color: ${a}; border-radius: 50%; width: ${p}px; height: ${p}px; box-shadow: ${r.buttonBoxShadow||"0 6px 16px rgba(0,0,0,0.12)"}"
             @click="${this.submit}"
           >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="margin-left: 2px; margin-top: 1px">
@@ -3548,7 +3548,7 @@ button.primary:active {\r
             </svg>
           </button>
         </div>
-      `}const n=r.buttonColor||"#9333EA",i=r.buttonIconColor||"#ffffff";return c`
+      `}const o=r.buttonColor||"#9333EA",n=r.buttonIconColor||"#ffffff";return l`
       <div
         class="input-container"
         style="background-color: ${r.backgroundColor||"#ffffff"}; border-radius: ${r.borderRadius||24}px; box-shadow: ${r.boxShadow||"0 6px 16px rgba(0,0,0,0.12)"}; padding: 4px 4px 4px 16px"
@@ -3564,7 +3564,7 @@ button.primary:active {\r
 
         <button
           type="button"
-          style="width: 38px; height: 38px; border-radius: 50%; background-color: ${n}; color: ${i}"
+          style="width: 38px; height: 38px; border-radius: 50%; background-color: ${o}; color: ${n}"
           @click="${this.submit}"
         >
           <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="margin-left: 2px; margin-top: 1px">
@@ -3572,7 +3572,7 @@ button.primary:active {\r
           </svg>
         </button>
       </div>
-    `}},sr.styles=S`
+    `}},s.CwGreetInput.styles=S`
     :host {
       display: block;
       width: 100%;
@@ -3606,8 +3606,8 @@ button.primary:active {\r
     button:hover {
       transform: scale(1.05);
     }
-  `,sr),Ur([h({type:Object})],s.CwGreetInput.prototype,"config",void 0),Ur([h({type:String})],s.CwGreetInput.prototype,"accentColor",void 0),Ur([h({type:String})],s.CwGreetInput.prototype,"draft",void 0),s.CwGreetInput=Ur([B("cw-greet-input")],s.CwGreetInput);var pe=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwWelcomeCard=(lr=class extends ${constructor(){super(...arguments),this.accentColor="#0b5fff"}start(){w.startFromWelcome()}close(){w.closePanel()}render(){const r=this.config||{},e=r.headerTextColor||"#ffffff",n=r.bgGradient||"linear-gradient(135deg, #0b5fff, #22d3ee)",i=r.padding||"24px 20px 12px 20px",o=r.cardLayout==="glassy";return c`
-      <div class="welcome-container" style="padding: ${i}; color: ${e}; background: ${n}">
+  `,kr([h({type:Object})],s.CwGreetInput.prototype,"config",2),kr([h({type:String})],s.CwGreetInput.prototype,"accentColor",2),kr([h({type:String})],s.CwGreetInput.prototype,"draft",2),s.CwGreetInput=kr([B("cw-greet-input")],s.CwGreetInput);var Ot=Object.defineProperty,zt=Object.getOwnPropertyDescriptor,Yr=(t,r,e,o)=>{for(var n=o>1?void 0:o?zt(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&Ot(r,e,n),n};s.CwWelcomeCard=class extends ${constructor(){super(...arguments),this.accentColor="#0b5fff"}start(){w.startFromWelcome()}close(){w.closePanel()}render(){const r=this.config||{},e=r.headerTextColor||"#ffffff",o=r.bgGradient||"linear-gradient(135deg, #0b5fff, #22d3ee)",n=r.padding||"24px 20px 12px 20px",i=r.cardLayout==="glassy";return l`
+      <div class="welcome-container" style="padding: ${n}; color: ${e}; background: ${o}">
         <div class="bg-blobs">
           <div class="blob-1"></div>
           <div class="blob-2"></div>
@@ -3622,12 +3622,12 @@ button.primary:active {\r
             </svg>
           </button>
 
-          ${o?c`
+          ${i?l`
                 <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; width: 100%">
                   <div style="display: flex; flex-direction: column; height: 100%; margin-bottom: 12px; justify-content: ${r.cardAlign==="center"||r.cardPosition==="center"?"center":"space-between"}">
                     <!-- Top Logo / Icon -->
                     <div style="display: flex; align-items: center; margin-bottom: 20px; flex-shrink: 0; justify-content: ${r.logoAlign||(r.textAlign==="center"||r.cardAlign==="center"?"center":"flex-start")}">
-                      ${r.logoUrl?c`<img src="${r.logoUrl}" style="height: 36px; object-fit: contain" />`:c`
+                      ${r.logoUrl?l`<img src="${r.logoUrl}" style="height: 36px; object-fit: contain" />`:l`
                             <div style="color: ${e}; opacity: 1">
                               <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
@@ -3650,11 +3650,11 @@ button.primary:active {\r
 
                         <!-- Overlapping Avatars -->
                         <div class="avatars-row" style="justify-content: ${r.avatarAlign||(r.textAlign==="center"||r.cardAlign==="center"?"center":"flex-start")}">
-                          ${(r.avatars||[]).map((a,l)=>c`
+                          ${(r.avatars||[]).map((a,p)=>l`
                               <img
                                 class="avatar-img"
                                 src="${a}"
-                                style="margin-left: ${l===0?"0":"-12px"}; border-color: ${r.avatarBorderColor||"rgba(255,255,255,0.2)"}; z-index: ${10+l}"
+                                style="margin-left: ${p===0?"0":"-12px"}; border-color: ${r.avatarBorderColor||"rgba(255,255,255,0.2)"}; z-index: ${10+p}"
                               />
                             `)}
                         </div>
@@ -3690,12 +3690,12 @@ button.primary:active {\r
                     <a href="#" target="_blank">vAInatheya.ai</a>
                   </div>
                 </div>
-              `:c`
+              `:l`
                 <!-- Normal Layout -->
                 <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; width: 100%">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 28px">
-                      ${r.logoUrl?c`<img src="${r.logoUrl}" style="height: 36px; object-fit: contain" />`:c`
+                      ${r.logoUrl?l`<img src="${r.logoUrl}" style="height: 36px; object-fit: contain" />`:l`
                             <div style="color: ${e}; opacity: 1">
                               <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
@@ -3713,11 +3713,11 @@ button.primary:active {\r
                       </p>
 
                       <div class="avatars-row">
-                        ${(r.avatars||[]).map((a,l)=>c`
+                        ${(r.avatars||[]).map((a,p)=>l`
                             <img
                               class="avatar-img"
                               src="${a}"
-                              style="margin-left: ${l===0?"0":"-12px"}; border-color: ${r.avatarBorderColor||"rgba(255,255,255,0.2)"}; z-index: ${10+l}"
+                              style="margin-left: ${p===0?"0":"-12px"}; border-color: ${r.avatarBorderColor||"rgba(255,255,255,0.2)"}; z-index: ${10+p}"
                             />
                           `)}
                       </div>
@@ -3755,7 +3755,7 @@ button.primary:active {\r
               `}
         </div>
       </div>
-    `}},lr.styles=[A,S`
+    `}},s.CwWelcomeCard.styles=[_,S`
       :host {
         display: block;
         width: 100%;
@@ -3886,7 +3886,7 @@ button.primary:active {\r
         color: inherit;
         text-decoration: none;
       }
-    `],lr),pe([h({type:Object})],s.CwWelcomeCard.prototype,"config",void 0),pe([h({type:String})],s.CwWelcomeCard.prototype,"accentColor",void 0),s.CwWelcomeCard=pe([B("cw-welcome-card")],s.CwWelcomeCard);var Lr=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwFormsPreview=(cr=class extends ${constructor(){super(...arguments),this.type="prechat",this.heading="Submit a Support Ticket",this.subheading="We will get back to you within 24 hours."}render(){return this.type==="postchat"?c`
+    `],Yr([h({type:Object})],s.CwWelcomeCard.prototype,"config",2),Yr([h({type:String})],s.CwWelcomeCard.prototype,"accentColor",2),s.CwWelcomeCard=Yr([B("cw-welcome-card")],s.CwWelcomeCard);var _t=Object.defineProperty,At=Object.getOwnPropertyDescriptor,Cr=(t,r,e,o)=>{for(var n=o>1?void 0:o?At(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&_t(r,e,n),n};s.CwFormsPreview=class extends ${constructor(){super(...arguments),this.type="prechat",this.heading="Submit a Support Ticket",this.subheading="We will get back to you within 24 hours."}render(){return this.type==="postchat"?l`
         <div class="phone-preview-card-container">
           <div class="phone-preview-header">
             Post-chat form preview
@@ -3923,7 +3923,7 @@ button.primary:active {\r
             </div>
           </form>
         </div>
-      `:this.type==="ticket"?c`
+      `:this.type==="ticket"?l`
         <div class="phone-preview-card-container">
           <div class="phone-preview-header">
             Ticket form preview
@@ -3952,7 +3952,7 @@ button.primary:active {\r
             </div>
           </form>
         </div>
-      `:c`
+      `:l`
       <div class="phone-preview-card-container">
         <div class="phone-preview-header">
           Pre-chat form preview
@@ -4003,27 +4003,27 @@ button.primary:active {\r
           </div>
         </form>
       </div>
-    `}},cr.styles=[A,S`
+    `}},s.CwFormsPreview.styles=[_,S`
       :host {
         display: block;
         width: 100%;
       }
-    `],cr),Lr([h({type:String})],s.CwFormsPreview.prototype,"type",void 0),Lr([h({type:String})],s.CwFormsPreview.prototype,"heading",void 0),Lr([h({type:String})],s.CwFormsPreview.prototype,"subheading",void 0),s.CwFormsPreview=Lr([B("cw-forms-preview")],s.CwFormsPreview);var J=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwBubble=(dr=class extends ${constructor(){super(...arguments),this.panelOpen=!1,this.unreadCount=0,this.hasSentMessage=!1,this.hovered=!1}connectedCallback(){super.connectedCallback(),this.unsub=Z("store:bubble",()=>this.requestUpdate())}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsub)==null||r.call(this)}handleClick(){window.dispatchEvent(new CustomEvent("toggle-contact-widget"))}render(){var tt;const r=this.config||Sr.get();if(r.hideOnOpen&&this.panelOpen)return c``;const e=r.width||60,n=r.height||60,i=r.offsetBottom!==void 0?r.offsetBottom:12,o=r.offsetRight!==void 0?r.offsetRight:16,a=se(r.borderRadius),l=He(r),d=[Le(r),De(r)].filter(Boolean).join(", "),g=r.hoverScale!==void 0?r.hoverScale:1.05,b=this.hovered&&!this.panelOpen?`scale(${g})`:"scale(1.0)";let p="";if(r.glass&&r.glass.enabled){const E=r.glass.blur||10,G=r.glass.bgOpacity||.3;p=`backdrop-filter: blur(${E}px); -webkit-backdrop-filter: blur(${E}px); background-color: rgba(255, 255, 255, ${G});`}let u="";if(r.neon&&r.neon.enabled){const E=r.neon.color||"#22d3ee",G=r.neon.intensity||.8;u=`box-shadow: 0 0 ${20*G}px ${E}, inset 0 0 ${10*G}px ${E};`}const x=r.border||{},k=x.width?`border: ${x.width}px ${x.style||"solid"} ${x.color||"transparent"};`:"";let O="";r.idleAnim&&r.idleAnim.enabled&&r.idleAnim.type!=="none"&&!this.hovered&&!this.panelOpen&&(O=`animation: idleFloat ${r.idleAnim.duration||3200}ms ease-in-out infinite;`);const f=r.tooltip,j=f&&f.enabled&&!this.panelOpen&&!this.hasSentMessage,W=(f==null?void 0:f.position)||"left",jt=Ve(f==null?void 0:f.borderRadius,W);let _r="",_="";const wr=8,z=(f==null?void 0:f.borderWidth)||0,N=(f==null?void 0:f.borderColor)||"transparent";W==="left"?(_r="right: calc(100% + 12px); top: 50%; transform: translateY(-50%);",_=`right: -${wr/2}px; top: 50%; transform: translateY(-50%) rotate(45deg);`,z>0&&(_+=` border-top: ${z}px solid ${N}; border-right: ${z}px solid ${N};`)):W==="right"?(_r="left: calc(100% + 12px); top: 50%; transform: translateY(-50%);",_=`left: -${wr/2}px; top: 50%; transform: translateY(-50%) rotate(45deg);`,z>0&&(_+=` border-bottom: ${z}px solid ${N}; border-left: ${z}px solid ${N};`)):W==="top"?(_r="bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%);",_=`bottom: -${wr/2}px; left: 50%; transform: translateX(-50%) rotate(45deg);`,z>0&&(_+=` border-bottom: ${z}px solid ${N}; border-right: ${z}px solid ${N};`)):W==="bottom"&&(_r="top: calc(100% + 12px); left: 50%; transform: translateX(-50%);",_=`top: -${wr/2}px; left: 50%; transform: translateX(-50%) rotate(45deg);`,z>0&&(_+=` border-top: ${z}px solid ${N}; border-left: ${z}px solid ${N};`));const _t=r.dots&&r.dots.animation&&r.dots.animation!=="none"&&this.hovered&&!this.panelOpen;return c`
+    `],Cr([h({type:String})],s.CwFormsPreview.prototype,"type",2),Cr([h({type:String})],s.CwFormsPreview.prototype,"heading",2),Cr([h({type:String})],s.CwFormsPreview.prototype,"subheading",2),s.CwFormsPreview=Cr([B("cw-forms-preview")],s.CwFormsPreview);var Et=Object.defineProperty,jt=Object.getOwnPropertyDescriptor,J=(t,r,e,o)=>{for(var n=o>1?void 0:o?jt(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&Et(r,e,n),n};s.CwBubble=class extends ${constructor(){super(...arguments),this.panelOpen=!1,this.unreadCount=0,this.hasSentMessage=!1,this.hovered=!1}connectedCallback(){super.connectedCallback(),this.unsub=Z("store:bubble",()=>this.requestUpdate())}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsub)==null||r.call(this)}handleClick(){window.dispatchEvent(new CustomEvent("toggle-contact-widget"))}render(){var Ne;const r=this.config||lr.get();if(r.hideOnOpen&&this.panelOpen)return l``;const e=r.width||60,o=r.height||60,n=r.offsetBottom!==void 0?r.offsetBottom:12,i=r.offsetRight!==void 0?r.offsetRight:16,a=Fr(r.borderRadius),p=Be(r),c=[Ce(r),Se(r)].filter(Boolean).join(", "),g=r.hoverScale!==void 0?r.hoverScale:1.05,b=this.hovered&&!this.panelOpen?`scale(${g})`:"scale(1.0)";let d="";if(r.glass&&r.glass.enabled){const j=r.glass.blur||10,q=r.glass.bgOpacity||.3;d=`backdrop-filter: blur(${j}px); -webkit-backdrop-filter: blur(${j}px); background-color: rgba(255, 255, 255, ${q});`}let u="";if(r.neon&&r.neon.enabled){const j=r.neon.color||"#22d3ee",q=r.neon.intensity||.8;u=`box-shadow: 0 0 ${20*q}px ${j}, inset 0 0 ${10*q}px ${j};`}const v=r.border||{},k=v.width?`border: ${v.width}px ${v.style||"solid"} ${v.color||"transparent"};`:"";let z="";r.idleAnim&&r.idleAnim.enabled&&r.idleAnim.type!=="none"&&!this.hovered&&!this.panelOpen&&(z=`animation: idleFloat ${r.idleAnim.duration||3200}ms ease-in-out infinite;`);const f=r.tooltip,A=f&&f.enabled&&!this.panelOpen&&!this.hasSentMessage,R=(f==null?void 0:f.position)||"left",qt=Ae(f==null?void 0:f.borderRadius,R);let fr="",E="";const rr=8,O=(f==null?void 0:f.borderWidth)||0,I=(f==null?void 0:f.borderColor)||"transparent";R==="left"?(fr="right: calc(100% + 12px); top: 50%; transform: translateY(-50%);",E=`right: -${rr/2}px; top: 50%; transform: translateY(-50%) rotate(45deg);`,O>0&&(E+=` border-top: ${O}px solid ${I}; border-right: ${O}px solid ${I};`)):R==="right"?(fr="left: calc(100% + 12px); top: 50%; transform: translateY(-50%);",E=`left: -${rr/2}px; top: 50%; transform: translateY(-50%) rotate(45deg);`,O>0&&(E+=` border-bottom: ${O}px solid ${I}; border-left: ${O}px solid ${I};`)):R==="top"?(fr="bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%);",E=`bottom: -${rr/2}px; left: 50%; transform: translateX(-50%) rotate(45deg);`,O>0&&(E+=` border-bottom: ${O}px solid ${I}; border-right: ${O}px solid ${I};`)):R==="bottom"&&(fr="top: calc(100% + 12px); left: 50%; transform: translateX(-50%);",E=`top: -${rr/2}px; left: 50%; transform: translateX(-50%) rotate(45deg);`,O>0&&(E+=` border-top: ${O}px solid ${I}; border-left: ${O}px solid ${I};`));const Vt=r.dots&&r.dots.animation&&r.dots.animation!=="none"&&this.hovered&&!this.panelOpen;return l`
       <div
         class="bubble-wrapper"
-        style="width: ${e}px; height: ${n}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${i}px; right: ${o}px; border-radius: ${a}; background: ${l}; background-blend-mode: ${r.backgroundBlendMode||"normal"}; box-shadow: ${d}; transform: ${b}; ${k} ${p} ${u} ${O}"
+        style="width: ${e}px; height: ${o}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${n}px; right: ${i}px; border-radius: ${a}; background: ${p}; background-blend-mode: ${r.backgroundBlendMode||"normal"}; box-shadow: ${c}; transform: ${b}; ${k} ${d} ${u} ${z}"
         @mouseenter="${()=>this.hovered=!0}"
         @mouseleave="${()=>this.hovered=!1}"
         @click="${this.handleClick}"
       >
-        ${r.backgroundOverlayType==="image"&&r.backgroundImageUrl?c`
+        ${r.backgroundOverlayType==="image"&&r.backgroundImageUrl?l`
               <div
                 class="overlay-img"
                 style="background-image: url(${r.backgroundImageUrl}); background-size: ${r.backgroundImageSize||"contain"}; opacity: ${r.backgroundImageOpacity||.25}; mix-blend-mode: ${r.backgroundBlendMode||"normal"}; border-radius: inherit"
               ></div>
             `:""}
 
-        ${r.backgroundOverlayType==="lucide"&&r.backgroundLucideIcon?c`
+        ${r.backgroundOverlayType==="lucide"&&r.backgroundLucideIcon?l`
               <div
                 class="overlay-icon"
                 style="color: ${r.backgroundLucideColor||"#FFFFFF"}; opacity: ${r.backgroundLucideOpacity||.2}; mix-blend-mode: ${r.backgroundBlendMode||"normal"}"
@@ -4032,32 +4032,32 @@ button.primary:active {\r
               </div>
             `:""}
 
-        ${_t?c`
-              <div class="dots-container" style="gap: ${((tt=r.dots)==null?void 0:tt.spacing)||6}px">
-                ${[0,1,2].map(E=>{var G,nt,ot,it;return c`
+        ${Vt?l`
+              <div class="dots-container" style="gap: ${((Ne=r.dots)==null?void 0:Ne.spacing)||6}px">
+                ${[0,1,2].map(j=>{var q,De,Ue,Le;return l`
                     <span
                       class="dot-span"
-                      style="width: ${((G=r.dots)==null?void 0:G.size)||6}px; height: ${((nt=r.dots)==null?void 0:nt.size)||6}px; background-color: ${((ot=r.dots)==null?void 0:ot.color)||"#FFFFFF"}; animation: ${((it=r.dots)==null?void 0:it.animation)==="bounce"?`dotBounce 1.2s cubic-bezier(.2,.8,.2,1) ${E*.12}s infinite`:`dotPulse 1.4s cubic-bezier(.2,.8,.2,1) ${E*.1}s infinite`}"
+                      style="width: ${((q=r.dots)==null?void 0:q.size)||6}px; height: ${((De=r.dots)==null?void 0:De.size)||6}px; background-color: ${((Ue=r.dots)==null?void 0:Ue.color)||"#FFFFFF"}; animation: ${((Le=r.dots)==null?void 0:Le.animation)==="bounce"?`dotBounce 1.2s cubic-bezier(.2,.8,.2,1) ${j*.12}s infinite`:`dotPulse 1.4s cubic-bezier(.2,.8,.2,1) ${j*.1}s infinite`}"
                     ></span>
                   `})}
               </div>
-            `:c`
+            `:l`
               <div class="icon-container">
-                ${this.panelOpen?c`
+                ${this.panelOpen?l`
                       <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="6 9 12 15 18 9"></polyline>
                       </svg>
-                    `:c`
+                    `:l`
                       <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%">
-                        ${r.iconType==="image"&&(r.iconImageUrl||r.backgroundImageUrl)?c`
+                        ${r.iconType==="image"&&(r.iconImageUrl||r.backgroundImageUrl)?l`
                               <img
                                 src="${r.iconImageUrl||r.backgroundImageUrl}"
                                 alt="bubble icon"
                                 style="width: ${r.iconWidth||26}px; height: ${r.iconHeight||26}px; object-fit: ${r.iconFit||"contain"}; opacity: ${r.iconOpacity!==void 0?r.iconOpacity:1}; mix-blend-mode: ${r.iconBlend||"normal"}; border-radius: 50%"
                               />
-                            `:r.iconType==="customSvg"&&r.customSvg?c`
+                            `:r.iconType==="customSvg"&&r.customSvg?l`
                               <cw-icon .customSvg="${r.customSvg}" .size="${r.iconWidth||26}" .color="${r.iconColor||"#ffffff"}"></cw-icon>
-                            `:c`
+                            `:l`
                               <cw-icon
                                 .name="${r.lucideIcon||r.backgroundLucideIcon||"MessageSquare"}"
                                 .size="${r.iconWidth||26}"
@@ -4069,30 +4069,30 @@ button.primary:active {\r
               </div>
             `}
 
-        ${r.outlineRing&&r.outlineRing.enabled?c`
+        ${r.outlineRing&&r.outlineRing.enabled?l`
               <div
-                style="position: absolute; inset: 0; pointer-events: none; border-radius: inherit; box-shadow: 0 0 0 ${r.outlineRing.width||3}px ${Ie(r.outlineRing.color||"#22d3ee",r.outlineRing.opacity||.4)}"
+                style="position: absolute; inset: 0; pointer-events: none; border-radius: inherit; box-shadow: 0 0 0 ${r.outlineRing.width||3}px ${$e(r.outlineRing.color||"#22d3ee",r.outlineRing.opacity||.4)}"
               ></div>
             `:""}
 
-        ${this.unreadCount>0?c`<cw-badge .count="${this.unreadCount}" .config="${r.badge}"></cw-badge>`:""}
+        ${this.unreadCount>0?l`<cw-badge .count="${this.unreadCount}" .config="${r.badge}"></cw-badge>`:""}
 
-        ${j?c`
+        ${A?l`
               <div
                 class="tooltip-box"
-                style="background-color: ${(f==null?void 0:f.backgroundColor)||"#ffffff"}; color: ${(f==null?void 0:f.textColor)||"#374151"}; font-size: ${(f==null?void 0:f.fontSize)||14}px; padding: ${(f==null?void 0:f.padding)||"8px 16px"}; border-radius: ${jt}; box-shadow: ${(f==null?void 0:f.boxShadow)||"0 4px 12px rgba(0,0,0,0.1)"}; border: ${(f==null?void 0:f.borderWidth)||0}px solid ${(f==null?void 0:f.borderColor)||"transparent"}; ${_r}"
+                style="background-color: ${(f==null?void 0:f.backgroundColor)||"#ffffff"}; color: ${(f==null?void 0:f.textColor)||"#374151"}; font-size: ${(f==null?void 0:f.fontSize)||14}px; padding: ${(f==null?void 0:f.padding)||"8px 16px"}; border-radius: ${qt}; box-shadow: ${(f==null?void 0:f.boxShadow)||"0 4px 12px rgba(0,0,0,0.1)"}; border: ${(f==null?void 0:f.borderWidth)||0}px solid ${(f==null?void 0:f.borderColor)||"transparent"}; ${fr}"
               >
                 <span>${(f==null?void 0:f.text)||"Chat with us"}</span>
-                ${(f==null?void 0:f.arrowEnabled)!==!1?c`
+                ${(f==null?void 0:f.arrowEnabled)!==!1?l`
                       <div
                         class="tooltip-arrow"
-                        style="width: ${wr}px; height: ${wr}px; background-color: ${(f==null?void 0:f.backgroundColor)||"#ffffff"}; ${_}"
+                        style="width: ${rr}px; height: ${rr}px; background-color: ${(f==null?void 0:f.backgroundColor)||"#ffffff"}; ${E}"
                       ></div>
                     `:""}
               </div>
             `:""}
       </div>
-    `}},dr.styles=[A,S`
+    `}},s.CwBubble.styles=[_,S`
       :host {
         display: block;
       }
@@ -4154,25 +4154,25 @@ button.primary:active {\r
         box-sizing: border-box;
         pointer-events: none;
       }
-    `],dr),J([h({type:Object})],s.CwBubble.prototype,"config",void 0),J([h({type:Boolean})],s.CwBubble.prototype,"panelOpen",void 0),J([h({type:Number})],s.CwBubble.prototype,"unreadCount",void 0),J([h({type:Boolean})],s.CwBubble.prototype,"hasSentMessage",void 0),J([zr()],s.CwBubble.prototype,"hovered",void 0),s.CwBubble=J([B("cw-bubble")],s.CwBubble);var jr=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwChatbar=(pr=class extends ${constructor(){super(...arguments),this.panelOpen=!1,this.unreadCount=0,this.hovered=!1}connectedCallback(){super.connectedCallback(),this.unsub=Z("store:chatbar",()=>this.requestUpdate())}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsub)==null||r.call(this)}handleClick(){window.dispatchEvent(new CustomEvent("toggle-contact-widget"))}render(){const r=this.config||{};if(!r.enabled||r.hideOnOpen&&this.panelOpen)return c``;const e=r.layout==="card",n=r.width||(e?240:255),i=r.height||(e?220:40),o=r.offsetBottom!==void 0?r.offsetBottom:12,a=r.offsetRight!==void 0?r.offsetRight:16,l=Fe(r),d=se(r.borderRadius,"20px"),g=this.hovered?"scale(1.02)":"scale(1.0)",b=r.padding!==void 0?r.padding:e?"24px 16px":"0 16px",p=r.gap!==void 0?`${r.gap}px`:e?"14px":"0";return c`
+    `],J([h({type:Object})],s.CwBubble.prototype,"config",2),J([h({type:Boolean})],s.CwBubble.prototype,"panelOpen",2),J([h({type:Number})],s.CwBubble.prototype,"unreadCount",2),J([h({type:Boolean})],s.CwBubble.prototype,"hasSentMessage",2),J([dr()],s.CwBubble.prototype,"hovered",2),s.CwBubble=J([B("cw-bubble")],s.CwBubble);var Tt=Object.defineProperty,Pt=Object.getOwnPropertyDescriptor,gr=(t,r,e,o)=>{for(var n=o>1?void 0:o?Pt(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&Tt(r,e,n),n};s.CwChatbar=class extends ${constructor(){super(...arguments),this.panelOpen=!1,this.unreadCount=0,this.hovered=!1}connectedCallback(){super.connectedCallback(),this.unsub=Z("store:chatbar",()=>this.requestUpdate())}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsub)==null||r.call(this)}handleClick(){window.dispatchEvent(new CustomEvent("toggle-contact-widget"))}render(){const r=this.config||{};if(!r.enabled||r.hideOnOpen&&this.panelOpen)return l``;const e=r.layout==="card",o=r.width||(e?240:255),n=r.height||(e?220:40),i=r.offsetBottom!==void 0?r.offsetBottom:12,a=r.offsetRight!==void 0?r.offsetRight:16,p=Oe(r),c=Fr(r.borderRadius,"20px"),g=this.hovered?"scale(1.02)":"scale(1.0)",b=r.padding!==void 0?r.padding:e?"24px 16px":"0 16px",d=r.gap!==void 0?`${r.gap}px`:e?"14px":"0";return l`
       <div
         class="chatbar-wrapper"
-        style="width: ${n}px; height: ${i}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${o}px; right: ${a}px; background: ${l}; color: ${r.textColor||"#ffffff"}; border-radius: ${d}; box-shadow: ${r.shadow?"0 4px 16px rgba(0,0,0,0.15)":"none"}; padding: ${b}; transform: ${g}; flex-direction: ${e?"column":"row"}; gap: ${p}"
+        style="width: ${o}px; height: ${n}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${i}px; right: ${a}px; background: ${p}; color: ${r.textColor||"#ffffff"}; border-radius: ${c}; box-shadow: ${r.shadow?"0 4px 16px rgba(0,0,0,0.15)":"none"}; padding: ${b}; transform: ${g}; flex-direction: ${e?"column":"row"}; gap: ${d}"
         @mouseenter="${()=>this.hovered=!0}"
         @mouseleave="${()=>this.hovered=!1}"
         @click="${this.handleClick}"
       >
-        ${e?c`
+        ${e?l`
               <!-- CARD LAYOUT (Vertical) -->
               <div class="card-layout" style="gap: ${r.gap!==void 0?r.gap:14}px">
                 <div style="display: flex; align-items: center; justify-content: center; position: relative">
-                  ${r.iconType==="image"&&r.iconImageUrl?c`
+                  ${r.iconType==="image"&&r.iconImageUrl?l`
                         <img
                           src="${r.iconImageUrl}"
                           alt="icon"
                           style="object-fit: ${r.iconFit||"contain"}; opacity: ${r.iconOpacity!==void 0?r.iconOpacity:1}; width: ${r.iconWidth||24}px; height: ${r.iconHeight||24}px; mix-blend-mode: ${r.iconBlend||"normal"}"
                         />
-                      `:r.iconType==="customSvg"&&r.customSvg?c`<cw-icon .customSvg="${r.customSvg}" .size="${r.iconWidth||28}" .color="${r.iconColor||"#ffffff"}"></cw-icon>`:c`<cw-icon .name="${r.lucideIcon||"MessageCircle"}" .size="${r.iconWidth||24}" .color="${r.iconColor||"#ffffff"}"></cw-icon>`}
+                      `:r.iconType==="customSvg"&&r.customSvg?l`<cw-icon .customSvg="${r.customSvg}" .size="${r.iconWidth||28}" .color="${r.iconColor||"#ffffff"}"></cw-icon>`:l`<cw-icon .name="${r.lucideIcon||"MessageCircle"}" .size="${r.iconWidth||24}" .color="${r.iconColor||"#ffffff"}"></cw-icon>`}
                 </div>
 
                 <span style="font-weight: 700; line-height: 1.35; white-space: pre-line; text-align: center; font-size: ${r.textSize||16}px; letter-spacing: ${r.letterSpacing||0}px">
@@ -4185,44 +4185,44 @@ button.primary:active {\r
                   <span>${r.buttonText||"Chat Now"}</span>
                 </div>
 
-                ${this.unreadCount>0?c`<span class="badge">${this.unreadCount}</span>`:""}
+                ${this.unreadCount>0?l`<span class="badge">${this.unreadCount}</span>`:""}
               </div>
-            `:c`
+            `:l`
               <!-- BAR LAYOUT (Horizontal) -->
               <div class="bar-layout">
                 <span
-                  style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; text-align: left; font-size: ${qe(r.textSize,r.height)}; letter-spacing: ${r.letterSpacing||0}px; color: ${r.textColor||"#ffffff"}"
+                  style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; text-align: left; font-size: ${ze(r.textSize,r.height)}; letter-spacing: ${r.letterSpacing||0}px; color: ${r.textColor||"#ffffff"}"
                 >
                   ${(r.text||"Chat with us").replace(/\n/g," ")}
                 </span>
 
                 <div style="display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; margin-left: 8px">
-                  ${r.iconType==="image"&&r.iconImageUrl?c`
+                  ${r.iconType==="image"&&r.iconImageUrl?l`
                         <img
                           src="${r.iconImageUrl}"
                           alt="icon"
-                          style="object-fit: ${r.iconFit||"contain"}; opacity: ${r.iconOpacity!==void 0?r.iconOpacity:1}; width: ${Mr(r.iconWidth,r.height,"image")}px; height: ${Ge(r.iconHeight,r.height,"image")}px; mix-blend-mode: ${r.iconBlend||"normal"}"
+                          style="object-fit: ${r.iconFit||"contain"}; opacity: ${r.iconOpacity!==void 0?r.iconOpacity:1}; width: ${mr(r.iconWidth,r.height,"image")}px; height: ${_e(r.iconHeight,r.height,"image")}px; mix-blend-mode: ${r.iconBlend||"normal"}"
                         />
-                      `:r.iconType==="customSvg"&&r.customSvg?c`
+                      `:r.iconType==="customSvg"&&r.customSvg?l`
                         <cw-icon
                           .customSvg="${r.customSvg}"
-                          .size="${Mr(r.iconWidth,r.height,"customSvg")}"
+                          .size="${mr(r.iconWidth,r.height,"customSvg")}"
                           .color="${r.iconColor||"#ffffff"}"
                         ></cw-icon>
-                      `:c`
+                      `:l`
                         <cw-icon
                           .name="${r.lucideIcon||"MessageCircle"}"
-                          .size="${Mr(r.iconWidth,r.height,"lucide")}"
+                          .size="${mr(r.iconWidth,r.height,"lucide")}"
                           .color="${r.iconColor||"#ffffff"}"
                         ></cw-icon>
                       `}
 
-                  ${this.unreadCount>0?c`<span class="bar-badge">${this.unreadCount}</span>`:""}
+                  ${this.unreadCount>0?l`<span class="bar-badge">${this.unreadCount}</span>`:""}
                 </div>
               </div>
             `}
       </div>
-    `}},pr.styles=[A,S`
+    `}},s.CwChatbar.styles=[_,S`
       :host {
         display: block;
       }
@@ -4289,10 +4289,10 @@ button.primary:active {\r
         z-index: 50;
         box-shadow: 0 1px 3px rgba(0,0,0,0.15);
       }
-    `],pr),jr([h({type:Object})],s.CwChatbar.prototype,"config",void 0),jr([h({type:Boolean})],s.CwChatbar.prototype,"panelOpen",void 0),jr([h({type:Number})],s.CwChatbar.prototype,"unreadCount",void 0),jr([zr()],s.CwChatbar.prototype,"hovered",void 0),s.CwChatbar=jr([B("cw-chatbar")],s.CwChatbar);var Q=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwGreetWindow=(hr=class extends ${constructor(){super(...arguments),this.panelOpen=!1,this.hasSentMessage=!1}connectedCallback(){super.connectedCallback(),this.unsub=Z("store:greetWindow",()=>this.requestUpdate())}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsub)==null||r.call(this)}handleDismiss(r){r.stopPropagation(),this.config&&(this.config.dismissed=!0,Wr.get().dismissed=!0,this.requestUpdate())}handleCardClick(){window.dispatchEvent(new CustomEvent("toggle-contact-widget"))}render(){const r=this.config||Wr.get(),e=this.chatbarConfig||Ir.get(),n=this.bubbleConfig||Sr.get(),i=e.enabled;if(!(!(i?e.hideOnOpen:n.hideOnOpen)||!this.panelOpen)||this.hasSentMessage||!r||!r.enabled||r.dismissed||!r.visible)return c``;const l=i?e.offsetBottom!==void 0?e.offsetBottom:12:n.offsetBottom!==void 0?n.offsetBottom:12,d=i?e.height||(e.layout==="card"?220:40):n.height||60,g=r.spacing!==void 0?r.spacing:16,b=l+d+g,p=i?e.offsetRight!==void 0?parseInt(String(e.offsetRight)):16:n.offsetRight!==void 0?parseInt(String(n.offsetRight)):16,u=r.width||320,x=r.iconAlign==="left"?"flex-start":r.iconAlign==="right"?"flex-end":"center",k=`calc(100% - ${b+24}px)`;return c`
+    `],gr([h({type:Object})],s.CwChatbar.prototype,"config",2),gr([h({type:Boolean})],s.CwChatbar.prototype,"panelOpen",2),gr([h({type:Number})],s.CwChatbar.prototype,"unreadCount",2),gr([dr()],s.CwChatbar.prototype,"hovered",2),s.CwChatbar=gr([B("cw-chatbar")],s.CwChatbar);var Mt=Object.defineProperty,Wt=Object.getOwnPropertyDescriptor,Q=(t,r,e,o)=>{for(var n=o>1?void 0:o?Wt(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&Mt(r,e,n),n};s.CwGreetWindow=class extends ${constructor(){super(...arguments),this.panelOpen=!1,this.hasSentMessage=!1}connectedCallback(){super.connectedCallback(),this.unsub=Z("store:greetWindow",()=>this.requestUpdate())}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsub)==null||r.call(this)}handleDismiss(r){r.stopPropagation(),this.config&&(this.config.dismissed=!0,xr.get().dismissed=!0,this.requestUpdate())}handleCardClick(){window.dispatchEvent(new CustomEvent("toggle-contact-widget"))}render(){const r=this.config||xr.get(),e=this.chatbarConfig||$r.get(),o=this.bubbleConfig||lr.get(),n=e.enabled;if(!(!(n?e.hideOnOpen:o.hideOnOpen)||!this.panelOpen)||this.hasSentMessage||!r||!r.enabled||r.dismissed||!r.visible)return l``;const p=n?e.offsetBottom!==void 0?e.offsetBottom:12:o.offsetBottom!==void 0?o.offsetBottom:12,c=n?e.height||(e.layout==="card"?220:40):o.height||60,g=r.spacing!==void 0?r.spacing:16,b=p+c+g,d=n?e.offsetRight!==void 0?parseInt(String(e.offsetRight)):16:o.offsetRight!==void 0?parseInt(String(o.offsetRight)):16,u=r.width||320,v=r.iconAlign==="left"?"flex-start":r.iconAlign==="right"?"flex-end":"center",k=`calc(100% - ${b+24}px)`;return l`
       <div
         class="greet-wrapper"
-        style="bottom: ${b}px; right: ${p}px; width: ${u}px; max-width: calc(100% - 24px); max-height: ${k}"
+        style="bottom: ${b}px; right: ${d}px; width: ${u}px; max-width: calc(100% - 24px); max-height: ${k}"
       >
         <!-- Close Button -->
         <div class="close-row">
@@ -4310,17 +4310,17 @@ button.primary:active {\r
           style="background-color: ${r.backgroundColor||"#ffffff"}; border-radius: ${r.borderRadius||16}px; padding: ${r.padding||"24px 20px"}; box-shadow: ${r.boxShadow||"0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)"}"
           @click="${this.handleCardClick}"
         >
-          ${r.imageUrl||r.iconType==="lucide"&&r.lucideIcon?c`
-                <div style="width: 100%; display: flex; align-items: center; margin-bottom: 16px; justify-content: ${x}">
-                  ${r.imageUrl?c`
+          ${r.imageUrl||r.iconType==="lucide"&&r.lucideIcon?l`
+                <div style="width: 100%; display: flex; align-items: center; margin-bottom: 16px; justify-content: ${v}">
+                  ${r.imageUrl?l`
                         <img
                           src="${r.imageUrl}"
-                          class="${le(r.iconAnimation)}"
+                          class="${Gr(r.iconAnimation)}"
                           style="display: block; margin: ${r.iconAlign==="center"?"0 auto":"0"}; height: ${r.imageHeight||70}px; width: ${r.imageWidth?`${r.imageWidth}px`:"auto"}; object-fit: contain; padding: ${r.imagePadding||"0px"}"
                         />
-                      `:c`
+                      `:l`
                         <div
-                          class="${le(r.iconAnimation)}"
+                          class="${Gr(r.iconAnimation)}"
                           style="width: ${r.iconSize||48}px; height: ${r.iconSize||48}px; color: ${r.iconColor||"#9333EA"}"
                         >
                           <cw-icon .name="${r.lucideIcon}" .size="${r.iconSize||48}" .color="${r.iconColor||"#9333EA"}"></cw-icon>
@@ -4341,7 +4341,7 @@ button.primary:active {\r
         <!-- Quick Input Box -->
         <cw-greet-input .config="${r.inputBox}" .accentColor="${r.iconColor||"#9333EA"}"></cw-greet-input>
       </div>
-    `}},hr.styles=[A,S`
+    `}},s.CwGreetWindow.styles=[_,S`
       :host {
         display: block;
       }
@@ -4394,25 +4394,25 @@ button.primary:active {\r
         pointer-events: auto;
         box-sizing: border-box;
       }
-    `],hr),Q([h({type:Object})],s.CwGreetWindow.prototype,"config",void 0),Q([h({type:Object})],s.CwGreetWindow.prototype,"chatbarConfig",void 0),Q([h({type:Object})],s.CwGreetWindow.prototype,"bubbleConfig",void 0),Q([h({type:Boolean})],s.CwGreetWindow.prototype,"panelOpen",void 0),Q([h({type:Boolean})],s.CwGreetWindow.prototype,"hasSentMessage",void 0),s.CwGreetWindow=Q([B("cw-greet-window")],s.CwGreetWindow);var F=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwChatHeader=(fr=class extends ${constructor(){super(...arguments),this.isExpanded=!1,this.clientName="Support",this.agentName="Sarah",this.state="active"}connectedCallback(){super.connectedCallback(),this.unsub=Pr(()=>this.requestUpdate())}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsub)==null||r.call(this)}toggleExpand(){w.toggleExpand()}toggleMenu(){w.get().menuOpen=!w.get().menuOpen,w.get()}closePanel(){w.closePanel(),window.dispatchEvent(new CustomEvent("close-contact-widget"))}askEndChat(){w.askEndChat()}render(){var u,x,k,O,f,j,W;const r=w.get(),e=this.state||r.state;if(e==="welcome")return c``;const n=this.config&&Object.keys(this.config).length>0?this.config:Br.get(),i=this.features&&Object.keys(this.features).length>0?this.features:Nr.get(),o=n.headerTextColor||"#ffffff",a=(i.voiceCallMaster||((u=n.features)==null?void 0:u.voiceCallMaster))&&(i.voiceCallAgents||((x=n.features)==null?void 0:x.voiceCallAgents)||i.voiceCallVisitors||((k=n.features)==null?void 0:k.voiceCallVisitors)),l=(i.videoCallMaster||((O=n.features)==null?void 0:O.videoCallMaster))&&(i.videoCallAgents||((f=n.features)==null?void 0:f.videoCallAgents)||i.videoCallVisitors||((j=n.features)==null?void 0:j.videoCallVisitors)),d=i.closeChatVisitor||((W=n.features)==null?void 0:W.closeChatVisitor),g=this.agentName||n.agentName||r.agentName,b=this.clientName||n.clientName||r.clientName||"Support",p=e==="active"&&g?`${g} · Online`:"Online";return c`
+    `],Q([h({type:Object})],s.CwGreetWindow.prototype,"config",2),Q([h({type:Object})],s.CwGreetWindow.prototype,"chatbarConfig",2),Q([h({type:Object})],s.CwGreetWindow.prototype,"bubbleConfig",2),Q([h({type:Boolean})],s.CwGreetWindow.prototype,"panelOpen",2),Q([h({type:Boolean})],s.CwGreetWindow.prototype,"hasSentMessage",2),s.CwGreetWindow=Q([B("cw-greet-window")],s.CwGreetWindow);var Rt=Object.defineProperty,It=Object.getOwnPropertyDescriptor,F=(t,r,e,o)=>{for(var n=o>1?void 0:o?It(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&Rt(r,e,n),n};s.CwChatHeader=class extends ${constructor(){super(...arguments),this.isExpanded=!1,this.clientName="Support",this.agentName="Sarah",this.state="active"}connectedCallback(){super.connectedCallback(),this.unsub=vr(()=>this.requestUpdate())}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsub)==null||r.call(this)}toggleExpand(){w.toggleExpand()}toggleMenu(){w.get().menuOpen=!w.get().menuOpen,w.get()}closePanel(){w.closePanel(),window.dispatchEvent(new CustomEvent("close-contact-widget"))}askEndChat(){w.askEndChat()}render(){var u,v,k,z,f,A,R;const r=w.get(),e=this.state||r.state;if(e==="welcome")return l``;const o=this.config&&Object.keys(this.config).length>0?this.config:cr.get(),n=this.features&&Object.keys(this.features).length>0?this.features:yr.get(),i=o.headerTextColor||"#ffffff",a=(n.voiceCallMaster||((u=o.features)==null?void 0:u.voiceCallMaster))&&(n.voiceCallAgents||((v=o.features)==null?void 0:v.voiceCallAgents)||n.voiceCallVisitors||((k=o.features)==null?void 0:k.voiceCallVisitors)),p=(n.videoCallMaster||((z=o.features)==null?void 0:z.videoCallMaster))&&(n.videoCallAgents||((f=o.features)==null?void 0:f.videoCallAgents)||n.videoCallVisitors||((A=o.features)==null?void 0:A.videoCallVisitors)),c=n.closeChatVisitor||((R=o.features)==null?void 0:R.closeChatVisitor),g=this.agentName||o.agentName||r.agentName,b=this.clientName||o.clientName||r.clientName||"Support",d=e==="active"&&g?`${g} · Online`:"Online";return l`
       <header
         class="panel-header"
-        style="background: ${n.headerBg||"var(--cw-grad)"}; color: ${o}; padding: ${n.headerPadding||"14px 16px"}; border-bottom: ${n.headerBorderColor?`1px solid ${n.headerBorderColor}`:"1px solid rgba(0,0,0,0.08)"}"
+        style="background: ${o.headerBg||"var(--cw-grad)"}; color: ${i}; padding: ${o.headerPadding||"14px 16px"}; border-bottom: ${o.headerBorderColor?`1px solid ${o.headerBorderColor}`:"1px solid rgba(0,0,0,0.08)"}"
       >
         <div class="left-section">
-          ${n.modernUi!==!1?c`
+          ${o.modernUi!==!1?l`
                 <button
                   type="button"
                   class="icon-btn"
                   aria-label="${this.isExpanded?"Collapse chat":"Expand chat"}"
-                  style="color: ${o}; opacity: 0.7"
+                  style="color: ${i}; opacity: 0.7"
                   @click="${this.toggleExpand}"
                 >
-                  ${this.isExpanded?c`
+                  ${this.isExpanded?l`
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                           <path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7" />
                         </svg>
-                      `:c`
+                      `:l`
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                           <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
                         </svg>
@@ -4422,26 +4422,26 @@ button.primary:active {\r
 
           <cw-avatar
             .name="${b}"
-            .bg="${n.headerAvatarBg||(o==="#18181b"?"#e4e4e7":"rgba(255,255,255,0.2)")}"
-            .color="${n.headerAvatarColor||o}"
+            .bg="${o.headerAvatarBg||(i==="#18181b"?"#e4e4e7":"rgba(255,255,255,0.2)")}"
+            .color="${o.headerAvatarColor||i}"
             .size="${32}"
-            .activeDot="${n.activeDot}"
+            .activeDot="${o.activeDot}"
           ></cw-avatar>
 
           <div class="info-col">
-            <span class="title-text" style="font-size: ${n.headerTitleFontSize||"14px"}">${b}</span>
-            <span class="subtitle-text" style="font-size: ${n.headerSubtitleFontSize||"11px"}">${p}</span>
+            <span class="title-text" style="font-size: ${o.headerTitleFontSize||"14px"}">${b}</span>
+            <span class="subtitle-text" style="font-size: ${o.headerSubtitleFontSize||"11px"}">${d}</span>
           </div>
         </div>
 
         <div class="actions-section">
-          ${a?c`
+          ${a?l`
                 <button
                   type="button"
                   class="icon-btn"
                   aria-label="Start voice call"
                   title="Voice call"
-                  style="color: ${o}; opacity: 0.9"
+                  style="color: ${i}; opacity: 0.9"
                   @click="${()=>alert("Initiating voice call...")}"
                 >
                   <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -4450,13 +4450,13 @@ button.primary:active {\r
                 </button>
               `:""}
 
-          ${l?c`
+          ${p?l`
                 <button
                   type="button"
                   class="icon-btn"
                   aria-label="Start video call"
                   title="Video call"
-                  style="color: ${o}; opacity: 0.9"
+                  style="color: ${i}; opacity: 0.9"
                   @click="${()=>alert("Initiating video call...")}"
                 >
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -4466,13 +4466,13 @@ button.primary:active {\r
                 </button>
               `:""}
 
-          ${d?c`
+          ${c?l`
                 <button
                   type="button"
                   class="icon-btn"
                   aria-label="End chat session"
                   title="End chat"
-                  style="color: ${o}; opacity: 0.7"
+                  style="color: ${i}; opacity: 0.7"
                   @click="${this.askEndChat}"
                 >
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -4481,12 +4481,12 @@ button.primary:active {\r
                 </button>
               `:""}
 
-          ${n.modernUi!==!1?c`
+          ${o.modernUi!==!1?l`
                 <button
                   type="button"
                   class="icon-btn"
                   aria-label="Chat options"
-                  style="color: ${o}; opacity: 0.7"
+                  style="color: ${i}; opacity: 0.7"
                   @click="${this.toggleMenu}"
                 >
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
@@ -4501,7 +4501,7 @@ button.primary:active {\r
             type="button"
             class="icon-btn"
             aria-label="Minimize chat panel"
-            style="color: ${o}; opacity: 0.7"
+            style="color: ${i}; opacity: 0.7"
             @click="${this.closePanel}"
           >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -4510,7 +4510,7 @@ button.primary:active {\r
           </button>
         </div>
       </header>
-    `}},fr.styles=[A,S`
+    `}},s.CwChatHeader.styles=[_,S`
       :host {
         display: block;
         width: 100%;
@@ -4568,16 +4568,16 @@ button.primary:active {\r
       .icon-btn:hover {
         opacity: 1 !important;
       }
-    `],fr),F([h({type:Object})],s.CwChatHeader.prototype,"config",void 0),F([h({type:Object})],s.CwChatHeader.prototype,"features",void 0),F([h({type:Boolean})],s.CwChatHeader.prototype,"isExpanded",void 0),F([h({type:String})],s.CwChatHeader.prototype,"clientName",void 0),F([h({type:String})],s.CwChatHeader.prototype,"agentName",void 0),F([h({type:String})],s.CwChatHeader.prototype,"state",void 0),s.CwChatHeader=F([B("cw-chat-header")],s.CwChatHeader);var he=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwChatBody=(gr=class extends ${connectedCallback(){super.connectedCallback(),this.unsub=Z("store:chat",()=>{this.requestUpdate(),this.scrollToBottom()})}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsub)==null||r.call(this)}scrollToBottom(){setTimeout(()=>{var e;const r=(e=this.shadowRoot)==null?void 0:e.querySelector(".messages-area");r&&(r.scrollTop=r.scrollHeight)},50)}handleDraftChange(r){w.get().draft=r.detail}handleSendMessage(r){w.send()}render(){var p;const r=this.chatState||w.get(),e=this.chatWindowConfig||Br.get(),n=r.state==="welcome",i=r.state==="boot",o=r.state==="prechat",a=r.state==="offline",l=r.state==="offline-sent",d=r.state==="queued",g=r.state==="active",b=r.state==="closed";return c`
+    `],F([h({type:Object})],s.CwChatHeader.prototype,"config",2),F([h({type:Object})],s.CwChatHeader.prototype,"features",2),F([h({type:Boolean})],s.CwChatHeader.prototype,"isExpanded",2),F([h({type:String})],s.CwChatHeader.prototype,"clientName",2),F([h({type:String})],s.CwChatHeader.prototype,"agentName",2),F([h({type:String})],s.CwChatHeader.prototype,"state",2),s.CwChatHeader=F([B("cw-chat-header")],s.CwChatHeader);var Nt=Object.defineProperty,Dt=Object.getOwnPropertyDescriptor,Kr=(t,r,e,o)=>{for(var n=o>1?void 0:o?Dt(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&Nt(r,e,n),n};s.CwChatBody=class extends ${connectedCallback(){super.connectedCallback(),this.unsub=Z("store:chat",()=>{this.requestUpdate(),this.scrollToBottom()})}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsub)==null||r.call(this)}scrollToBottom(){setTimeout(()=>{var e;const r=(e=this.shadowRoot)==null?void 0:e.querySelector(".messages-area");r&&(r.scrollTop=r.scrollHeight)},50)}handleDraftChange(r){w.get().draft=r.detail}handleSendMessage(r){w.send()}render(){var d;const r=this.chatState||w.get(),e=this.chatWindowConfig||cr.get(),o=r.state==="welcome",n=r.state==="boot",i=r.state==="prechat",a=r.state==="offline",p=r.state==="offline-sent",c=r.state==="queued",g=r.state==="active",b=r.state==="closed";return l`
       <div
         class="panel-body"
-        style="background: ${n?((p=e.welcome)==null?void 0:p.bgGradient)||"linear-gradient(135deg, #0b5fff, #22d3ee)":e.bodyBg||"var(--cw-bg)"}; padding: ${n?"0px":""}"
+        style="background: ${o?((d=e.welcome)==null?void 0:d.bgGradient)||"linear-gradient(135deg, #0b5fff, #22d3ee)":e.bodyBg||"var(--cw-bg)"}; padding: ${o?"0px":""}"
       >
         <!-- WELCOME SCREEN -->
-        ${n?c`<cw-welcome-card .config="${e.welcome}" .accentColor="${e.accentColor}"></cw-welcome-card>`:""}
+        ${o?l`<cw-welcome-card .config="${e.welcome}" .accentColor="${e.accentColor}"></cw-welcome-card>`:""}
 
         <!-- BOOT / CONNECTING -->
-        ${i?c`
+        ${n?l`
               <div class="center-note">
                 <div class="spinner"></div>
                 <p>Connecting…</p>
@@ -4585,7 +4585,7 @@ button.primary:active {\r
             `:""}
 
         <!-- PRECHAT FORM -->
-        ${o?c`
+        ${i?l`
               <div class="prechat">
                 <div class="avatar prechat-avatar">
                   <span>${(r.clientName||e.clientName||"S").charAt(0)}</span>
@@ -4603,7 +4603,7 @@ button.primary:active {\r
             `:""}
 
         <!-- OFFLINE FORM -->
-        ${a?c`
+        ${a?l`
               <div class="prechat">
                 <div class="avatar prechat-avatar offline-avatar">
                   <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -4649,7 +4649,7 @@ button.primary:active {\r
             `:""}
 
         <!-- OFFLINE SENT CONFIRMATION -->
-        ${l?c`
+        ${p?l`
               <div class="queued">
                 <div class="ticket offline-done">
                   <div class="done-check">
@@ -4666,7 +4666,7 @@ button.primary:active {\r
             `:""}
 
         <!-- QUEUED STATE -->
-        ${d?c`
+        ${c?l`
               <div class="queued">
                 <div class="ticket">
                   <div class="ticket-number">${r.position}</div>
@@ -4677,21 +4677,21 @@ button.primary:active {\r
             `:""}
 
         <!-- ACTIVE CHAT / CLOSED MESSAGES -->
-        ${g||b?c`
+        ${g||b?l`
               <div class="messages-area" style="background: ${e.bodyBg||"var(--cw-bg)"}">
-                ${r.messages.map((u,x)=>{const k=w.dividerBefore(x),O=w.groupEnd(x),f=w.groupStart(x);return c`
-                    ${k?c`<div class="day-divider">${w.dayLabel()}</div>`:""}
+                ${r.messages.map((u,v)=>{const k=w.dividerBefore(v),z=w.groupEnd(v),f=w.groupStart(v);return l`
+                    ${k?l`<div class="day-divider">${w.dayLabel()}</div>`:""}
 
                     <cw-message-bubble
                       .message="${u}"
                       .chatWindowConfig="${e}"
-                      .isGroupEnd="${O}"
+                      .isGroupEnd="${z}"
                       .isGroupStart="${f}"
                       .agentName="${r.agentName}"
                     ></cw-message-bubble>
                   `})}
 
-                ${r.typingName&&w.flag("chat.typingIndicator",!0)?c`
+                ${r.typingName&&w.flag("chat.typingIndicator",!0)?l`
                       <div class="bubble-row from-agent g-start g-end" style="margin-top: 4px">
                         <div class="bubble typing-bubble">
                           <span class="sr-only">${r.typingName}</span>
@@ -4702,7 +4702,7 @@ button.primary:active {\r
               </div>
 
               <!-- CONSENT BANNER -->
-              ${g&&!r.consentDismissed&&w.flag("widget.modernUi",!0)?c`
+              ${g&&!r.consentDismissed&&w.flag("widget.modernUi",!0)?l`
                     <div class="consent">
                       <p>By chatting here you agree this conversation may be processed and recorded to provide support.</p>
                       <button type="button" class="consent-x" aria-label="Dismiss" @click="${()=>w.dismissConsent()}">✕</button>
@@ -4710,9 +4710,9 @@ button.primary:active {\r
                   `:""}
 
               <!-- ATTACHMENT POPUP -->
-              ${r.attachOpen?c`
+              ${r.attachOpen?l`
                     <div class="attach-pop">
-                      <button type="button" class="menu-item" @click="${()=>{var u,x;r.attachOpen=!1,(x=(u=this.shadowRoot)==null?void 0:u.querySelector("#cw-file-input"))==null||x.click()}}">
+                      <button type="button" class="menu-item" @click="${()=>{var u,v;r.attachOpen=!1,(v=(u=this.shadowRoot)==null?void 0:u.querySelector("#cw-file-input"))==null||v.click()}}">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                           <rect x="3" y="5" width="18" height="14" rx="2" />
                           <circle cx="8.5" cy="10" r="1.5" />
@@ -4731,7 +4731,7 @@ button.primary:active {\r
                   `:""}
 
               <!-- MENU POPUP -->
-              ${r.menuOpen?c`
+              ${r.menuOpen?l`
                     <div class="menu-pop">
                       <button type="button" class="menu-item" @click="${()=>w.downloadTranscript()}">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -4749,16 +4749,16 @@ button.primary:active {\r
                   `:""}
 
               <!-- EMOJI PICKER -->
-              ${r.emojiOpen?c`
+              ${r.emojiOpen?l`
                     <div class="emoji-row">
-                      ${["😀","😂","😊","😍","👍","👎","🙏","🎉","❤️","😢","😮","👌"].map(u=>c`
+                      ${["😀","😂","😊","😍","👍","👎","🙏","🎉","❤️","😢","😮","👌"].map(u=>l`
                           <button type="button" class="emoji-btn" @click="${()=>{r.draft+=u,this.requestUpdate()}}">${u}</button>
                         `)}
                     </div>
                   `:""}
 
               <!-- COMPOSER BAR (ACTIVE STATE) -->
-              ${g?c`
+              ${g?l`
                     <cw-composer
                       .config="${e}"
                       .draft="${r.draft}"
@@ -4775,7 +4775,7 @@ button.primary:active {\r
                       class="panel-footer"
                       style="padding-bottom: ${e.footerPaddingBottom||"16px"}; background: ${e.footerBg||e.bodyBg||"#ffffff"}; border-bottom-left-radius: ${e.widgetBorderRadius||24}px; border-bottom-right-radius: ${e.widgetBorderRadius||24}px"
                     >
-                      ${w.flag("widget.modernUi",!0)?c`
+                      ${w.flag("widget.modernUi",!0)?l`
                             <div class="powered" style="font-size: ${e.footerFontSize||"11px"}; color: ${e.footerTextColor||"var(--cw-muted)"}">
                               <span>Powered by</span>
                               <a href="${e.poweredByLink||"#"}" target="_blank" style="color: ${e.poweredByColor||"#a1a1aa"}">
@@ -4787,7 +4787,7 @@ button.primary:active {\r
                   `:""}
 
               <!-- CLOSED NOTE -->
-              ${b?c`
+              ${b?l`
                     <div class="closed-note">
                       <p>Chat ended</p>
                       <button type="button" class="primary" @click="${()=>w.startNew()}">Start new chat</button>
@@ -4795,7 +4795,7 @@ button.primary:active {\r
                   `:""}
             `:""}
       </div>
-    `}},gr.styles=[A,S`
+    `}},s.CwChatBody.styles=[_,S`
       :host {
         display: flex;
         flex-direction: column;
@@ -5055,19 +5055,19 @@ button.primary:active {\r
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
-    `],gr),he([h({type:Object})],s.CwChatBody.prototype,"chatState",void 0),he([h({type:Object})],s.CwChatBody.prototype,"chatWindowConfig",void 0),s.CwChatBody=he([B("cw-chat-body")],s.CwChatBody);var q=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwChatPanel=(ur=class extends ${constructor(){super(...arguments),this.panelOpen=!1}connectedCallback(){super.connectedCallback(),this.unsub=Pr(()=>this.requestUpdate())}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsub)==null||r.call(this)}render(){if(!this.panelOpen)return c``;const r=this.chatWindowConfig||Br.get(),e=this.chatState||w.get(),n=this.features||Nr.get(),i=this.chatbarConfig||Ir.get(),o=this.bubbleConfig||Sr.get(),a=e.isExpanded,l=a?r.expandedWidth||480:r.widgetWidth||350,d=r.widgetHeight||550,g=r.offsetBottom!==void 0&&r.offsetBottom!==null&&r.offsetBottom!==""?Number(r.offsetBottom):i.enabled?i.offsetBottom!==void 0?i.offsetBottom:12:o.offsetBottom!==void 0?o.offsetBottom:12;let b=g;if(i.enabled&&!i.hideOnOpen){const f=i.height||(i.layout==="card"?220:40),j=i.stackGap!==void 0?i.stackGap:12;b=g+f+j}else if(!i.enabled&&!o.hideOnOpen){const f=o.height||60,j=o.stackGap!==void 0?o.stackGap:12;b=g+f+j}const p=r.offsetRight!==void 0&&r.offsetRight!==null&&r.offsetRight!==""?Number(r.offsetRight):i.enabled?i.offsetRight!==void 0?i.offsetRight:16:o.offsetRight!==void 0?o.offsetRight:16,u=r.widgetShadow?`0 8px ${r.widgetShadowBlur||30}px ${r.widgetShadowColor||"rgba(0,0,0,0.12)"}`:"none",x=r.widgetBorderEnabled?`${r.widgetBorderWidth||1}px solid ${r.widgetBorderColor||"#e5e7eb"}`:"none",k=`${r.widgetBorderRadius||24}px`,O=`calc(100% - ${b+24}px)`;return c`
+    `],Kr([h({type:Object})],s.CwChatBody.prototype,"chatState",2),Kr([h({type:Object})],s.CwChatBody.prototype,"chatWindowConfig",2),s.CwChatBody=Kr([B("cw-chat-body")],s.CwChatBody);var Ut=Object.defineProperty,Lt=Object.getOwnPropertyDescriptor,G=(t,r,e,o)=>{for(var n=o>1?void 0:o?Lt(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&Ut(r,e,n),n};s.CwChatPanel=class extends ${constructor(){super(...arguments),this.panelOpen=!1}connectedCallback(){super.connectedCallback(),this.unsub=vr(()=>this.requestUpdate())}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsub)==null||r.call(this)}render(){if(!this.panelOpen)return l``;const r=this.chatWindowConfig||cr.get(),e=this.chatState||w.get(),o=this.features||yr.get(),n=this.chatbarConfig||$r.get(),i=this.bubbleConfig||lr.get(),a=e.isExpanded,p=a?r.expandedWidth||480:r.widgetWidth||350,c=r.widgetHeight||550,g=r.offsetBottom!==void 0&&r.offsetBottom!==null&&r.offsetBottom!==""?Number(r.offsetBottom):n.enabled?n.offsetBottom!==void 0?n.offsetBottom:12:i.offsetBottom!==void 0?i.offsetBottom:12;let b=g;if(n.enabled&&!n.hideOnOpen){const f=n.height||(n.layout==="card"?220:40),A=n.stackGap!==void 0?n.stackGap:12;b=g+f+A}else if(!n.enabled&&!i.hideOnOpen){const f=i.height||60,A=i.stackGap!==void 0?i.stackGap:12;b=g+f+A}const d=r.offsetRight!==void 0&&r.offsetRight!==null&&r.offsetRight!==""?Number(r.offsetRight):n.enabled?n.offsetRight!==void 0?n.offsetRight:16:i.offsetRight!==void 0?i.offsetRight:16,u=r.widgetShadow?`0 8px ${r.widgetShadowBlur||30}px ${r.widgetShadowColor||"rgba(0,0,0,0.12)"}`:"none",v=r.widgetBorderEnabled?`${r.widgetBorderWidth||1}px solid ${r.widgetBorderColor||"#e5e7eb"}`:"none",k=`${r.widgetBorderRadius||24}px`,z=`calc(100% - ${b+24}px)`;return l`
       <div
         class="panel-wrapper zotly-widget-panel-wrapper"
-        style="width: ${l}px; height: ${d}px; max-width: calc(100% - 24px); max-height: ${O}; position: fixed; bottom: ${b}px; right: ${p}px"
+        style="width: ${p}px; height: ${c}px; max-width: calc(100% - 24px); max-height: ${z}; position: fixed; bottom: ${b}px; right: ${d}px"
       >
         <div
           class="panel"
-          style="box-shadow: ${u}; border: ${x}; border-radius: ${k}; background: ${r.bodyBg||"var(--cw-bg)"}; --cw-accent: ${r.accentColor||"#0b5fff"}"
+          style="box-shadow: ${u}; border: ${v}; border-radius: ${k}; background: ${r.bodyBg||"var(--cw-bg)"}; --cw-accent: ${r.accentColor||"#0b5fff"}"
         >
           <!-- HEADER -->
           <cw-chat-header
             .config="${r}"
-            .features="${n}"
+            .features="${o}"
             .isExpanded="${a}"
             .clientName="${e.clientName}"
             .agentName="${e.agentName}"
@@ -5078,10 +5078,10 @@ button.primary:active {\r
           <cw-chat-body .chatState="${e}" .chatWindowConfig="${r}"></cw-chat-body>
 
           <!-- RECONNECTING BANNER -->
-          ${e.reconnecting?c`<div class="reconnecting">Reconnecting…</div>`:""}
+          ${e.reconnecting?l`<div class="reconnecting">Reconnecting…</div>`:""}
 
           <!-- CONFIRM MODAL OVERLAY -->
-          ${e.confirmBox?c`
+          ${e.confirmBox?l`
                 <div class="modal-overlay" @click="${f=>{f.target===f.currentTarget&&(e.confirmBox=null)}}">
                   <div class="modal-card" style="background: ${r.modalCardBg||"#ffffff"}; border-radius: ${r.modalBorderRadius||24}px">
                     <p class="modal-message" style="color: ${r.modalMessageColor||"#101828"}">${e.confirmBox.message}</p>
@@ -5109,7 +5109,7 @@ button.primary:active {\r
               `:""}
         </div>
       </div>
-    `}},ur.styles=[A,S`
+    `}},s.CwChatPanel.styles=[_,S`
       :host {
         display: block;
       }
@@ -5176,19 +5176,19 @@ button.primary:active {\r
         cursor: pointer;
         border: 1px solid transparent;
       }
-    `],ur),q([h({type:Object})],s.CwChatPanel.prototype,"chatWindowConfig",void 0),q([h({type:Object})],s.CwChatPanel.prototype,"chatState",void 0),q([h({type:Object})],s.CwChatPanel.prototype,"features",void 0),q([h({type:Object})],s.CwChatPanel.prototype,"chatbarConfig",void 0),q([h({type:Object})],s.CwChatPanel.prototype,"bubbleConfig",void 0),q([h({type:Boolean})],s.CwChatPanel.prototype,"panelOpen",void 0),s.CwChatPanel=q([B("cw-chat-panel")],s.CwChatPanel);var fe=function(t,r,e,n){var i=arguments.length,o=i<3?r:n===null?n=Object.getOwnPropertyDescriptor(r,e):n,a;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")o=Reflect.decorate(t,r,e,n);else for(var l=t.length-1;l>=0;l--)(a=t[l])&&(o=(i<3?a(o):i>3?a(r,e,o):a(r,e))||o);return i>3&&o&&Object.defineProperty(r,e,o),o};s.CwWidgetRoot=(br=class extends ${constructor(){super(...arguments),this.panelOpen=!1,this.initialized=!1,this.toggleListener=()=>this.handleToggleWidget(),this.closeListener=()=>this.handleCloseWidget()}async connectedCallback(){super.connectedCallback();try{await rt()}catch(r){console.warn("CwWidgetRoot initStore warning:",r)}finally{this.unsubAll=Pr(()=>this.requestUpdate()),window.addEventListener("toggle-contact-widget",this.toggleListener),window.addEventListener("close-contact-widget",this.closeListener),this.initialized=!0,this.requestUpdate()}}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsubAll)==null||r.call(this),window.removeEventListener("toggle-contact-widget",this.toggleListener),window.removeEventListener("close-contact-widget",this.closeListener)}handleToggleWidget(){this.panelOpen=!this.panelOpen,w.get().panelOpen=this.panelOpen,this.panelOpen&&(w.get().unreadCount=0),this.requestUpdate()}handleCloseWidget(){this.panelOpen=!1,w.get().panelOpen=!1,this.requestUpdate()}render(){if(!this.initialized)return c``;const r=Sr.get(),e=Ir.get(),n=Wr.get(),i=Br.get(),o=Nr.get(),a=w.get();return c`
+    `],G([h({type:Object})],s.CwChatPanel.prototype,"chatWindowConfig",2),G([h({type:Object})],s.CwChatPanel.prototype,"chatState",2),G([h({type:Object})],s.CwChatPanel.prototype,"features",2),G([h({type:Object})],s.CwChatPanel.prototype,"chatbarConfig",2),G([h({type:Object})],s.CwChatPanel.prototype,"bubbleConfig",2),G([h({type:Boolean})],s.CwChatPanel.prototype,"panelOpen",2),s.CwChatPanel=G([B("cw-chat-panel")],s.CwChatPanel);var Ht=Object.defineProperty,Ft=Object.getOwnPropertyDescriptor,Zr=(t,r,e,o)=>{for(var n=o>1?void 0:o?Ft(r,e):r,i=t.length-1,a;i>=0;i--)(a=t[i])&&(n=(o?a(r,e,n):a(n))||n);return o&&n&&Ht(r,e,n),n};s.CwWidgetRoot=class extends ${constructor(){super(...arguments),this.panelOpen=!1,this.initialized=!1,this.toggleListener=()=>this.handleToggleWidget(),this.closeListener=()=>this.handleCloseWidget()}async connectedCallback(){super.connectedCallback();try{await Re()}catch(r){console.warn("CwWidgetRoot initStore warning:",r)}finally{this.unsubAll=vr(()=>this.requestUpdate()),window.addEventListener("toggle-contact-widget",this.toggleListener),window.addEventListener("close-contact-widget",this.closeListener),this.initialized=!0,this.requestUpdate()}}disconnectedCallback(){var r;super.disconnectedCallback(),(r=this.unsubAll)==null||r.call(this),window.removeEventListener("toggle-contact-widget",this.toggleListener),window.removeEventListener("close-contact-widget",this.closeListener)}handleToggleWidget(){this.panelOpen=!this.panelOpen,w.get().panelOpen=this.panelOpen,this.panelOpen&&(w.get().unreadCount=0),this.requestUpdate()}handleCloseWidget(){this.panelOpen=!1,w.get().panelOpen=!1,this.requestUpdate()}render(){if(!this.initialized)return l``;const r=lr.get(),e=$r.get(),o=xr.get(),n=cr.get(),i=yr.get(),a=w.get();return l`
       <style>
-        ${Te}
+        ${be}
       </style>
 
       <!-- FLOATING TRIGGER (BUBBLE OR CHATBAR) -->
-      ${e.enabled?c`
+      ${e.enabled?l`
             <cw-chatbar
               .config="${e}"
               .panelOpen="${this.panelOpen}"
               .unreadCount="${a.unreadCount}"
             ></cw-chatbar>
-          `:c`
+          `:l`
             <cw-bubble
               .config="${r}"
               .panelOpen="${this.panelOpen}"
@@ -5199,7 +5199,7 @@ button.primary:active {\r
 
       <!-- FLOATING GREET WINDOW -->
       <cw-greet-window
-        .config="${n}"
+        .config="${o}"
         .chatbarConfig="${e}"
         .bubbleConfig="${r}"
         .panelOpen="${this.panelOpen}"
@@ -5208,16 +5208,16 @@ button.primary:active {\r
 
       <!-- MAIN CHAT PANEL -->
       <cw-chat-panel
-        .chatWindowConfig="${i}"
+        .chatWindowConfig="${n}"
         .chatState="${a}"
-        .features="${o}"
+        .features="${i}"
         .chatbarConfig="${e}"
         .bubbleConfig="${r}"
         .panelOpen="${this.panelOpen}"
       ></cw-chat-panel>
-    `}},br.styles=S`
+    `}},s.CwWidgetRoot.styles=S`
     :host {
       display: block;
       font-family: inherit;
     }
-  `,br),fe([zr()],s.CwWidgetRoot.prototype,"panelOpen",void 0),fe([zr()],s.CwWidgetRoot.prototype,"initialized",void 0),s.CwWidgetRoot=fe([B("cw-widget-root")],s.CwWidgetRoot);function At(t=document.body){let r=t.querySelector("cw-widget-root");return r||(r=document.createElement("cw-widget-root"),t.appendChild(r)),r}s.CW_ACCENT=te,s.CW_ACCENT_DEEP=oe,s.CW_ACCENT_TINT=ne,s.CW_BG=Zr,s.CW_BORDER=Jr,s.CW_GRAD=ee,s.CW_INK=Qr,s.CW_MUTED=re,s.CW_SURFACE=Xr,s.DARK_TOKENS=Ee,s.GLOBAL_STYLES=A,s.KEYFRAMES_CSS=Te,s.LIGHT_TOKENS=_e,s.bubbleStore=Sr,s.chatStore=w,s.chatWindowStore=Br,s.chatbarStore=Ir,s.featuresStore=Nr,s.fetchClientConfig=Ne,s.formatTime=St,s.getAnimClass=le,s.getBorderRadius=se,s.getBoxShadow=Le,s.getChatbarBackground=Fe,s.getChatbarFontSize=qe,s.getChatbarIconHeight=Ge,s.getChatbarIconWidth=Mr,s.getClientId=We,s.getCompositeBackground=He,s.getGradient=Ue,s.getInnerShadow=De,s.getParentTheme=ie,s.getTooltipBorderRadius=Ve,s.getWidgetBaseUrl=Me,s.greetWindowStore=Wr,s.hexToRgba=Ie,s.hostTokensCss=Ct,s.initStore=rt,s.isHostDark=ae,s.mountChatWidget=At,s.observeDarkMode=Pe,s.subscribe=Z,s.subscribeAll=Pr,s.tokensToCss=Re,Object.defineProperty(s,Symbol.toStringTag,{value:"Module"})});
+  `,Zr([dr()],s.CwWidgetRoot.prototype,"panelOpen",2),Zr([dr()],s.CwWidgetRoot.prototype,"initialized",2),s.CwWidgetRoot=Zr([B("cw-widget-root")],s.CwWidgetRoot);function Gt(t=document.body){let r=t.querySelector("cw-widget-root");return r||(r=document.createElement("cw-widget-root"),t.appendChild(r)),r}s.CW_ACCENT=Nr,s.CW_ACCENT_DEEP=Ur,s.CW_ACCENT_TINT=Dr,s.CW_BG=Tr,s.CW_BORDER=Mr,s.CW_GRAD=Ir,s.CW_INK=Wr,s.CW_MUTED=Rr,s.CW_SURFACE=Pr,s.DARK_TOKENS=ue,s.GLOBAL_STYLES=_,s.KEYFRAMES_CSS=be,s.LIGHT_TOKENS=fe,s.bubbleStore=lr,s.chatStore=w,s.chatWindowStore=cr,s.chatbarStore=$r,s.featuresStore=yr,s.fetchClientConfig=ye,s.formatTime=lt,s.getAnimClass=Gr,s.getBorderRadius=Fr,s.getBoxShadow=Ce,s.getChatbarBackground=Oe,s.getChatbarFontSize=ze,s.getChatbarIconHeight=_e,s.getChatbarIconWidth=mr,s.getClientId=xe,s.getCompositeBackground=Be,s.getGradient=ke,s.getInnerShadow=Se,s.getParentTheme=Lr,s.getTooltipBorderRadius=Ae,s.getWidgetBaseUrl=me,s.greetWindowStore=xr,s.hexToRgba=$e,s.hostTokensCss=st,s.initStore=Re,s.isHostDark=Hr,s.mountChatWidget=Gt,s.observeDarkMode=ve,s.subscribe=Z,s.subscribeAll=vr,s.tokensToCss=we,Object.defineProperty(s,Symbol.toStringTag,{value:"Module"})});

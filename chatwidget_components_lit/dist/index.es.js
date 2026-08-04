@@ -3,260 +3,260 @@
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Ur = globalThis, ie = Ur.ShadowRoot && (Ur.ShadyCSS === void 0 || Ur.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, ae = Symbol(), ve = /* @__PURE__ */ new WeakMap();
-let Re = class {
-  constructor(r, e, n) {
-    if (this._$cssResult$ = !0, n !== ae) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
-    this.cssText = r, this.t = e;
+const Br = globalThis, Lr = Br.ShadowRoot && (Br.ShadyCSS === void 0 || Br.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, Hr = Symbol(), ne = /* @__PURE__ */ new WeakMap();
+let be = class {
+  constructor(e, t, o) {
+    if (this._$cssResult$ = !0, o !== Hr) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
+    this.cssText = e, this.t = t;
   }
   get styleSheet() {
-    let r = this.o;
-    const e = this.t;
-    if (ie && r === void 0) {
-      const n = e !== void 0 && e.length === 1;
-      n && (r = ve.get(e)), r === void 0 && ((this.o = r = new CSSStyleSheet()).replaceSync(this.cssText), n && ve.set(e, r));
+    let e = this.o;
+    const t = this.t;
+    if (Lr && e === void 0) {
+      const o = t !== void 0 && t.length === 1;
+      o && (e = ne.get(t)), e === void 0 && ((this.o = e = new CSSStyleSheet()).replaceSync(this.cssText), o && ne.set(t, e));
     }
-    return r;
+    return e;
   }
   toString() {
     return this.cssText;
   }
 };
-const Me = (t) => new Re(typeof t == "string" ? t : t + "", void 0, ae), C = (t, ...r) => {
-  const e = t.length === 1 ? t[0] : r.reduce((n, i, o) => n + ((a) => {
+const we = (r) => new be(typeof r == "string" ? r : r + "", void 0, Hr), C = (r, ...e) => {
+  const t = r.length === 1 ? r[0] : e.reduce((o, n, i) => o + ((a) => {
     if (a._$cssResult$ === !0) return a.cssText;
     if (typeof a == "number") return a;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + a + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
-  })(i) + t[o + 1], t[0]);
-  return new Re(e, t, ae);
-}, at = (t, r) => {
-  if (ie) t.adoptedStyleSheets = r.map((e) => e instanceof CSSStyleSheet ? e : e.styleSheet);
-  else for (const e of r) {
-    const n = document.createElement("style"), i = Ur.litNonce;
-    i !== void 0 && n.setAttribute("nonce", i), n.textContent = e.cssText, t.appendChild(n);
+  })(n) + r[i + 1], r[0]);
+  return new be(t, r, Hr);
+}, Le = (r, e) => {
+  if (Lr) r.adoptedStyleSheets = e.map((t) => t instanceof CSSStyleSheet ? t : t.styleSheet);
+  else for (const t of e) {
+    const o = document.createElement("style"), n = Br.litNonce;
+    n !== void 0 && o.setAttribute("nonce", n), o.textContent = t.cssText, r.appendChild(o);
   }
-}, ye = ie ? (t) => t : (t) => t instanceof CSSStyleSheet ? ((r) => {
-  let e = "";
-  for (const n of r.cssRules) e += n.cssText;
-  return Me(e);
-})(t) : t;
+}, oe = Lr ? (r) => r : (r) => r instanceof CSSStyleSheet ? ((e) => {
+  let t = "";
+  for (const o of e.cssRules) t += o.cssText;
+  return we(t);
+})(r) : r;
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: st, defineProperty: lt, getOwnPropertyDescriptor: ct, getOwnPropertyNames: dt, getOwnPropertySymbols: pt, getPrototypeOf: ht } = Object, P = globalThis, $e = P.trustedTypes, ft = $e ? $e.emptyScript : "", Jr = P.reactiveElementPolyfillSupport, zr = (t, r) => t, Lr = { toAttribute(t, r) {
-  switch (r) {
+const { is: He, defineProperty: Fe, getOwnPropertyDescriptor: qe, getOwnPropertyNames: Ve, getOwnPropertySymbols: Ye, getPrototypeOf: Ge } = Object, W = globalThis, ie = W.trustedTypes, Ke = ie ? ie.emptyScript : "", Pr = W.reactiveElementPolyfillSupport, pr = (r, e) => r, zr = { toAttribute(r, e) {
+  switch (e) {
     case Boolean:
-      t = t ? ft : null;
+      r = r ? Ke : null;
       break;
     case Object:
     case Array:
-      t = t == null ? t : JSON.stringify(t);
+      r = r == null ? r : JSON.stringify(r);
   }
-  return t;
-}, fromAttribute(t, r) {
-  let e = t;
-  switch (r) {
+  return r;
+}, fromAttribute(r, e) {
+  let t = r;
+  switch (e) {
     case Boolean:
-      e = t !== null;
+      t = r !== null;
       break;
     case Number:
-      e = t === null ? null : Number(t);
+      t = r === null ? null : Number(r);
       break;
     case Object:
     case Array:
       try {
-        e = JSON.parse(t);
+        t = JSON.parse(r);
       } catch {
-        e = null;
+        t = null;
       }
   }
-  return e;
-} }, se = (t, r) => !st(t, r), ke = { attribute: !0, type: String, converter: Lr, reflect: !1, useDefault: !1, hasChanged: se };
-Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), P.litPropertyMetadata ?? (P.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
-let Q = class extends HTMLElement {
-  static addInitializer(r) {
-    this._$Ei(), (this.l ?? (this.l = [])).push(r);
+  return t;
+} }, Fr = (r, e) => !He(r, e), ae = { attribute: !0, type: String, converter: zr, reflect: !1, useDefault: !1, hasChanged: Fr };
+Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), W.litPropertyMetadata ?? (W.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
+let er = class extends HTMLElement {
+  static addInitializer(e) {
+    this._$Ei(), (this.l ?? (this.l = [])).push(e);
   }
   static get observedAttributes() {
     return this.finalize(), this._$Eh && [...this._$Eh.keys()];
   }
-  static createProperty(r, e = ke) {
-    if (e.state && (e.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(r) && ((e = Object.create(e)).wrapped = !0), this.elementProperties.set(r, e), !e.noAccessor) {
-      const n = Symbol(), i = this.getPropertyDescriptor(r, n, e);
-      i !== void 0 && lt(this.prototype, r, i);
+  static createProperty(e, t = ae) {
+    if (t.state && (t.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(e) && ((t = Object.create(t)).wrapped = !0), this.elementProperties.set(e, t), !t.noAccessor) {
+      const o = Symbol(), n = this.getPropertyDescriptor(e, o, t);
+      n !== void 0 && Fe(this.prototype, e, n);
     }
   }
-  static getPropertyDescriptor(r, e, n) {
-    const { get: i, set: o } = ct(this.prototype, r) ?? { get() {
-      return this[e];
+  static getPropertyDescriptor(e, t, o) {
+    const { get: n, set: i } = qe(this.prototype, e) ?? { get() {
+      return this[t];
     }, set(a) {
-      this[e] = a;
+      this[t] = a;
     } };
-    return { get: i, set(a) {
-      const s = i == null ? void 0 : i.call(this);
-      o == null || o.call(this, a), this.requestUpdate(r, s, n);
+    return { get: n, set(a) {
+      const d = n == null ? void 0 : n.call(this);
+      i == null || i.call(this, a), this.requestUpdate(e, d, o);
     }, configurable: !0, enumerable: !0 };
   }
-  static getPropertyOptions(r) {
-    return this.elementProperties.get(r) ?? ke;
+  static getPropertyOptions(e) {
+    return this.elementProperties.get(e) ?? ae;
   }
   static _$Ei() {
-    if (this.hasOwnProperty(zr("elementProperties"))) return;
-    const r = ht(this);
-    r.finalize(), r.l !== void 0 && (this.l = [...r.l]), this.elementProperties = new Map(r.elementProperties);
+    if (this.hasOwnProperty(pr("elementProperties"))) return;
+    const e = Ge(this);
+    e.finalize(), e.l !== void 0 && (this.l = [...e.l]), this.elementProperties = new Map(e.elementProperties);
   }
   static finalize() {
-    if (this.hasOwnProperty(zr("finalized"))) return;
-    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(zr("properties"))) {
-      const e = this.properties, n = [...dt(e), ...pt(e)];
-      for (const i of n) this.createProperty(i, e[i]);
+    if (this.hasOwnProperty(pr("finalized"))) return;
+    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(pr("properties"))) {
+      const t = this.properties, o = [...Ve(t), ...Ye(t)];
+      for (const n of o) this.createProperty(n, t[n]);
     }
-    const r = this[Symbol.metadata];
-    if (r !== null) {
-      const e = litPropertyMetadata.get(r);
-      if (e !== void 0) for (const [n, i] of e) this.elementProperties.set(n, i);
+    const e = this[Symbol.metadata];
+    if (e !== null) {
+      const t = litPropertyMetadata.get(e);
+      if (t !== void 0) for (const [o, n] of t) this.elementProperties.set(o, n);
     }
     this._$Eh = /* @__PURE__ */ new Map();
-    for (const [e, n] of this.elementProperties) {
-      const i = this._$Eu(e, n);
-      i !== void 0 && this._$Eh.set(i, e);
+    for (const [t, o] of this.elementProperties) {
+      const n = this._$Eu(t, o);
+      n !== void 0 && this._$Eh.set(n, t);
     }
     this.elementStyles = this.finalizeStyles(this.styles);
   }
-  static finalizeStyles(r) {
-    const e = [];
-    if (Array.isArray(r)) {
-      const n = new Set(r.flat(1 / 0).reverse());
-      for (const i of n) e.unshift(ye(i));
-    } else r !== void 0 && e.push(ye(r));
-    return e;
+  static finalizeStyles(e) {
+    const t = [];
+    if (Array.isArray(e)) {
+      const o = new Set(e.flat(1 / 0).reverse());
+      for (const n of o) t.unshift(oe(n));
+    } else e !== void 0 && t.push(oe(e));
+    return t;
   }
-  static _$Eu(r, e) {
-    const n = e.attribute;
-    return n === !1 ? void 0 : typeof n == "string" ? n : typeof r == "string" ? r.toLowerCase() : void 0;
+  static _$Eu(e, t) {
+    const o = t.attribute;
+    return o === !1 ? void 0 : typeof o == "string" ? o : typeof e == "string" ? e.toLowerCase() : void 0;
   }
   constructor() {
     super(), this._$Ep = void 0, this.isUpdatePending = !1, this.hasUpdated = !1, this._$Em = null, this._$Ev();
   }
   _$Ev() {
-    var r;
-    this._$ES = new Promise((e) => this.enableUpdating = e), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), (r = this.constructor.l) == null || r.forEach((e) => e(this));
-  }
-  addController(r) {
     var e;
-    (this._$EO ?? (this._$EO = /* @__PURE__ */ new Set())).add(r), this.renderRoot !== void 0 && this.isConnected && ((e = r.hostConnected) == null || e.call(r));
+    this._$ES = new Promise((t) => this.enableUpdating = t), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), (e = this.constructor.l) == null || e.forEach((t) => t(this));
   }
-  removeController(r) {
-    var e;
-    (e = this._$EO) == null || e.delete(r);
+  addController(e) {
+    var t;
+    (this._$EO ?? (this._$EO = /* @__PURE__ */ new Set())).add(e), this.renderRoot !== void 0 && this.isConnected && ((t = e.hostConnected) == null || t.call(e));
+  }
+  removeController(e) {
+    var t;
+    (t = this._$EO) == null || t.delete(e);
   }
   _$E_() {
-    const r = /* @__PURE__ */ new Map(), e = this.constructor.elementProperties;
-    for (const n of e.keys()) this.hasOwnProperty(n) && (r.set(n, this[n]), delete this[n]);
-    r.size > 0 && (this._$Ep = r);
+    const e = /* @__PURE__ */ new Map(), t = this.constructor.elementProperties;
+    for (const o of t.keys()) this.hasOwnProperty(o) && (e.set(o, this[o]), delete this[o]);
+    e.size > 0 && (this._$Ep = e);
   }
   createRenderRoot() {
-    const r = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
-    return at(r, this.constructor.elementStyles), r;
+    const e = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
+    return Le(e, this.constructor.elementStyles), e;
   }
   connectedCallback() {
-    var r;
-    this.renderRoot ?? (this.renderRoot = this.createRenderRoot()), this.enableUpdating(!0), (r = this._$EO) == null || r.forEach((e) => {
-      var n;
-      return (n = e.hostConnected) == null ? void 0 : n.call(e);
+    var e;
+    this.renderRoot ?? (this.renderRoot = this.createRenderRoot()), this.enableUpdating(!0), (e = this._$EO) == null || e.forEach((t) => {
+      var o;
+      return (o = t.hostConnected) == null ? void 0 : o.call(t);
     });
   }
-  enableUpdating(r) {
+  enableUpdating(e) {
   }
   disconnectedCallback() {
-    var r;
-    (r = this._$EO) == null || r.forEach((e) => {
-      var n;
-      return (n = e.hostDisconnected) == null ? void 0 : n.call(e);
+    var e;
+    (e = this._$EO) == null || e.forEach((t) => {
+      var o;
+      return (o = t.hostDisconnected) == null ? void 0 : o.call(t);
     });
   }
-  attributeChangedCallback(r, e, n) {
-    this._$AK(r, n);
+  attributeChangedCallback(e, t, o) {
+    this._$AK(e, o);
   }
-  _$ET(r, e) {
-    var o;
-    const n = this.constructor.elementProperties.get(r), i = this.constructor._$Eu(r, n);
-    if (i !== void 0 && n.reflect === !0) {
-      const a = (((o = n.converter) == null ? void 0 : o.toAttribute) !== void 0 ? n.converter : Lr).toAttribute(e, n.type);
-      this._$Em = r, a == null ? this.removeAttribute(i) : this.setAttribute(i, a), this._$Em = null;
+  _$ET(e, t) {
+    var i;
+    const o = this.constructor.elementProperties.get(e), n = this.constructor._$Eu(e, o);
+    if (n !== void 0 && o.reflect === !0) {
+      const a = (((i = o.converter) == null ? void 0 : i.toAttribute) !== void 0 ? o.converter : zr).toAttribute(t, o.type);
+      this._$Em = e, a == null ? this.removeAttribute(n) : this.setAttribute(n, a), this._$Em = null;
     }
   }
-  _$AK(r, e) {
-    var o, a;
-    const n = this.constructor, i = n._$Eh.get(r);
-    if (i !== void 0 && this._$Em !== i) {
-      const s = n.getPropertyOptions(i), c = typeof s.converter == "function" ? { fromAttribute: s.converter } : ((o = s.converter) == null ? void 0 : o.fromAttribute) !== void 0 ? s.converter : Lr;
-      this._$Em = i;
-      const f = c.fromAttribute(e, s.type);
-      this[i] = f ?? ((a = this._$Ej) == null ? void 0 : a.get(i)) ?? f, this._$Em = null;
+  _$AK(e, t) {
+    var i, a;
+    const o = this.constructor, n = o._$Eh.get(e);
+    if (n !== void 0 && this._$Em !== n) {
+      const d = o.getPropertyOptions(n), l = typeof d.converter == "function" ? { fromAttribute: d.converter } : ((i = d.converter) == null ? void 0 : i.fromAttribute) !== void 0 ? d.converter : zr;
+      this._$Em = n;
+      const h = l.fromAttribute(t, d.type);
+      this[n] = h ?? ((a = this._$Ej) == null ? void 0 : a.get(n)) ?? h, this._$Em = null;
     }
   }
-  requestUpdate(r, e, n, i = !1, o) {
+  requestUpdate(e, t, o, n = !1, i) {
     var a;
-    if (r !== void 0) {
-      const s = this.constructor;
-      if (i === !1 && (o = this[r]), n ?? (n = s.getPropertyOptions(r)), !((n.hasChanged ?? se)(o, e) || n.useDefault && n.reflect && o === ((a = this._$Ej) == null ? void 0 : a.get(r)) && !this.hasAttribute(s._$Eu(r, n)))) return;
-      this.C(r, e, n);
+    if (e !== void 0) {
+      const d = this.constructor;
+      if (n === !1 && (i = this[e]), o ?? (o = d.getPropertyOptions(e)), !((o.hasChanged ?? Fr)(i, t) || o.useDefault && o.reflect && i === ((a = this._$Ej) == null ? void 0 : a.get(e)) && !this.hasAttribute(d._$Eu(e, o)))) return;
+      this.C(e, t, o);
     }
     this.isUpdatePending === !1 && (this._$ES = this._$EP());
   }
-  C(r, e, { useDefault: n, reflect: i, wrapped: o }, a) {
-    n && !(this._$Ej ?? (this._$Ej = /* @__PURE__ */ new Map())).has(r) && (this._$Ej.set(r, a ?? e ?? this[r]), o !== !0 || a !== void 0) || (this._$AL.has(r) || (this.hasUpdated || n || (e = void 0), this._$AL.set(r, e)), i === !0 && this._$Em !== r && (this._$Eq ?? (this._$Eq = /* @__PURE__ */ new Set())).add(r));
+  C(e, t, { useDefault: o, reflect: n, wrapped: i }, a) {
+    o && !(this._$Ej ?? (this._$Ej = /* @__PURE__ */ new Map())).has(e) && (this._$Ej.set(e, a ?? t ?? this[e]), i !== !0 || a !== void 0) || (this._$AL.has(e) || (this.hasUpdated || o || (t = void 0), this._$AL.set(e, t)), n === !0 && this._$Em !== e && (this._$Eq ?? (this._$Eq = /* @__PURE__ */ new Set())).add(e));
   }
   async _$EP() {
     this.isUpdatePending = !0;
     try {
       await this._$ES;
-    } catch (e) {
-      Promise.reject(e);
+    } catch (t) {
+      Promise.reject(t);
     }
-    const r = this.scheduleUpdate();
-    return r != null && await r, !this.isUpdatePending;
+    const e = this.scheduleUpdate();
+    return e != null && await e, !this.isUpdatePending;
   }
   scheduleUpdate() {
     return this.performUpdate();
   }
   performUpdate() {
-    var n;
+    var o;
     if (!this.isUpdatePending) return;
     if (!this.hasUpdated) {
       if (this.renderRoot ?? (this.renderRoot = this.createRenderRoot()), this._$Ep) {
-        for (const [o, a] of this._$Ep) this[o] = a;
+        for (const [i, a] of this._$Ep) this[i] = a;
         this._$Ep = void 0;
       }
-      const i = this.constructor.elementProperties;
-      if (i.size > 0) for (const [o, a] of i) {
-        const { wrapped: s } = a, c = this[o];
-        s !== !0 || this._$AL.has(o) || c === void 0 || this.C(o, void 0, a, c);
+      const n = this.constructor.elementProperties;
+      if (n.size > 0) for (const [i, a] of n) {
+        const { wrapped: d } = a, l = this[i];
+        d !== !0 || this._$AL.has(i) || l === void 0 || this.C(i, void 0, a, l);
       }
     }
-    let r = !1;
-    const e = this._$AL;
+    let e = !1;
+    const t = this._$AL;
     try {
-      r = this.shouldUpdate(e), r ? (this.willUpdate(e), (n = this._$EO) == null || n.forEach((i) => {
-        var o;
-        return (o = i.hostUpdate) == null ? void 0 : o.call(i);
-      }), this.update(e)) : this._$EM();
-    } catch (i) {
-      throw r = !1, this._$EM(), i;
+      e = this.shouldUpdate(t), e ? (this.willUpdate(t), (o = this._$EO) == null || o.forEach((n) => {
+        var i;
+        return (i = n.hostUpdate) == null ? void 0 : i.call(n);
+      }), this.update(t)) : this._$EM();
+    } catch (n) {
+      throw e = !1, this._$EM(), n;
     }
-    r && this._$AE(e);
+    e && this._$AE(t);
   }
-  willUpdate(r) {
+  willUpdate(e) {
   }
-  _$AE(r) {
-    var e;
-    (e = this._$EO) == null || e.forEach((n) => {
-      var i;
-      return (i = n.hostUpdated) == null ? void 0 : i.call(n);
-    }), this.hasUpdated || (this.hasUpdated = !0, this.firstUpdated(r)), this.updated(r);
+  _$AE(e) {
+    var t;
+    (t = this._$EO) == null || t.forEach((o) => {
+      var n;
+      return (n = o.hostUpdated) == null ? void 0 : n.call(o);
+    }), this.hasUpdated || (this.hasUpdated = !0, this.firstUpdated(e)), this.updated(e);
   }
   _$EM() {
     this._$AL = /* @__PURE__ */ new Map(), this.isUpdatePending = !1;
@@ -267,89 +267,89 @@ let Q = class extends HTMLElement {
   getUpdateComplete() {
     return this._$ES;
   }
-  shouldUpdate(r) {
+  shouldUpdate(e) {
     return !0;
   }
-  update(r) {
-    this._$Eq && (this._$Eq = this._$Eq.forEach((e) => this._$ET(e, this[e]))), this._$EM();
+  update(e) {
+    this._$Eq && (this._$Eq = this._$Eq.forEach((t) => this._$ET(t, this[t]))), this._$EM();
   }
-  updated(r) {
+  updated(e) {
   }
-  firstUpdated(r) {
+  firstUpdated(e) {
   }
 };
-Q.elementStyles = [], Q.shadowRootOptions = { mode: "open" }, Q[zr("elementProperties")] = /* @__PURE__ */ new Map(), Q[zr("finalized")] = /* @__PURE__ */ new Map(), Jr == null || Jr({ ReactiveElement: Q }), (P.reactiveElementVersions ?? (P.reactiveElementVersions = [])).push("2.1.2");
+er.elementStyles = [], er.shadowRootOptions = { mode: "open" }, er[pr("elementProperties")] = /* @__PURE__ */ new Map(), er[pr("finalized")] = /* @__PURE__ */ new Map(), Pr == null || Pr({ ReactiveElement: er }), (W.reactiveElementVersions ?? (W.reactiveElementVersions = [])).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Or = globalThis, Ce = (t) => t, Dr = Or.trustedTypes, Se = Dr ? Dr.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, Pe = "$lit$", M = `lit$${Math.random().toFixed(9).slice(2)}$`, Ne = "?" + M, gt = `<${Ne}>`, q = document, jr = () => q.createComment(""), Ar = (t) => t === null || typeof t != "object" && typeof t != "function", le = Array.isArray, ut = (t) => le(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", Qr = `[ 	
-\f\r]`, Br = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Be = /-->/g, ze = />/g, D = RegExp(`>|${Qr}(?:([^\\s"'>=/]+)(${Qr}*=${Qr}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Oe = /'/g, je = /"/g, We = /^(?:script|style|textarea|title)$/i, bt = (t) => (r, ...e) => ({ _$litType$: t, strings: r, values: e }), l = bt(1), wr = Symbol.for("lit-noChange"), k = Symbol.for("lit-nothing"), Ae = /* @__PURE__ */ new WeakMap(), H = q.createTreeWalker(q, 129);
-function Ie(t, r) {
-  if (!le(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
-  return Se !== void 0 ? Se.createHTML(r) : r;
+const hr = globalThis, se = (r) => r, Or = hr.trustedTypes, le = Or ? Or.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, xe = "$lit$", N = `lit$${Math.random().toFixed(9).slice(2)}$`, me = "?" + N, Ze = `<${me}>`, Y = document, gr = () => Y.createComment(""), fr = (r) => r === null || typeof r != "object" && typeof r != "function", qr = Array.isArray, Xe = (r) => qr(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", Mr = `[ 	
+\f\r]`, dr = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, ce = /-->/g, de = />/g, F = RegExp(`>|${Mr}(?:([^\\s"'>=/]+)(${Mr}*=${Mr}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), pe = /'/g, he = /"/g, ve = /^(?:script|style|textarea|title)$/i, Je = (r) => (e, ...t) => ({ _$litType$: r, strings: e, values: t }), s = Je(1), tr = Symbol.for("lit-noChange"), k = Symbol.for("lit-nothing"), ge = /* @__PURE__ */ new WeakMap(), q = Y.createTreeWalker(Y, 129);
+function ye(r, e) {
+  if (!qr(r) || !r.hasOwnProperty("raw")) throw Error("invalid template strings array");
+  return le !== void 0 ? le.createHTML(e) : e;
 }
-const wt = (t, r) => {
-  const e = t.length - 1, n = [];
-  let i, o = r === 2 ? "<svg>" : r === 3 ? "<math>" : "", a = Br;
-  for (let s = 0; s < e; s++) {
-    const c = t[s];
-    let f, u, d = -1, g = 0;
-    for (; g < c.length && (a.lastIndex = g, u = a.exec(c), u !== null); ) g = a.lastIndex, a === Br ? u[1] === "!--" ? a = Be : u[1] !== void 0 ? a = ze : u[2] !== void 0 ? (We.test(u[2]) && (i = RegExp("</" + u[2], "g")), a = D) : u[3] !== void 0 && (a = D) : a === D ? u[0] === ">" ? (a = i ?? Br, d = -1) : u[1] === void 0 ? d = -2 : (d = a.lastIndex - u[2].length, f = u[1], a = u[3] === void 0 ? D : u[3] === '"' ? je : Oe) : a === je || a === Oe ? a = D : a === Be || a === ze ? a = Br : (a = D, i = void 0);
-    const x = a === D && t[s + 1].startsWith("/>") ? " " : "";
-    o += a === Br ? c + gt : d >= 0 ? (n.push(f), c.slice(0, d) + Pe + c.slice(d) + M + x) : c + M + (d === -2 ? s : x);
+const Qe = (r, e) => {
+  const t = r.length - 1, o = [];
+  let n, i = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", a = dr;
+  for (let d = 0; d < t; d++) {
+    const l = r[d];
+    let h, f, c = -1, b = 0;
+    for (; b < l.length && (a.lastIndex = b, f = a.exec(l), f !== null); ) b = a.lastIndex, a === dr ? f[1] === "!--" ? a = ce : f[1] !== void 0 ? a = de : f[2] !== void 0 ? (ve.test(f[2]) && (n = RegExp("</" + f[2], "g")), a = F) : f[3] !== void 0 && (a = F) : a === F ? f[0] === ">" ? (a = n ?? dr, c = -1) : f[1] === void 0 ? c = -2 : (c = a.lastIndex - f[2].length, h = f[1], a = f[3] === void 0 ? F : f[3] === '"' ? he : pe) : a === he || a === pe ? a = F : a === ce || a === de ? a = dr : (a = F, n = void 0);
+    const v = a === F && r[d + 1].startsWith("/>") ? " " : "";
+    i += a === dr ? l + Ze : c >= 0 ? (o.push(h), l.slice(0, c) + xe + l.slice(c) + N + v) : l + N + (c === -2 ? d : v);
   }
-  return [Ie(t, o + (t[e] || "<?>") + (r === 2 ? "</svg>" : r === 3 ? "</math>" : "")), n];
+  return [ye(r, i + (r[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), o];
 };
-class _r {
-  constructor({ strings: r, _$litType$: e }, n) {
-    let i;
+class ur {
+  constructor({ strings: e, _$litType$: t }, o) {
+    let n;
     this.parts = [];
-    let o = 0, a = 0;
-    const s = r.length - 1, c = this.parts, [f, u] = wt(r, e);
-    if (this.el = _r.createElement(f, n), H.currentNode = this.el.content, e === 2 || e === 3) {
-      const d = this.el.content.firstChild;
-      d.replaceWith(...d.childNodes);
+    let i = 0, a = 0;
+    const d = e.length - 1, l = this.parts, [h, f] = Qe(e, t);
+    if (this.el = ur.createElement(h, o), q.currentNode = this.el.content, t === 2 || t === 3) {
+      const c = this.el.content.firstChild;
+      c.replaceWith(...c.childNodes);
     }
-    for (; (i = H.nextNode()) !== null && c.length < s; ) {
-      if (i.nodeType === 1) {
-        if (i.hasAttributes()) for (const d of i.getAttributeNames()) if (d.endsWith(Pe)) {
-          const g = u[a++], x = i.getAttribute(d).split(M), $ = /([.?@])?(.*)/.exec(g);
-          c.push({ type: 1, index: o, name: $[2], strings: x, ctor: $[1] === "." ? mt : $[1] === "?" ? vt : $[1] === "@" ? yt : Yr }), i.removeAttribute(d);
-        } else d.startsWith(M) && (c.push({ type: 6, index: o }), i.removeAttribute(d));
-        if (We.test(i.tagName)) {
-          const d = i.textContent.split(M), g = d.length - 1;
-          if (g > 0) {
-            i.textContent = Dr ? Dr.emptyScript : "";
-            for (let x = 0; x < g; x++) i.append(d[x], jr()), H.nextNode(), c.push({ type: 2, index: ++o });
-            i.append(d[g], jr());
+    for (; (n = q.nextNode()) !== null && l.length < d; ) {
+      if (n.nodeType === 1) {
+        if (n.hasAttributes()) for (const c of n.getAttributeNames()) if (c.endsWith(xe)) {
+          const b = f[a++], v = n.getAttribute(c).split(N), $ = /([.?@])?(.*)/.exec(b);
+          l.push({ type: 1, index: i, name: $[2], strings: v, ctor: $[1] === "." ? et : $[1] === "?" ? tt : $[1] === "@" ? nt : _r }), n.removeAttribute(c);
+        } else c.startsWith(N) && (l.push({ type: 6, index: i }), n.removeAttribute(c));
+        if (ve.test(n.tagName)) {
+          const c = n.textContent.split(N), b = c.length - 1;
+          if (b > 0) {
+            n.textContent = Or ? Or.emptyScript : "";
+            for (let v = 0; v < b; v++) n.append(c[v], gr()), q.nextNode(), l.push({ type: 2, index: ++i });
+            n.append(c[b], gr());
           }
         }
-      } else if (i.nodeType === 8) if (i.data === Ne) c.push({ type: 2, index: o });
+      } else if (n.nodeType === 8) if (n.data === me) l.push({ type: 2, index: i });
       else {
-        let d = -1;
-        for (; (d = i.data.indexOf(M, d + 1)) !== -1; ) c.push({ type: 7, index: o }), d += M.length - 1;
+        let c = -1;
+        for (; (c = n.data.indexOf(N, c + 1)) !== -1; ) l.push({ type: 7, index: i }), c += N.length - 1;
       }
-      o++;
+      i++;
     }
   }
-  static createElement(r, e) {
-    const n = q.createElement("template");
-    return n.innerHTML = r, n;
+  static createElement(e, t) {
+    const o = Y.createElement("template");
+    return o.innerHTML = e, o;
   }
 }
-function xr(t, r, e = t, n) {
-  var a, s;
-  if (r === wr) return r;
-  let i = n !== void 0 ? (a = e._$Co) == null ? void 0 : a[n] : e._$Cl;
-  const o = Ar(r) ? void 0 : r._$litDirective$;
-  return (i == null ? void 0 : i.constructor) !== o && ((s = i == null ? void 0 : i._$AO) == null || s.call(i, !1), o === void 0 ? i = void 0 : (i = new o(t), i._$AT(t, e, n)), n !== void 0 ? (e._$Co ?? (e._$Co = []))[n] = i : e._$Cl = i), i !== void 0 && (r = xr(t, i._$AS(t, r.values), i, n)), r;
+function nr(r, e, t = r, o) {
+  var a, d;
+  if (e === tr) return e;
+  let n = o !== void 0 ? (a = t._$Co) == null ? void 0 : a[o] : t._$Cl;
+  const i = fr(e) ? void 0 : e._$litDirective$;
+  return (n == null ? void 0 : n.constructor) !== i && ((d = n == null ? void 0 : n._$AO) == null || d.call(n, !1), i === void 0 ? n = void 0 : (n = new i(r), n._$AT(r, t, o)), o !== void 0 ? (t._$Co ?? (t._$Co = []))[o] = n : t._$Cl = n), n !== void 0 && (e = nr(r, n._$AS(r, e.values), n, o)), e;
 }
-class xt {
-  constructor(r, e) {
-    this._$AV = [], this._$AN = void 0, this._$AD = r, this._$AM = e;
+class rt {
+  constructor(e, t) {
+    this._$AV = [], this._$AN = void 0, this._$AD = e, this._$AM = t;
   }
   get parentNode() {
     return this._$AM.parentNode;
@@ -357,36 +357,36 @@ class xt {
   get _$AU() {
     return this._$AM._$AU;
   }
-  u(r) {
-    const { el: { content: e }, parts: n } = this._$AD, i = ((r == null ? void 0 : r.creationScope) ?? q).importNode(e, !0);
-    H.currentNode = i;
-    let o = H.nextNode(), a = 0, s = 0, c = n[0];
-    for (; c !== void 0; ) {
-      if (a === c.index) {
-        let f;
-        c.type === 2 ? f = new Rr(o, o.nextSibling, this, r) : c.type === 1 ? f = new c.ctor(o, c.name, c.strings, this, r) : c.type === 6 && (f = new $t(o, this, r)), this._$AV.push(f), c = n[++s];
+  u(e) {
+    const { el: { content: t }, parts: o } = this._$AD, n = ((e == null ? void 0 : e.creationScope) ?? Y).importNode(t, !0);
+    q.currentNode = n;
+    let i = q.nextNode(), a = 0, d = 0, l = o[0];
+    for (; l !== void 0; ) {
+      if (a === l.index) {
+        let h;
+        l.type === 2 ? h = new vr(i, i.nextSibling, this, e) : l.type === 1 ? h = new l.ctor(i, l.name, l.strings, this, e) : l.type === 6 && (h = new ot(i, this, e)), this._$AV.push(h), l = o[++d];
       }
-      a !== (c == null ? void 0 : c.index) && (o = H.nextNode(), a++);
+      a !== (l == null ? void 0 : l.index) && (i = q.nextNode(), a++);
     }
-    return H.currentNode = q, i;
+    return q.currentNode = Y, n;
   }
-  p(r) {
-    let e = 0;
-    for (const n of this._$AV) n !== void 0 && (n.strings !== void 0 ? (n._$AI(r, n, e), e += n.strings.length - 2) : n._$AI(r[e])), e++;
+  p(e) {
+    let t = 0;
+    for (const o of this._$AV) o !== void 0 && (o.strings !== void 0 ? (o._$AI(e, o, t), t += o.strings.length - 2) : o._$AI(e[t])), t++;
   }
 }
-class Rr {
+class vr {
   get _$AU() {
-    var r;
-    return ((r = this._$AM) == null ? void 0 : r._$AU) ?? this._$Cv;
+    var e;
+    return ((e = this._$AM) == null ? void 0 : e._$AU) ?? this._$Cv;
   }
-  constructor(r, e, n, i) {
-    this.type = 2, this._$AH = k, this._$AN = void 0, this._$AA = r, this._$AB = e, this._$AM = n, this.options = i, this._$Cv = (i == null ? void 0 : i.isConnected) ?? !0;
+  constructor(e, t, o, n) {
+    this.type = 2, this._$AH = k, this._$AN = void 0, this._$AA = e, this._$AB = t, this._$AM = o, this.options = n, this._$Cv = (n == null ? void 0 : n.isConnected) ?? !0;
   }
   get parentNode() {
-    let r = this._$AA.parentNode;
-    const e = this._$AM;
-    return e !== void 0 && (r == null ? void 0 : r.nodeType) === 11 && (r = e.parentNode), r;
+    let e = this._$AA.parentNode;
+    const t = this._$AM;
+    return t !== void 0 && (e == null ? void 0 : e.nodeType) === 11 && (e = t.parentNode), e;
   }
   get startNode() {
     return this._$AA;
@@ -394,164 +394,164 @@ class Rr {
   get endNode() {
     return this._$AB;
   }
-  _$AI(r, e = this) {
-    r = xr(this, r, e), Ar(r) ? r === k || r == null || r === "" ? (this._$AH !== k && this._$AR(), this._$AH = k) : r !== this._$AH && r !== wr && this._(r) : r._$litType$ !== void 0 ? this.$(r) : r.nodeType !== void 0 ? this.T(r) : ut(r) ? this.k(r) : this._(r);
+  _$AI(e, t = this) {
+    e = nr(this, e, t), fr(e) ? e === k || e == null || e === "" ? (this._$AH !== k && this._$AR(), this._$AH = k) : e !== this._$AH && e !== tr && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : Xe(e) ? this.k(e) : this._(e);
   }
-  O(r) {
-    return this._$AA.parentNode.insertBefore(r, this._$AB);
+  O(e) {
+    return this._$AA.parentNode.insertBefore(e, this._$AB);
   }
-  T(r) {
-    this._$AH !== r && (this._$AR(), this._$AH = this.O(r));
+  T(e) {
+    this._$AH !== e && (this._$AR(), this._$AH = this.O(e));
   }
-  _(r) {
-    this._$AH !== k && Ar(this._$AH) ? this._$AA.nextSibling.data = r : this.T(q.createTextNode(r)), this._$AH = r;
+  _(e) {
+    this._$AH !== k && fr(this._$AH) ? this._$AA.nextSibling.data = e : this.T(Y.createTextNode(e)), this._$AH = e;
   }
-  $(r) {
-    var o;
-    const { values: e, _$litType$: n } = r, i = typeof n == "number" ? this._$AC(r) : (n.el === void 0 && (n.el = _r.createElement(Ie(n.h, n.h[0]), this.options)), n);
-    if (((o = this._$AH) == null ? void 0 : o._$AD) === i) this._$AH.p(e);
+  $(e) {
+    var i;
+    const { values: t, _$litType$: o } = e, n = typeof o == "number" ? this._$AC(e) : (o.el === void 0 && (o.el = ur.createElement(ye(o.h, o.h[0]), this.options)), o);
+    if (((i = this._$AH) == null ? void 0 : i._$AD) === n) this._$AH.p(t);
     else {
-      const a = new xt(i, this), s = a.u(this.options);
-      a.p(e), this.T(s), this._$AH = a;
+      const a = new rt(n, this), d = a.u(this.options);
+      a.p(t), this.T(d), this._$AH = a;
     }
   }
-  _$AC(r) {
-    let e = Ae.get(r.strings);
-    return e === void 0 && Ae.set(r.strings, e = new _r(r)), e;
+  _$AC(e) {
+    let t = ge.get(e.strings);
+    return t === void 0 && ge.set(e.strings, t = new ur(e)), t;
   }
-  k(r) {
-    le(this._$AH) || (this._$AH = [], this._$AR());
-    const e = this._$AH;
-    let n, i = 0;
-    for (const o of r) i === e.length ? e.push(n = new Rr(this.O(jr()), this.O(jr()), this, this.options)) : n = e[i], n._$AI(o), i++;
-    i < e.length && (this._$AR(n && n._$AB.nextSibling, i), e.length = i);
+  k(e) {
+    qr(this._$AH) || (this._$AH = [], this._$AR());
+    const t = this._$AH;
+    let o, n = 0;
+    for (const i of e) n === t.length ? t.push(o = new vr(this.O(gr()), this.O(gr()), this, this.options)) : o = t[n], o._$AI(i), n++;
+    n < t.length && (this._$AR(o && o._$AB.nextSibling, n), t.length = n);
   }
-  _$AR(r = this._$AA.nextSibling, e) {
-    var n;
-    for ((n = this._$AP) == null ? void 0 : n.call(this, !1, !0, e); r !== this._$AB; ) {
-      const i = Ce(r).nextSibling;
-      Ce(r).remove(), r = i;
+  _$AR(e = this._$AA.nextSibling, t) {
+    var o;
+    for ((o = this._$AP) == null ? void 0 : o.call(this, !1, !0, t); e !== this._$AB; ) {
+      const n = se(e).nextSibling;
+      se(e).remove(), e = n;
     }
   }
-  setConnected(r) {
-    var e;
-    this._$AM === void 0 && (this._$Cv = r, (e = this._$AP) == null || e.call(this, r));
+  setConnected(e) {
+    var t;
+    this._$AM === void 0 && (this._$Cv = e, (t = this._$AP) == null || t.call(this, e));
   }
 }
-class Yr {
+class _r {
   get tagName() {
     return this.element.tagName;
   }
   get _$AU() {
     return this._$AM._$AU;
   }
-  constructor(r, e, n, i, o) {
-    this.type = 1, this._$AH = k, this._$AN = void 0, this.element = r, this.name = e, this._$AM = i, this.options = o, n.length > 2 || n[0] !== "" || n[1] !== "" ? (this._$AH = Array(n.length - 1).fill(new String()), this.strings = n) : this._$AH = k;
+  constructor(e, t, o, n, i) {
+    this.type = 1, this._$AH = k, this._$AN = void 0, this.element = e, this.name = t, this._$AM = n, this.options = i, o.length > 2 || o[0] !== "" || o[1] !== "" ? (this._$AH = Array(o.length - 1).fill(new String()), this.strings = o) : this._$AH = k;
   }
-  _$AI(r, e = this, n, i) {
-    const o = this.strings;
+  _$AI(e, t = this, o, n) {
+    const i = this.strings;
     let a = !1;
-    if (o === void 0) r = xr(this, r, e, 0), a = !Ar(r) || r !== this._$AH && r !== wr, a && (this._$AH = r);
+    if (i === void 0) e = nr(this, e, t, 0), a = !fr(e) || e !== this._$AH && e !== tr, a && (this._$AH = e);
     else {
-      const s = r;
-      let c, f;
-      for (r = o[0], c = 0; c < o.length - 1; c++) f = xr(this, s[n + c], e, c), f === wr && (f = this._$AH[c]), a || (a = !Ar(f) || f !== this._$AH[c]), f === k ? r = k : r !== k && (r += (f ?? "") + o[c + 1]), this._$AH[c] = f;
+      const d = e;
+      let l, h;
+      for (e = i[0], l = 0; l < i.length - 1; l++) h = nr(this, d[o + l], t, l), h === tr && (h = this._$AH[l]), a || (a = !fr(h) || h !== this._$AH[l]), h === k ? e = k : e !== k && (e += (h ?? "") + i[l + 1]), this._$AH[l] = h;
     }
-    a && !i && this.j(r);
+    a && !n && this.j(e);
   }
-  j(r) {
-    r === k ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, r ?? "");
+  j(e) {
+    e === k ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, e ?? "");
   }
 }
-class mt extends Yr {
+class et extends _r {
   constructor() {
     super(...arguments), this.type = 3;
   }
-  j(r) {
-    this.element[this.name] = r === k ? void 0 : r;
+  j(e) {
+    this.element[this.name] = e === k ? void 0 : e;
   }
 }
-class vt extends Yr {
+class tt extends _r {
   constructor() {
     super(...arguments), this.type = 4;
   }
-  j(r) {
-    this.element.toggleAttribute(this.name, !!r && r !== k);
+  j(e) {
+    this.element.toggleAttribute(this.name, !!e && e !== k);
   }
 }
-class yt extends Yr {
-  constructor(r, e, n, i, o) {
-    super(r, e, n, i, o), this.type = 5;
+class nt extends _r {
+  constructor(e, t, o, n, i) {
+    super(e, t, o, n, i), this.type = 5;
   }
-  _$AI(r, e = this) {
-    if ((r = xr(this, r, e, 0) ?? k) === wr) return;
-    const n = this._$AH, i = r === k && n !== k || r.capture !== n.capture || r.once !== n.once || r.passive !== n.passive, o = r !== k && (n === k || i);
-    i && this.element.removeEventListener(this.name, this, n), o && this.element.addEventListener(this.name, this, r), this._$AH = r;
+  _$AI(e, t = this) {
+    if ((e = nr(this, e, t, 0) ?? k) === tr) return;
+    const o = this._$AH, n = e === k && o !== k || e.capture !== o.capture || e.once !== o.once || e.passive !== o.passive, i = e !== k && (o === k || n);
+    n && this.element.removeEventListener(this.name, this, o), i && this.element.addEventListener(this.name, this, e), this._$AH = e;
   }
-  handleEvent(r) {
-    var e;
-    typeof this._$AH == "function" ? this._$AH.call(((e = this.options) == null ? void 0 : e.host) ?? this.element, r) : this._$AH.handleEvent(r);
+  handleEvent(e) {
+    var t;
+    typeof this._$AH == "function" ? this._$AH.call(((t = this.options) == null ? void 0 : t.host) ?? this.element, e) : this._$AH.handleEvent(e);
   }
 }
-class $t {
-  constructor(r, e, n) {
-    this.element = r, this.type = 6, this._$AN = void 0, this._$AM = e, this.options = n;
+class ot {
+  constructor(e, t, o) {
+    this.element = e, this.type = 6, this._$AN = void 0, this._$AM = t, this.options = o;
   }
   get _$AU() {
     return this._$AM._$AU;
   }
-  _$AI(r) {
-    xr(this, r);
+  _$AI(e) {
+    nr(this, e);
   }
 }
-const re = Or.litHtmlPolyfillSupport;
-re == null || re(_r, Rr), (Or.litHtmlVersions ?? (Or.litHtmlVersions = [])).push("3.3.3");
-const kt = (t, r, e) => {
-  const n = (e == null ? void 0 : e.renderBefore) ?? r;
-  let i = n._$litPart$;
-  if (i === void 0) {
-    const o = (e == null ? void 0 : e.renderBefore) ?? null;
-    n._$litPart$ = i = new Rr(r.insertBefore(jr(), o), o, void 0, e ?? {});
+const Rr = hr.litHtmlPolyfillSupport;
+Rr == null || Rr(ur, vr), (hr.litHtmlVersions ?? (hr.litHtmlVersions = [])).push("3.3.3");
+const it = (r, e, t) => {
+  const o = (t == null ? void 0 : t.renderBefore) ?? e;
+  let n = o._$litPart$;
+  if (n === void 0) {
+    const i = (t == null ? void 0 : t.renderBefore) ?? null;
+    o._$litPart$ = n = new vr(e.insertBefore(gr(), i), i, void 0, t ?? {});
   }
-  return i._$AI(t), i;
+  return n._$AI(r), n;
 };
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const F = globalThis;
-class y extends Q {
+const V = globalThis;
+class y extends er {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
   }
   createRenderRoot() {
-    var e;
-    const r = super.createRenderRoot();
-    return (e = this.renderOptions).renderBefore ?? (e.renderBefore = r.firstChild), r;
+    var t;
+    const e = super.createRenderRoot();
+    return (t = this.renderOptions).renderBefore ?? (t.renderBefore = e.firstChild), e;
   }
-  update(r) {
-    const e = this.render();
-    this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(r), this._$Do = kt(e, this.renderRoot, this.renderOptions);
+  update(e) {
+    const t = this.render();
+    this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(e), this._$Do = it(t, this.renderRoot, this.renderOptions);
   }
   connectedCallback() {
-    var r;
-    super.connectedCallback(), (r = this._$Do) == null || r.setConnected(!0);
+    var e;
+    super.connectedCallback(), (e = this._$Do) == null || e.setConnected(!0);
   }
   disconnectedCallback() {
-    var r;
-    super.disconnectedCallback(), (r = this._$Do) == null || r.setConnected(!1);
+    var e;
+    super.disconnectedCallback(), (e = this._$Do) == null || e.setConnected(!1);
   }
   render() {
-    return wr;
+    return tr;
   }
 }
-var Te;
-y._$litElement$ = !0, y.finalized = !0, (Te = F.litElementHydrateSupport) == null || Te.call(F, { LitElement: y });
-const ee = F.litElementPolyfillSupport;
-ee == null || ee({ LitElement: y });
-(F.litElementVersions ?? (F.litElementVersions = [])).push("4.2.2");
-const E = Me(`/* ==========================================================================\r
+var ue;
+y._$litElement$ = !0, y.finalized = !0, (ue = V.litElementHydrateSupport) == null || ue.call(V, { LitElement: y });
+const Nr = V.litElementPolyfillSupport;
+Nr == null || Nr({ LitElement: y });
+(V.litElementVersions ?? (V.litElementVersions = [])).push("4.2.2");
+const P = we(`/* ==========================================================================\r
    Zotly Dashboard - Pure Vanilla CSS Stylesheet\r
    Self-contained styling for layout, components, widgets, responsive & dark mode\r
    ========================================================================== */\r
@@ -3600,27 +3600,27 @@ button.primary:active {\r
     max-width: none;\r
   }\r
 }\r
-`), Ue = "--cw-bg", Le = "--cw-surface", De = "--cw-border", He = "--cw-ink", Fe = "--cw-muted", qe = "--cw-grad", Ve = "--cw-accent", Ye = "--cw-accent-tint", Ge = "--cw-accent-deep", Ct = {
-  [Ue]: "#ffffff",
-  [Le]: "#f8fafc",
-  [De]: "#e5e7eb",
-  [He]: "#0f172a",
-  [Fe]: "#71717a",
-  [qe]: "linear-gradient(135deg, #0b5fff, #22d3ee)",
-  [Ve]: "#0b5fff",
-  [Ye]: "rgba(11,95,255,0.1)",
-  [Ge]: "#0040cc"
-}, St = {
-  [Ue]: "#18181b",
-  [Le]: "#27272a",
-  [De]: "#3f3f46",
-  [He]: "#f4f4f5",
-  [Fe]: "#a1a1aa",
-  [qe]: "linear-gradient(135deg, #0b5fff, #22d3ee)",
-  [Ve]: "#0b5fff",
-  [Ye]: "rgba(11,95,255,0.15)",
-  [Ge]: "#3b82f6"
-}, Bt = `
+`), $e = "--cw-bg", ke = "--cw-surface", Ce = "--cw-border", Se = "--cw-ink", Be = "--cw-muted", ze = "--cw-grad", Oe = "--cw-accent", _e = "--cw-accent-tint", Ae = "--cw-accent-deep", at = {
+  [$e]: "#ffffff",
+  [ke]: "#f8fafc",
+  [Ce]: "#e5e7eb",
+  [Se]: "#0f172a",
+  [Be]: "#71717a",
+  [ze]: "linear-gradient(135deg, #0b5fff, #22d3ee)",
+  [Oe]: "#0b5fff",
+  [_e]: "rgba(11,95,255,0.1)",
+  [Ae]: "#0040cc"
+}, st = {
+  [$e]: "#18181b",
+  [ke]: "#27272a",
+  [Ce]: "#3f3f46",
+  [Se]: "#f4f4f5",
+  [Be]: "#a1a1aa",
+  [ze]: "linear-gradient(135deg, #0b5fff, #22d3ee)",
+  [Oe]: "#0b5fff",
+  [_e]: "rgba(11,95,255,0.15)",
+  [Ae]: "#3b82f6"
+}, lt = `
   #zotly-widget-embed, #zotly-widget-embed *, .panel, .panel * {
     font-family: inherit !important;
   }
@@ -3683,186 +3683,186 @@ button.primary:active {\r
   .anim-zotly-float { animation: zotly-float 3s infinite ease-in-out; }
   .anim-zotly-spin { animation: zotly-spin 4s infinite linear; }
 `;
-function zt(t) {
-  return Object.entries(t).map(([r, e]) => `${r}: ${e};`).join(`
+function ct(r) {
+  return Object.entries(r).map(([e, t]) => `${e}: ${t};`).join(`
   `);
 }
-function Yt(t = !1) {
-  return `:host { ${zt(t ? St : Ct)} }`;
+function cn(r = !1) {
+  return `:host { ${ct(r ? st : at)} }`;
 }
-function Ke() {
-  const t = getComputedStyle(document.documentElement), r = document.body ? getComputedStyle(document.body) : null;
-  let e = t.getPropertyValue("--primary-color").trim() || (r ? r.getPropertyValue("--primary-color").trim() : ""), n = t.getPropertyValue("--secondary-color").trim() || (r ? r.getPropertyValue("--secondary-color").trim() : "");
-  const i = document.querySelector("script[data-client-id]") || document.querySelector('script[src*="index.es.js"]') || document.querySelector('script[src*="index.js"]') || document.querySelector('script[src*="widget.js"]'), o = i ? i.getAttribute("data-accent") : null;
-  return !e && o && (e = o), e || (e = "#0b5fff"), n || (n = e), { primary: e, secondary: n };
+function je() {
+  const r = getComputedStyle(document.documentElement), e = document.body ? getComputedStyle(document.body) : null;
+  let t = r.getPropertyValue("--primary-color").trim() || (e ? e.getPropertyValue("--primary-color").trim() : ""), o = r.getPropertyValue("--secondary-color").trim() || (e ? e.getPropertyValue("--secondary-color").trim() : "");
+  const n = document.querySelector("script[data-client-id]") || document.querySelector('script[src*="index.es.js"]') || document.querySelector('script[src*="index.js"]') || document.querySelector('script[src*="widget.js"]'), i = n ? n.getAttribute("data-accent") : null;
+  return !t && i && (t = i), t || (t = "#0b5fff"), o || (o = t), { primary: t, secondary: o };
 }
-function Ot() {
-  const t = document.querySelector('script[src*="index.es.js"]') || document.querySelector('script[src*="index.umd.js"]') || document.querySelector('script[src*="index.js"]') || document.querySelector('script[src*="widget.js"]');
-  if (t && t.src)
+function dt() {
+  const r = document.querySelector('script[src*="index.es.js"]') || document.querySelector('script[src*="index.umd.js"]') || document.querySelector('script[src*="index.js"]') || document.querySelector('script[src*="widget.js"]');
+  if (r && r.src)
     try {
-      const r = new URL(t.src, window.location.href);
-      return r.pathname.includes("/dist/") ? new URL("../", r).href : new URL("./", r).href;
+      const e = new URL(r.src, window.location.href);
+      return e.pathname.includes("/dist/") ? new URL("../", e).href : new URL("./", e).href;
     } catch {
     }
   return window.location.pathname.includes("/chatwidget_components_lit/") ? "./" : "./chatwidget_components_lit/";
 }
-function Ze() {
+function Ee() {
   return document.documentElement.classList.contains("dark");
 }
-function jt(t) {
-  const r = new MutationObserver(() => t(Ze()));
-  return r.observe(document.documentElement, {
+function pt(r) {
+  const e = new MutationObserver(() => r(Ee()));
+  return e.observe(document.documentElement, {
     attributes: !0,
     attributeFilter: ["class"]
-  }), () => r.disconnect();
+  }), () => e.disconnect();
 }
-function At() {
-  if (window.ZOTLY_CLIENT_ID)
-    return window.ZOTLY_CLIENT_ID;
-  const t = document.querySelector("script[data-client-id]") || document.querySelector('script[src*="index.es.js"]') || document.querySelector('script[src*="index.umd.js"]') || document.querySelector('script[src*="index.js"]') || document.querySelector('script[src*="widget.js"]');
-  if (t) {
-    const r = t.getAttribute("data-client-id");
-    if (r)
-      return r;
+function ht() {
+  if (window.ZOTLY_CLIENT_ID) return window.ZOTLY_CLIENT_ID;
+  const r = document.querySelector("script[data-client-id]") || document.querySelector('script[src*="index.es.js"]') || document.querySelector('script[src*="index.umd.js"]') || document.querySelector('script[src*="index.js"]') || document.querySelector('script[src*="widget.js"]');
+  if (r) {
+    const e = r.getAttribute("data-client-id");
+    if (e) return e;
     try {
-      const e = new URL(t.src, window.location.href), n = e.searchParams.get("client_id") || e.searchParams.get("clientId");
-      if (n)
-        return n;
+      const t = new URL(r.src, window.location.href), o = t.searchParams.get("client_id") || t.searchParams.get("clientId");
+      if (o) return o;
     } catch {
     }
   }
   return "default";
 }
-async function _t(t) {
+async function gt(r) {
   if (window.location.search.includes("test=true")) {
-    const n = localStorage.getItem("zotly_temp_preview_config");
-    if (n)
+    const o = localStorage.getItem("zotly_temp_preview_config");
+    if (o)
       try {
-        const i = JSON.parse(n);
+        const n = JSON.parse(o);
         return {
-          bubbleConfig: i.bubble || {},
-          chatConfig: i.chatWindow || i.chat || {},
-          chatbarConfig: i.chatbar || {},
-          greetWindowConfig: i.greetWindow || {}
+          bubbleConfig: n.bubble || {},
+          chatConfig: n.chatWindow || n.chat || {},
+          chatbarConfig: n.chatbar || {},
+          greetWindowConfig: n.greetWindow || {}
         };
-      } catch (i) {
-        console.warn("Failed to parse temporary preview configuration:", i);
+      } catch (n) {
+        console.warn("Failed to parse temporary preview configuration:", n);
       }
   }
-  const r = Ot(), e = [
-    `${r}public/clients/${t}.json`,
-    `${r}public/clients/default.json`,
-    `./chatwidget_components_lit/public/clients/${t}.json`,
+  const e = dt(), t = [
+    `${e}public/clients/${r}.json`,
+    `${e}public/clients/default.json`,
+    `./chatwidget_components_lit/public/clients/${r}.json`,
     "./chatwidget_components_lit/public/clients/default.json",
-    `./public/clients/${t}.json`,
+    `./public/clients/${r}.json`,
     "./public/clients/default.json"
   ];
-  for (const n of e)
+  for (const o of t)
     try {
-      const i = await fetch(n);
-      if (i.ok) {
-        const o = await i.json();
-        if (o && typeof o == "object")
+      const n = await fetch(o);
+      if (n.ok) {
+        const i = await n.json();
+        if (i && typeof i == "object")
           return {
-            bubbleConfig: o.bubble || {},
-            chatConfig: o.chatWindow || o.chat || {},
-            chatbarConfig: o.chatbar || {},
-            greetWindowConfig: o.greetWindow || {}
+            bubbleConfig: i.bubble || {},
+            chatConfig: i.chatWindow || i.chat || {},
+            chatbarConfig: i.chatbar || {},
+            greetWindowConfig: i.greetWindow || {}
           };
       }
     } catch {
     }
   return { bubbleConfig: {}, chatConfig: {}, chatbarConfig: {}, greetWindowConfig: {} };
 }
-function Et(t, r = 1) {
-  if (!t)
-    return "";
-  if (t.startsWith("#")) {
-    const e = t.replace("#", ""), n = e.length === 3 ? e.split("").map((o) => o + o).join("") : e, i = parseInt(n, 16);
-    if (!isNaN(i))
-      return `rgba(${i >> 16 & 255},${i >> 8 & 255},${i & 255},${r})`;
-  }
-  return t;
-}
-function Xe(t, r = "50%") {
-  if (t == null)
-    return r;
-  if (typeof t == "number")
-    return `${t}px`;
-  if (typeof t == "object") {
-    const { tl: e = 50, tr: n = 50, br: i = 50, bl: o = 50 } = t;
-    return `${e}px ${n}px ${i}px ${o}px`;
+function ft(r, e = 1) {
+  if (!r) return "";
+  if (r.startsWith("#")) {
+    const t = r.replace("#", ""), o = t.length === 3 ? t.split("").map((i) => i + i).join("") : t, n = parseInt(o, 16);
+    if (!isNaN(n))
+      return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${e})`;
   }
   return r;
 }
-function Tt(t, r, e = 135, n = "#0b5fff") {
-  if (!t || t === "none")
-    return "";
-  if (!r || r.length === 0)
-    return n;
-  const i = r.map((o) => `${o.color} ${o.pos}%`).join(", ");
-  return t === "radial" ? `radial-gradient(circle, ${i})` : t === "conic" ? `conic-gradient(from ${e}deg, ${i})` : `linear-gradient(${e}deg, ${i})`;
+function Te(r, e = "50%") {
+  if (r == null) return e;
+  if (typeof r == "number") return `${r}px`;
+  if (typeof r == "object") {
+    const { tl: t = 50, tr: o = 50, br: n = 50, bl: i = 50 } = r;
+    return `${t}px ${o}px ${n}px ${i}px`;
+  }
+  return e;
 }
-function Rt(t) {
-  const { boxShadowOffsetX: r = 0, boxShadowOffsetY: e = 8, boxShadowSpread: n = 0, boxShadowBlur: i = 20, boxShadowOpacity: o = 0.25 } = t;
-  return `${r}px ${e}px ${n}px ${i}px rgba(0,0,0,${o})`;
+function ut(r, e, t = 135, o = "#0b5fff") {
+  if (!r || r === "none") return "";
+  if (!e || e.length === 0) return o;
+  const n = e.map((i) => `${i.color} ${i.pos}%`).join(", ");
+  return r === "radial" ? `radial-gradient(circle, ${n})` : r === "conic" ? `conic-gradient(from ${t}deg, ${n})` : `linear-gradient(${t}deg, ${n})`;
 }
-function Mt(t) {
-  return !t.innerShadow || !t.innerShadow.enabled ? "" : `inset 0 6px ${t.innerShadow.blur ?? 12}px rgba(0,0,0,${t.innerShadow.opacity ?? 0.25})`;
+function bt(r) {
+  const {
+    boxShadowOffsetX: e = 0,
+    boxShadowOffsetY: t = 8,
+    boxShadowSpread: o = 0,
+    boxShadowBlur: n = 20,
+    boxShadowOpacity: i = 0.25
+  } = r;
+  return `${e}px ${t}px ${o}px ${n}px rgba(0,0,0,${i})`;
 }
-function Pt(t) {
-  return t.useWebsiteTheme ? t.backgroundColor || "#0b5fff" : t.gradientType && t.gradientType !== "none" ? Tt(t.gradientType, t.gradientStops || [], t.gradientAngle ?? 135, t.backgroundColor || "#0b5fff") : t.backgroundColor || "#0b5fff";
+function wt(r) {
+  return !r.innerShadow || !r.innerShadow.enabled ? "" : `inset 0 6px ${r.innerShadow.blur ?? 12}px rgba(0,0,0,${r.innerShadow.opacity ?? 0.25})`;
 }
-function Nt(t) {
-  if (t.useWebsiteTheme)
-    return t.accentColor || "#0b5fff";
-  if (!t.gradientEnabled)
-    return t.bgColor || "#007bff";
-  const r = t.gradientStops || [];
-  if (r.length === 0)
-    return t.bgColor || "#007bff";
-  const e = r.map((n) => `${n.color} ${n.pos}%`).join(", ");
-  switch (t.gradientType) {
+function xt(r) {
+  return r.useWebsiteTheme ? r.backgroundColor || "#0b5fff" : r.gradientType && r.gradientType !== "none" ? ut(
+    r.gradientType,
+    r.gradientStops || [],
+    r.gradientAngle ?? 135,
+    r.backgroundColor || "#0b5fff"
+  ) : r.backgroundColor || "#0b5fff";
+}
+function mt(r) {
+  if (r.useWebsiteTheme) return r.accentColor || "#0b5fff";
+  if (!r.gradientEnabled) return r.bgColor || "#007bff";
+  const e = r.gradientStops || [];
+  if (e.length === 0) return r.bgColor || "#007bff";
+  const t = e.map((o) => `${o.color} ${o.pos}%`).join(", ");
+  switch (r.gradientType) {
     case "linear":
-      return `linear-gradient(${t.gradientAngle ?? 90}deg, ${e})`;
+      return `linear-gradient(${r.gradientAngle ?? 90}deg, ${t})`;
     case "radial":
-      return `radial-gradient(circle, ${e})`;
+      return `radial-gradient(circle, ${t})`;
     case "conic":
-      return `conic-gradient(from ${t.gradientAngle ?? 90}deg, ${e})`;
+      return `conic-gradient(from ${r.gradientAngle ?? 90}deg, ${t})`;
     default:
-      return t.bgColor || "#007bff";
+      return r.bgColor || "#007bff";
   }
 }
-function Wt(t = 14, r = 40) {
-  return Math.min(t, Math.max(12, Math.floor(r * 0.35))) + "px";
+function vt(r = 14, e = 40) {
+  return Math.min(r, Math.max(12, Math.floor(e * 0.35))) + "px";
 }
-function te(t = 20, r = 40, e = "lucide") {
-  return Math.min(t, Math.max(16, Math.floor(r * (e === "customSvg" ? 0.55 : 0.5))));
+function Wr(r = 20, e = 40, t = "lucide") {
+  return Math.min(r, Math.max(16, Math.floor(e * (t === "customSvg" ? 0.55 : 0.5))));
 }
-function It(t = 20, r = 40, e = "lucide") {
-  return Math.min(t, Math.max(16, Math.floor(r * (e === "customSvg" ? 0.55 : 0.5))));
+function yt(r = 20, e = 40, t = "lucide") {
+  return Math.min(r, Math.max(16, Math.floor(e * (t === "customSvg" ? 0.55 : 0.5))));
 }
-function Ut(t, r) {
-  if (t !== void 0) {
-    if (typeof t == "object") {
-      const { tl: e = 20, tr: n = 20, br: i = 20, bl: o = 20 } = t;
-      return `${e}px ${n}px ${i}px ${o}px`;
+function $t(r, e) {
+  if (r !== void 0) {
+    if (typeof r == "object") {
+      const { tl: t = 20, tr: o = 20, br: n = 20, bl: i = 20 } = r;
+      return `${t}px ${o}px ${n}px ${i}px`;
     }
-    return typeof t == "number" ? t + "px" : String(t);
+    return typeof r == "number" ? r + "px" : String(r);
   }
-  return r === "left" ? "20px 20px 4px 20px" : r === "right" ? "20px 20px 20px 4px" : "20px";
+  return e === "left" ? "20px 20px 4px 20px" : e === "right" ? "20px 20px 20px 4px" : "20px";
 }
-function _e(t) {
-  return !t || t === "none" ? "" : `anim-zotly-${t}`;
+function fe(r) {
+  return !r || r === "none" ? "" : `anim-zotly-${r}`;
 }
-function Gt(t) {
-  return (t ? new Date(t) : /* @__PURE__ */ new Date()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+function dn(r) {
+  return (r ? new Date(r) : /* @__PURE__ */ new Date()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
-const ne = new EventTarget();
-function w(t) {
-  ne.dispatchEvent(new CustomEvent(t));
+const Ir = new EventTarget();
+function w(r) {
+  Ir.dispatchEvent(new CustomEvent(r));
 }
-function Je(t) {
+function Pe(r) {
   return {
     useWebsiteTheme: !0,
     position: "bottom-right",
@@ -3872,19 +3872,19 @@ function Je(t) {
     width: 60,
     height: 60,
     borderRadius: { tl: 50, tr: 50, bl: 50, br: 50 },
-    backgroundColor: t.primary,
+    backgroundColor: r.primary,
     gradientType: "none",
     gradientStops: [
-      { color: t.primary, pos: 0 },
-      { color: t.secondary, pos: 100 }
+      { color: r.primary, pos: 0 },
+      { color: r.secondary, pos: 100 }
     ],
     backgroundOverlayType: "image",
     backgroundImageUrl: "",
     backgroundImageSize: "contain",
     backgroundImageOpacity: 0.25,
     backgroundBlendMode: "normal",
-    border: { width: 0, color: t.primary, style: "solid" },
-    outlineRing: { enabled: !0, width: 3, color: t.secondary, opacity: 0.4 },
+    border: { width: 0, color: r.primary, style: "solid" },
+    outlineRing: { enabled: !0, width: 3, color: r.secondary, opacity: 0.4 },
     boxShadowBlur: 20,
     boxShadowSpread: 0,
     boxShadowOffsetX: 0,
@@ -3924,7 +3924,7 @@ function Je(t) {
     }
   };
 }
-function Qe(t) {
+function Me(r) {
   return {
     enabled: !1,
     dismissed: !1,
@@ -3943,7 +3943,7 @@ function Qe(t) {
     iconType: "lucide",
     lucideIcon: "Sparkles",
     iconSize: 52,
-    iconColor: t.primary,
+    iconColor: r.primary,
     iconAnimation: "wiggle",
     iconAnimationDuration: "2.5s",
     title: "Hi there! 👋 Need help growing your business using AI?",
@@ -3960,19 +3960,19 @@ function Qe(t) {
       textColor: "#1e293b",
       borderRadius: 24,
       boxShadow: "0 6px 16px rgba(0,0,0,0.12)",
-      buttonColor: t.primary,
+      buttonColor: r.primary,
       buttonIconColor: "#ffffff"
     }
   };
 }
-function rt(t) {
+function Re(r) {
   return {
     useWebsiteTheme: !0,
     offsetRight: null,
     offsetBottom: null,
     clientName: "Zotly Support",
     agentName: "Sarah",
-    accentColor: t.primary,
+    accentColor: r.primary,
     widgetWidth: 400,
     widgetHeight: 650,
     expandedWidth: 550,
@@ -3988,7 +3988,7 @@ function rt(t) {
     attachmentsEnabled: !0,
     ticksEnabled: !0,
     readTickColor: "#34b7f1",
-    headerBg: t.primary,
+    headerBg: r.primary,
     headerTextColor: "#ffffff",
     headerBorderColor: "rgba(0,0,0,0.08)",
     headerPadding: "14px 16px",
@@ -4009,13 +4009,13 @@ function rt(t) {
     modalCardBg: "#ffffff",
     modalMessageColor: "#101828",
     modalBorderRadius: 28,
-    endChatConfirmBg: t.primary,
+    endChatConfirmBg: r.primary,
     endChatConfirmTextColor: "#ffffff",
     endChatCancelBg: "#ffffff",
     endChatCancelTextColor: "#667085",
     endChatCancelBorderColor: "#e9ecf1",
     bodyBg: "#f4f4f5",
-    visitorBubbleBg: t.primary,
+    visitorBubbleBg: r.primary,
     visitorBubbleColor: "#ffffff",
     visitorBubbleFontSize: "14px",
     visitorBubblePadding: "10px 14px",
@@ -4026,14 +4026,14 @@ function rt(t) {
     agentBubbleFontSize: "14px",
     agentBubblePadding: "10px 14px",
     agentBubbleBorderRadius: "16px",
-    agentAvatarBg: t.primary,
+    agentAvatarBg: r.primary,
     agentAvatarColor: "#ffffff",
     inputBg: "#ffffff",
     inputTextColor: "#18181b",
     inputPlaceholderColor: "#6b7280",
     inputBorderColor: "#d1d5db",
-    inputFocusBorderColor: t.primary,
-    inputFocusShadow: `0 0 0 3px ${t.primary}26`,
+    inputFocusBorderColor: r.primary,
+    inputFocusShadow: `0 0 0 3px ${r.primary}26`,
     inputBorderRadius: "9999px",
     inputPadding: "6px 8px",
     inputMargin: "12px 16px",
@@ -4041,7 +4041,7 @@ function rt(t) {
     attachButtonBg: "#ffffff",
     attachButtonColor: "#6b7280",
     emojiButtonColor: "#6b7280",
-    sendButtonBgActive: t.primary,
+    sendButtonBgActive: r.primary,
     sendButtonColorActive: "#ffffff",
     sendButtonBgInactive: "#e5e7eb",
     sendButtonColorInactive: "#9ca3af",
@@ -4052,7 +4052,7 @@ function rt(t) {
     footerPaddingBottom: "16px",
     poweredByText: "vAInatheya.ai",
     poweredByLink: "#",
-    poweredByColor: t.primary,
+    poweredByColor: r.primary,
     welcome: {
       enabled: !1,
       useWebsiteTheme: !0,
@@ -4071,7 +4071,7 @@ function rt(t) {
       titleFontSize: "26px",
       description: "Our support heroes are here to assist you.",
       descriptionFontSize: "15px",
-      bgGradient: `linear-gradient(135deg, ${t.primary}, ${t.secondary})`,
+      bgGradient: `linear-gradient(135deg, ${r.primary}, ${r.secondary})`,
       headerTextColor: "#ffffff",
       subtextColor: "rgba(255, 255, 255, 0.85)",
       padding: "32px 20px 10px 20px",
@@ -4085,11 +4085,11 @@ function rt(t) {
       buttonText: "Start Conversation",
       buttonBg: "#ffffff",
       buttonTextColor: "#111827",
-      buttonIconColor: t.primary
+      buttonIconColor: r.primary
     }
   };
 }
-function et() {
+function Ne() {
   return {
     voiceCallMaster: !1,
     voiceCallAgents: !1,
@@ -4103,7 +4103,7 @@ function et() {
     chatAcceptanceTime: 5
   };
 }
-function tt(t) {
+function We(r) {
   return {
     enabled: !1,
     useWebsiteTheme: !0,
@@ -4118,14 +4118,14 @@ function tt(t) {
     text: "Chat with us",
     cardText: "",
     barText: "Chat with us",
-    bgColor: t.primary,
+    bgColor: r.primary,
     textColor: "#ffffff",
     textSize: 14,
     letterSpacing: 0,
     gradientEnabled: !1,
     gradientStops: [
-      { color: t.primary, pos: 0 },
-      { color: t.secondary, pos: 100 }
+      { color: r.primary, pos: 0 },
+      { color: r.secondary, pos: 100 }
     ],
     gradientType: "linear",
     gradientAngle: 90,
@@ -4145,17 +4145,17 @@ function tt(t) {
     hideOnOpen: !0
   };
 }
-function nt(t) {
-  var n;
-  const r = (t == null ? void 0 : t.agentName) || "Sarah";
+function Ie(r) {
+  var o;
+  const e = (r == null ? void 0 : r.agentName) || "Sarah";
   return {
-    state: ((n = t == null ? void 0 : t.welcome) == null ? void 0 : n.enabled) === !0 ? "welcome" : "active",
+    state: ((o = r == null ? void 0 : r.welcome) == null ? void 0 : o.enabled) === !0 ? "welcome" : "active",
     isExpanded: !1,
     panelOpen: !1,
     unreadCount: 0,
     isMobile: window.innerWidth < 640 || window.innerHeight < 750,
-    clientName: (t == null ? void 0 : t.clientName) || "Zotly Support",
-    agentName: r,
+    clientName: (r == null ? void 0 : r.clientName) || "Zotly Support",
+    agentName: e,
     agentsOnline: !0,
     token: "visitor-token-demo",
     position: 1,
@@ -4179,229 +4179,232 @@ function nt(t) {
       {
         key: "msg_welcome",
         senderType: "AGENT",
-        senderName: r,
+        senderName: e,
         body: "Welcome! How can we assist you today?",
         created: (/* @__PURE__ */ new Date()).toISOString()
       }
     ]
   };
 }
-let v = null;
-function m() {
-  if (!v) {
-    const t = Ke();
-    v = {
-      bubble: Je(t),
-      greetWindow: Qe(t),
-      chatWindow: rt(t),
-      features: et(),
-      chat: nt(),
-      chatbar: tt(t)
+let m = null;
+function x() {
+  if (!m) {
+    const r = je();
+    m = {
+      bubble: Pe(r),
+      greetWindow: Me(r),
+      chatWindow: Re(r),
+      features: Ne(),
+      chat: Ie(),
+      chatbar: We(r)
     };
   }
-  return v;
+  return m;
 }
-function Mr(t, r) {
-  return ne.addEventListener(t, r), () => ne.removeEventListener(t, r);
+function yr(r, e) {
+  return Ir.addEventListener(r, e), () => Ir.removeEventListener(r, e);
 }
-function ce(t) {
-  const e = ["store:bubble", "store:greetWindow", "store:chatWindow", "store:chat", "store:chatbar", "store:features"].map((n) => Mr(n, t));
-  return () => e.forEach((n) => n());
+function Vr(r) {
+  const t = ["store:bubble", "store:greetWindow", "store:chatWindow", "store:chat", "store:chatbar", "store:features"].map((o) => yr(o, r));
+  return () => t.forEach((o) => o());
 }
-const Gr = { get() {
-  return m().bubble;
-} }, oe = { get() {
-  return m().greetWindow;
-} }, Kr = { get() {
-  return m().chatWindow;
-} }, de = { get() {
-  return m().features;
-} }, pe = { get() {
-  return m().chatbar;
-} }, b = {
+const Ar = { get() {
+  return x().bubble;
+} }, Ur = { get() {
+  return x().greetWindow;
+} }, jr = { get() {
+  return x().chatWindow;
+} }, Yr = { get() {
+  return x().features;
+} }, Gr = { get() {
+  return x().chatbar;
+} }, u = {
   get() {
-    return m().chat;
+    return x().chat;
   },
-  flag(t, r = !0) {
-    const e = m().chat;
-    return e.flags[t] !== void 0 ? e.flags[t] : r;
+  flag(r, e = !0) {
+    const t = x().chat;
+    return t.flags[r] !== void 0 ? t.flags[r] : e;
   },
   send() {
-    var i;
-    const t = m().chat;
-    if (!((i = t.draft) != null && i.trim()))
-      return;
-    const r = t.draft.trim(), e = {
+    var n;
+    const r = x().chat;
+    if (!((n = r.draft) != null && n.trim())) return;
+    const e = r.draft.trim(), t = {
       key: "msg_" + Date.now(),
       senderType: "VISITOR",
-      body: r,
+      body: e,
       created: (/* @__PURE__ */ new Date()).toISOString(),
       status: "sent"
     };
-    t.messages = [...t.messages, e], t.draft = "", t.emojiOpen = !1, t.attachOpen = !1, t.hasSentMessage = !0, w("store:chat");
-    const n = m().greetWindow;
-    n && (n.dismissed = !0, n.visible = !1, n.inputBox && (n.inputBox.visible = !1), w("store:greetWindow")), b.resetChatbarLayout(), setTimeout(() => {
-      const o = t.messages.findIndex((a) => a.key === e.key);
-      o !== -1 && (t.messages = t.messages.map((a, s) => s === o ? { ...a, status: "delivered" } : a), w("store:chat"));
+    r.messages = [...r.messages, t], r.draft = "", r.emojiOpen = !1, r.attachOpen = !1, r.hasSentMessage = !0, w("store:chat");
+    const o = x().greetWindow;
+    o && (o.dismissed = !0, o.visible = !1, o.inputBox && (o.inputBox.visible = !1), w("store:greetWindow")), u.resetChatbarLayout(), setTimeout(() => {
+      const i = r.messages.findIndex((a) => a.key === t.key);
+      i !== -1 && (r.messages = r.messages.map(
+        (a, d) => d === i ? { ...a, status: "delivered" } : a
+      ), w("store:chat"));
     }, 2e3), setTimeout(() => {
-      const o = t.messages.findIndex((a) => a.key === e.key);
-      o !== -1 && (t.messages = t.messages.map((a, s) => s === o ? { ...a, status: "read" } : a), w("store:chat"));
+      const i = r.messages.findIndex((a) => a.key === t.key);
+      i !== -1 && (r.messages = r.messages.map(
+        (a, d) => d === i ? { ...a, status: "read" } : a
+      ), w("store:chat"));
     }, 4e3);
   },
   resetChatbarLayout() {
-    const t = m().chatbar;
-    t.enabled && t.layout === "card" && (t.layout = "bar", t.height = 40, t.width = 255, t.offsetRight = t.barOffsetRight !== void 0 && t.barOffsetRight !== null ? t.barOffsetRight : 16, t.offsetBottom = t.barOffsetBottom !== void 0 && t.barOffsetBottom !== null ? t.barOffsetBottom : 12, w("store:chatbar"));
+    const r = x().chatbar;
+    r.enabled && r.layout === "card" && (r.layout = "bar", r.height = 40, r.width = 255, r.offsetRight = r.barOffsetRight !== void 0 && r.barOffsetRight !== null ? r.barOffsetRight : 16, r.offsetBottom = r.barOffsetBottom !== void 0 && r.barOffsetBottom !== null ? r.barOffsetBottom : 12, w("store:chatbar"));
   },
   askEndChat() {
-    const t = m().chat, r = m().chatWindow;
-    t.confirmBox = {
-      message: r.endChatConfirmMessage || "Are you sure you want to end this chat session?",
-      confirmLabel: r.endChatConfirmLabel || "End chat",
-      cancelLabel: r.endChatCancelLabel || "Cancel"
+    const r = x().chat, e = x().chatWindow;
+    r.confirmBox = {
+      message: e.endChatConfirmMessage || "Are you sure you want to end this chat session?",
+      confirmLabel: e.endChatConfirmLabel || "End chat",
+      cancelLabel: e.endChatCancelLabel || "Cancel"
     }, w("store:chat");
   },
   confirmEnd() {
-    const t = m().chat;
-    t.state = "closed", t.confirmBox = null, w("store:chat");
+    const r = x().chat;
+    r.state = "closed", r.confirmBox = null, w("store:chat");
   },
   startNew() {
-    const t = m().chat;
-    t.state = "active", t.messages = [
+    const r = x().chat;
+    r.state = "active", r.messages = [
       {
         key: "m_new",
         senderType: "AGENT",
-        senderName: t.agentName || "Sarah",
+        senderName: r.agentName || "Sarah",
         body: "Chat restarted. How can we help you?",
         created: (/* @__PURE__ */ new Date()).toISOString()
       }
     ], w("store:chat");
   },
   startFromWelcome() {
-    const t = m().chat;
-    t.state = "active", w("store:chat");
+    const r = x().chat;
+    r.state = "active", w("store:chat");
   },
   closePanel() {
-    const t = m().chat;
-    t.isExpanded = !1, t.menuOpen = !1, t.attachOpen = !1, t.emojiOpen = !1, t.panelOpen = !1, w("store:chat"), window.dispatchEvent(new CustomEvent("close-contact-widget"));
+    const r = x().chat;
+    r.isExpanded = !1, r.menuOpen = !1, r.attachOpen = !1, r.emojiOpen = !1, r.panelOpen = !1, w("store:chat"), window.dispatchEvent(new CustomEvent("close-contact-widget"));
   },
   toggleExpand() {
-    const t = m().chat;
-    t.isExpanded = !t.isExpanded, w("store:chat");
+    const r = x().chat;
+    r.isExpanded = !r.isExpanded, w("store:chat");
   },
   downloadTranscript() {
-    m().chat.menuOpen = !1, w("store:chat"), alert("Downloading transcript...");
+    x().chat.menuOpen = !1, w("store:chat"), alert("Downloading transcript...");
   },
   toggleSounds() {
-    const t = m().chat;
-    t.soundsOn = !t.soundsOn, w("store:chat");
+    const r = x().chat;
+    r.soundsOn = !r.soundsOn, w("store:chat");
   },
   dismissConsent() {
-    m().chat.consentDismissed = !0, w("store:chat");
+    x().chat.consentDismissed = !0, w("store:chat");
   },
   submitOffline() {
-    const t = m().chat;
-    t.offlineEmail && t.offlineMessage && (t.offlineSending = !0, w("store:chat"), setTimeout(() => {
-      t.offlineSending = !1, t.state = "offline-sent", w("store:chat");
+    const r = x().chat;
+    r.offlineEmail && r.offlineMessage && (r.offlineSending = !0, w("store:chat"), setTimeout(() => {
+      r.offlineSending = !1, r.state = "offline-sent", w("store:chat");
     }, 1e3));
   },
-  uploadImage(t) {
-    const r = m().chat;
-    if (t.files && t.files[0]) {
-      const e = URL.createObjectURL(t.files[0]), n = {
+  uploadImage(r) {
+    const e = x().chat;
+    if (r.files && r.files[0]) {
+      const t = URL.createObjectURL(r.files[0]), o = {
         key: "img_" + Date.now(),
         senderType: "VISITOR",
-        localUrl: e,
+        localUrl: t,
         attachment: !0,
         body: "",
         created: (/* @__PURE__ */ new Date()).toISOString(),
         status: "sent"
       };
-      r.messages = [...r.messages, n], r.attachOpen = !1, r.hasSentMessage = !0, w("store:chat"), b.resetChatbarLayout(), setTimeout(() => {
-        const i = r.messages.findIndex((o) => o.key === n.key);
-        i !== -1 && (r.messages = r.messages.map((o, a) => a === i ? { ...o, status: "delivered" } : o), w("store:chat"));
+      e.messages = [...e.messages, o], e.attachOpen = !1, e.hasSentMessage = !0, w("store:chat"), u.resetChatbarLayout(), setTimeout(() => {
+        const n = e.messages.findIndex((i) => i.key === o.key);
+        n !== -1 && (e.messages = e.messages.map((i, a) => a === n ? { ...i, status: "delivered" } : i), w("store:chat"));
       }, 2e3), setTimeout(() => {
-        const i = r.messages.findIndex((o) => o.key === n.key);
-        i !== -1 && (r.messages = r.messages.map((o, a) => a === i ? { ...o, status: "read" } : o), w("store:chat"));
+        const n = e.messages.findIndex((i) => i.key === o.key);
+        n !== -1 && (e.messages = e.messages.map((i, a) => a === n ? { ...i, status: "read" } : i), w("store:chat"));
       }, 4e3);
     }
   },
   captureScreenshot() {
-    m().chat.attachOpen = !1, w("store:chat"), alert("Screenshot captured!");
+    x().chat.attachOpen = !1, w("store:chat"), alert("Screenshot captured!");
   },
-  dividerBefore(t) {
-    return t === 0;
+  dividerBefore(r) {
+    return r === 0;
   },
   dayLabel() {
     return "Today";
   },
-  timeLabel(t) {
-    return (t.created ? new Date(t.created) : /* @__PURE__ */ new Date()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  timeLabel(r) {
+    return (r.created ? new Date(r.created) : /* @__PURE__ */ new Date()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   },
-  groupStart(t) {
-    const r = m().chat;
-    return t === 0 || r.messages[t].senderType !== r.messages[t - 1].senderType;
+  groupStart(r) {
+    const e = x().chat;
+    return r === 0 || e.messages[r].senderType !== e.messages[r - 1].senderType;
   },
-  groupEnd(t) {
-    const r = m().chat;
-    return t === r.messages.length - 1 || r.messages[t].senderType !== r.messages[t + 1].senderType;
+  groupEnd(r) {
+    const e = x().chat;
+    return r === e.messages.length - 1 || e.messages[r].senderType !== e.messages[r + 1].senderType;
   },
-  attachmentUrl(t) {
-    return t.localUrl || t.url || "";
+  attachmentUrl(r) {
+    return r.localUrl || r.url || "";
   }
 };
-async function Lt() {
-  var n;
-  const t = Ke(), r = At();
-  v = {
-    bubble: Je(t),
-    greetWindow: Qe(t),
-    chatWindow: rt(t),
-    features: et(),
-    chat: nt(),
-    chatbar: tt(t)
+async function kt() {
+  var o;
+  const r = je(), e = ht();
+  m = {
+    bubble: Pe(r),
+    greetWindow: Me(r),
+    chatWindow: Re(r),
+    features: Ne(),
+    chat: Ie(),
+    chatbar: We(r)
   }, w("store:bubble"), w("store:greetWindow"), w("store:chatWindow"), w("store:features"), w("store:chat"), w("store:chatbar");
   try {
-    const { bubbleConfig: i, chatConfig: o, chatbarConfig: a, greetWindowConfig: s } = await _t(r);
-    if (i && Object.keys(i).length > 0) {
-      const c = i;
-      c.useWebsiteTheme && (c.backgroundColor = t.primary, c.gradientType = "none", c.outlineRing && (c.outlineRing.color = t.secondary)), Object.assign(v.bubble, c), c.position && (v.greetWindow.position = c.position), w("store:bubble"), w("store:greetWindow");
+    const { bubbleConfig: n, chatConfig: i, chatbarConfig: a, greetWindowConfig: d } = await gt(e);
+    if (n && Object.keys(n).length > 0) {
+      const l = n;
+      l.useWebsiteTheme && (l.backgroundColor = r.primary, l.gradientType = "none", l.outlineRing && (l.outlineRing.color = r.secondary)), Object.assign(m.bubble, l), l.position && (m.greetWindow.position = l.position), w("store:bubble"), w("store:greetWindow");
     }
-    if (s && Object.keys(s).length > 0) {
-      const c = s;
-      c.inputBox && (c.inputBox = { ...v.greetWindow.inputBox, ...c.inputBox }), c.useWebsiteTheme && (c.iconColor = t.primary, c.inputBox && (c.inputBox.layout === "separated" ? c.inputBox.buttonIconColor = t.primary : c.inputBox.buttonColor = t.primary)), Object.assign(v.greetWindow, c), w("store:greetWindow");
+    if (d && Object.keys(d).length > 0) {
+      const l = d;
+      l.inputBox && (l.inputBox = { ...m.greetWindow.inputBox, ...l.inputBox }), l.useWebsiteTheme && (l.iconColor = r.primary, l.inputBox && (l.inputBox.layout === "separated" ? l.inputBox.buttonIconColor = r.primary : l.inputBox.buttonColor = r.primary)), Object.assign(m.greetWindow, l), w("store:greetWindow");
     }
     if (a && Object.keys(a).length > 0) {
-      Object.assign(v.chatbar, a);
-      const c = v.chatbar;
-      c.layout === "card" ? (c.cardOffsetRight !== void 0 && c.cardOffsetRight !== null && (c.offsetRight = c.cardOffsetRight), c.cardOffsetBottom !== void 0 && c.cardOffsetBottom !== null && (c.offsetBottom = c.cardOffsetBottom)) : (c.barOffsetRight !== void 0 && c.barOffsetRight !== null && (c.offsetRight = c.barOffsetRight), c.barOffsetBottom !== void 0 && c.barOffsetBottom !== null && (c.offsetBottom = c.barOffsetBottom)), w("store:chatbar");
+      Object.assign(m.chatbar, a);
+      const l = m.chatbar;
+      l.layout === "card" ? (l.cardOffsetRight !== void 0 && l.cardOffsetRight !== null && (l.offsetRight = l.cardOffsetRight), l.cardOffsetBottom !== void 0 && l.cardOffsetBottom !== null && (l.offsetBottom = l.cardOffsetBottom)) : (l.barOffsetRight !== void 0 && l.barOffsetRight !== null && (l.offsetRight = l.barOffsetRight), l.barOffsetBottom !== void 0 && l.barOffsetBottom !== null && (l.offsetBottom = l.barOffsetBottom)), w("store:chatbar");
     }
-    if (o && Object.keys(o).length > 0) {
-      let f = function() {
-        const u = Ze(), d = JSON.parse(JSON.stringify(c));
-        d.useWebsiteTheme && (d.accentColor = t.primary, d.visitorBubbleBg = t.primary, d.visitorBubbleColor = "#ffffff", d.headerBg = t.primary, d.headerTextColor = "#ffffff", d.headerAvatarBg = "rgba(255,255,255,0.2)", d.headerAvatarColor = "#ffffff", d.agentAvatarBg = t.primary, d.agentAvatarColor = "#ffffff", d.inputFocusBorderColor = t.primary, d.inputFocusShadow = `0 0 0 2px ${t.primary}26`, d.sendButtonBgActive = t.primary, d.poweredByColor = t.primary, d.endChatConfirmBg = t.primary, d.endChatConfirmTextColor = "#ffffff", u && (d.bodyBg = "var(--cw-bg)", d.inputBg = "var(--cw-surface)", d.agentBubbleBg = "var(--cw-surface)", d.agentBubbleColor = "var(--cw-ink)", d.agentBubbleBorderColor = "var(--cw-border)", d.footerBg = "var(--cw-bg)", d.footerTextColor = "var(--cw-muted)", d.inputTextColor = "var(--cw-ink)", d.inputBorderColor = "var(--cw-border)", d.attachButtonBg = "var(--cw-surface)", d.attachButtonColor = "var(--cw-muted)", d.emojiButtonColor = "var(--cw-muted)", d.modalCardBg = "var(--cw-surface)", d.modalMessageColor = "var(--cw-ink)", d.endChatCancelBg = "var(--cw-surface)", d.endChatCancelTextColor = "var(--cw-muted)", d.endChatCancelBorderColor = "var(--cw-border)"));
-        const g = d.welcome || v.chatWindow.welcome;
-        if (g && (g.useWebsiteTheme ?? d.useWebsiteTheme)) {
-          const $ = t.secondary && t.secondary !== t.primary ? t.secondary : t.primary;
-          g.bgGradient = `linear-gradient(135deg, ${t.primary}, ${$})`, g.buttonIconColor = t.primary, d.welcome = g;
+    if (i && Object.keys(i).length > 0) {
+      let l = function() {
+        const f = Ee(), c = JSON.parse(JSON.stringify(h));
+        c.useWebsiteTheme && (c.accentColor = r.primary, c.visitorBubbleBg = r.primary, c.visitorBubbleColor = "#ffffff", c.headerBg = r.primary, c.headerTextColor = "#ffffff", c.headerAvatarBg = "rgba(255,255,255,0.2)", c.headerAvatarColor = "#ffffff", c.agentAvatarBg = r.primary, c.agentAvatarColor = "#ffffff", c.inputFocusBorderColor = r.primary, c.inputFocusShadow = `0 0 0 2px ${r.primary}26`, c.sendButtonBgActive = r.primary, c.poweredByColor = r.primary, c.endChatConfirmBg = r.primary, c.endChatConfirmTextColor = "#ffffff", f && (c.bodyBg = "var(--cw-bg)", c.inputBg = "var(--cw-surface)", c.agentBubbleBg = "var(--cw-surface)", c.agentBubbleColor = "var(--cw-ink)", c.agentBubbleBorderColor = "var(--cw-border)", c.footerBg = "var(--cw-bg)", c.footerTextColor = "var(--cw-muted)", c.inputTextColor = "var(--cw-ink)", c.inputBorderColor = "var(--cw-border)", c.attachButtonBg = "var(--cw-surface)", c.attachButtonColor = "var(--cw-muted)", c.emojiButtonColor = "var(--cw-muted)", c.modalCardBg = "var(--cw-surface)", c.modalMessageColor = "var(--cw-ink)", c.endChatCancelBg = "var(--cw-surface)", c.endChatCancelTextColor = "var(--cw-muted)", c.endChatCancelBorderColor = "var(--cw-border)"));
+        const b = c.welcome || m.chatWindow.welcome;
+        if (b && (b.useWebsiteTheme ?? c.useWebsiteTheme)) {
+          const $ = r.secondary && r.secondary !== r.primary ? r.secondary : r.primary;
+          b.bgGradient = `linear-gradient(135deg, ${r.primary}, ${$})`, b.buttonIconColor = r.primary, c.welcome = b;
         }
-        u && c.dark && Object.keys(c.dark).length > 0 && Object.assign(d, c.dark), Object.assign(v.chatWindow, d), w("store:chatWindow");
+        f && h.dark && Object.keys(h.dark).length > 0 && Object.assign(c, h.dark), Object.assign(m.chatWindow, c), w("store:chatWindow");
       };
-      const c = o;
-      c.welcome && (v.chatWindow.welcome = { ...v.chatWindow.welcome, ...c.welcome }), f(), jt(() => f()), c.clientName && (v.chat.clientName = c.clientName), c.agentName && (v.chat.agentName = c.agentName, v.chat.messages[0] && (v.chat.messages[0].senderName = c.agentName)), !v.chat.hasSentMessage && ((n = c.welcome) != null && n.enabled) && (v.chat.state = "welcome"), w("store:chat");
+      const h = i;
+      h.welcome && (m.chatWindow.welcome = { ...m.chatWindow.welcome, ...h.welcome }), l(), pt(() => l()), h.clientName && (m.chat.clientName = h.clientName), h.agentName && (m.chat.agentName = h.agentName, m.chat.messages[0] && (m.chat.messages[0].senderName = h.agentName)), !m.chat.hasSentMessage && ((o = h.welcome) != null && o.enabled) && (m.chat.state = "welcome"), w("store:chat");
     }
-  } catch (i) {
-    console.warn("initStore fetchClientConfig warning:", i);
+  } catch (n) {
+    console.warn("initStore fetchClientConfig warning:", n);
   }
-  const e = v.greetWindow;
-  if (e && e.enabled) {
-    const i = parseFloat(String(e.openingTimeAfterInitialLoadSec ?? 2));
+  const t = m.greetWindow;
+  if (t && t.enabled) {
+    const n = parseFloat(String(t.openingTimeAfterInitialLoadSec ?? 2));
     if (setTimeout(() => {
-      !e.dismissed && !v.chat.hasSentMessage && (e.visible = !0, w("store:greetWindow"));
-    }, i * 1e3), e.inputBox && e.inputBox.enabled) {
-      const o = parseFloat(String(e.inputBox.openingTimeAfterInitialLoadSec ?? 4));
+      !t.dismissed && !m.chat.hasSentMessage && (t.visible = !0, w("store:greetWindow"));
+    }, n * 1e3), t.inputBox && t.inputBox.enabled) {
+      const i = parseFloat(String(t.inputBox.openingTimeAfterInitialLoadSec ?? 4));
       setTimeout(() => {
-        !e.dismissed && !v.chat.hasSentMessage && (e.inputBox && (e.inputBox.visible = !0), w("store:greetWindow"));
-      }, o * 1e3);
+        !t.dismissed && !m.chat.hasSentMessage && (t.inputBox && (t.inputBox.visible = !0), w("store:greetWindow"));
+      }, i * 1e3);
     }
   }
 }
@@ -4410,92 +4413,92 @@ async function Lt() {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const S = (t) => (r, e) => {
-  e !== void 0 ? e.addInitializer(() => {
-    customElements.define(t, r);
-  }) : customElements.define(t, r);
+const S = (r) => (e, t) => {
+  t !== void 0 ? t.addInitializer(() => {
+    customElements.define(r, e);
+  }) : customElements.define(r, e);
 };
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Dt = { attribute: !0, type: String, converter: Lr, reflect: !1, hasChanged: se }, Ht = (t = Dt, r, e) => {
-  const { kind: n, metadata: i } = e;
-  let o = globalThis.litPropertyMetadata.get(i);
-  if (o === void 0 && globalThis.litPropertyMetadata.set(i, o = /* @__PURE__ */ new Map()), n === "setter" && ((t = Object.create(t)).wrapped = !0), o.set(e.name, t), n === "accessor") {
-    const { name: a } = e;
-    return { set(s) {
-      const c = r.get.call(this);
-      r.set.call(this, s), this.requestUpdate(a, c, t, !0, s);
-    }, init(s) {
-      return s !== void 0 && this.C(a, void 0, t, s), s;
+const Ct = { attribute: !0, type: String, converter: zr, reflect: !1, hasChanged: Fr }, St = (r = Ct, e, t) => {
+  const { kind: o, metadata: n } = t;
+  let i = globalThis.litPropertyMetadata.get(n);
+  if (i === void 0 && globalThis.litPropertyMetadata.set(n, i = /* @__PURE__ */ new Map()), o === "setter" && ((r = Object.create(r)).wrapped = !0), i.set(t.name, r), o === "accessor") {
+    const { name: a } = t;
+    return { set(d) {
+      const l = e.get.call(this);
+      e.set.call(this, d), this.requestUpdate(a, l, r, !0, d);
+    }, init(d) {
+      return d !== void 0 && this.C(a, void 0, r, d), d;
     } };
   }
-  if (n === "setter") {
-    const { name: a } = e;
-    return function(s) {
-      const c = this[a];
-      r.call(this, s), this.requestUpdate(a, c, t, !0, s);
+  if (o === "setter") {
+    const { name: a } = t;
+    return function(d) {
+      const l = this[a];
+      e.call(this, d), this.requestUpdate(a, l, r, !0, d);
     };
   }
-  throw Error("Unsupported decorator location: " + n);
+  throw Error("Unsupported decorator location: " + o);
 };
-function p(t) {
-  return (r, e) => typeof e == "object" ? Ht(t, r, e) : ((n, i, o) => {
-    const a = i.hasOwnProperty(o);
-    return i.constructor.createProperty(o, n), a ? Object.getOwnPropertyDescriptor(i, o) : void 0;
-  })(t, r, e);
+function p(r) {
+  return (e, t) => typeof t == "object" ? St(r, e, t) : ((o, n, i) => {
+    const a = n.hasOwnProperty(i);
+    return n.constructor.createProperty(i, o), a ? Object.getOwnPropertyDescriptor(n, i) : void 0;
+  })(r, e, t);
 }
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-function Pr(t) {
-  return p({ ...t, state: !0, attribute: !1 });
+function $r(r) {
+  return p({ ...r, state: !0, attribute: !1 });
 }
-var Nr = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, rr;
-let mr = (rr = class extends y {
+var Bt = Object.defineProperty, zt = Object.getOwnPropertyDescriptor, kr = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? zt(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && Bt(e, t, n), n;
+};
+let G = class extends y {
   constructor() {
     super(...arguments), this.name = "MessageCircle", this.size = 24, this.color = "currentColor", this.customSvg = "";
   }
   render() {
     if (this.customSvg)
-      return l`<div class="custom-svg" style="width: ${this.size}px; height: ${this.size}px; color: ${this.color}" .innerHTML=${this.customSvg}></div>`;
+      return s`<div class="custom-svg" style="width: ${this.size}px; height: ${this.size}px; color: ${this.color}" .innerHTML=${this.customSvg}></div>`;
     const r = this.size, e = this.color;
     switch (this.name) {
       case "Star":
-        return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="${e}" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+        return s`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="${e}" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
       case "Heart":
-        return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="${e}" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+        return s`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="${e}" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
       case "Smile":
-        return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>`;
+        return s`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>`;
       case "Sparkles":
-        return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z"></path><path d="M5 3l.8 1.6L7.4 5l-1.6.8L5 7.4l-.8-1.6L2.6 5l1.6-.8L5 3z"></path><path d="M19 17l.8 1.6 1.6.6-1.6.8-.8 1.6-.8-1.6-1.6-.8 1.6-.6.8-1.6z"></path></svg>`;
+        return s`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z"></path><path d="M5 3l.8 1.6L7.4 5l-1.6.8L5 7.4l-.8-1.6L2.6 5l1.6-.8L5 3z"></path><path d="M19 17l.8 1.6 1.6.6-1.6.8-.8 1.6-.8-1.6-1.6-.8 1.6-.6.8-1.6z"></path></svg>`;
       case "MessageSquare":
-        return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
+        return s`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
       case "Send":
-        return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
+        return s`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
       case "HelpCircle":
-        return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
+        return s`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
       case "Gift":
-        return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>`;
+        return s`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>`;
       case "Bell":
-        return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>`;
+        return s`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>`;
       case "Info":
-        return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
+        return s`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
       case "MessageCircle":
       default:
-        return l`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>`;
+        return s`<svg viewBox="0 0 24 24" width="${r}" height="${r}" fill="none" stroke="${e}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>`;
     }
   }
-}, rr.styles = C`
+};
+G.styles = C`
     :host {
       display: inline-flex;
       align-items: center;
@@ -4512,43 +4515,41 @@ let mr = (rr = class extends y {
       height: 100%;
       display: inline-flex;
     }
-  `, rr);
-Nr([
+  `;
+kr([
   p({ type: String })
-], mr.prototype, "name", void 0);
-Nr([
+], G.prototype, "name", 2);
+kr([
   p({ type: Number })
-], mr.prototype, "size", void 0);
-Nr([
+], G.prototype, "size", 2);
+kr([
   p({ type: String })
-], mr.prototype, "color", void 0);
-Nr([
+], G.prototype, "color", 2);
+kr([
   p({ type: String })
-], mr.prototype, "customSvg", void 0);
-mr = Nr([
+], G.prototype, "customSvg", 2);
+G = kr([
   S("cw-icon")
-], mr);
-var he = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, er;
-let Hr = (er = class extends y {
+], G);
+var Ot = Object.defineProperty, _t = Object.getOwnPropertyDescriptor, Kr = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? _t(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && Ot(e, t, n), n;
+};
+let br = class extends y {
   constructor() {
     super(...arguments), this.count = 0, this.config = {};
   }
   render() {
-    if (!this.count || this.count <= 0)
-      return l``;
-    const r = this.config || {}, e = r.position || "top-right", n = r.offsetX !== void 0 ? r.offsetX : -6, i = r.offsetY !== void 0 ? r.offsetY : -6, o = r.size || 20, a = {
+    if (!this.count || this.count <= 0) return s``;
+    const r = this.config || {}, e = r.position || "top-right", t = r.offsetX !== void 0 ? r.offsetX : -6, o = r.offsetY !== void 0 ? r.offsetY : -6, n = r.size || 20, i = {
       position: "absolute",
       backgroundColor: r.backgroundColor || "#dc2626",
       color: r.textColor || "#ffffff",
       fontSize: `${r.fontSize || 11}px`,
       lineHeight: "1",
-      minWidth: `${o}px`,
-      height: `${o}px`,
+      minWidth: `${n}px`,
+      height: `${n}px`,
       border: `${r.borderWidth !== void 0 ? r.borderWidth : 2}px solid ${r.borderColor || "#ffffff"}`,
       borderRadius: r.borderRadius !== void 0 ? r.borderRadius : "9999px",
       fontWeight: r.fontWeight || "700",
@@ -4557,11 +4558,12 @@ let Hr = (er = class extends y {
       zIndex: "50",
       animation: r.animation || "none"
     };
-    e === "top-left" ? (a.top = `${i}px`, a.left = `${n}px`) : e === "bottom-right" ? (a.bottom = `${i}px`, a.right = `${n}px`) : e === "bottom-left" ? (a.bottom = `${i}px`, a.left = `${n}px`) : (a.top = `${i}px`, a.right = `${n}px`);
-    const s = Object.entries(a).map(([c, f]) => `${c.replace(/([A-Z])/g, "-$1").toLowerCase()}: ${f}`).join("; ");
-    return l`<div class="badge" style="${s}">${this.count}</div>`;
+    e === "top-left" ? (i.top = `${o}px`, i.left = `${t}px`) : e === "bottom-right" ? (i.bottom = `${o}px`, i.right = `${t}px`) : e === "bottom-left" ? (i.bottom = `${o}px`, i.left = `${t}px`) : (i.top = `${o}px`, i.right = `${t}px`);
+    const a = Object.entries(i).map(([d, l]) => `${d.replace(/([A-Z])/g, "-$1").toLowerCase()}: ${l}`).join("; ");
+    return s`<div class="badge" style="${a}">${this.count}</div>`;
   }
-}, er.styles = C`
+};
+br.styles = C`
     :host {
       display: inline-flex;
     }
@@ -4572,31 +4574,31 @@ let Hr = (er = class extends y {
       box-sizing: border-box;
       white-space: nowrap;
     }
-  `, er);
-he([
+  `;
+Kr([
   p({ type: Number })
-], Hr.prototype, "count", void 0);
-he([
+], br.prototype, "count", 2);
+Kr([
   p({ type: Object })
-], Hr.prototype, "config", void 0);
-Hr = he([
+], br.prototype, "config", 2);
+br = Kr([
   S("cw-badge")
-], Hr);
-var Ft = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, tr;
-let Ee = (tr = class extends y {
+], br);
+var At = Object.getOwnPropertyDescriptor, jt = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? At(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = a(n) || n);
+  return n;
+};
+let Dr = class extends y {
   render() {
-    return l`
+    return s`
       <span class="dot"></span>
       <span class="dot"></span>
       <span class="dot"></span>
     `;
   }
-}, tr.styles = C`
+};
+Dr.styles = C`
     :host {
       display: inline-flex;
       align-items: center;
@@ -4630,24 +4632,23 @@ let Ee = (tr = class extends y {
         opacity: 1;
       }
     }
-  `, tr);
-Ee = Ft([
+  `;
+Dr = jt([
   S("cw-typing-dots")
-], Ee);
-var Wr = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, nr;
-let vr = (nr = class extends y {
+], Dr);
+var Et = Object.defineProperty, Tt = Object.getOwnPropertyDescriptor, Cr = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? Tt(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && Et(e, t, n), n;
+};
+let K = class extends y {
   constructor() {
     super(...arguments), this.status = "sent", this.sentColor = "", this.deliveredColor = "", this.readColor = "#34b7f1";
   }
   render() {
     if (!this.status || this.status === "sent") {
       const r = this.sentColor || "currentColor", e = this.sentColor ? "1" : "0.7";
-      return l`
+      return s`
         <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke="${r}" style="opacity: ${e}">
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
@@ -4655,7 +4656,7 @@ let vr = (nr = class extends y {
     }
     if (this.status === "delivered") {
       const r = this.deliveredColor || "currentColor", e = this.deliveredColor ? "1" : "0.7";
-      return l`
+      return s`
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke="${r}" style="opacity: ${e}">
           <path d="M17 6L8.5 14.5L5 11M22 6L13.5 14.5L12.5 13.5"></path>
         </svg>
@@ -4663,15 +4664,16 @@ let vr = (nr = class extends y {
     }
     if (this.status === "read") {
       const r = this.readColor || "#34b7f1";
-      return l`
+      return s`
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke="${r}">
           <path d="M17 6L8.5 14.5L5 11M22 6L13.5 14.5L12.5 13.5"></path>
         </svg>
       `;
     }
-    return l``;
+    return s``;
   }
-}, nr.styles = C`
+};
+K.styles = C`
     :host {
       display: inline-flex;
       align-items: center;
@@ -4681,48 +4683,48 @@ let vr = (nr = class extends y {
     svg {
       display: block;
     }
-  `, nr);
-Wr([
+  `;
+Cr([
   p({ type: String })
-], vr.prototype, "status", void 0);
-Wr([
+], K.prototype, "status", 2);
+Cr([
   p({ type: String })
-], vr.prototype, "sentColor", void 0);
-Wr([
+], K.prototype, "sentColor", 2);
+Cr([
   p({ type: String })
-], vr.prototype, "deliveredColor", void 0);
-Wr([
+], K.prototype, "deliveredColor", 2);
+Cr([
   p({ type: String })
-], vr.prototype, "readColor", void 0);
-vr = Wr([
+], K.prototype, "readColor", 2);
+K = Cr([
   S("cw-message-tick")
-], vr);
-var U = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, or;
-let _ = (or = class extends y {
+], K);
+var Pt = Object.defineProperty, Mt = Object.getOwnPropertyDescriptor, L = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? Mt(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && Pt(e, t, n), n;
+};
+let O = class extends y {
   constructor() {
     super(...arguments), this.name = "Support", this.imageUrl = "", this.bg = "rgba(255,255,255,0.2)", this.color = "#ffffff", this.size = 32, this.showOnlineDot = !0;
   }
   render() {
-    var s, c, f, u, d;
-    const r = (this.name || "S").charAt(0).toUpperCase(), e = ((s = this.activeDot) == null ? void 0 : s.size) !== void 0 ? this.activeDot.size : 8, n = ((c = this.activeDot) == null ? void 0 : c.color) || "#22c55e", i = ((f = this.activeDot) == null ? void 0 : f.animate) !== !1, o = ((u = this.activeDot) == null ? void 0 : u.borderWidth) !== void 0 ? this.activeDot.borderWidth : 0, a = ((d = this.activeDot) == null ? void 0 : d.borderColor) || "transparent";
-    return l`
+    var a, d, l, h, f;
+    const r = (this.name || "S").charAt(0).toUpperCase(), e = ((a = this.activeDot) == null ? void 0 : a.size) !== void 0 ? this.activeDot.size : 8, t = ((d = this.activeDot) == null ? void 0 : d.color) || "#22c55e", o = ((l = this.activeDot) == null ? void 0 : l.animate) !== !1, n = ((h = this.activeDot) == null ? void 0 : h.borderWidth) !== void 0 ? this.activeDot.borderWidth : 0, i = ((f = this.activeDot) == null ? void 0 : f.borderColor) || "transparent";
+    return s`
       <div class="avatar-box" style="width: ${this.size}px; height: ${this.size}px; font-size: ${Math.floor(this.size * 0.45)}px; background: ${this.bg}; color: ${this.color}">
-        ${this.imageUrl ? l`<img class="avatar-img" src="${this.imageUrl}" alt="${this.name}" />` : l`<span>${r}</span>`}
-        ${this.showOnlineDot ? l`
+        ${this.imageUrl ? s`<img class="avatar-img" src="${this.imageUrl}" alt="${this.name}" />` : s`<span>${r}</span>`}
+        ${this.showOnlineDot ? s`
               <div class="dot-wrapper" style="width: ${e}px; height: ${e}px">
-                ${i ? l`<span class="dot-pulse" style="background-color: ${n}"></span>` : ""}
-                <span class="dot-solid" style="background-color: ${n}; border: ${o}px solid ${a}"></span>
+                ${o ? s`<span class="dot-pulse" style="background-color: ${t}"></span>` : ""}
+                <span class="dot-solid" style="background-color: ${t}; border: ${n}px solid ${i}"></span>
               </div>
             ` : ""}
       </div>
     `;
   }
-}, or.styles = C`
+};
+O.styles = C`
     :host {
       display: inline-flex;
       position: relative;
@@ -4773,58 +4775,56 @@ let _ = (or = class extends y {
       50% { transform: scale(1.6); opacity: 0.3; }
       100% { transform: scale(2.4); opacity: 0; }
     }
-  `, or);
-U([
+  `;
+L([
   p({ type: String })
-], _.prototype, "name", void 0);
-U([
+], O.prototype, "name", 2);
+L([
   p({ type: String })
-], _.prototype, "imageUrl", void 0);
-U([
+], O.prototype, "imageUrl", 2);
+L([
   p({ type: String })
-], _.prototype, "bg", void 0);
-U([
+], O.prototype, "bg", 2);
+L([
   p({ type: String })
-], _.prototype, "color", void 0);
-U([
+], O.prototype, "color", 2);
+L([
   p({ type: Number })
-], _.prototype, "size", void 0);
-U([
+], O.prototype, "size", 2);
+L([
   p({ type: Object })
-], _.prototype, "activeDot", void 0);
-U([
+], O.prototype, "activeDot", 2);
+L([
   p({ type: Boolean })
-], _.prototype, "showOnlineDot", void 0);
-_ = U([
+], O.prototype, "showOnlineDot", 2);
+O = L([
   S("cw-avatar")
-], _);
-var $r = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, ir;
-let V = (ir = class extends y {
+], O);
+var Rt = Object.defineProperty, Nt = Object.getOwnPropertyDescriptor, ar = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? Nt(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && Rt(e, t, n), n;
+};
+let I = class extends y {
   constructor() {
     super(...arguments), this.chatWindowConfig = {}, this.isGroupEnd = !0, this.isGroupStart = !0, this.agentName = "Sarah";
   }
   render() {
-    if (!this.message)
-      return l``;
-    const r = this.message, e = this.chatWindowConfig, n = r.senderType === "VISITOR", i = r.senderType === "AGENT", o = n ? e.visitorBubbleBg || "var(--cw-grad)" : e.agentBubbleBg || "var(--cw-surface)", a = n ? e.visitorBubbleColor || "#fff" : e.agentBubbleColor || "var(--cw-ink)", s = n ? "transparent" : e.agentBubbleBorderColor || "var(--cw-border)", c = n ? e.visitorBubbleBg ? "none" : "0 2px 8px color-mix(in srgb, var(--cw-accent) 25%, transparent)" : "0 1px 2px rgba(16, 24, 40, 0.05)", f = n ? e.visitorBubbleBorderRadius || "16px" : e.agentBubbleBorderRadius || "16px", u = n ? e.visitorBubblePadding || "10px 14px" : e.agentBubblePadding || "10px 14px", d = n ? e.visitorBubbleFontSize || "14px" : e.agentBubbleFontSize || "14px", g = r.created ? new Date(r.created).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : (/* @__PURE__ */ new Date()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }), x = (r.senderName || this.agentName || "A").charAt(0).toUpperCase();
-    return l`
-      <div class="bubble-row ${n ? "from-visitor" : "from-agent"}">
-        ${i && this.isGroupEnd ? l`
+    if (!this.message) return s``;
+    const r = this.message, e = this.chatWindowConfig, t = r.senderType === "VISITOR", o = r.senderType === "AGENT", n = t ? e.visitorBubbleBg || "var(--cw-grad)" : e.agentBubbleBg || "var(--cw-surface)", i = t ? e.visitorBubbleColor || "#fff" : e.agentBubbleColor || "var(--cw-ink)", a = t ? "transparent" : e.agentBubbleBorderColor || "var(--cw-border)", d = t ? e.visitorBubbleBg ? "none" : "0 2px 8px color-mix(in srgb, var(--cw-accent) 25%, transparent)" : "0 1px 2px rgba(16, 24, 40, 0.05)", l = t ? e.visitorBubbleBorderRadius || "16px" : e.agentBubbleBorderRadius || "16px", h = t ? e.visitorBubblePadding || "10px 14px" : e.agentBubblePadding || "10px 14px", f = t ? e.visitorBubbleFontSize || "14px" : e.agentBubbleFontSize || "14px", c = r.created ? new Date(r.created).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : (/* @__PURE__ */ new Date()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }), b = (r.senderName || this.agentName || "A").charAt(0).toUpperCase();
+    return s`
+      <div class="bubble-row ${t ? "from-visitor" : "from-agent"}">
+        ${o && this.isGroupEnd ? s`
               <div class="msg-avatar" style="background: ${e.agentAvatarBg || "var(--cw-accent-tint)"}; color: ${e.agentAvatarColor || "var(--cw-accent-deep)"}">
-                ${e.agentAvatarUrl ? l`<img src="${e.agentAvatarUrl}" alt="avatar" />` : l`<span>${x}</span>`}
+                ${e.agentAvatarUrl ? s`<img src="${e.agentAvatarUrl}" alt="avatar" />` : s`<span>${b}</span>`}
               </div>
-            ` : i ? l`<div class="msg-avatar-placeholder"></div>` : ""}
+            ` : o ? s`<div class="msg-avatar-placeholder"></div>` : ""}
 
         <div
           class="bubble ${r.pending ? "pending" : ""}"
-          style="background: ${o}; color: ${a}; border-color: ${s}; border-style: solid; border-width: ${n ? "0px" : "1px"}; box-shadow: ${c}; border-radius: ${f}; padding: ${u}; font-size: ${d}"
+          style="background: ${n}; color: ${i}; border-color: ${a}; border-style: solid; border-width: ${t ? "0px" : "1px"}; box-shadow: ${d}; border-radius: ${l}; padding: ${h}; font-size: ${f}"
         >
-          ${r.attachment || r.localUrl ? l`
+          ${r.attachment || r.localUrl ? s`
                 <img
                   class="bubble-img"
                   alt="attachment"
@@ -4833,12 +4833,12 @@ let V = (ir = class extends y {
                 />
               ` : ""}
 
-          ${r.body ? l`<span>${r.body}</span>` : ""}
+          ${r.body ? s`<span>${r.body}</span>` : ""}
 
-          ${this.isGroupEnd ? l`
+          ${this.isGroupEnd ? s`
                 <span class="bubble-time">
-                  <span>${g}</span>
-                  ${n && e.ticksEnabled !== !1 ? l`
+                  <span>${c}</span>
+                  ${t && e.ticksEnabled !== !1 ? s`
                         <cw-message-tick
                           .status="${r.status || "sent"}"
                           .sentColor="${e.sentTickColor || ""}"
@@ -4852,7 +4852,8 @@ let V = (ir = class extends y {
       </div>
     `;
   }
-}, ir.styles = C`
+};
+I.styles = C`
     :host {
       display: block;
       width: 100%;
@@ -4918,32 +4919,31 @@ let V = (ir = class extends y {
       margin-left: 8px;
       margin-top: 4px;
     }
-  `, ir);
-$r([
+  `;
+ar([
   p({ type: Object })
-], V.prototype, "message", void 0);
-$r([
+], I.prototype, "message", 2);
+ar([
   p({ type: Object })
-], V.prototype, "chatWindowConfig", void 0);
-$r([
+], I.prototype, "chatWindowConfig", 2);
+ar([
   p({ type: Boolean })
-], V.prototype, "isGroupEnd", void 0);
-$r([
+], I.prototype, "isGroupEnd", 2);
+ar([
   p({ type: Boolean })
-], V.prototype, "isGroupStart", void 0);
-$r([
+], I.prototype, "isGroupStart", 2);
+ar([
   p({ type: String })
-], V.prototype, "agentName", void 0);
-V = $r([
+], I.prototype, "agentName", 2);
+I = ar([
   S("cw-message-bubble")
-], V);
-var K = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, ar;
-let N = (ar = class extends y {
+], I);
+var Wt = Object.defineProperty, It = Object.getOwnPropertyDescriptor, X = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? It(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && Wt(e, t, n), n;
+};
+let j = class extends y {
   constructor() {
     super(...arguments), this.config = {}, this.draft = "", this.attachmentsEnabled = !0, this.modernUi = !0, this.uploading = !1, this.focused = !1;
   }
@@ -4965,14 +4965,14 @@ let N = (ar = class extends y {
   }
   handleFileSelect(r) {
     const e = r.target;
-    e && b.uploadImage(e);
+    e && u.uploadImage(e);
   }
   render() {
-    const r = this.config, e = this.focused, n = !!this.draft.trim(), i = r.inputPadding || "6px 8px", o = r.inputMargin || "12px 16px", a = r.inputBg || "var(--cw-surface)", s = r.inputBorderRadius || "9999px", c = e ? r.inputFocusBorderColor || r.accentColor || "#0b5fff" : r.inputBorderColor || "var(--cw-border)", f = e ? r.inputFocusShadow || "0 0 0 2px rgba(11, 95, 255, 0.1)" : "none", u = r.inputTextColor || "var(--cw-ink)", d = r.inputPlaceholderColor || "#a1a1aa", g = r.textareaFontSize || "14px", x = r.attachButtonBg || "#ffffff", $ = r.attachButtonColor || "#71717a", z = r.emojiButtonColor || "#71717a", h = n ? r.sendButtonBgActive || r.accentColor || "#0b5fff" : r.sendButtonBgInactive || "#e4e4e7", O = n ? r.sendButtonColorActive || "#ffffff" : r.sendButtonColorInactive || "#a1a1aa";
-    return l`
+    const r = this.config, e = this.focused, t = !!this.draft.trim(), o = r.inputPadding || "6px 8px", n = r.inputMargin || "12px 16px", i = r.inputBg || "var(--cw-surface)", a = r.inputBorderRadius || "9999px", d = e ? r.inputFocusBorderColor || r.accentColor || "#0b5fff" : r.inputBorderColor || "var(--cw-border)", l = e ? r.inputFocusShadow || "0 0 0 2px rgba(11, 95, 255, 0.1)" : "none", h = r.inputTextColor || "var(--cw-ink)", f = r.inputPlaceholderColor || "#a1a1aa", c = r.textareaFontSize || "14px", b = r.attachButtonBg || "#ffffff", v = r.attachButtonColor || "#71717a", $ = r.emojiButtonColor || "#71717a", g = t ? r.sendButtonBgActive || r.accentColor || "#0b5fff" : r.sendButtonBgInactive || "#e4e4e7", z = t ? r.sendButtonColorActive || "#ffffff" : r.sendButtonColorInactive || "#a1a1aa";
+    return s`
       <div
         class="composer"
-        style="padding: ${i}; margin: ${o}; background: ${a}; border-radius: ${s}; border: 1px solid ${c}; box-shadow: ${f}; --placeholder-color: ${d}"
+        style="padding: ${o}; margin: ${n}; background: ${i}; border-radius: ${a}; border: 1px solid ${d}; box-shadow: ${l}; --placeholder-color: ${f}"
       >
         <input
           type="file"
@@ -4983,14 +4983,14 @@ let N = (ar = class extends y {
           @change="${this.handleFileSelect}"
         />
 
-        ${this.attachmentsEnabled ? l`
+        ${this.attachmentsEnabled ? s`
               <button
                 type="button"
                 class="attach-btn"
                 aria-label="Attach"
                 title="Attach"
                 ?disabled="${this.uploading}"
-                style="background: ${x}; color: ${$}"
+                style="background: ${b}; color: ${v}"
                 @click="${this.toggleAttach}"
               >
                 <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -5005,18 +5005,18 @@ let N = (ar = class extends y {
           placeholder="Write a message…"
           aria-label="Message"
           .value="${this.draft}"
-          style="color: ${u}; font-size: ${g}"
+          style="color: ${h}; font-size: ${c}"
           @input="${this.handleInput}"
           @keydown="${this.handleKeyDown}"
           @focus="${() => this.focused = !0}"
           @blur="${() => this.focused = !1}"
         ></textarea>
 
-        ${this.modernUi ? l`
+        ${this.modernUi ? s`
               <button
                 type="button"
                 aria-label="Emoji"
-                style="background: transparent; color: ${z}; margin-right: 2px"
+                style="background: transparent; color: ${$}; margin-right: 2px"
                 @click="${this.toggleEmoji}"
               >
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
@@ -5031,16 +5031,16 @@ let N = (ar = class extends y {
         <button
           type="button"
           aria-label="Send message"
-          ?disabled="${!n}"
-          style="background: ${h}; color: ${O}"
+          ?disabled="${!t}"
+          style="background: ${g}; color: ${z}"
           @click="${this.send}"
         >
-          ${r.sendIconType === "arrow" ? l`
+          ${r.sendIconType === "arrow" ? s`
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="12" y1="19" x2="12" y2="5"></line>
                   <polyline points="5 12 12 5 19 12"></polyline>
                 </svg>
-              ` : l`
+              ` : s`
                 <svg class="send-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                   <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                 </svg>
@@ -5049,8 +5049,9 @@ let N = (ar = class extends y {
       </div>
     `;
   }
-}, ar.styles = [
-  E,
+};
+j.styles = [
+  P,
   C`
       :host {
         display: block;
@@ -5104,35 +5105,34 @@ let N = (ar = class extends y {
         margin-top: -2px;
       }
     `
-], ar);
-K([
+];
+X([
   p({ type: Object })
-], N.prototype, "config", void 0);
-K([
+], j.prototype, "config", 2);
+X([
   p({ type: String })
-], N.prototype, "draft", void 0);
-K([
+], j.prototype, "draft", 2);
+X([
   p({ type: Boolean })
-], N.prototype, "attachmentsEnabled", void 0);
-K([
+], j.prototype, "attachmentsEnabled", 2);
+X([
   p({ type: Boolean })
-], N.prototype, "modernUi", void 0);
-K([
+], j.prototype, "modernUi", 2);
+X([
   p({ type: Boolean })
-], N.prototype, "uploading", void 0);
-K([
-  Pr()
-], N.prototype, "focused", void 0);
-N = K([
+], j.prototype, "uploading", 2);
+X([
+  $r()
+], j.prototype, "focused", 2);
+j = X([
   S("cw-composer")
-], N);
-var Zr = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, sr;
-let Er = (sr = class extends y {
+], j);
+var Ut = Object.defineProperty, Dt = Object.getOwnPropertyDescriptor, Er = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? Dt(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && Ut(e, t, n), n;
+};
+let or = class extends y {
   constructor() {
     super(...arguments), this.accentColor = "#9333EA", this.draft = "";
   }
@@ -5140,18 +5140,17 @@ let Er = (sr = class extends y {
     r.key === "Enter" && this.submit();
   }
   handleInput(r) {
-    this.draft = r.target.value, b.get().draft = this.draft;
+    this.draft = r.target.value, u.get().draft = this.draft;
   }
   submit() {
-    window.dispatchEvent(new CustomEvent("toggle-contact-widget")), b.get().state = "active", this.draft && setTimeout(() => b.send(), 200);
+    window.dispatchEvent(new CustomEvent("toggle-contact-widget")), u.get().state = "active", this.draft && setTimeout(() => u.send(), 200);
   }
   render() {
-    if (!this.config || !this.config.enabled || !this.config.visible)
-      return l``;
+    if (!this.config || !this.config.enabled || !this.config.visible) return s``;
     const r = this.config;
     if (r.layout === "separated") {
-      const o = r.buttonBgColor || r.buttonColor || "#ffffff", a = r.buttonIconColor || this.accentColor, s = r.buttonSize || 42;
-      return l`
+      const n = r.buttonBgColor || r.buttonColor || "#ffffff", i = r.buttonIconColor || this.accentColor, a = r.buttonSize || 42;
+      return s`
         <div class="input-container" style="gap: 8px">
           <div
             style="flex: 1; background-color: ${r.backgroundColor || "#ffffff"}; border-radius: ${r.borderRadius || 24}px; box-shadow: ${r.boxShadow || "0 6px 16px rgba(0,0,0,0.12)"}; padding: 10px 16px; display: flex; align-items: center"
@@ -5168,7 +5167,7 @@ let Er = (sr = class extends y {
 
           <button
             type="button"
-            style="background-color: ${o}; color: ${a}; border-radius: 50%; width: ${s}px; height: ${s}px; box-shadow: ${r.buttonBoxShadow || "0 6px 16px rgba(0,0,0,0.12)"}"
+            style="background-color: ${n}; color: ${i}; border-radius: 50%; width: ${a}px; height: ${a}px; box-shadow: ${r.buttonBoxShadow || "0 6px 16px rgba(0,0,0,0.12)"}"
             @click="${this.submit}"
           >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="margin-left: 2px; margin-top: 1px">
@@ -5178,8 +5177,8 @@ let Er = (sr = class extends y {
         </div>
       `;
     }
-    const n = r.buttonColor || "#9333EA", i = r.buttonIconColor || "#ffffff";
-    return l`
+    const t = r.buttonColor || "#9333EA", o = r.buttonIconColor || "#ffffff";
+    return s`
       <div
         class="input-container"
         style="background-color: ${r.backgroundColor || "#ffffff"}; border-radius: ${r.borderRadius || 24}px; box-shadow: ${r.boxShadow || "0 6px 16px rgba(0,0,0,0.12)"}; padding: 4px 4px 4px 16px"
@@ -5195,7 +5194,7 @@ let Er = (sr = class extends y {
 
         <button
           type="button"
-          style="width: 38px; height: 38px; border-radius: 50%; background-color: ${n}; color: ${i}"
+          style="width: 38px; height: 38px; border-radius: 50%; background-color: ${t}; color: ${o}"
           @click="${this.submit}"
         >
           <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="margin-left: 2px; margin-top: 1px">
@@ -5205,7 +5204,8 @@ let Er = (sr = class extends y {
       </div>
     `;
   }
-}, sr.styles = C`
+};
+or.styles = C`
     :host {
       display: block;
       width: 100%;
@@ -5239,39 +5239,38 @@ let Er = (sr = class extends y {
     button:hover {
       transform: scale(1.05);
     }
-  `, sr);
-Zr([
+  `;
+Er([
   p({ type: Object })
-], Er.prototype, "config", void 0);
-Zr([
+], or.prototype, "config", 2);
+Er([
   p({ type: String })
-], Er.prototype, "accentColor", void 0);
-Zr([
+], or.prototype, "accentColor", 2);
+Er([
   p({ type: String })
-], Er.prototype, "draft", void 0);
-Er = Zr([
+], or.prototype, "draft", 2);
+or = Er([
   S("cw-greet-input")
-], Er);
-var fe = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, lr;
-let Fr = (lr = class extends y {
+], or);
+var Lt = Object.defineProperty, Ht = Object.getOwnPropertyDescriptor, Zr = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? Ht(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && Lt(e, t, n), n;
+};
+let wr = class extends y {
   constructor() {
     super(...arguments), this.accentColor = "#0b5fff";
   }
   start() {
-    b.startFromWelcome();
+    u.startFromWelcome();
   }
   close() {
-    b.closePanel();
+    u.closePanel();
   }
   render() {
-    const r = this.config || {}, e = r.headerTextColor || "#ffffff", n = r.bgGradient || "linear-gradient(135deg, #0b5fff, #22d3ee)", i = r.padding || "24px 20px 12px 20px", o = r.cardLayout === "glassy";
-    return l`
-      <div class="welcome-container" style="padding: ${i}; color: ${e}; background: ${n}">
+    const r = this.config || {}, e = r.headerTextColor || "#ffffff", t = r.bgGradient || "linear-gradient(135deg, #0b5fff, #22d3ee)", o = r.padding || "24px 20px 12px 20px", n = r.cardLayout === "glassy";
+    return s`
+      <div class="welcome-container" style="padding: ${o}; color: ${e}; background: ${t}">
         <div class="bg-blobs">
           <div class="blob-1"></div>
           <div class="blob-2"></div>
@@ -5286,12 +5285,12 @@ let Fr = (lr = class extends y {
             </svg>
           </button>
 
-          ${o ? l`
+          ${n ? s`
                 <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; width: 100%">
                   <div style="display: flex; flex-direction: column; height: 100%; margin-bottom: 12px; justify-content: ${r.cardAlign === "center" || r.cardPosition === "center" ? "center" : "space-between"}">
                     <!-- Top Logo / Icon -->
                     <div style="display: flex; align-items: center; margin-bottom: 20px; flex-shrink: 0; justify-content: ${r.logoAlign || (r.textAlign === "center" || r.cardAlign === "center" ? "center" : "flex-start")}">
-                      ${r.logoUrl ? l`<img src="${r.logoUrl}" style="height: 36px; object-fit: contain" />` : l`
+                      ${r.logoUrl ? s`<img src="${r.logoUrl}" style="height: 36px; object-fit: contain" />` : s`
                             <div style="color: ${e}; opacity: 1">
                               <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
@@ -5314,13 +5313,15 @@ let Fr = (lr = class extends y {
 
                         <!-- Overlapping Avatars -->
                         <div class="avatars-row" style="justify-content: ${r.avatarAlign || (r.textAlign === "center" || r.cardAlign === "center" ? "center" : "flex-start")}">
-                          ${(r.avatars || []).map((a, s) => l`
+                          ${(r.avatars || []).map(
+      (i, a) => s`
                               <img
                                 class="avatar-img"
-                                src="${a}"
-                                style="margin-left: ${s === 0 ? "0" : "-12px"}; border-color: ${r.avatarBorderColor || "rgba(255,255,255,0.2)"}; z-index: ${10 + s}"
+                                src="${i}"
+                                style="margin-left: ${a === 0 ? "0" : "-12px"}; border-color: ${r.avatarBorderColor || "rgba(255,255,255,0.2)"}; z-index: ${10 + a}"
                               />
-                            `)}
+                            `
+    )}
                         </div>
                       </div>
 
@@ -5354,12 +5355,12 @@ let Fr = (lr = class extends y {
                     <a href="#" target="_blank">vAInatheya.ai</a>
                   </div>
                 </div>
-              ` : l`
+              ` : s`
                 <!-- Normal Layout -->
                 <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; width: 100%">
                   <div>
                     <div style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 28px">
-                      ${r.logoUrl ? l`<img src="${r.logoUrl}" style="height: 36px; object-fit: contain" />` : l`
+                      ${r.logoUrl ? s`<img src="${r.logoUrl}" style="height: 36px; object-fit: contain" />` : s`
                             <div style="color: ${e}; opacity: 1">
                               <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
@@ -5377,13 +5378,15 @@ let Fr = (lr = class extends y {
                       </p>
 
                       <div class="avatars-row">
-                        ${(r.avatars || []).map((a, s) => l`
+                        ${(r.avatars || []).map(
+      (i, a) => s`
                             <img
                               class="avatar-img"
-                              src="${a}"
-                              style="margin-left: ${s === 0 ? "0" : "-12px"}; border-color: ${r.avatarBorderColor || "rgba(255,255,255,0.2)"}; z-index: ${10 + s}"
+                              src="${i}"
+                              style="margin-left: ${a === 0 ? "0" : "-12px"}; border-color: ${r.avatarBorderColor || "rgba(255,255,255,0.2)"}; z-index: ${10 + a}"
                             />
-                          `)}
+                          `
+    )}
                       </div>
                     </div>
                   </div>
@@ -5421,8 +5424,9 @@ let Fr = (lr = class extends y {
       </div>
     `;
   }
-}, lr.styles = [
-  E,
+};
+wr.styles = [
+  P,
   C`
       :host {
         display: block;
@@ -5555,28 +5559,27 @@ let Fr = (lr = class extends y {
         text-decoration: none;
       }
     `
-], lr);
-fe([
+];
+Zr([
   p({ type: Object })
-], Fr.prototype, "config", void 0);
-fe([
+], wr.prototype, "config", 2);
+Zr([
   p({ type: String })
-], Fr.prototype, "accentColor", void 0);
-Fr = fe([
+], wr.prototype, "accentColor", 2);
+wr = Zr([
   S("cw-welcome-card")
-], Fr);
-var Xr = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, cr;
-let Tr = (cr = class extends y {
+], wr);
+var Ft = Object.defineProperty, qt = Object.getOwnPropertyDescriptor, Tr = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? qt(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && Ft(e, t, n), n;
+};
+let ir = class extends y {
   constructor() {
     super(...arguments), this.type = "prechat", this.heading = "Submit a Support Ticket", this.subheading = "We will get back to you within 24 hours.";
   }
   render() {
-    return this.type === "postchat" ? l`
+    return this.type === "postchat" ? s`
         <div class="phone-preview-card-container">
           <div class="phone-preview-header">
             Post-chat form preview
@@ -5615,7 +5618,7 @@ let Tr = (cr = class extends y {
             </div>
           </form>
         </div>
-      ` : this.type === "ticket" ? l`
+      ` : this.type === "ticket" ? s`
         <div class="phone-preview-card-container">
           <div class="phone-preview-header">
             Ticket form preview
@@ -5646,7 +5649,7 @@ let Tr = (cr = class extends y {
             </div>
           </form>
         </div>
-      ` : l`
+      ` : s`
       <div class="phone-preview-card-container">
         <div class="phone-preview-header">
           Pre-chat form preview
@@ -5701,39 +5704,39 @@ let Tr = (cr = class extends y {
       </div>
     `;
   }
-}, cr.styles = [
-  E,
+};
+ir.styles = [
+  P,
   C`
       :host {
         display: block;
         width: 100%;
       }
     `
-], cr);
-Xr([
+];
+Tr([
   p({ type: String })
-], Tr.prototype, "type", void 0);
-Xr([
+], ir.prototype, "type", 2);
+Tr([
   p({ type: String })
-], Tr.prototype, "heading", void 0);
-Xr([
+], ir.prototype, "heading", 2);
+Tr([
   p({ type: String })
-], Tr.prototype, "subheading", void 0);
-Tr = Xr([
+], ir.prototype, "subheading", 2);
+ir = Tr([
   S("cw-forms-preview")
-], Tr);
-var kr = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, dr;
-let Y = (dr = class extends y {
+], ir);
+var Vt = Object.defineProperty, Yt = Object.getOwnPropertyDescriptor, sr = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? Yt(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && Vt(e, t, n), n;
+};
+let U = class extends y {
   constructor() {
     super(...arguments), this.panelOpen = !1, this.unreadCount = 0, this.hasSentMessage = !1, this.hovered = !1;
   }
   connectedCallback() {
-    super.connectedCallback(), this.unsub = Mr("store:bubble", () => this.requestUpdate());
+    super.connectedCallback(), this.unsub = yr("store:bubble", () => this.requestUpdate());
   }
   disconnectedCallback() {
     var r;
@@ -5743,45 +5746,44 @@ let Y = (dr = class extends y {
     window.dispatchEvent(new CustomEvent("toggle-contact-widget"));
   }
   render() {
-    var be;
-    const r = this.config || Gr.get();
-    if (r.hideOnOpen && this.panelOpen)
-      return l``;
-    const e = r.width || 60, n = r.height || 60, i = r.offsetBottom !== void 0 ? r.offsetBottom : 12, o = r.offsetRight !== void 0 ? r.offsetRight : 16, a = Xe(r.borderRadius), s = Pt(r), c = [Rt(r), Mt(r)].filter(Boolean).join(", "), f = r.hoverScale !== void 0 ? r.hoverScale : 1.05, u = this.hovered && !this.panelOpen ? `scale(${f})` : "scale(1.0)";
-    let d = "";
+    var Qr;
+    const r = this.config || Ar.get();
+    if (r.hideOnOpen && this.panelOpen) return s``;
+    const e = r.width || 60, t = r.height || 60, o = r.offsetBottom !== void 0 ? r.offsetBottom : 12, n = r.offsetRight !== void 0 ? r.offsetRight : 16, i = Te(r.borderRadius), a = xt(r), d = [bt(r), wt(r)].filter(Boolean).join(", "), l = r.hoverScale !== void 0 ? r.hoverScale : 1.05, h = this.hovered && !this.panelOpen ? `scale(${l})` : "scale(1.0)";
+    let f = "";
     if (r.glass && r.glass.enabled) {
-      const A = r.glass.blur || 10, L = r.glass.bgOpacity || 0.3;
-      d = `backdrop-filter: blur(${A}px); -webkit-backdrop-filter: blur(${A}px); background-color: rgba(255, 255, 255, ${L});`;
+      const A = r.glass.blur || 10, H = r.glass.bgOpacity || 0.3;
+      f = `backdrop-filter: blur(${A}px); -webkit-backdrop-filter: blur(${A}px); background-color: rgba(255, 255, 255, ${H});`;
     }
-    let g = "";
+    let c = "";
     if (r.neon && r.neon.enabled) {
-      const A = r.neon.color || "#22d3ee", L = r.neon.intensity || 0.8;
-      g = `box-shadow: 0 0 ${20 * L}px ${A}, inset 0 0 ${10 * L}px ${A};`;
+      const A = r.neon.color || "#22d3ee", H = r.neon.intensity || 0.8;
+      c = `box-shadow: 0 0 ${20 * H}px ${A}, inset 0 0 ${10 * H}px ${A};`;
     }
-    const x = r.border || {}, $ = x.width ? `border: ${x.width}px ${x.style || "solid"} ${x.color || "transparent"};` : "";
-    let z = "";
-    r.idleAnim && r.idleAnim.enabled && r.idleAnim.type !== "none" && !this.hovered && !this.panelOpen && (z = `animation: idleFloat ${r.idleAnim.duration || 3200}ms ease-in-out infinite;`);
-    const h = r.tooltip, O = h && h.enabled && !this.panelOpen && !this.hasSentMessage, T = (h == null ? void 0 : h.position) || "left", ot = Ut(h == null ? void 0 : h.borderRadius, T);
-    let Sr = "", j = "";
-    const J = 8, B = (h == null ? void 0 : h.borderWidth) || 0, R = (h == null ? void 0 : h.borderColor) || "transparent";
-    T === "left" ? (Sr = "right: calc(100% + 12px); top: 50%; transform: translateY(-50%);", j = `right: -${J / 2}px; top: 50%; transform: translateY(-50%) rotate(45deg);`, B > 0 && (j += ` border-top: ${B}px solid ${R}; border-right: ${B}px solid ${R};`)) : T === "right" ? (Sr = "left: calc(100% + 12px); top: 50%; transform: translateY(-50%);", j = `left: -${J / 2}px; top: 50%; transform: translateY(-50%) rotate(45deg);`, B > 0 && (j += ` border-bottom: ${B}px solid ${R}; border-left: ${B}px solid ${R};`)) : T === "top" ? (Sr = "bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%);", j = `bottom: -${J / 2}px; left: 50%; transform: translateX(-50%) rotate(45deg);`, B > 0 && (j += ` border-bottom: ${B}px solid ${R}; border-right: ${B}px solid ${R};`)) : T === "bottom" && (Sr = "top: calc(100% + 12px); left: 50%; transform: translateX(-50%);", j = `top: -${J / 2}px; left: 50%; transform: translateX(-50%) rotate(45deg);`, B > 0 && (j += ` border-top: ${B}px solid ${R}; border-left: ${B}px solid ${R};`));
-    const it = r.dots && r.dots.animation && r.dots.animation !== "none" && this.hovered && !this.panelOpen;
-    return l`
+    const b = r.border || {}, v = b.width ? `border: ${b.width}px ${b.style || "solid"} ${b.color || "transparent"};` : "";
+    let $ = "";
+    r.idleAnim && r.idleAnim.enabled && r.idleAnim.type !== "none" && !this.hovered && !this.panelOpen && ($ = `animation: idleFloat ${r.idleAnim.duration || 3200}ms ease-in-out infinite;`);
+    const g = r.tooltip, z = g && g.enabled && !this.panelOpen && !this.hasSentMessage, M = (g == null ? void 0 : g.position) || "left", Ue = $t(g == null ? void 0 : g.borderRadius, M);
+    let cr = "", _ = "";
+    const rr = 8, B = (g == null ? void 0 : g.borderWidth) || 0, R = (g == null ? void 0 : g.borderColor) || "transparent";
+    M === "left" ? (cr = "right: calc(100% + 12px); top: 50%; transform: translateY(-50%);", _ = `right: -${rr / 2}px; top: 50%; transform: translateY(-50%) rotate(45deg);`, B > 0 && (_ += ` border-top: ${B}px solid ${R}; border-right: ${B}px solid ${R};`)) : M === "right" ? (cr = "left: calc(100% + 12px); top: 50%; transform: translateY(-50%);", _ = `left: -${rr / 2}px; top: 50%; transform: translateY(-50%) rotate(45deg);`, B > 0 && (_ += ` border-bottom: ${B}px solid ${R}; border-left: ${B}px solid ${R};`)) : M === "top" ? (cr = "bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%);", _ = `bottom: -${rr / 2}px; left: 50%; transform: translateX(-50%) rotate(45deg);`, B > 0 && (_ += ` border-bottom: ${B}px solid ${R}; border-right: ${B}px solid ${R};`)) : M === "bottom" && (cr = "top: calc(100% + 12px); left: 50%; transform: translateX(-50%);", _ = `top: -${rr / 2}px; left: 50%; transform: translateX(-50%) rotate(45deg);`, B > 0 && (_ += ` border-top: ${B}px solid ${R}; border-left: ${B}px solid ${R};`));
+    const De = r.dots && r.dots.animation && r.dots.animation !== "none" && this.hovered && !this.panelOpen;
+    return s`
       <div
         class="bubble-wrapper"
-        style="width: ${e}px; height: ${n}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${i}px; right: ${o}px; border-radius: ${a}; background: ${s}; background-blend-mode: ${r.backgroundBlendMode || "normal"}; box-shadow: ${c}; transform: ${u}; ${$} ${d} ${g} ${z}"
+        style="width: ${e}px; height: ${t}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${o}px; right: ${n}px; border-radius: ${i}; background: ${a}; background-blend-mode: ${r.backgroundBlendMode || "normal"}; box-shadow: ${d}; transform: ${h}; ${v} ${f} ${c} ${$}"
         @mouseenter="${() => this.hovered = !0}"
         @mouseleave="${() => this.hovered = !1}"
         @click="${this.handleClick}"
       >
-        ${r.backgroundOverlayType === "image" && r.backgroundImageUrl ? l`
+        ${r.backgroundOverlayType === "image" && r.backgroundImageUrl ? s`
               <div
                 class="overlay-img"
                 style="background-image: url(${r.backgroundImageUrl}); background-size: ${r.backgroundImageSize || "contain"}; opacity: ${r.backgroundImageOpacity || 0.25}; mix-blend-mode: ${r.backgroundBlendMode || "normal"}; border-radius: inherit"
               ></div>
             ` : ""}
 
-        ${r.backgroundOverlayType === "lucide" && r.backgroundLucideIcon ? l`
+        ${r.backgroundOverlayType === "lucide" && r.backgroundLucideIcon ? s`
               <div
                 class="overlay-icon"
                 style="color: ${r.backgroundLucideColor || "#FFFFFF"}; opacity: ${r.backgroundLucideOpacity || 0.2}; mix-blend-mode: ${r.backgroundBlendMode || "normal"}"
@@ -5790,35 +5792,37 @@ let Y = (dr = class extends y {
               </div>
             ` : ""}
 
-        ${it ? l`
-              <div class="dots-container" style="gap: ${((be = r.dots) == null ? void 0 : be.spacing) || 6}px">
-                ${[0, 1, 2].map((A) => {
-      var L, we, xe, me;
-      return l`
+        ${De ? s`
+              <div class="dots-container" style="gap: ${((Qr = r.dots) == null ? void 0 : Qr.spacing) || 6}px">
+                ${[0, 1, 2].map(
+      (A) => {
+        var H, re, ee, te;
+        return s`
                     <span
                       class="dot-span"
-                      style="width: ${((L = r.dots) == null ? void 0 : L.size) || 6}px; height: ${((we = r.dots) == null ? void 0 : we.size) || 6}px; background-color: ${((xe = r.dots) == null ? void 0 : xe.color) || "#FFFFFF"}; animation: ${((me = r.dots) == null ? void 0 : me.animation) === "bounce" ? `dotBounce 1.2s cubic-bezier(.2,.8,.2,1) ${A * 0.12}s infinite` : `dotPulse 1.4s cubic-bezier(.2,.8,.2,1) ${A * 0.1}s infinite`}"
+                      style="width: ${((H = r.dots) == null ? void 0 : H.size) || 6}px; height: ${((re = r.dots) == null ? void 0 : re.size) || 6}px; background-color: ${((ee = r.dots) == null ? void 0 : ee.color) || "#FFFFFF"}; animation: ${((te = r.dots) == null ? void 0 : te.animation) === "bounce" ? `dotBounce 1.2s cubic-bezier(.2,.8,.2,1) ${A * 0.12}s infinite` : `dotPulse 1.4s cubic-bezier(.2,.8,.2,1) ${A * 0.1}s infinite`}"
                     ></span>
                   `;
-    })}
+      }
+    )}
               </div>
-            ` : l`
+            ` : s`
               <div class="icon-container">
-                ${this.panelOpen ? l`
+                ${this.panelOpen ? s`
                       <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="6 9 12 15 18 9"></polyline>
                       </svg>
-                    ` : l`
+                    ` : s`
                       <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%">
-                        ${r.iconType === "image" && (r.iconImageUrl || r.backgroundImageUrl) ? l`
+                        ${r.iconType === "image" && (r.iconImageUrl || r.backgroundImageUrl) ? s`
                               <img
                                 src="${r.iconImageUrl || r.backgroundImageUrl}"
                                 alt="bubble icon"
                                 style="width: ${r.iconWidth || 26}px; height: ${r.iconHeight || 26}px; object-fit: ${r.iconFit || "contain"}; opacity: ${r.iconOpacity !== void 0 ? r.iconOpacity : 1}; mix-blend-mode: ${r.iconBlend || "normal"}; border-radius: 50%"
                               />
-                            ` : r.iconType === "customSvg" && r.customSvg ? l`
+                            ` : r.iconType === "customSvg" && r.customSvg ? s`
                               <cw-icon .customSvg="${r.customSvg}" .size="${r.iconWidth || 26}" .color="${r.iconColor || "#ffffff"}"></cw-icon>
-                            ` : l`
+                            ` : s`
                               <cw-icon
                                 .name="${r.lucideIcon || r.backgroundLucideIcon || "MessageSquare"}"
                                 .size="${r.iconWidth || 26}"
@@ -5830,24 +5834,24 @@ let Y = (dr = class extends y {
               </div>
             `}
 
-        ${r.outlineRing && r.outlineRing.enabled ? l`
+        ${r.outlineRing && r.outlineRing.enabled ? s`
               <div
-                style="position: absolute; inset: 0; pointer-events: none; border-radius: inherit; box-shadow: 0 0 0 ${r.outlineRing.width || 3}px ${Et(r.outlineRing.color || "#22d3ee", r.outlineRing.opacity || 0.4)}"
+                style="position: absolute; inset: 0; pointer-events: none; border-radius: inherit; box-shadow: 0 0 0 ${r.outlineRing.width || 3}px ${ft(r.outlineRing.color || "#22d3ee", r.outlineRing.opacity || 0.4)}"
               ></div>
             ` : ""}
 
-        ${this.unreadCount > 0 ? l`<cw-badge .count="${this.unreadCount}" .config="${r.badge}"></cw-badge>` : ""}
+        ${this.unreadCount > 0 ? s`<cw-badge .count="${this.unreadCount}" .config="${r.badge}"></cw-badge>` : ""}
 
-        ${O ? l`
+        ${z ? s`
               <div
                 class="tooltip-box"
-                style="background-color: ${(h == null ? void 0 : h.backgroundColor) || "#ffffff"}; color: ${(h == null ? void 0 : h.textColor) || "#374151"}; font-size: ${(h == null ? void 0 : h.fontSize) || 14}px; padding: ${(h == null ? void 0 : h.padding) || "8px 16px"}; border-radius: ${ot}; box-shadow: ${(h == null ? void 0 : h.boxShadow) || "0 4px 12px rgba(0,0,0,0.1)"}; border: ${(h == null ? void 0 : h.borderWidth) || 0}px solid ${(h == null ? void 0 : h.borderColor) || "transparent"}; ${Sr}"
+                style="background-color: ${(g == null ? void 0 : g.backgroundColor) || "#ffffff"}; color: ${(g == null ? void 0 : g.textColor) || "#374151"}; font-size: ${(g == null ? void 0 : g.fontSize) || 14}px; padding: ${(g == null ? void 0 : g.padding) || "8px 16px"}; border-radius: ${Ue}; box-shadow: ${(g == null ? void 0 : g.boxShadow) || "0 4px 12px rgba(0,0,0,0.1)"}; border: ${(g == null ? void 0 : g.borderWidth) || 0}px solid ${(g == null ? void 0 : g.borderColor) || "transparent"}; ${cr}"
               >
-                <span>${(h == null ? void 0 : h.text) || "Chat with us"}</span>
-                ${(h == null ? void 0 : h.arrowEnabled) !== !1 ? l`
+                <span>${(g == null ? void 0 : g.text) || "Chat with us"}</span>
+                ${(g == null ? void 0 : g.arrowEnabled) !== !1 ? s`
                       <div
                         class="tooltip-arrow"
-                        style="width: ${J}px; height: ${J}px; background-color: ${(h == null ? void 0 : h.backgroundColor) || "#ffffff"}; ${j}"
+                        style="width: ${rr}px; height: ${rr}px; background-color: ${(g == null ? void 0 : g.backgroundColor) || "#ffffff"}; ${_}"
                       ></div>
                     ` : ""}
               </div>
@@ -5855,8 +5859,9 @@ let Y = (dr = class extends y {
       </div>
     `;
   }
-}, dr.styles = [
-  E,
+};
+U.styles = [
+  P,
   C`
       :host {
         display: block;
@@ -5920,37 +5925,36 @@ let Y = (dr = class extends y {
         pointer-events: none;
       }
     `
-], dr);
-kr([
+];
+sr([
   p({ type: Object })
-], Y.prototype, "config", void 0);
-kr([
+], U.prototype, "config", 2);
+sr([
   p({ type: Boolean })
-], Y.prototype, "panelOpen", void 0);
-kr([
+], U.prototype, "panelOpen", 2);
+sr([
   p({ type: Number })
-], Y.prototype, "unreadCount", void 0);
-kr([
+], U.prototype, "unreadCount", 2);
+sr([
   p({ type: Boolean })
-], Y.prototype, "hasSentMessage", void 0);
-kr([
-  Pr()
-], Y.prototype, "hovered", void 0);
-Y = kr([
+], U.prototype, "hasSentMessage", 2);
+sr([
+  $r()
+], U.prototype, "hovered", 2);
+U = sr([
   S("cw-bubble")
-], Y);
-var Ir = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, pr;
-let yr = (pr = class extends y {
+], U);
+var Gt = Object.defineProperty, Kt = Object.getOwnPropertyDescriptor, Sr = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? Kt(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && Gt(e, t, n), n;
+};
+let Z = class extends y {
   constructor() {
     super(...arguments), this.panelOpen = !1, this.unreadCount = 0, this.hovered = !1;
   }
   connectedCallback() {
-    super.connectedCallback(), this.unsub = Mr("store:chatbar", () => this.requestUpdate());
+    super.connectedCallback(), this.unsub = yr("store:chatbar", () => this.requestUpdate());
   }
   disconnectedCallback() {
     var r;
@@ -5961,28 +5965,27 @@ let yr = (pr = class extends y {
   }
   render() {
     const r = this.config || {};
-    if (!r.enabled || r.hideOnOpen && this.panelOpen)
-      return l``;
-    const e = r.layout === "card", n = r.width || (e ? 240 : 255), i = r.height || (e ? 220 : 40), o = r.offsetBottom !== void 0 ? r.offsetBottom : 12, a = r.offsetRight !== void 0 ? r.offsetRight : 16, s = Nt(r), c = Xe(r.borderRadius, "20px"), f = this.hovered ? "scale(1.02)" : "scale(1.0)", u = r.padding !== void 0 ? r.padding : e ? "24px 16px" : "0 16px", d = r.gap !== void 0 ? `${r.gap}px` : e ? "14px" : "0";
-    return l`
+    if (!r.enabled || r.hideOnOpen && this.panelOpen) return s``;
+    const e = r.layout === "card", t = r.width || (e ? 240 : 255), o = r.height || (e ? 220 : 40), n = r.offsetBottom !== void 0 ? r.offsetBottom : 12, i = r.offsetRight !== void 0 ? r.offsetRight : 16, a = mt(r), d = Te(r.borderRadius, "20px"), l = this.hovered ? "scale(1.02)" : "scale(1.0)", h = r.padding !== void 0 ? r.padding : e ? "24px 16px" : "0 16px", f = r.gap !== void 0 ? `${r.gap}px` : e ? "14px" : "0";
+    return s`
       <div
         class="chatbar-wrapper"
-        style="width: ${n}px; height: ${i}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${o}px; right: ${a}px; background: ${s}; color: ${r.textColor || "#ffffff"}; border-radius: ${c}; box-shadow: ${r.shadow ? "0 4px 16px rgba(0,0,0,0.15)" : "none"}; padding: ${u}; transform: ${f}; flex-direction: ${e ? "column" : "row"}; gap: ${d}"
+        style="width: ${t}px; height: ${o}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${n}px; right: ${i}px; background: ${a}; color: ${r.textColor || "#ffffff"}; border-radius: ${d}; box-shadow: ${r.shadow ? "0 4px 16px rgba(0,0,0,0.15)" : "none"}; padding: ${h}; transform: ${l}; flex-direction: ${e ? "column" : "row"}; gap: ${f}"
         @mouseenter="${() => this.hovered = !0}"
         @mouseleave="${() => this.hovered = !1}"
         @click="${this.handleClick}"
       >
-        ${e ? l`
+        ${e ? s`
               <!-- CARD LAYOUT (Vertical) -->
               <div class="card-layout" style="gap: ${r.gap !== void 0 ? r.gap : 14}px">
                 <div style="display: flex; align-items: center; justify-content: center; position: relative">
-                  ${r.iconType === "image" && r.iconImageUrl ? l`
+                  ${r.iconType === "image" && r.iconImageUrl ? s`
                         <img
                           src="${r.iconImageUrl}"
                           alt="icon"
                           style="object-fit: ${r.iconFit || "contain"}; opacity: ${r.iconOpacity !== void 0 ? r.iconOpacity : 1}; width: ${r.iconWidth || 24}px; height: ${r.iconHeight || 24}px; mix-blend-mode: ${r.iconBlend || "normal"}"
                         />
-                      ` : r.iconType === "customSvg" && r.customSvg ? l`<cw-icon .customSvg="${r.customSvg}" .size="${r.iconWidth || 28}" .color="${r.iconColor || "#ffffff"}"></cw-icon>` : l`<cw-icon .name="${r.lucideIcon || "MessageCircle"}" .size="${r.iconWidth || 24}" .color="${r.iconColor || "#ffffff"}"></cw-icon>`}
+                      ` : r.iconType === "customSvg" && r.customSvg ? s`<cw-icon .customSvg="${r.customSvg}" .size="${r.iconWidth || 28}" .color="${r.iconColor || "#ffffff"}"></cw-icon>` : s`<cw-icon .name="${r.lucideIcon || "MessageCircle"}" .size="${r.iconWidth || 24}" .color="${r.iconColor || "#ffffff"}"></cw-icon>`}
                 </div>
 
                 <span style="font-weight: 700; line-height: 1.35; white-space: pre-line; text-align: center; font-size: ${r.textSize || 16}px; letter-spacing: ${r.letterSpacing || 0}px">
@@ -5995,47 +5998,48 @@ let yr = (pr = class extends y {
                   <span>${r.buttonText || "Chat Now"}</span>
                 </div>
 
-                ${this.unreadCount > 0 ? l`<span class="badge">${this.unreadCount}</span>` : ""}
+                ${this.unreadCount > 0 ? s`<span class="badge">${this.unreadCount}</span>` : ""}
               </div>
-            ` : l`
+            ` : s`
               <!-- BAR LAYOUT (Horizontal) -->
               <div class="bar-layout">
                 <span
-                  style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; text-align: left; font-size: ${Wt(r.textSize, r.height)}; letter-spacing: ${r.letterSpacing || 0}px; color: ${r.textColor || "#ffffff"}"
+                  style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; text-align: left; font-size: ${vt(r.textSize, r.height)}; letter-spacing: ${r.letterSpacing || 0}px; color: ${r.textColor || "#ffffff"}"
                 >
                   ${(r.text || "Chat with us").replace(/\n/g, " ")}
                 </span>
 
                 <div style="display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; margin-left: 8px">
-                  ${r.iconType === "image" && r.iconImageUrl ? l`
+                  ${r.iconType === "image" && r.iconImageUrl ? s`
                         <img
                           src="${r.iconImageUrl}"
                           alt="icon"
-                          style="object-fit: ${r.iconFit || "contain"}; opacity: ${r.iconOpacity !== void 0 ? r.iconOpacity : 1}; width: ${te(r.iconWidth, r.height, "image")}px; height: ${It(r.iconHeight, r.height, "image")}px; mix-blend-mode: ${r.iconBlend || "normal"}"
+                          style="object-fit: ${r.iconFit || "contain"}; opacity: ${r.iconOpacity !== void 0 ? r.iconOpacity : 1}; width: ${Wr(r.iconWidth, r.height, "image")}px; height: ${yt(r.iconHeight, r.height, "image")}px; mix-blend-mode: ${r.iconBlend || "normal"}"
                         />
-                      ` : r.iconType === "customSvg" && r.customSvg ? l`
+                      ` : r.iconType === "customSvg" && r.customSvg ? s`
                         <cw-icon
                           .customSvg="${r.customSvg}"
-                          .size="${te(r.iconWidth, r.height, "customSvg")}"
+                          .size="${Wr(r.iconWidth, r.height, "customSvg")}"
                           .color="${r.iconColor || "#ffffff"}"
                         ></cw-icon>
-                      ` : l`
+                      ` : s`
                         <cw-icon
                           .name="${r.lucideIcon || "MessageCircle"}"
-                          .size="${te(r.iconWidth, r.height, "lucide")}"
+                          .size="${Wr(r.iconWidth, r.height, "lucide")}"
                           .color="${r.iconColor || "#ffffff"}"
                         ></cw-icon>
                       `}
 
-                  ${this.unreadCount > 0 ? l`<span class="bar-badge">${this.unreadCount}</span>` : ""}
+                  ${this.unreadCount > 0 ? s`<span class="bar-badge">${this.unreadCount}</span>` : ""}
                 </div>
               </div>
             `}
       </div>
     `;
   }
-}, pr.styles = [
-  E,
+};
+Z.styles = [
+  P,
   C`
       :host {
         display: block;
@@ -6104,54 +6108,53 @@ let yr = (pr = class extends y {
         box-shadow: 0 1px 3px rgba(0,0,0,0.15);
       }
     `
-], pr);
-Ir([
+];
+Sr([
   p({ type: Object })
-], yr.prototype, "config", void 0);
-Ir([
+], Z.prototype, "config", 2);
+Sr([
   p({ type: Boolean })
-], yr.prototype, "panelOpen", void 0);
-Ir([
+], Z.prototype, "panelOpen", 2);
+Sr([
   p({ type: Number })
-], yr.prototype, "unreadCount", void 0);
-Ir([
-  Pr()
-], yr.prototype, "hovered", void 0);
-yr = Ir([
+], Z.prototype, "unreadCount", 2);
+Sr([
+  $r()
+], Z.prototype, "hovered", 2);
+Z = Sr([
   S("cw-chatbar")
-], yr);
-var Cr = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, hr;
-let G = (hr = class extends y {
+], Z);
+var Zt = Object.defineProperty, Xt = Object.getOwnPropertyDescriptor, lr = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? Xt(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && Zt(e, t, n), n;
+};
+let D = class extends y {
   constructor() {
     super(...arguments), this.panelOpen = !1, this.hasSentMessage = !1;
   }
   connectedCallback() {
-    super.connectedCallback(), this.unsub = Mr("store:greetWindow", () => this.requestUpdate());
+    super.connectedCallback(), this.unsub = yr("store:greetWindow", () => this.requestUpdate());
   }
   disconnectedCallback() {
     var r;
     super.disconnectedCallback(), (r = this.unsub) == null || r.call(this);
   }
   handleDismiss(r) {
-    r.stopPropagation(), this.config && (this.config.dismissed = !0, oe.get().dismissed = !0, this.requestUpdate());
+    r.stopPropagation(), this.config && (this.config.dismissed = !0, Ur.get().dismissed = !0, this.requestUpdate());
   }
   handleCardClick() {
     window.dispatchEvent(new CustomEvent("toggle-contact-widget"));
   }
   render() {
-    const r = this.config || oe.get(), e = this.chatbarConfig || pe.get(), n = this.bubbleConfig || Gr.get(), i = e.enabled;
-    if (!(!(i ? e.hideOnOpen : n.hideOnOpen) || !this.panelOpen) || this.hasSentMessage || !r || !r.enabled || r.dismissed || !r.visible)
-      return l``;
-    const s = i ? e.offsetBottom !== void 0 ? e.offsetBottom : 12 : n.offsetBottom !== void 0 ? n.offsetBottom : 12, c = i ? e.height || (e.layout === "card" ? 220 : 40) : n.height || 60, f = r.spacing !== void 0 ? r.spacing : 16, u = s + c + f, d = i ? e.offsetRight !== void 0 ? parseInt(String(e.offsetRight)) : 16 : n.offsetRight !== void 0 ? parseInt(String(n.offsetRight)) : 16, g = r.width || 320, x = r.iconAlign === "left" ? "flex-start" : r.iconAlign === "right" ? "flex-end" : "center", $ = `calc(100% - ${u + 24}px)`;
-    return l`
+    const r = this.config || Ur.get(), e = this.chatbarConfig || Gr.get(), t = this.bubbleConfig || Ar.get(), o = e.enabled;
+    if (!(!(o ? e.hideOnOpen : t.hideOnOpen) || !this.panelOpen) || this.hasSentMessage || !r || !r.enabled || r.dismissed || !r.visible)
+      return s``;
+    const a = o ? e.offsetBottom !== void 0 ? e.offsetBottom : 12 : t.offsetBottom !== void 0 ? t.offsetBottom : 12, d = o ? e.height || (e.layout === "card" ? 220 : 40) : t.height || 60, l = r.spacing !== void 0 ? r.spacing : 16, h = a + d + l, f = o ? e.offsetRight !== void 0 ? parseInt(String(e.offsetRight)) : 16 : t.offsetRight !== void 0 ? parseInt(String(t.offsetRight)) : 16, c = r.width || 320, b = r.iconAlign === "left" ? "flex-start" : r.iconAlign === "right" ? "flex-end" : "center", v = `calc(100% - ${h + 24}px)`;
+    return s`
       <div
         class="greet-wrapper"
-        style="bottom: ${u}px; right: ${d}px; width: ${g}px; max-width: calc(100% - 24px); max-height: ${$}"
+        style="bottom: ${h}px; right: ${f}px; width: ${c}px; max-width: calc(100% - 24px); max-height: ${v}"
       >
         <!-- Close Button -->
         <div class="close-row">
@@ -6169,17 +6172,17 @@ let G = (hr = class extends y {
           style="background-color: ${r.backgroundColor || "#ffffff"}; border-radius: ${r.borderRadius || 16}px; padding: ${r.padding || "24px 20px"}; box-shadow: ${r.boxShadow || "0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)"}"
           @click="${this.handleCardClick}"
         >
-          ${r.imageUrl || r.iconType === "lucide" && r.lucideIcon ? l`
-                <div style="width: 100%; display: flex; align-items: center; margin-bottom: 16px; justify-content: ${x}">
-                  ${r.imageUrl ? l`
+          ${r.imageUrl || r.iconType === "lucide" && r.lucideIcon ? s`
+                <div style="width: 100%; display: flex; align-items: center; margin-bottom: 16px; justify-content: ${b}">
+                  ${r.imageUrl ? s`
                         <img
                           src="${r.imageUrl}"
-                          class="${_e(r.iconAnimation)}"
+                          class="${fe(r.iconAnimation)}"
                           style="display: block; margin: ${r.iconAlign === "center" ? "0 auto" : "0"}; height: ${r.imageHeight || 70}px; width: ${r.imageWidth ? `${r.imageWidth}px` : "auto"}; object-fit: contain; padding: ${r.imagePadding || "0px"}"
                         />
-                      ` : l`
+                      ` : s`
                         <div
-                          class="${_e(r.iconAnimation)}"
+                          class="${fe(r.iconAnimation)}"
                           style="width: ${r.iconSize || 48}px; height: ${r.iconSize || 48}px; color: ${r.iconColor || "#9333EA"}"
                         >
                           <cw-icon .name="${r.lucideIcon}" .size="${r.iconSize || 48}" .color="${r.iconColor || "#9333EA"}"></cw-icon>
@@ -6202,8 +6205,9 @@ let G = (hr = class extends y {
       </div>
     `;
   }
-}, hr.styles = [
-  E,
+};
+D.styles = [
+  P,
   C`
       :host {
         display: block;
@@ -6258,79 +6262,77 @@ let G = (hr = class extends y {
         box-sizing: border-box;
       }
     `
-], hr);
-Cr([
+];
+lr([
   p({ type: Object })
-], G.prototype, "config", void 0);
-Cr([
+], D.prototype, "config", 2);
+lr([
   p({ type: Object })
-], G.prototype, "chatbarConfig", void 0);
-Cr([
+], D.prototype, "chatbarConfig", 2);
+lr([
   p({ type: Object })
-], G.prototype, "bubbleConfig", void 0);
-Cr([
+], D.prototype, "bubbleConfig", 2);
+lr([
   p({ type: Boolean })
-], G.prototype, "panelOpen", void 0);
-Cr([
+], D.prototype, "panelOpen", 2);
+lr([
   p({ type: Boolean })
-], G.prototype, "hasSentMessage", void 0);
-G = Cr([
+], D.prototype, "hasSentMessage", 2);
+D = lr([
   S("cw-greet-window")
-], G);
-var Z = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, fr;
-let W = (fr = class extends y {
+], D);
+var Jt = Object.defineProperty, Qt = Object.getOwnPropertyDescriptor, J = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? Qt(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && Jt(e, t, n), n;
+};
+let E = class extends y {
   constructor() {
     super(...arguments), this.isExpanded = !1, this.clientName = "Support", this.agentName = "Sarah", this.state = "active";
   }
   connectedCallback() {
-    super.connectedCallback(), this.unsub = ce(() => this.requestUpdate());
+    super.connectedCallback(), this.unsub = Vr(() => this.requestUpdate());
   }
   disconnectedCallback() {
     var r;
     super.disconnectedCallback(), (r = this.unsub) == null || r.call(this);
   }
   toggleExpand() {
-    b.toggleExpand();
+    u.toggleExpand();
   }
   toggleMenu() {
-    b.get().menuOpen = !b.get().menuOpen, b.get();
+    u.get().menuOpen = !u.get().menuOpen, u.get();
   }
   closePanel() {
-    b.closePanel(), window.dispatchEvent(new CustomEvent("close-contact-widget"));
+    u.closePanel(), window.dispatchEvent(new CustomEvent("close-contact-widget"));
   }
   askEndChat() {
-    b.askEndChat();
+    u.askEndChat();
   }
   render() {
-    var g, x, $, z, h, O, T;
-    const r = b.get(), e = this.state || r.state;
-    if (e === "welcome")
-      return l``;
-    const n = this.config && Object.keys(this.config).length > 0 ? this.config : Kr.get(), i = this.features && Object.keys(this.features).length > 0 ? this.features : de.get(), o = n.headerTextColor || "#ffffff", a = (i.voiceCallMaster || ((g = n.features) == null ? void 0 : g.voiceCallMaster)) && (i.voiceCallAgents || ((x = n.features) == null ? void 0 : x.voiceCallAgents) || i.voiceCallVisitors || (($ = n.features) == null ? void 0 : $.voiceCallVisitors)), s = (i.videoCallMaster || ((z = n.features) == null ? void 0 : z.videoCallMaster)) && (i.videoCallAgents || ((h = n.features) == null ? void 0 : h.videoCallAgents) || i.videoCallVisitors || ((O = n.features) == null ? void 0 : O.videoCallVisitors)), c = i.closeChatVisitor || ((T = n.features) == null ? void 0 : T.closeChatVisitor), f = this.agentName || n.agentName || r.agentName, u = this.clientName || n.clientName || r.clientName || "Support", d = e === "active" && f ? `${f} · Online` : "Online";
-    return l`
+    var c, b, v, $, g, z, M;
+    const r = u.get(), e = this.state || r.state;
+    if (e === "welcome") return s``;
+    const t = this.config && Object.keys(this.config).length > 0 ? this.config : jr.get(), o = this.features && Object.keys(this.features).length > 0 ? this.features : Yr.get(), n = t.headerTextColor || "#ffffff", i = (o.voiceCallMaster || ((c = t.features) == null ? void 0 : c.voiceCallMaster)) && (o.voiceCallAgents || ((b = t.features) == null ? void 0 : b.voiceCallAgents) || o.voiceCallVisitors || ((v = t.features) == null ? void 0 : v.voiceCallVisitors)), a = (o.videoCallMaster || (($ = t.features) == null ? void 0 : $.videoCallMaster)) && (o.videoCallAgents || ((g = t.features) == null ? void 0 : g.videoCallAgents) || o.videoCallVisitors || ((z = t.features) == null ? void 0 : z.videoCallVisitors)), d = o.closeChatVisitor || ((M = t.features) == null ? void 0 : M.closeChatVisitor), l = this.agentName || t.agentName || r.agentName, h = this.clientName || t.clientName || r.clientName || "Support", f = e === "active" && l ? `${l} · Online` : "Online";
+    return s`
       <header
         class="panel-header"
-        style="background: ${n.headerBg || "var(--cw-grad)"}; color: ${o}; padding: ${n.headerPadding || "14px 16px"}; border-bottom: ${n.headerBorderColor ? `1px solid ${n.headerBorderColor}` : "1px solid rgba(0,0,0,0.08)"}"
+        style="background: ${t.headerBg || "var(--cw-grad)"}; color: ${n}; padding: ${t.headerPadding || "14px 16px"}; border-bottom: ${t.headerBorderColor ? `1px solid ${t.headerBorderColor}` : "1px solid rgba(0,0,0,0.08)"}"
       >
         <div class="left-section">
-          ${n.modernUi !== !1 ? l`
+          ${t.modernUi !== !1 ? s`
                 <button
                   type="button"
                   class="icon-btn"
                   aria-label="${this.isExpanded ? "Collapse chat" : "Expand chat"}"
-                  style="color: ${o}; opacity: 0.7"
+                  style="color: ${n}; opacity: 0.7"
                   @click="${this.toggleExpand}"
                 >
-                  ${this.isExpanded ? l`
+                  ${this.isExpanded ? s`
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                           <path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7" />
                         </svg>
-                      ` : l`
+                      ` : s`
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                           <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
                         </svg>
@@ -6339,27 +6341,27 @@ let W = (fr = class extends y {
               ` : ""}
 
           <cw-avatar
-            .name="${u}"
-            .bg="${n.headerAvatarBg || (o === "#18181b" ? "#e4e4e7" : "rgba(255,255,255,0.2)")}"
-            .color="${n.headerAvatarColor || o}"
+            .name="${h}"
+            .bg="${t.headerAvatarBg || (n === "#18181b" ? "#e4e4e7" : "rgba(255,255,255,0.2)")}"
+            .color="${t.headerAvatarColor || n}"
             .size="${32}"
-            .activeDot="${n.activeDot}"
+            .activeDot="${t.activeDot}"
           ></cw-avatar>
 
           <div class="info-col">
-            <span class="title-text" style="font-size: ${n.headerTitleFontSize || "14px"}">${u}</span>
-            <span class="subtitle-text" style="font-size: ${n.headerSubtitleFontSize || "11px"}">${d}</span>
+            <span class="title-text" style="font-size: ${t.headerTitleFontSize || "14px"}">${h}</span>
+            <span class="subtitle-text" style="font-size: ${t.headerSubtitleFontSize || "11px"}">${f}</span>
           </div>
         </div>
 
         <div class="actions-section">
-          ${a ? l`
+          ${i ? s`
                 <button
                   type="button"
                   class="icon-btn"
                   aria-label="Start voice call"
                   title="Voice call"
-                  style="color: ${o}; opacity: 0.9"
+                  style="color: ${n}; opacity: 0.9"
                   @click="${() => alert("Initiating voice call...")}"
                 >
                   <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -6368,13 +6370,13 @@ let W = (fr = class extends y {
                 </button>
               ` : ""}
 
-          ${s ? l`
+          ${a ? s`
                 <button
                   type="button"
                   class="icon-btn"
                   aria-label="Start video call"
                   title="Video call"
-                  style="color: ${o}; opacity: 0.9"
+                  style="color: ${n}; opacity: 0.9"
                   @click="${() => alert("Initiating video call...")}"
                 >
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -6384,13 +6386,13 @@ let W = (fr = class extends y {
                 </button>
               ` : ""}
 
-          ${c ? l`
+          ${d ? s`
                 <button
                   type="button"
                   class="icon-btn"
                   aria-label="End chat session"
                   title="End chat"
-                  style="color: ${o}; opacity: 0.7"
+                  style="color: ${n}; opacity: 0.7"
                   @click="${this.askEndChat}"
                 >
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -6399,12 +6401,12 @@ let W = (fr = class extends y {
                 </button>
               ` : ""}
 
-          ${n.modernUi !== !1 ? l`
+          ${t.modernUi !== !1 ? s`
                 <button
                   type="button"
                   class="icon-btn"
                   aria-label="Chat options"
-                  style="color: ${o}; opacity: 0.7"
+                  style="color: ${n}; opacity: 0.7"
                   @click="${this.toggleMenu}"
                 >
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
@@ -6419,7 +6421,7 @@ let W = (fr = class extends y {
             type="button"
             class="icon-btn"
             aria-label="Minimize chat panel"
-            style="color: ${o}; opacity: 0.7"
+            style="color: ${n}; opacity: 0.7"
             @click="${this.closePanel}"
           >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -6430,8 +6432,9 @@ let W = (fr = class extends y {
       </header>
     `;
   }
-}, fr.styles = [
-  E,
+};
+E.styles = [
+  P,
   C`
       :host {
         display: block;
@@ -6491,37 +6494,36 @@ let W = (fr = class extends y {
         opacity: 1 !important;
       }
     `
-], fr);
-Z([
+];
+J([
   p({ type: Object })
-], W.prototype, "config", void 0);
-Z([
+], E.prototype, "config", 2);
+J([
   p({ type: Object })
-], W.prototype, "features", void 0);
-Z([
+], E.prototype, "features", 2);
+J([
   p({ type: Boolean })
-], W.prototype, "isExpanded", void 0);
-Z([
+], E.prototype, "isExpanded", 2);
+J([
   p({ type: String })
-], W.prototype, "clientName", void 0);
-Z([
+], E.prototype, "clientName", 2);
+J([
   p({ type: String })
-], W.prototype, "agentName", void 0);
-Z([
+], E.prototype, "agentName", 2);
+J([
   p({ type: String })
-], W.prototype, "state", void 0);
-W = Z([
+], E.prototype, "state", 2);
+E = J([
   S("cw-chat-header")
-], W);
-var ge = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, gr;
-let qr = (gr = class extends y {
+], E);
+var rn = Object.defineProperty, en = Object.getOwnPropertyDescriptor, Xr = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? en(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && rn(e, t, n), n;
+};
+let xr = class extends y {
   connectedCallback() {
-    super.connectedCallback(), this.unsub = Mr("store:chat", () => {
+    super.connectedCallback(), this.unsub = yr("store:chat", () => {
       this.requestUpdate(), this.scrollToBottom();
     });
   }
@@ -6537,24 +6539,24 @@ let qr = (gr = class extends y {
     }, 50);
   }
   handleDraftChange(r) {
-    b.get().draft = r.detail;
+    u.get().draft = r.detail;
   }
   handleSendMessage(r) {
-    b.send();
+    u.send();
   }
   render() {
-    var d;
-    const r = this.chatState || b.get(), e = this.chatWindowConfig || Kr.get(), n = r.state === "welcome", i = r.state === "boot", o = r.state === "prechat", a = r.state === "offline", s = r.state === "offline-sent", c = r.state === "queued", f = r.state === "active", u = r.state === "closed";
-    return l`
+    var f;
+    const r = this.chatState || u.get(), e = this.chatWindowConfig || jr.get(), t = r.state === "welcome", o = r.state === "boot", n = r.state === "prechat", i = r.state === "offline", a = r.state === "offline-sent", d = r.state === "queued", l = r.state === "active", h = r.state === "closed";
+    return s`
       <div
         class="panel-body"
-        style="background: ${n ? ((d = e.welcome) == null ? void 0 : d.bgGradient) || "linear-gradient(135deg, #0b5fff, #22d3ee)" : e.bodyBg || "var(--cw-bg)"}; padding: ${n ? "0px" : ""}"
+        style="background: ${t ? ((f = e.welcome) == null ? void 0 : f.bgGradient) || "linear-gradient(135deg, #0b5fff, #22d3ee)" : e.bodyBg || "var(--cw-bg)"}; padding: ${t ? "0px" : ""}"
       >
         <!-- WELCOME SCREEN -->
-        ${n ? l`<cw-welcome-card .config="${e.welcome}" .accentColor="${e.accentColor}"></cw-welcome-card>` : ""}
+        ${t ? s`<cw-welcome-card .config="${e.welcome}" .accentColor="${e.accentColor}"></cw-welcome-card>` : ""}
 
         <!-- BOOT / CONNECTING -->
-        ${i ? l`
+        ${o ? s`
               <div class="center-note">
                 <div class="spinner"></div>
                 <p>Connecting…</p>
@@ -6562,15 +6564,15 @@ let qr = (gr = class extends y {
             ` : ""}
 
         <!-- PRECHAT FORM -->
-        ${o ? l`
+        ${n ? s`
               <div class="prechat">
                 <div class="avatar prechat-avatar">
                   <span>${(r.clientName || e.clientName || "S").charAt(0)}</span>
                 </div>
                 <h2>Hi there 👋</h2>
                 <p class="muted">Tell us who you are and we'll connect you with an agent right away.</p>
-                <form @submit="${(g) => {
-      g.preventDefault(), r.state = "active", b.get().state = "active", this.requestUpdate();
+                <form @submit="${(c) => {
+      c.preventDefault(), r.state = "active", u.get().state = "active", this.requestUpdate();
     }}">
                   <label>Name</label>
                   <input required maxlength="120" placeholder="Your name" />
@@ -6582,7 +6584,7 @@ let qr = (gr = class extends y {
             ` : ""}
 
         <!-- OFFLINE FORM -->
-        ${a ? l`
+        ${i ? s`
               <div class="prechat">
                 <div class="avatar prechat-avatar offline-avatar">
                   <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -6592,8 +6594,8 @@ let qr = (gr = class extends y {
                 </div>
                 <h2>We're not around right now</h2>
                 <p class="muted">Our agents are offline. Leave your details and a message — we'll pick it up the moment someone is back.</p>
-                <form @submit="${(g) => {
-      g.preventDefault(), b.submitOffline();
+                <form @submit="${(c) => {
+      c.preventDefault(), u.submitOffline();
     }}">
                   <label>Name</label>
                   <input
@@ -6601,7 +6603,7 @@ let qr = (gr = class extends y {
                     maxlength="120"
                     placeholder="Your name"
                     .value="${r.offlineName}"
-                    @input="${(g) => r.offlineName = g.target.value}"
+                    @input="${(c) => r.offlineName = c.target.value}"
                   />
                   <label>Email</label>
                   <input
@@ -6610,7 +6612,7 @@ let qr = (gr = class extends y {
                     maxlength="160"
                     placeholder="you@example.com"
                     .value="${r.offlineEmail}"
-                    @input="${(g) => r.offlineEmail = g.target.value}"
+                    @input="${(c) => r.offlineEmail = c.target.value}"
                   />
                   <label>Message</label>
                   <textarea
@@ -6620,7 +6622,7 @@ let qr = (gr = class extends y {
                     maxlength="4000"
                     placeholder="How can we help?"
                     .value="${r.offlineMessage}"
-                    @input="${(g) => r.offlineMessage = g.target.value}"
+                    @input="${(c) => r.offlineMessage = c.target.value}"
                   ></textarea>
                   <button type="submit" class="primary" ?disabled="${r.offlineSending}">
                     ${r.offlineSending ? "Sending…" : "Leave message"}
@@ -6630,7 +6632,7 @@ let qr = (gr = class extends y {
             ` : ""}
 
         <!-- OFFLINE SENT CONFIRMATION -->
-        ${s ? l`
+        ${a ? s`
               <div class="queued">
                 <div class="ticket offline-done">
                   <div class="done-check">
@@ -6647,7 +6649,7 @@ let qr = (gr = class extends y {
             ` : ""}
 
         <!-- QUEUED STATE -->
-        ${c ? l`
+        ${d ? s`
               <div class="queued">
                 <div class="ticket">
                   <div class="ticket-number">${r.position}</div>
@@ -6658,24 +6660,24 @@ let qr = (gr = class extends y {
             ` : ""}
 
         <!-- ACTIVE CHAT / CLOSED MESSAGES -->
-        ${f || u ? l`
+        ${l || h ? s`
               <div class="messages-area" style="background: ${e.bodyBg || "var(--cw-bg)"}">
-                ${r.messages.map((g, x) => {
-      const $ = b.dividerBefore(x), z = b.groupEnd(x), h = b.groupStart(x);
-      return l`
-                    ${$ ? l`<div class="day-divider">${b.dayLabel()}</div>` : ""}
+                ${r.messages.map((c, b) => {
+      const v = u.dividerBefore(b), $ = u.groupEnd(b), g = u.groupStart(b);
+      return s`
+                    ${v ? s`<div class="day-divider">${u.dayLabel()}</div>` : ""}
 
                     <cw-message-bubble
-                      .message="${g}"
+                      .message="${c}"
                       .chatWindowConfig="${e}"
-                      .isGroupEnd="${z}"
-                      .isGroupStart="${h}"
+                      .isGroupEnd="${$}"
+                      .isGroupStart="${g}"
                       .agentName="${r.agentName}"
                     ></cw-message-bubble>
                   `;
     })}
 
-                ${r.typingName && b.flag("chat.typingIndicator", !0) ? l`
+                ${r.typingName && u.flag("chat.typingIndicator", !0) ? s`
                       <div class="bubble-row from-agent g-start g-end" style="margin-top: 4px">
                         <div class="bubble typing-bubble">
                           <span class="sr-only">${r.typingName}</span>
@@ -6686,19 +6688,19 @@ let qr = (gr = class extends y {
               </div>
 
               <!-- CONSENT BANNER -->
-              ${f && !r.consentDismissed && b.flag("widget.modernUi", !0) ? l`
+              ${l && !r.consentDismissed && u.flag("widget.modernUi", !0) ? s`
                     <div class="consent">
                       <p>By chatting here you agree this conversation may be processed and recorded to provide support.</p>
-                      <button type="button" class="consent-x" aria-label="Dismiss" @click="${() => b.dismissConsent()}">✕</button>
+                      <button type="button" class="consent-x" aria-label="Dismiss" @click="${() => u.dismissConsent()}">✕</button>
                     </div>
                   ` : ""}
 
               <!-- ATTACHMENT POPUP -->
-              ${r.attachOpen ? l`
+              ${r.attachOpen ? s`
                     <div class="attach-pop">
                       <button type="button" class="menu-item" @click="${() => {
-      var g, x;
-      r.attachOpen = !1, (x = (g = this.shadowRoot) == null ? void 0 : g.querySelector("#cw-file-input")) == null || x.click();
+      var c, b;
+      r.attachOpen = !1, (b = (c = this.shadowRoot) == null ? void 0 : c.querySelector("#cw-file-input")) == null || b.click();
     }}">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                           <rect x="3" y="5" width="18" height="14" rx="2" />
@@ -6707,7 +6709,7 @@ let qr = (gr = class extends y {
                         </svg>
                         Send an image
                       </button>
-                      <button type="button" class="menu-item" @click="${() => b.captureScreenshot()}">
+                      <button type="button" class="menu-item" @click="${() => u.captureScreenshot()}">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                           <path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2" />
                           <circle cx="12" cy="12" r="3" />
@@ -6718,15 +6720,15 @@ let qr = (gr = class extends y {
                   ` : ""}
 
               <!-- MENU POPUP -->
-              ${r.menuOpen ? l`
+              ${r.menuOpen ? s`
                     <div class="menu-pop">
-                      <button type="button" class="menu-item" @click="${() => b.downloadTranscript()}">
+                      <button type="button" class="menu-item" @click="${() => u.downloadTranscript()}">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                           <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
                         </svg>
                         Download transcript
                       </button>
-                      <button type="button" class="menu-item" @click="${() => b.toggleSounds()}">
+                      <button type="button" class="menu-item" @click="${() => u.toggleSounds()}">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                           <path d="M11 5L6 9H3v6h3l5 4V5zM16 9a4 4 0 010 6" />
                         </svg>
@@ -6736,23 +6738,25 @@ let qr = (gr = class extends y {
                   ` : ""}
 
               <!-- EMOJI PICKER -->
-              ${r.emojiOpen ? l`
+              ${r.emojiOpen ? s`
                     <div class="emoji-row">
-                      ${["😀", "😂", "😊", "😍", "👍", "👎", "🙏", "🎉", "❤️", "😢", "😮", "👌"].map((g) => l`
+                      ${["😀", "😂", "😊", "😍", "👍", "👎", "🙏", "🎉", "❤️", "😢", "😮", "👌"].map(
+      (c) => s`
                           <button type="button" class="emoji-btn" @click="${() => {
-      r.draft += g, this.requestUpdate();
-    }}">${g}</button>
-                        `)}
+        r.draft += c, this.requestUpdate();
+      }}">${c}</button>
+                        `
+    )}
                     </div>
                   ` : ""}
 
               <!-- COMPOSER BAR (ACTIVE STATE) -->
-              ${f ? l`
+              ${l ? s`
                     <cw-composer
                       .config="${e}"
                       .draft="${r.draft}"
-                      .attachmentsEnabled="${b.flag("attachments.enabled", !0)}"
-                      .modernUi="${b.flag("widget.modernUi", !0)}"
+                      .attachmentsEnabled="${u.flag("attachments.enabled", !0)}"
+                      .modernUi="${u.flag("widget.modernUi", !0)}"
                       .uploading="${r.uploading}"
                       @draft-change="${this.handleDraftChange}"
                       @send-message="${this.handleSendMessage}"
@@ -6768,7 +6772,7 @@ let qr = (gr = class extends y {
                       class="panel-footer"
                       style="padding-bottom: ${e.footerPaddingBottom || "16px"}; background: ${e.footerBg || e.bodyBg || "#ffffff"}; border-bottom-left-radius: ${e.widgetBorderRadius || 24}px; border-bottom-right-radius: ${e.widgetBorderRadius || 24}px"
                     >
-                      ${b.flag("widget.modernUi", !0) ? l`
+                      ${u.flag("widget.modernUi", !0) ? s`
                             <div class="powered" style="font-size: ${e.footerFontSize || "11px"}; color: ${e.footerTextColor || "var(--cw-muted)"}">
                               <span>Powered by</span>
                               <a href="${e.poweredByLink || "#"}" target="_blank" style="color: ${e.poweredByColor || "#a1a1aa"}">
@@ -6780,18 +6784,19 @@ let qr = (gr = class extends y {
                   ` : ""}
 
               <!-- CLOSED NOTE -->
-              ${u ? l`
+              ${h ? s`
                     <div class="closed-note">
                       <p>Chat ended</p>
-                      <button type="button" class="primary" @click="${() => b.startNew()}">Start new chat</button>
+                      <button type="button" class="primary" @click="${() => u.startNew()}">Start new chat</button>
                     </div>
                   ` : ""}
             ` : ""}
       </div>
     `;
   }
-}, gr.styles = [
-  E,
+};
+xr.styles = [
+  P,
   C`
       :host {
         display: flex;
@@ -7053,60 +7058,58 @@ let qr = (gr = class extends y {
         100% { transform: rotate(360deg); }
       }
     `
-], gr);
-ge([
+];
+Xr([
   p({ type: Object })
-], qr.prototype, "chatState", void 0);
-ge([
+], xr.prototype, "chatState", 2);
+Xr([
   p({ type: Object })
-], qr.prototype, "chatWindowConfig", void 0);
-qr = ge([
+], xr.prototype, "chatWindowConfig", 2);
+xr = Xr([
   S("cw-chat-body")
-], qr);
-var X = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, ur;
-let I = (ur = class extends y {
+], xr);
+var tn = Object.defineProperty, nn = Object.getOwnPropertyDescriptor, Q = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? nn(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && tn(e, t, n), n;
+};
+let T = class extends y {
   constructor() {
     super(...arguments), this.panelOpen = !1;
   }
   connectedCallback() {
-    super.connectedCallback(), this.unsub = ce(() => this.requestUpdate());
+    super.connectedCallback(), this.unsub = Vr(() => this.requestUpdate());
   }
   disconnectedCallback() {
     var r;
     super.disconnectedCallback(), (r = this.unsub) == null || r.call(this);
   }
   render() {
-    if (!this.panelOpen)
-      return l``;
-    const r = this.chatWindowConfig || Kr.get(), e = this.chatState || b.get(), n = this.features || de.get(), i = this.chatbarConfig || pe.get(), o = this.bubbleConfig || Gr.get(), a = e.isExpanded, s = a ? r.expandedWidth || 480 : r.widgetWidth || 350, c = r.widgetHeight || 550, f = r.offsetBottom !== void 0 && r.offsetBottom !== null && r.offsetBottom !== "" ? Number(r.offsetBottom) : i.enabled ? i.offsetBottom !== void 0 ? i.offsetBottom : 12 : o.offsetBottom !== void 0 ? o.offsetBottom : 12;
-    let u = f;
-    if (i.enabled && !i.hideOnOpen) {
-      const h = i.height || (i.layout === "card" ? 220 : 40), O = i.stackGap !== void 0 ? i.stackGap : 12;
-      u = f + h + O;
-    } else if (!i.enabled && !o.hideOnOpen) {
-      const h = o.height || 60, O = o.stackGap !== void 0 ? o.stackGap : 12;
-      u = f + h + O;
+    if (!this.panelOpen) return s``;
+    const r = this.chatWindowConfig || jr.get(), e = this.chatState || u.get(), t = this.features || Yr.get(), o = this.chatbarConfig || Gr.get(), n = this.bubbleConfig || Ar.get(), i = e.isExpanded, a = i ? r.expandedWidth || 480 : r.widgetWidth || 350, d = r.widgetHeight || 550, l = r.offsetBottom !== void 0 && r.offsetBottom !== null && r.offsetBottom !== "" ? Number(r.offsetBottom) : o.enabled ? o.offsetBottom !== void 0 ? o.offsetBottom : 12 : n.offsetBottom !== void 0 ? n.offsetBottom : 12;
+    let h = l;
+    if (o.enabled && !o.hideOnOpen) {
+      const g = o.height || (o.layout === "card" ? 220 : 40), z = o.stackGap !== void 0 ? o.stackGap : 12;
+      h = l + g + z;
+    } else if (!o.enabled && !n.hideOnOpen) {
+      const g = n.height || 60, z = n.stackGap !== void 0 ? n.stackGap : 12;
+      h = l + g + z;
     }
-    const d = r.offsetRight !== void 0 && r.offsetRight !== null && r.offsetRight !== "" ? Number(r.offsetRight) : i.enabled ? i.offsetRight !== void 0 ? i.offsetRight : 16 : o.offsetRight !== void 0 ? o.offsetRight : 16, g = r.widgetShadow ? `0 8px ${r.widgetShadowBlur || 30}px ${r.widgetShadowColor || "rgba(0,0,0,0.12)"}` : "none", x = r.widgetBorderEnabled ? `${r.widgetBorderWidth || 1}px solid ${r.widgetBorderColor || "#e5e7eb"}` : "none", $ = `${r.widgetBorderRadius || 24}px`, z = `calc(100% - ${u + 24}px)`;
-    return l`
+    const f = r.offsetRight !== void 0 && r.offsetRight !== null && r.offsetRight !== "" ? Number(r.offsetRight) : o.enabled ? o.offsetRight !== void 0 ? o.offsetRight : 16 : n.offsetRight !== void 0 ? n.offsetRight : 16, c = r.widgetShadow ? `0 8px ${r.widgetShadowBlur || 30}px ${r.widgetShadowColor || "rgba(0,0,0,0.12)"}` : "none", b = r.widgetBorderEnabled ? `${r.widgetBorderWidth || 1}px solid ${r.widgetBorderColor || "#e5e7eb"}` : "none", v = `${r.widgetBorderRadius || 24}px`, $ = `calc(100% - ${h + 24}px)`;
+    return s`
       <div
         class="panel-wrapper zotly-widget-panel-wrapper"
-        style="width: ${s}px; height: ${c}px; max-width: calc(100% - 24px); max-height: ${z}; position: fixed; bottom: ${u}px; right: ${d}px"
+        style="width: ${a}px; height: ${d}px; max-width: calc(100% - 24px); max-height: ${$}; position: fixed; bottom: ${h}px; right: ${f}px"
       >
         <div
           class="panel"
-          style="box-shadow: ${g}; border: ${x}; border-radius: ${$}; background: ${r.bodyBg || "var(--cw-bg)"}; --cw-accent: ${r.accentColor || "#0b5fff"}"
+          style="box-shadow: ${c}; border: ${b}; border-radius: ${v}; background: ${r.bodyBg || "var(--cw-bg)"}; --cw-accent: ${r.accentColor || "#0b5fff"}"
         >
           <!-- HEADER -->
           <cw-chat-header
             .config="${r}"
-            .features="${n}"
-            .isExpanded="${a}"
+            .features="${t}"
+            .isExpanded="${i}"
             .clientName="${e.clientName}"
             .agentName="${e.agentName}"
             .state="${e.state}"
@@ -7116,12 +7119,12 @@ let I = (ur = class extends y {
           <cw-chat-body .chatState="${e}" .chatWindowConfig="${r}"></cw-chat-body>
 
           <!-- RECONNECTING BANNER -->
-          ${e.reconnecting ? l`<div class="reconnecting">Reconnecting…</div>` : ""}
+          ${e.reconnecting ? s`<div class="reconnecting">Reconnecting…</div>` : ""}
 
           <!-- CONFIRM MODAL OVERLAY -->
-          ${e.confirmBox ? l`
-                <div class="modal-overlay" @click="${(h) => {
-      h.target === h.currentTarget && (e.confirmBox = null);
+          ${e.confirmBox ? s`
+                <div class="modal-overlay" @click="${(g) => {
+      g.target === g.currentTarget && (e.confirmBox = null);
     }}">
                   <div class="modal-card" style="background: ${r.modalCardBg || "#ffffff"}; border-radius: ${r.modalBorderRadius || 24}px">
                     <p class="modal-message" style="color: ${r.modalMessageColor || "#101828"}">${e.confirmBox.message}</p>
@@ -7141,7 +7144,7 @@ let I = (ur = class extends y {
                         type="button"
                         class="btn-confirm"
                         style="background: ${r.endChatConfirmBg || "var(--cw-grad)"}; color: ${r.endChatConfirmTextColor || "#ffffff"}"
-                        @click="${() => b.confirmEnd()}"
+                        @click="${() => u.confirmEnd()}"
                       >
                         ${e.confirmBox.confirmLabel || "Confirm"}
                       </button>
@@ -7153,8 +7156,9 @@ let I = (ur = class extends y {
       </div>
     `;
   }
-}, ur.styles = [
-  E,
+};
+T.styles = [
+  P,
   C`
       :host {
         display: block;
@@ -7223,46 +7227,45 @@ let I = (ur = class extends y {
         border: 1px solid transparent;
       }
     `
-], ur);
-X([
+];
+Q([
   p({ type: Object })
-], I.prototype, "chatWindowConfig", void 0);
-X([
+], T.prototype, "chatWindowConfig", 2);
+Q([
   p({ type: Object })
-], I.prototype, "chatState", void 0);
-X([
+], T.prototype, "chatState", 2);
+Q([
   p({ type: Object })
-], I.prototype, "features", void 0);
-X([
+], T.prototype, "features", 2);
+Q([
   p({ type: Object })
-], I.prototype, "chatbarConfig", void 0);
-X([
+], T.prototype, "chatbarConfig", 2);
+Q([
   p({ type: Object })
-], I.prototype, "bubbleConfig", void 0);
-X([
+], T.prototype, "bubbleConfig", 2);
+Q([
   p({ type: Boolean })
-], I.prototype, "panelOpen", void 0);
-I = X([
+], T.prototype, "panelOpen", 2);
+T = Q([
   S("cw-chat-panel")
-], I);
-var ue = function(t, r, e, n) {
-  var i = arguments.length, o = i < 3 ? r : n === null ? n = Object.getOwnPropertyDescriptor(r, e) : n, a;
-  if (typeof Reflect == "object" && typeof Reflect.decorate == "function") o = Reflect.decorate(t, r, e, n);
-  else for (var s = t.length - 1; s >= 0; s--) (a = t[s]) && (o = (i < 3 ? a(o) : i > 3 ? a(r, e, o) : a(r, e)) || o);
-  return i > 3 && o && Object.defineProperty(r, e, o), o;
-}, br;
-let Vr = (br = class extends y {
+], T);
+var on = Object.defineProperty, an = Object.getOwnPropertyDescriptor, Jr = (r, e, t, o) => {
+  for (var n = o > 1 ? void 0 : o ? an(e, t) : e, i = r.length - 1, a; i >= 0; i--)
+    (a = r[i]) && (n = (o ? a(e, t, n) : a(n)) || n);
+  return o && n && on(e, t, n), n;
+};
+let mr = class extends y {
   constructor() {
     super(...arguments), this.panelOpen = !1, this.initialized = !1, this.toggleListener = () => this.handleToggleWidget(), this.closeListener = () => this.handleCloseWidget();
   }
   async connectedCallback() {
     super.connectedCallback();
     try {
-      await Lt();
+      await kt();
     } catch (r) {
       console.warn("CwWidgetRoot initStore warning:", r);
     } finally {
-      this.unsubAll = ce(() => this.requestUpdate()), window.addEventListener("toggle-contact-widget", this.toggleListener), window.addEventListener("close-contact-widget", this.closeListener), this.initialized = !0, this.requestUpdate();
+      this.unsubAll = Vr(() => this.requestUpdate()), window.addEventListener("toggle-contact-widget", this.toggleListener), window.addEventListener("close-contact-widget", this.closeListener), this.initialized = !0, this.requestUpdate();
     }
   }
   disconnectedCallback() {
@@ -7270,135 +7273,135 @@ let Vr = (br = class extends y {
     super.disconnectedCallback(), (r = this.unsubAll) == null || r.call(this), window.removeEventListener("toggle-contact-widget", this.toggleListener), window.removeEventListener("close-contact-widget", this.closeListener);
   }
   handleToggleWidget() {
-    this.panelOpen = !this.panelOpen, b.get().panelOpen = this.panelOpen, this.panelOpen && (b.get().unreadCount = 0), this.requestUpdate();
+    this.panelOpen = !this.panelOpen, u.get().panelOpen = this.panelOpen, this.panelOpen && (u.get().unreadCount = 0), this.requestUpdate();
   }
   handleCloseWidget() {
-    this.panelOpen = !1, b.get().panelOpen = !1, this.requestUpdate();
+    this.panelOpen = !1, u.get().panelOpen = !1, this.requestUpdate();
   }
   render() {
-    if (!this.initialized)
-      return l``;
-    const r = Gr.get(), e = pe.get(), n = oe.get(), i = Kr.get(), o = de.get(), a = b.get();
-    return l`
+    if (!this.initialized) return s``;
+    const r = Ar.get(), e = Gr.get(), t = Ur.get(), o = jr.get(), n = Yr.get(), i = u.get();
+    return s`
       <style>
-        ${Bt}
+        ${lt}
       </style>
 
       <!-- FLOATING TRIGGER (BUBBLE OR CHATBAR) -->
-      ${e.enabled ? l`
+      ${e.enabled ? s`
             <cw-chatbar
               .config="${e}"
               .panelOpen="${this.panelOpen}"
-              .unreadCount="${a.unreadCount}"
+              .unreadCount="${i.unreadCount}"
             ></cw-chatbar>
-          ` : l`
+          ` : s`
             <cw-bubble
               .config="${r}"
               .panelOpen="${this.panelOpen}"
-              .unreadCount="${a.unreadCount}"
-              .hasSentMessage="${a.hasSentMessage}"
+              .unreadCount="${i.unreadCount}"
+              .hasSentMessage="${i.hasSentMessage}"
             ></cw-bubble>
           `}
 
       <!-- FLOATING GREET WINDOW -->
       <cw-greet-window
-        .config="${n}"
+        .config="${t}"
         .chatbarConfig="${e}"
         .bubbleConfig="${r}"
         .panelOpen="${this.panelOpen}"
-        .hasSentMessage="${a.hasSentMessage}"
+        .hasSentMessage="${i.hasSentMessage}"
       ></cw-greet-window>
 
       <!-- MAIN CHAT PANEL -->
       <cw-chat-panel
-        .chatWindowConfig="${i}"
-        .chatState="${a}"
-        .features="${o}"
+        .chatWindowConfig="${o}"
+        .chatState="${i}"
+        .features="${n}"
         .chatbarConfig="${e}"
         .bubbleConfig="${r}"
         .panelOpen="${this.panelOpen}"
       ></cw-chat-panel>
     `;
   }
-}, br.styles = C`
+};
+mr.styles = C`
     :host {
       display: block;
       font-family: inherit;
     }
-  `, br);
-ue([
-  Pr()
-], Vr.prototype, "panelOpen", void 0);
-ue([
-  Pr()
-], Vr.prototype, "initialized", void 0);
-Vr = ue([
+  `;
+Jr([
+  $r()
+], mr.prototype, "panelOpen", 2);
+Jr([
+  $r()
+], mr.prototype, "initialized", 2);
+mr = Jr([
   S("cw-widget-root")
-], Vr);
-function Kt(t = document.body) {
-  let r = t.querySelector("cw-widget-root");
-  return r || (r = document.createElement("cw-widget-root"), t.appendChild(r)), r;
+], mr);
+function pn(r = document.body) {
+  let e = r.querySelector("cw-widget-root");
+  return e || (e = document.createElement("cw-widget-root"), r.appendChild(e)), e;
 }
 export {
-  Ve as CW_ACCENT,
-  Ge as CW_ACCENT_DEEP,
-  Ye as CW_ACCENT_TINT,
-  Ue as CW_BG,
-  De as CW_BORDER,
-  qe as CW_GRAD,
-  He as CW_INK,
-  Fe as CW_MUTED,
-  Le as CW_SURFACE,
-  _ as CwAvatar,
-  Hr as CwBadge,
-  Y as CwBubble,
-  qr as CwChatBody,
-  W as CwChatHeader,
-  I as CwChatPanel,
-  yr as CwChatbar,
-  N as CwComposer,
-  Tr as CwFormsPreview,
-  Er as CwGreetInput,
-  G as CwGreetWindow,
-  mr as CwIcon,
-  V as CwMessageBubble,
-  vr as CwMessageTick,
-  Ee as CwTypingDots,
-  Fr as CwWelcomeCard,
-  Vr as CwWidgetRoot,
-  St as DARK_TOKENS,
-  E as GLOBAL_STYLES,
-  Bt as KEYFRAMES_CSS,
-  Ct as LIGHT_TOKENS,
-  Gr as bubbleStore,
-  b as chatStore,
-  Kr as chatWindowStore,
-  pe as chatbarStore,
-  de as featuresStore,
-  _t as fetchClientConfig,
-  Gt as formatTime,
-  _e as getAnimClass,
-  Xe as getBorderRadius,
-  Rt as getBoxShadow,
-  Nt as getChatbarBackground,
-  Wt as getChatbarFontSize,
-  It as getChatbarIconHeight,
-  te as getChatbarIconWidth,
-  At as getClientId,
-  Pt as getCompositeBackground,
-  Tt as getGradient,
-  Mt as getInnerShadow,
-  Ke as getParentTheme,
-  Ut as getTooltipBorderRadius,
-  Ot as getWidgetBaseUrl,
-  oe as greetWindowStore,
-  Et as hexToRgba,
-  Yt as hostTokensCss,
-  Lt as initStore,
-  Ze as isHostDark,
-  Kt as mountChatWidget,
-  jt as observeDarkMode,
-  Mr as subscribe,
-  ce as subscribeAll,
-  zt as tokensToCss
+  Oe as CW_ACCENT,
+  Ae as CW_ACCENT_DEEP,
+  _e as CW_ACCENT_TINT,
+  $e as CW_BG,
+  Ce as CW_BORDER,
+  ze as CW_GRAD,
+  Se as CW_INK,
+  Be as CW_MUTED,
+  ke as CW_SURFACE,
+  O as CwAvatar,
+  br as CwBadge,
+  U as CwBubble,
+  xr as CwChatBody,
+  E as CwChatHeader,
+  T as CwChatPanel,
+  Z as CwChatbar,
+  j as CwComposer,
+  ir as CwFormsPreview,
+  or as CwGreetInput,
+  D as CwGreetWindow,
+  G as CwIcon,
+  I as CwMessageBubble,
+  K as CwMessageTick,
+  Dr as CwTypingDots,
+  wr as CwWelcomeCard,
+  mr as CwWidgetRoot,
+  st as DARK_TOKENS,
+  P as GLOBAL_STYLES,
+  lt as KEYFRAMES_CSS,
+  at as LIGHT_TOKENS,
+  Ar as bubbleStore,
+  u as chatStore,
+  jr as chatWindowStore,
+  Gr as chatbarStore,
+  Yr as featuresStore,
+  gt as fetchClientConfig,
+  dn as formatTime,
+  fe as getAnimClass,
+  Te as getBorderRadius,
+  bt as getBoxShadow,
+  mt as getChatbarBackground,
+  vt as getChatbarFontSize,
+  yt as getChatbarIconHeight,
+  Wr as getChatbarIconWidth,
+  ht as getClientId,
+  xt as getCompositeBackground,
+  ut as getGradient,
+  wt as getInnerShadow,
+  je as getParentTheme,
+  $t as getTooltipBorderRadius,
+  dt as getWidgetBaseUrl,
+  Ur as greetWindowStore,
+  ft as hexToRgba,
+  cn as hostTokensCss,
+  kt as initStore,
+  Ee as isHostDark,
+  pn as mountChatWidget,
+  pt as observeDarkMode,
+  yr as subscribe,
+  Vr as subscribeAll,
+  ct as tokensToCss
 };
