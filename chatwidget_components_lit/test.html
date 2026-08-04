@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lit Chat Widget - Client Preset Tester</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: 'var(--primary-color, #0b5fff)',
+            secondary: 'var(--secondary-color, #22d3ee)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --primary-color: #0b5fff;
+      --secondary-color: #22d3ee;
+    }
+    body {
+      font-family: 'Outfit', sans-serif;
+    }
+    .theme-gradient-bg {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+    .theme-gradient-text {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+
+  <!-- Load bundled Lit Component Library -->
+  <script type="module" src="./dist/index.es.js"></script>
+</head>
+
+<body class="bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+  <!-- Control Header -->
+  <header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm px-4 py-3">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl theme-gradient-bg flex items-center justify-center text-white font-extrabold text-lg shadow">
+          Lit
+        </div>
+        <div>
+          <h1 class="font-extrabold text-base leading-tight">Lit Component Client Tester</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Select any client preset below to preview</p>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex items-center bg-slate-200/70 dark:bg-slate-800/70 p-1 rounded-xl gap-1 text-xs font-semibold">
+        <button onclick="selectClient('default')" id="btn-client-default" class="client-btn px-3 py-1.5 rounded-lg transition-all">Default</button>
+        <button onclick="selectClient('emerald')" id="btn-client-emerald" class="client-btn px-3 py-1.5 rounded-lg transition-all">🟢 Emerald</button>
+        <button onclick="selectClient('amber')" id="btn-client-amber" class="client-btn px-3 py-1.5 rounded-lg transition-all">🟠 Amber</button>
+        <button onclick="selectClient('google')" id="btn-client-google" class="client-btn px-3 py-1.5 rounded-lg transition-all">🔵 Google</button>
+        <button onclick="selectClient('phonepe')" id="btn-client-phonepe" class="client-btn px-3 py-1.5 rounded-lg transition-all">🟣 PhonePe</button>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex items-center gap-2">
+        <button onclick="document.documentElement.classList.toggle('dark')" class="p-2 bg-slate-200 dark:bg-slate-800 rounded-lg text-xs font-bold">
+          Toggle Dark Mode
+        </button>
+        <button onclick="window.dispatchEvent(new CustomEvent('toggle-contact-widget'))" class="px-3.5 py-1.5 theme-gradient-bg text-white text-xs font-bold rounded-lg shadow">
+          Toggle Widget Window
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Banner -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl border border-slate-200 dark:border-slate-800 space-y-4">
+      <span id="preset-tag" class="px-3 py-1 rounded-full text-xs font-bold text-white theme-gradient-bg uppercase tracking-wider inline-block">
+        Preset: DEFAULT
+      </span>
+      <h2 class="text-3xl font-extrabold">
+        Active Client: <span id="client-title" class="theme-gradient-text">Zotly Support</span>
+      </h2>
+      <p id="client-desc" class="text-slate-600 dark:text-slate-300 text-sm">
+        Verifying Lit custom elements rendering with custom client parameters.
+      </p>
+    </div>
+  </main>
+
+  <!-- Container for Lit Root -->
+  <div id="widget-container">
+    <cw-widget-root></cw-widget-root>
+  </div>
+
+  <script>
+    const THEMES = {
+      default: { name: 'Zotly Support', desc: 'Standard blue palette.', primary: '#0b5fff', secondary: '#22d3ee' },
+      emerald: { name: 'EcoSphere Emerald', desc: 'Emerald green & teal theme.', primary: '#059669', secondary: '#0d9488' },
+      amber: { name: 'Amber Gold', desc: 'Amber gold theme.', primary: '#d97706', secondary: '#f59e0b' },
+      google: { name: 'Google Material', desc: 'Google Material Blue.', primary: '#1a73e8', secondary: '#4285f4' },
+      phonepe: { name: 'PhonePe Violet', desc: 'PhonePe purple & violet gradient.', primary: '#5f259f', secondary: '#9333ea' }
+    };
+
+    function selectClient(id) {
+      window.ZOTLY_CLIENT_ID = id;
+      const t = THEMES[id] || THEMES.default;
+      document.documentElement.style.setProperty('--primary-color', t.primary);
+      document.documentElement.style.setProperty('--secondary-color', t.secondary);
+      document.getElementById('preset-tag').textContent = `Preset: ${id.toUpperCase()}`;
+      document.getElementById('client-title').textContent = t.name;
+      document.getElementById('client-desc').textContent = t.desc;
+
+      document.querySelectorAll('.client-btn').forEach(b => b.classList.remove('bg-white', 'dark:bg-slate-900', 'shadow'));
+      document.getElementById(`btn-client-${id}`)?.classList.add('bg-white', 'dark:bg-slate-900', 'shadow');
+
+      const container = document.getElementById('widget-container');
+      container.innerHTML = '';
+      const root = document.createElement('cw-widget-root');
+      container.appendChild(root);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => selectClient('default'));
+    } else {
+      selectClient('default');
+    }
+  </script>
+</body>
+
+</html>
