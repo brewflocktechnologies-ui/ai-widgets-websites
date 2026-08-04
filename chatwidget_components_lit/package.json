@@ -1,0 +1,22 @@
+{
+  "name": "chatwidget-components-lit",
+  "version": "1.0.0",
+  "description": "Lit Web Component implementation of Zotly Chat Widget using Atomic Design Structure",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "lit": "^3.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.4"
+  }
+}
