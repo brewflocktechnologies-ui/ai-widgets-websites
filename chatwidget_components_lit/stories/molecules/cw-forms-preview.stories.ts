@@ -5,17 +5,51 @@ export default {
   title: 'Molecules/FormsPreview',
   component: 'cw-forms-preview',
   argTypes: {
-    accentColor: { control: 'color' },
+    type: { control: 'select', options: ['prechat', 'postchat', 'ticket'] },
+    heading: { control: 'text' },
+    subheading: { control: 'text' },
   },
 };
 
 export const PrechatForm = {
   args: {
-    accentColor: '#0b5fff',
+    type: 'prechat',
   },
   render: (args: any) => html`
-    <div style="width: 350px; background: #ffffff; padding: 16px; border-radius: 16px; border: 1px solid #e5e7eb;">
-      <cw-forms-preview .accentColor="${args.accentColor}"></cw-forms-preview>
+    <div style="width: 360px; padding: 24px; background: #f8fafc; border-radius: 16px;">
+      <cw-forms-preview
+        .type="${args.type}"
+      ></cw-forms-preview>
+    </div>
+  `,
+};
+
+export const PostchatForm = {
+  args: {
+    type: 'postchat',
+  },
+  render: (args: any) => html`
+    <div style="width: 360px; padding: 24px; background: #f8fafc; border-radius: 16px;">
+      <cw-forms-preview
+        .type="${args.type}"
+      ></cw-forms-preview>
+    </div>
+  `,
+};
+
+export const TicketForm = {
+  args: {
+    type: 'ticket',
+    heading: 'Submit a Support Ticket',
+    subheading: 'We will get back to you within 24 hours.',
+  },
+  render: (args: any) => html`
+    <div style="width: 360px; padding: 24px; background: #f8fafc; border-radius: 16px;">
+      <cw-forms-preview
+        .type="${args.type}"
+        .heading="${args.heading}"
+        .subheading="${args.subheading}"
+      ></cw-forms-preview>
     </div>
   `,
 };

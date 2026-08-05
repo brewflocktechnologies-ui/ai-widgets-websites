@@ -16,6 +16,7 @@ export class CwGreetWindow extends LitElement {
   @property({ type: Boolean }) hasSentMessage = false;
   @property({ type: Boolean }) visible = true;
   @property({ type: Boolean }) dismissed = false;
+  @property({ type: Number }) rev = 0;
 
   private transition = new EnterLeaveController(this, {
     enterMs: () => 300,

@@ -858,14 +858,15 @@ export async function initStore(): Promise<void> {
   // Set up greet window visibility timers
   const gw = store.greetWindow;
   if (gw && gw.enabled) {
-    if (gw.visible === undefined) gw.visible = true;
-    if (gw.inputBox && gw.inputBox.visible === undefined) gw.inputBox.visible = true;
+    gw.visible = false;
+    if (gw.inputBox) gw.inputBox = { ...gw.inputBox, visible: false };
     emit('store:greetWindow');
 
     const greetDelay = parseFloat(String(gw.openingTimeAfterInitialLoadSec ?? 2));
     setTimeout(() => {
-      if (!gw.dismissed && !store!.chat.hasSentMessage) {
-        gw.visible = true;
+      const curGw = store!.greetWindow;
+      if (curGw && !curGw.dismissed && !store!.chat.hasSentMessage) {
+        store!.greetWindow = { ...curGw, visible: true };
         emit('store:greetWindow');
       }
     }, greetDelay * 1000);
@@ -873,11 +874,92 @@ export async function initStore(): Promise<void> {
     if (gw.inputBox && gw.inputBox.enabled) {
       const inputDelay = parseFloat(String(gw.inputBox.openingTimeAfterInitialLoadSec ?? 4));
       setTimeout(() => {
-        if (!gw.dismissed && !store!.chat.hasSentMessage) {
-          if (gw.inputBox) gw.inputBox = { ...gw.inputBox, visible: true };
+        const curGw = store!.greetWindow;
+        if (curGw && !curGw.dismissed && !store!.chat.hasSentMessage && curGw.inputBox) {
+          store!.greetWindow = {
+            ...curGw,
+            inputBox: { ...curGw.inputBox, visible: true }
+          };
           emit('store:greetWindow');
         }
       }, inputDelay * 1000);
     }
   }
+}
+
+export function updateStoreConfig(overrides: {
+  enableWelcomeCard?: boolean;
+  enableGreetWindow?: boolean;
+  enableInputCard?: boolean;
+  greetDelaySec?: number;
+  greetAnimOpenSec?: number;
+  greetAnimCloseSec?: number;
+  inputBoxDelaySec?: number;
+  inputBoxAnimOpenSec?: number;
+  chatAnimStyle?: 'drop-in' | 'slide-up' | 'pop-in' | 'fade-in';
+  chatAnimOpenSec?: number;
+  chatAnimCloseSec?: number;
+  triggerType?: 'bubble' | 'chatbar';
+}) {
+  const store = getStore();
+  if (!store) return;
+
+  if (overrides.enableWelcomeCard !== undefined && store.chatWindow.welcome) {
+    store.chatWindow.welcome.enabled = overrides.enableWelcomeCard;
+  }
+
+  if (overrides.enableGreetWindow !== undefined) {
+    store.greetWindow.enabled = overrides.enableGreetWindow;
+  }
+
+  if (overrides.enableInputCard !== undefined && store.greetWindow.inputBox) {
+    store.greetWindow.inputBox.enabled = overrides.enableInputCard;
+  }
+
+  if (overrides.greetDelaySec !== undefined) {
+    store.greetWindow.openingTimeAfterInitialLoadSec = overrides.greetDelaySec;
+  }
+
+  if (overrides.greetAnimOpenSec !== undefined) {
+    store.greetWindow.animationOpeningSec = overrides.greetAnimOpenSec;
+  }
+
+  if (overrides.greetAnimCloseSec !== undefined) {
+    store.greetWindow.animationClosingSec = overrides.greetAnimCloseSec;
+  }
+
+  if (overrides.inputBoxDelaySec !== undefined && store.greetWindow.inputBox) {
+    store.greetWindow.inputBox.openingTimeAfterInitialLoadSec = overrides.inputBoxDelaySec;
+  }
+
+  if (overrides.inputBoxAnimOpenSec !== undefined && store.greetWindow.inputBox) {
+    store.greetWindow.inputBox.animationOpeningSec = overrides.inputBoxAnimOpenSec;
+  }
+
+  if (overrides.chatAnimStyle !== undefined) {
+    store.chatWindow.animationStyle = overrides.chatAnimStyle;
+  }
+
+  if (overrides.chatAnimOpenSec !== undefined) {
+    store.chatWindow.animationOpeningSec = overrides.chatAnimOpenSec;
+  }
+
+  if (overrides.chatAnimCloseSec !== undefined) {
+    store.chatWindow.animationClosingSec = overrides.chatAnimCloseSec;
+  }
+
+  if (overrides.triggerType !== undefined) {
+    if (overrides.triggerType === 'chatbar') {
+      store.chatbar.enabled = true;
+    } else {
+      store.chatbar.enabled = false;
+      store.bubble.enabled = true;
+    }
+    emit('store:chatbar');
+    emit('store:bubble');
+  }
+
+  emit('store:greetWindow');
+  emit('store:chatWindow');
+  emit('store:chat');
 }
