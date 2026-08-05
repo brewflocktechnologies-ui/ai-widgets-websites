@@ -12,6 +12,7 @@ import { EnterLeaveController } from '../../utils/transition.js';
 export class CwGreetInput extends LitElement {
   @property({ type: Object }) config?: InputBoxConfig;
   @property({ type: String }) accentColor = '#9333EA';
+  @property({ type: Boolean }) visible = true;
 
   @state() draft = '';
 
@@ -81,7 +82,8 @@ export class CwGreetInput extends LitElement {
 
   protected willUpdate(_changed: PropertyValues<this>) {
     super.willUpdate(_changed);
-    const visible = !!(this.config && this.config.enabled && this.config.visible);
+    const isVis = this.config?.visible !== false && this.visible !== false;
+    const visible = !!(this.config && this.config.enabled && isVis);
     this.transition.setTarget(visible);
   }
 

@@ -858,6 +858,10 @@ export async function initStore(): Promise<void> {
   // Set up greet window visibility timers
   const gw = store.greetWindow;
   if (gw && gw.enabled) {
+    if (gw.visible === undefined) gw.visible = true;
+    if (gw.inputBox && gw.inputBox.visible === undefined) gw.inputBox.visible = true;
+    emit('store:greetWindow');
+
     const greetDelay = parseFloat(String(gw.openingTimeAfterInitialLoadSec ?? 2));
     setTimeout(() => {
       if (!gw.dismissed && !store!.chat.hasSentMessage) {

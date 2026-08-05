@@ -144,7 +144,18 @@ export class CwWelcomeCard extends LitElement {
     `
   ];
 
-  private start() {
+  private resolveAvatarUrl(avatar: any): string {
+    if (typeof avatar === 'string' && avatar.trim() && !avatar.startsWith('[object')) {
+      return avatar;
+    }
+    if (avatar && typeof avatar === 'object') {
+      const url = avatar.url || avatar.src || avatar.avatar || avatar.imageUrl || '';
+      if (url && typeof url === 'string') return url;
+    }
+    return 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80';
+  }
+
+  private start(e?: Event) {
     this.dispatchEvent(
       new CustomEvent('cw:start-chat', { bubbles: true, composed: true })
     );
@@ -215,7 +226,7 @@ export class CwWelcomeCard extends LitElement {
                             (avatar: any, idx: number) => html`
                               <img
                                 class="avatar-img"
-                                src="${avatar}"
+                                src="${this.resolveAvatarUrl(avatar)}"
                                 style="margin-left: ${idx === 0 ? '0' : '-12px'}; border-color: ${w.avatarBorderColor || 'rgba(255,255,255,0.2)'}; z-index: ${10 + idx}"
                               />
                             `
@@ -284,7 +295,7 @@ export class CwWelcomeCard extends LitElement {
                           (avatar: any, idx: number) => html`
                             <img
                               class="avatar-img"
-                              src="${avatar}"
+                              src="${this.resolveAvatarUrl(avatar)}"
                               style="margin-left: ${idx === 0 ? '0' : '-12px'}; border-color: ${w.avatarBorderColor || 'rgba(255,255,255,0.2)'}; z-index: ${10 + idx}"
                             />
                           `

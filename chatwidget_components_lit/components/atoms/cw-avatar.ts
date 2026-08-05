@@ -5,11 +5,15 @@ import { customElement, property } from 'lit/decorators.js';
 export class CwAvatar extends LitElement {
   @property({ type: String }) name = 'Support';
   @property({ type: String }) imageUrl = '';
+  @property({ type: String }) src = '';
   @property({ type: String }) bg = 'rgba(255,255,255,0.2)';
+  @property({ type: String }) bgColor = '';
   @property({ type: String }) color = '#ffffff';
+  @property({ type: String }) textColor = '';
   @property({ type: Number }) size = 32;
   @property({ type: Object }) activeDot?: { size?: number; color?: string; animate?: boolean; borderWidth?: number; borderColor?: string };
   @property({ type: Boolean }) showOnlineDot = true;
+  @property({ type: Boolean }) showOnline = true;
 
   static styles = css`
     :host {
@@ -66,6 +70,11 @@ export class CwAvatar extends LitElement {
 
   render() {
     const initial = (this.name || 'S').charAt(0).toUpperCase();
+    const imgUrl = this.src || this.imageUrl;
+    const background = this.bgColor || this.bg || 'rgba(255,255,255,0.2)';
+    const textCol = this.textColor || this.color || '#ffffff';
+    const showDot = this.showOnlineDot && this.showOnline;
+
     const dotSize = this.activeDot?.size !== undefined ? this.activeDot.size : 8;
     const dotColor = this.activeDot?.color || '#22c55e';
     const dotAnimate = this.activeDot?.animate !== false;
@@ -73,12 +82,12 @@ export class CwAvatar extends LitElement {
     const dotBorderColor = this.activeDot?.borderColor || 'transparent';
 
     return html`
-      <div class="avatar-box" style="width: ${this.size}px; height: ${this.size}px; font-size: ${Math.floor(this.size * 0.45)}px; background: ${this.bg}; color: ${this.color}">
-        ${this.imageUrl
-          ? html`<img class="avatar-img" src="${this.imageUrl}" alt="${this.name}" />`
+      <div class="avatar-box" style="width: ${this.size}px; height: ${this.size}px; font-size: ${Math.floor(this.size * 0.45)}px; background: ${background}; color: ${textCol}">
+        ${imgUrl
+          ? html`<img class="avatar-img" src="${imgUrl}" alt="${this.name}" />`
           : html`<span>${initial}</span>`
         }
-        ${this.showOnlineDot
+        ${showDot
           ? html`
               <div class="dot-wrapper" style="width: ${dotSize}px; height: ${dotSize}px">
                 ${dotAnimate ? html`<span class="dot-pulse" style="background-color: ${dotColor}"></span>` : ''}

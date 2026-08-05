@@ -1,107 +1,114 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { Message, ChatWindowState } from '../../store/types.js';
+import { GLOBAL_STYLES } from '../../tokens/global-styles.js';
 import '../atoms/cw-message-tick.js';
 
 @customElement('cw-message-bubble')
 export class CwMessageBubble extends LitElement {
   @property({ type: Object }) message!: Message;
-  @property({ type: Object }) chatWindowConfig: Partial<ChatWindowState> = {};
+  @property({ type: Object }) chatWindowConfig?: ChatWindowState;
   @property({ type: Boolean }) isGroupEnd = true;
   @property({ type: Boolean }) isGroupStart = true;
-  @property({ type: String }) agentName = 'Sarah';
+  @property({ type: String }) agentName = '';
 
-  static styles = css`
-    :host {
-      display: block;
-      width: 100%;
-      margin-bottom: 4px;
-    }
-    .bubble-row {
-      display: flex;
-      gap: 8px;
-      align-items: flex-end;
-      width: 100%;
-    }
-    .bubble-row.from-visitor {
-      justify-content: flex-end;
-    }
-    .bubble-row.from-agent {
-      justify-content: flex-start;
-    }
-    .msg-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      font-weight: 700;
-      flex-shrink: 0;
-      overflow: hidden;
-    }
-    .msg-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .msg-avatar-placeholder {
-      width: 28px;
-      height: 28px;
-      flex-shrink: 0;
-    }
-    .bubble {
-      max-width: 75%;
-      word-break: break-word;
-      line-height: 1.4;
-      position: relative;
-      box-sizing: border-box;
-    }
-    .bubble.pending {
-      opacity: 0.7;
-    }
-    .bubble-img {
-      max-width: 100%;
-      border-radius: 12px;
-      cursor: pointer;
-      display: block;
-      margin-bottom: 4px;
-    }
-    .bubble-time {
-      font-size: 10px;
-      opacity: 0.7;
-      display: inline-flex;
-      align-items: center;
-      float: right;
-      margin-left: 8px;
-      margin-top: 4px;
-    }
-  `;
+  static styles = [
+    GLOBAL_STYLES,
+    css`
+      :host {
+        display: block;
+        width: 100%;
+        margin-bottom: 4px;
+        font-family: inherit, system-ui, -apple-system, sans-serif;
+      }
+      .bubble-row {
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+        width: 100%;
+      }
+      .bubble-row.from-visitor {
+        justify-content: flex-end;
+      }
+      .bubble-row.from-agent {
+        justify-content: flex-start;
+      }
+      .msg-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        flex-shrink: 0;
+        overflow: hidden;
+        background-color: #0b5fff;
+        color: #ffffff;
+      }
+      .msg-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .msg-avatar-placeholder {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+      }
+      .bubble {
+        max-width: 75%;
+        word-break: break-word;
+        line-height: 1.4;
+        position: relative;
+        box-sizing: border-box;
+      }
+      .bubble.pending {
+        opacity: 0.7;
+      }
+      .bubble-img {
+        max-width: 100%;
+        border-radius: 12px;
+        cursor: pointer;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .bubble-time {
+        font-size: 10px;
+        opacity: 0.75;
+        display: inline-flex;
+        align-items: center;
+        float: right;
+        margin-left: 8px;
+        margin-top: 4px;
+      }
+    `
+  ];
 
   render() {
     if (!this.message) return html``;
 
     const m = this.message;
-    const cw = this.chatWindowConfig;
+    const cw = this.chatWindowConfig || {};
     const isVisitor = m.senderType === 'VISITOR';
     const isAgent = m.senderType === 'AGENT';
 
     const bg = isVisitor
-      ? cw.visitorBubbleBg || 'var(--cw-grad)'
-      : cw.agentBubbleBg || 'var(--cw-surface)';
+      ? cw.visitorBubbleBg || 'linear-gradient(135deg, #0b5fff, #22d3ee)'
+      : cw.agentBubbleBg || '#ffffff';
 
     const color = isVisitor
-      ? cw.visitorBubbleColor || '#fff'
-      : cw.agentBubbleColor || 'var(--cw-ink)';
+      ? cw.visitorBubbleColor || '#ffffff'
+      : cw.agentBubbleColor || '#1e293b';
 
     const borderColor = isVisitor
       ? 'transparent'
-      : cw.agentBubbleBorderColor || 'var(--cw-border)';
+      : cw.agentBubbleBorderColor || '#e2e8f0';
 
     const boxShadow = isVisitor
-      ? cw.visitorBubbleBg ? 'none' : '0 2px 8px color-mix(in srgb, var(--cw-accent) 25%, transparent)'
-      : '0 1px 2px rgba(16, 24, 40, 0.05)';
+      ? cw.visitorBubbleBg ? 'none' : '0 2px 8px rgba(11, 95, 255, 0.2)'
+      : cw.agentBubbleBoxShadow || '0 1px 3px rgba(0, 0, 0, 0.08)';
 
     const borderRadius = isVisitor
       ? cw.visitorBubbleBorderRadius || '16px'
@@ -115,6 +122,9 @@ export class CwMessageBubble extends LitElement {
       ? cw.visitorBubbleFontSize || '14px'
       : cw.agentBubbleFontSize || '14px';
 
+    const avatarBg = cw.agentAvatarBg || '#0b5fff';
+    const avatarColor = cw.agentAvatarColor || '#ffffff';
+
     const formattedTime = m.created
       ? new Date(m.created).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -125,7 +135,7 @@ export class CwMessageBubble extends LitElement {
       <div class="bubble-row ${isVisitor ? 'from-visitor' : 'from-agent'}">
         ${isAgent && this.isGroupEnd
           ? html`
-              <div class="msg-avatar" style="background: ${cw.agentAvatarBg || 'var(--cw-accent-tint)'}; color: ${cw.agentAvatarColor || 'var(--cw-accent-deep)'}">
+              <div class="msg-avatar" style="background-color: ${avatarBg}; color: ${avatarColor}">
                 ${cw.agentAvatarUrl
                   ? html`<img src="${cw.agentAvatarUrl}" alt="avatar" />`
                   : html`<span>${avatarInitial}</span>`
@@ -158,14 +168,11 @@ export class CwMessageBubble extends LitElement {
           ${this.isGroupEnd
             ? html`
                 <span class="bubble-time">
-                  <span>${formattedTime}</span>
-                  ${isVisitor && cw.ticksEnabled !== false
+                  ${formattedTime}
+                  ${isVisitor
                     ? html`
-                        <cw-message-tick
-                          .status="${m.status || 'sent'}"
-                          .sentColor="${cw.sentTickColor || ''}"
-                          .deliveredColor="${cw.deliveredTickColor || ''}"
-                          .readColor="${cw.readTickColor || '#34b7f1'}"
+                        &nbsp;<cw-message-tick
+                          .status="${m.pending ? 'pending' : (m.status as any) || 'delivered'}"
                         ></cw-message-tick>
                       `
                     : ''

@@ -17,7 +17,7 @@ export default {
 export const TextInitials = {
   args: {
     name: 'Sarah Connor',
-    size: 40,
+    size: 44,
     showOnline: true,
     bgColor: '#0b5fff',
     textColor: '#ffffff',
