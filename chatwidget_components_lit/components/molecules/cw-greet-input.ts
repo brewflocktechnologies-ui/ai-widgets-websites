@@ -101,6 +101,10 @@ export class CwGreetInput extends LitElement {
       `transform: ${isHidden ? 'translateY(8px)' : 'translateY(0)'}; ` +
       `transition: opacity ${openingSec}s ease, transform ${openingSec}s ease;`;
 
+    const borderRadiusCss = ib.borderRadius !== undefined
+      ? (typeof ib.borderRadius === 'number' ? `${ib.borderRadius}px` : ib.borderRadius)
+      : '24px';
+
     if (isSeparated) {
       const btnBg = ib.buttonBgColor || ib.buttonColor || this.accentColor || '#0b5fff';
       let btnIconColor = ib.buttonIconColor || '#ffffff';
@@ -112,7 +116,7 @@ export class CwGreetInput extends LitElement {
       return html`
         <div class="input-container" style="gap: 8px; ${phaseStyle}">
           <div
-            style="flex: 1; background-color: ${ib.backgroundColor || '#ffffff'}; border-radius: ${(ib.borderRadius || 24)}px; box-shadow: ${ib.boxShadow || '0 6px 16px rgba(0,0,0,0.12)'}; padding: 10px 16px; display: flex; align-items: center"
+            style="flex: 1; background-color: ${ib.backgroundColor || '#ffffff'}; border-radius: ${borderRadiusCss}; box-shadow: ${ib.boxShadow || '0 6px 16px rgba(0,0,0,0.12)'}; padding: 10px 16px; display: flex; align-items: center"
           >
             <input
               type="text"
@@ -147,7 +151,7 @@ export class CwGreetInput extends LitElement {
     return html`
       <div
         class="input-container"
-        style="background-color: ${ib.backgroundColor || '#ffffff'}; border-radius: ${(ib.borderRadius || 24)}px; box-shadow: ${ib.boxShadow || '0 6px 16px rgba(0,0,0,0.12)'}; padding: 4px 4px 4px 16px; ${phaseStyle}"
+        style="background-color: ${ib.backgroundColor || '#ffffff'}; border-radius: ${borderRadiusCss}; box-shadow: ${ib.boxShadow || '0 6px 16px rgba(0,0,0,0.12)'}; padding: 4px 4px 4px 16px; ${phaseStyle}"
       >
         <input
           type="text"

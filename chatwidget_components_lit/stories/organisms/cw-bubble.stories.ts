@@ -6,214 +6,86 @@ export default {
   component: 'cw-bubble',
   argTypes: {
     panelOpen: { control: 'boolean' },
-    unreadCount: { control: 'number' },
+    unreadCount: { control: { type: 'number', min: 0, max: 99 } },
+    position: { control: 'select', options: ['bottom-right', 'bottom-left', 'top-right', 'top-left'] },
+    width: { control: { type: 'number', min: 40, max: 100 } },
+    height: { control: { type: 'number', min: 40, max: 100 } },
+    backgroundColor: { control: 'color' },
+    lucideIcon: { control: 'text' },
+    iconWidth: { control: { type: 'number', min: 16, max: 48 } },
+    iconHeight: { control: { type: 'number', min: 16, max: 48 } },
+    iconColor: { control: 'color' },
+    gradientType: { control: 'select', options: ['none', 'linear', 'radial'] },
+    gradientAngle: { control: { type: 'number', min: 0, max: 360 } },
+    enableGlass: { control: 'boolean' },
+    glassBlur: { control: { type: 'number', min: 0, max: 30 } },
+    glassOpacity: { control: { type: 'number', min: 0.1, max: 1.0, step: 0.1 } },
+    enableNeon: { control: 'boolean' },
+    neonColor: { control: 'color' },
+    neonIntensity: { control: { type: 'number', min: 0.1, max: 2.0, step: 0.1 } },
+    enableOutlineRing: { control: 'boolean' },
+    outlineRingColor: { control: 'color' },
+    outlineRingWidth: { control: { type: 'number', min: 1, max: 10 } },
+    backgroundOverlayType: { control: 'select', options: ['none', 'image', 'lucide'] },
+    backgroundImageUrl: { control: 'text' },
   },
 };
 
-export const DefaultSolid = {
+export const ConfigurableBubble = {
   args: {
     panelOpen: false,
     unreadCount: 2,
-    config: {
-      useWebsiteTheme: false,
-      position: 'bottom-right',
-      offsetRight: 16,
-      offsetBottom: 16,
-      width: 60,
-      height: 60,
-      backgroundColor: '#0b5fff',
-      lucideIcon: 'MessageCircle',
-      iconWidth: 26,
-      iconHeight: 26,
-      iconColor: '#ffffff',
-      boxShadowOffsetY: 6,
-      boxShadowBlur: 16,
-      boxShadowOpacity: 0.2,
-    },
+    position: 'bottom-right',
+    width: 60,
+    height: 60,
+    backgroundColor: '#0b5fff',
+    lucideIcon: 'MessageCircle',
+    iconWidth: 26,
+    iconHeight: 26,
+    iconColor: '#ffffff',
+    gradientType: 'none',
+    gradientAngle: 135,
+    enableGlass: false,
+    glassBlur: 16,
+    glassOpacity: 0.4,
+    enableNeon: false,
+    neonColor: '#10b981',
+    neonIntensity: 1.0,
+    enableOutlineRing: false,
+    outlineRingColor: '#22d3ee',
+    outlineRingWidth: 3,
+    backgroundOverlayType: 'none',
+    backgroundImageUrl: '',
   },
   render: (args: any) => html`
-    <div style="position: relative; height: 100px;">
+    <div style="position: relative; height: 120px;">
       <cw-bubble
-        .config="${args.config}"
         .panelOpen="${args.panelOpen}"
         .unreadCount="${args.unreadCount}"
-      ></cw-bubble>
-    </div>
-  `,
-};
-
-export const GradientBackground = {
-  args: {
-    panelOpen: false,
-    unreadCount: 3,
-    config: {
-      useWebsiteTheme: false,
-      position: 'bottom-right',
-      offsetRight: 16,
-      offsetBottom: 16,
-      width: 60,
-      height: 60,
-      gradientType: 'linear',
-      gradientAngle: 135,
-      gradientStops: [
-        { color: '#0b5fff', pos: 0 },
-        { color: '#22d3ee', pos: 100 },
-      ],
-      lucideIcon: 'Sparkles',
-      iconWidth: 26,
-      iconHeight: 26,
-      iconColor: '#ffffff',
-      boxShadowOffsetY: 8,
-      boxShadowBlur: 20,
-      boxShadowOpacity: 0.25,
-    },
-  },
-  render: (args: any) => html`
-    <div style="position: relative; height: 100px;">
-      <cw-bubble
-        .config="${args.config}"
-        .panelOpen="${args.panelOpen}"
-        .unreadCount="${args.unreadCount}"
-      ></cw-bubble>
-    </div>
-  `,
-};
-
-export const Glassmorphism = {
-  args: {
-    panelOpen: false,
-    unreadCount: 0,
-    config: {
-      useWebsiteTheme: false,
-      position: 'bottom-right',
-      offsetRight: 16,
-      offsetBottom: 16,
-      width: 60,
-      height: 60,
-      backgroundColor: '#0b5fff',
-      glass: {
-        enabled: true,
-        blur: 16,
-        bgOpacity: 0.4,
-      },
-      border: {
-        width: 1,
-        color: 'rgba(255, 255, 255, 0.4)',
-        style: 'solid',
-      },
-      lucideIcon: 'MessageSquare',
-      iconWidth: 26,
-      iconHeight: 26,
-      iconColor: '#ffffff',
-    },
-  },
-  render: (args: any) => html`
-    <div style="position: relative; height: 100px;">
-      <cw-bubble
-        .config="${args.config}"
-        .panelOpen="${args.panelOpen}"
-        .unreadCount="${args.unreadCount}"
-      ></cw-bubble>
-    </div>
-  `,
-};
-
-export const NeonGlow = {
-  args: {
-    panelOpen: false,
-    unreadCount: 1,
-    config: {
-      useWebsiteTheme: false,
-      position: 'bottom-right',
-      offsetRight: 16,
-      offsetBottom: 16,
-      width: 60,
-      height: 60,
-      backgroundColor: '#059669',
-      neon: {
-        enabled: true,
-        color: '#10b981',
-        intensity: 1.0,
-      },
-      lucideIcon: 'Bot',
-      iconWidth: 26,
-      iconHeight: 26,
-      iconColor: '#ffffff',
-    },
-  },
-  render: (args: any) => html`
-    <div style="position: relative; height: 100px;">
-      <cw-bubble
-        .config="${args.config}"
-        .panelOpen="${args.panelOpen}"
-        .unreadCount="${args.unreadCount}"
-      ></cw-bubble>
-    </div>
-  `,
-};
-
-export const OverlayImagePattern = {
-  args: {
-    panelOpen: false,
-    unreadCount: 0,
-    config: {
-      useWebsiteTheme: false,
-      position: 'bottom-right',
-      offsetRight: 16,
-      offsetBottom: 16,
-      width: 60,
-      height: 60,
-      backgroundColor: '#5f259f',
-      backgroundOverlayType: 'image',
-      backgroundImageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80',
-      backgroundImageOpacity: 0.35,
-      lucideIcon: 'MessageCircle',
-      iconWidth: 26,
-      iconHeight: 26,
-      iconColor: '#ffffff',
-    },
-  },
-  render: (args: any) => html`
-    <div style="position: relative; height: 100px;">
-      <cw-bubble
-        .config="${args.config}"
-        .panelOpen="${args.panelOpen}"
-        .unreadCount="${args.unreadCount}"
-      ></cw-bubble>
-    </div>
-  `,
-};
-
-export const OutlineRingHighlight = {
-  args: {
-    panelOpen: false,
-    unreadCount: 5,
-    config: {
-      useWebsiteTheme: false,
-      position: 'bottom-right',
-      offsetRight: 16,
-      offsetBottom: 16,
-      width: 60,
-      height: 60,
-      backgroundColor: '#0b5fff',
-      outlineRing: {
-        enabled: true,
-        width: 4,
-        color: '#22d3ee',
-        opacity: 0.8,
-      },
-      lucideIcon: 'Headphones',
-      iconWidth: 26,
-      iconHeight: 26,
-      iconColor: '#ffffff',
-    },
-  },
-  render: (args: any) => html`
-    <div style="position: relative; height: 100px;">
-      <cw-bubble
-        .config="${args.config}"
-        .panelOpen="${args.panelOpen}"
-        .unreadCount="${args.unreadCount}"
+        .config="${{
+          useWebsiteTheme: false,
+          position: args.position,
+          offsetRight: 16,
+          offsetBottom: 16,
+          width: args.width,
+          height: args.height,
+          backgroundColor: args.backgroundColor,
+          lucideIcon: args.lucideIcon,
+          iconWidth: args.iconWidth,
+          iconHeight: args.iconHeight,
+          iconColor: args.iconColor,
+          gradientType: args.gradientType === 'none' ? undefined : args.gradientType,
+          gradientAngle: args.gradientAngle,
+          gradientStops: args.gradientType === 'linear' ? [{ color: '#0b5fff', pos: 0 }, { color: '#22d3ee', pos: 100 }] : undefined,
+          glass: args.enableGlass ? { enabled: true, blur: args.glassBlur, bgOpacity: args.glassOpacity } : undefined,
+          neon: args.enableNeon ? { enabled: true, color: args.neonColor, intensity: args.neonIntensity } : undefined,
+          outlineRing: args.enableOutlineRing ? { enabled: true, color: args.outlineRingColor, width: args.outlineRingWidth, opacity: 0.8 } : undefined,
+          backgroundOverlayType: args.backgroundOverlayType === 'none' ? undefined : args.backgroundOverlayType,
+          backgroundImageUrl: args.backgroundImageUrl || undefined,
+          boxShadowOffsetY: 6,
+          boxShadowBlur: 16,
+          boxShadowOpacity: 0.2,
+        }}"
       ></cw-bubble>
     </div>
   `,

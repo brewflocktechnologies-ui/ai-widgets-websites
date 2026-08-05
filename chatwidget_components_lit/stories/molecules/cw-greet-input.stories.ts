@@ -5,44 +5,57 @@ export default {
   title: 'Molecules/GreetInput',
   component: 'cw-greet-input',
   argTypes: {
-    accentColor: { control: 'color' },
+    enabled: { control: 'boolean' },
+    openingTimeAfterInitialLoadSec: { control: { type: 'number', min: 0, max: 10, step: 0.5 } },
+    animationOpeningSec: { control: { type: 'number', min: 0.1, max: 3, step: 0.1 } },
+    layout: {
+      control: 'select',
+      options: ['separated', 'joined'],
+      description: 'Switch between separated (floating button) and joined (combined input bar) layouts',
+    },
+    placeholder: { control: 'text' },
+    backgroundColor: { control: 'color' },
+    textColor: { control: 'color' },
+    borderRadius: { control: { type: 'number', min: 0, max: 40 } },
+    boxShadow: { control: 'text' },
+    buttonColor: { control: 'color' },
+    buttonIconColor: { control: 'color' },
   },
 };
 
-export const SeparatedLayout = {
+export const ConfigurableGreetInput = {
   args: {
-    accentColor: '#0b5fff',
-    config: {
-      enabled: true,
-      visible: true,
-      layout: 'separated',
-      placeholder: 'Write your message...',
-      buttonColor: '#0b5fff',
-      buttonIconColor: '#ffffff',
-    },
+    enabled: true,
+    openingTimeAfterInitialLoadSec: 6.0,
+    animationOpeningSec: 0.8,
+    layout: 'separated',
+    placeholder: 'Write your message...',
+    backgroundColor: '#ffffff',
+    textColor: '#1e293b',
+    borderRadius: 24,
+    boxShadow: '0 6px 16px rgba(0,0,0,0.12)',
+    buttonColor: '#d97706',
+    buttonIconColor: '#ffffff',
   },
   render: (args: any) => html`
-    <div style="width: 320px; padding: 16px; background: #f8fafc; border-radius: 16px;">
-      <cw-greet-input .config="${args.config}" .accentColor="${args.accentColor}"></cw-greet-input>
-    </div>
-  `,
-};
-
-export const CombinedLayout = {
-  args: {
-    accentColor: '#0b5fff',
-    config: {
-      enabled: true,
-      visible: true,
-      layout: 'joined',
-      placeholder: 'Write your message...',
-      buttonColor: '#0b5fff',
-      buttonIconColor: '#ffffff',
-    },
-  },
-  render: (args: any) => html`
-    <div style="width: 320px; padding: 16px; background: #f8fafc; border-radius: 16px;">
-      <cw-greet-input .config="${args.config}" .accentColor="${args.accentColor}"></cw-greet-input>
+    <div style="width: 340px; padding: 24px; background: #f8fafc; border-radius: 16px;">
+      <cw-greet-input
+        .config="${{
+          enabled: args.enabled,
+          visible: true,
+          openingTimeAfterInitialLoadSec: args.openingTimeAfterInitialLoadSec,
+          animationOpeningSec: args.animationOpeningSec,
+          layout: args.layout,
+          placeholder: args.placeholder,
+          backgroundColor: args.backgroundColor,
+          textColor: args.textColor,
+          borderRadius: args.borderRadius,
+          boxShadow: args.boxShadow,
+          buttonColor: args.buttonColor,
+          buttonIconColor: args.buttonIconColor,
+        }}"
+        .accentColor="${args.buttonColor}"
+      ></cw-greet-input>
     </div>
   `,
 };

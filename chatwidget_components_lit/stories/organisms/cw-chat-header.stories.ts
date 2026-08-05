@@ -7,36 +7,47 @@ export default {
   argTypes: {
     clientName: { control: 'text' },
     agentName: { control: 'text' },
+    state: { control: 'select', options: ['active', 'welcome', 'prechat', 'postchat'] },
     isExpanded: { control: 'boolean' },
+    headerBg: { control: 'color' },
+    headerTextColor: { control: 'color' },
+    headerPadding: { control: 'text' },
+    headerTitleFontSize: { control: 'text' },
+    headerSubtitleFontSize: { control: 'text' },
+    enableCloseChatVisitor: { control: 'boolean', name: 'Show Close Button' },
   },
 };
 
-export const ActiveState = {
+export const ConfigurableHeader = {
   args: {
     clientName: 'Zotly Support',
     agentName: 'Sarah',
     state: 'active',
     isExpanded: false,
-    config: {
-      headerBg: '#0b5fff',
-      headerTextColor: '#ffffff',
-      headerPadding: '14px 16px',
-      headerTitleFontSize: '14px',
-      headerSubtitleFontSize: '11px',
-    },
-    features: {
-      closeChatVisitor: true,
-    },
+    headerBg: '#0b5fff',
+    headerTextColor: '#ffffff',
+    headerPadding: '14px 16px',
+    headerTitleFontSize: '14px',
+    headerSubtitleFontSize: '11px',
+    enableCloseChatVisitor: true,
   },
   render: (args: any) => html`
     <div style="width: 350px; border-radius: 16px 16px 0 0; overflow: hidden;">
       <cw-chat-header
-        .config="${args.config}"
-        .features="${args.features}"
         .clientName="${args.clientName}"
         .agentName="${args.agentName}"
         .state="${args.state}"
         .isExpanded="${args.isExpanded}"
+        .config="${{
+          headerBg: args.headerBg,
+          headerTextColor: args.headerTextColor,
+          headerPadding: args.headerPadding,
+          headerTitleFontSize: args.headerTitleFontSize,
+          headerSubtitleFontSize: args.headerSubtitleFontSize,
+        }}"
+        .features="${{
+          closeChatVisitor: args.enableCloseChatVisitor,
+        }}"
       ></cw-chat-header>
     </div>
   `,
