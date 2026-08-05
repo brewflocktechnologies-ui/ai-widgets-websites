@@ -6,6 +6,7 @@
 export * from './tokens/design-tokens.js';
 export * from './utils/theme.js';
 export * from './utils/config.js';
+export * from './utils/transition.js';
 export {
   hexToRgba,
   getBorderRadius,

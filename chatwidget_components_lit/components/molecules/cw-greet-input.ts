@@ -1,6 +1,7 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, type PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { InputBoxConfig } from '../../store/types.js';
+import { EnterLeaveController } from '../../utils/transition.js';
 
 /**
  * cw-greet-input
@@ -13,6 +14,11 @@ export class CwGreetInput extends LitElement {
   @property({ type: String }) accentColor = '#9333EA';
 
   @state() draft = '';
+
+  private transition = new EnterLeaveController(this, {
+    enterMs: () => (this.config?.animationOpeningSec !== undefined ? this.config.animationOpeningSec : 0.3) * 1000,
+    leaveMs: () => 0,
+  });
 
   static styles = css`
     :host {
@@ -73,11 +79,25 @@ export class CwGreetInput extends LitElement {
     this.requestUpdate();
   }
 
+  protected willUpdate(_changed: PropertyValues<this>) {
+    super.willUpdate(_changed);
+    const visible = !!(this.config && this.config.enabled && this.config.visible);
+    this.transition.setTarget(visible);
+  }
+
   render() {
-    if (!this.config || !this.config.enabled || !this.config.visible) return html``;
+    if (!this.transition.render || !this.config || !this.config.enabled) return html``;
 
     const ib = this.config;
     const isSeparated = ib.layout === 'separated';
+
+    const phase = this.transition.phase;
+    const isHidden = phase === 'enter';
+    const openingSec = ib.animationOpeningSec !== undefined ? ib.animationOpeningSec : 0.3;
+    const phaseStyle =
+      `opacity: ${isHidden ? '0' : '1'}; ` +
+      `transform: ${isHidden ? 'translateY(8px)' : 'translateY(0)'}; ` +
+      `transition: opacity ${openingSec}s ease, transform ${openingSec}s ease;`;
 
     if (isSeparated) {
       const btnBg = ib.buttonBgColor || ib.buttonColor || '#ffffff';
@@ -85,7 +105,7 @@ export class CwGreetInput extends LitElement {
       const btnSize = ib.buttonSize || 42;
 
       return html`
-        <div class="input-container" style="gap: 8px">
+        <div class="input-container" style="gap: 8px; ${phaseStyle}">
           <div
             style="flex: 1; background-color: ${ib.backgroundColor || '#ffffff'}; border-radius: ${(ib.borderRadius || 24)}px; box-shadow: ${ib.boxShadow || '0 6px 16px rgba(0,0,0,0.12)'}; padding: 10px 16px; display: flex; align-items: center"
           >
@@ -119,7 +139,7 @@ export class CwGreetInput extends LitElement {
     return html`
       <div
         class="input-container"
-        style="background-color: ${ib.backgroundColor || '#ffffff'}; border-radius: ${(ib.borderRadius || 24)}px; box-shadow: ${ib.boxShadow || '0 6px 16px rgba(0,0,0,0.12)'}; padding: 4px 4px 4px 16px"
+        style="background-color: ${ib.backgroundColor || '#ffffff'}; border-radius: ${(ib.borderRadius || 24)}px; box-shadow: ${ib.boxShadow || '0 6px 16px rgba(0,0,0,0.12)'}; padding: 4px 4px 4px 16px; ${phaseStyle}"
       >
         <input
           type="text"

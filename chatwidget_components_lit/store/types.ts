@@ -94,6 +94,8 @@ export interface ChatWindowState {
   useWebsiteTheme?: boolean;
   offsetRight?: number | null;
   offsetBottom?: number | null;
+  animationOpeningSec?: number;
+  animationClosingSec?: number;
   clientName?: string;
   agentName?: string;
   accentColor?: string;
@@ -304,6 +306,8 @@ export interface GreetWindowState {
   dismissed: boolean;
   visible?: boolean;
   openingTimeAfterInitialLoadSec?: number;
+  animationOpeningSec?: number;
+  animationClosingSec?: number;
   useWebsiteTheme: boolean;
   width: number;
   spacing: number;

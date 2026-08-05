@@ -223,6 +223,8 @@
     "useWebsiteTheme": true,
     "offsetRight": null,
     "offsetBottom": null,
+    "animationOpeningSec": 0.3,
+    "animationClosingSec": 0.2,
     "clientName": "EcoSphere Support",
     "agentName": "Sarah (Eco)",
     "accentColor": "#059669",

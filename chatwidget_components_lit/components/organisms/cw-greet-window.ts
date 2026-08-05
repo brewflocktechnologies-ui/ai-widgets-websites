@@ -1,8 +1,9 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { GreetWindowState, ChatbarState, BubbleState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
 import { getAnimClass } from '../../utils/style-helpers.js';
+import { EnterLeaveController } from '../../utils/transition.js';
 import '../atoms/cw-icon.js';
 import '../molecules/cw-greet-input.js';
 
@@ -16,6 +17,11 @@ export class CwGreetWindow extends LitElement {
   @property({ type: Boolean }) visible = false;
   @property({ type: Boolean }) dismissed = false;
   @property({ type: Number }) rev = 0;
+
+  private transition = new EnterLeaveController(this, {
+    enterMs: () => (this.config?.animationOpeningSec !== undefined ? this.config.animationOpeningSec : 0.3) * 1000,
+    leaveMs: () => (this.config?.animationClosingSec !== undefined ? this.config.animationClosingSec : 0.3) * 1000,
+  });
 
   static styles = [
     GLOBAL_STYLES,
@@ -88,7 +94,8 @@ export class CwGreetWindow extends LitElement {
     );
   }
 
-  render() {
+  protected willUpdate(_changed: PropertyValues<this>) {
+    super.willUpdate(_changed);
     const g = this.config;
     const cb = this.chatbarConfig;
     const bb = this.bubbleConfig;
@@ -96,10 +103,28 @@ export class CwGreetWindow extends LitElement {
     const chatbarEnabled = !!cb?.enabled;
     const hideOnOpen = chatbarEnabled ? (cb?.hideOnOpen ?? true) : (bb?.hideOnOpen ?? true);
     const shouldShowTrigger = !hideOnOpen || !this.panelOpen;
+    const isVisible = this.visible || !!g?.visible;
 
-    if (!shouldShowTrigger || this.hasSentMessage || !g || !g.enabled || this.dismissed || !this.visible) {
-      return html``;
-    }
+    const shouldShow = shouldShowTrigger && !this.hasSentMessage && !!g && g.enabled && !this.dismissed && isVisible;
+    this.transition.setTarget(shouldShow);
+  }
+
+  render() {
+    const g = this.config;
+    const cb = this.chatbarConfig;
+    const bb = this.bubbleConfig;
+
+    if (!this.transition.render || !g) return html``;
+
+    const phase = this.transition.phase;
+    const isLeaving = phase === 'leave';
+    const isHidden = phase === 'enter' || phase === 'leave';
+    const openingSec = g.animationOpeningSec !== undefined ? g.animationOpeningSec : 0.3;
+    const closingSec = g.animationClosingSec !== undefined ? g.animationClosingSec : 0.3;
+    const durationSec = isLeaving ? closingSec : openingSec;
+    const transitionDelay = phase === 'enter' ? '150ms' : '0ms';
+
+    const chatbarEnabled = !!cb?.enabled;
 
     const baseBottom = chatbarEnabled
       ? cb?.offsetBottom !== undefined ? cb.offsetBottom : 12
@@ -123,7 +148,7 @@ export class CwGreetWindow extends LitElement {
     return html`
       <div
         class="greet-wrapper"
-        style="bottom: ${bottomPx}px; right: ${rawRight}px; width: ${widthVal}px; max-width: calc(100% - 24px); max-height: ${maxHeightPx}"
+        style="bottom: ${bottomPx}px; right: ${rawRight}px; width: ${widthVal}px; max-width: calc(100% - 24px); max-height: ${maxHeightPx}; opacity: ${isHidden ? '0' : '1'}; transform: ${isHidden ? 'translateY(16px)' : 'translateY(0)'}; transition: opacity ${durationSec}s ease, transform ${durationSec}s ease; transition-delay: ${transitionDelay}"
       >
         <!-- Close Button -->
         <div class="close-row">

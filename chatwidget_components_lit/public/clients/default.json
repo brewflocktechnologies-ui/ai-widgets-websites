@@ -229,6 +229,8 @@
     "useWebsiteTheme": true,
     "offsetRight": null,
     "offsetBottom": null,
+    "animationOpeningSec": 0.3,
+    "animationClosingSec": 0.2,
     "clientName": "Vortex Studio Support",
     "agentName": "Alex (Vortex)",
     "accentColor": "#d97706",

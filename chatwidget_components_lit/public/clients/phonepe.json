@@ -216,6 +216,8 @@
     "useWebsiteTheme": false,
     "offsetRight": 16,
     "offsetBottom": 20,
+    "animationOpeningSec": 0.3,
+    "animationClosingSec": 0.2,
     "clientName": "PhonePe Support",
     "agentName": "Sarah",
     "accentColor": "#5f259f",

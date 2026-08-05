@@ -70,10 +70,24 @@ export class CwBubble extends LitElement {
       .dots-container {
         position: absolute;
         display: flex;
+        align-items: center;
+        justify-content: center;
         z-index: 10;
       }
       .dot-span {
         border-radius: 50%;
+      }
+      @keyframes dotBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+      }
+      @keyframes dotPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.25); }
+      }
+      @keyframes idleFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
       }
       .tooltip-box {
         position: absolute;

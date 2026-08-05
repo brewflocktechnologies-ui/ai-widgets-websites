@@ -1,7 +1,8 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { ChatWindowState, ChatState, FeaturesState, ChatbarState, BubbleState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
+import { EnterLeaveController } from '../../utils/transition.js';
 import './cw-chat-header.js';
 import './cw-chat-body.js';
 
@@ -14,6 +15,11 @@ export class CwChatPanel extends LitElement {
   @property({ type: Object }) bubbleConfig?: BubbleState;
   @property({ type: Boolean }) panelOpen = false;
   @property({ type: Number }) rev = 0;
+
+  private transition = new EnterLeaveController(this, {
+    enterMs: () => (this.chatWindowConfig?.animationOpeningSec !== undefined ? this.chatWindowConfig.animationOpeningSec : 0.3) * 1000,
+    leaveMs: () => (this.chatWindowConfig?.animationClosingSec !== undefined ? this.chatWindowConfig.animationClosingSec : 0.2) * 1000,
+  });
 
   static styles = [
     GLOBAL_STYLES,
@@ -91,16 +97,26 @@ export class CwChatPanel extends LitElement {
     this.dispatchEvent(new CustomEvent(name, { bubbles: true, composed: true }));
   }
 
-  render() {
-    if (!this.panelOpen) return html``;
+  protected willUpdate(_changed: PropertyValues<this>) {
+    super.willUpdate(_changed);
+    this.transition.setTarget(!!this.panelOpen);
+  }
 
+  render() {
     const cw = this.chatWindowConfig;
     const cs = this.chatState;
     const feats = this.features || {};
     const cb = this.chatbarConfig;
     const bb = this.bubbleConfig;
 
-    if (!cw || !cs) return html``;
+    if (!this.transition.render || !cw || !cs) return html``;
+
+    const phase = this.transition.phase;
+    const isLeaving = phase === 'leave';
+    const isHidden = phase === 'enter' || phase === 'leave';
+    const openingSec = cw.animationOpeningSec !== undefined ? cw.animationOpeningSec : 0.3;
+    const closingSec = cw.animationClosingSec !== undefined ? cw.animationClosingSec : 0.2;
+    const durationSec = isLeaving ? closingSec : openingSec;
 
     const isExpanded = cs.isExpanded;
     const widthVal = isExpanded
@@ -142,7 +158,7 @@ export class CwChatPanel extends LitElement {
     return html`
       <div
         class="panel-wrapper zotly-widget-panel-wrapper"
-        style="width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: ${maxHeightPx}; position: fixed; bottom: ${bottomPx}px; right: ${rawRight}px"
+        style="width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: ${maxHeightPx}; position: fixed; bottom: ${bottomPx}px; right: ${rawRight}px; opacity: ${isHidden ? '0' : '1'}; transform: ${isHidden ? 'scale(0.5) translateY(32px)' : 'scale(1) translateY(0)'}; transform-origin: bottom right; transition: opacity ${durationSec}s ease, transform ${durationSec}s ease"
       >
         <div
           class="panel"

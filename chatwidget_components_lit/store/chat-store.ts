@@ -140,6 +140,10 @@ function buildDefaultGreetWindow(theme: { primary: string; secondary: string }):
     description: "Let's chat & find the right solution for you!",
     descriptionColor: '#475569',
     descriptionFontSize: '14px',
+    openingTimeAfterInitialLoadSec: 2,
+    animationOpeningSec: 0.5,
+    animationClosingSec: 0.3,
+    visible: false,
     inputBox: {
       enabled: true,
       layout: 'separated',
@@ -150,6 +154,9 @@ function buildDefaultGreetWindow(theme: { primary: string; secondary: string }):
       boxShadow: '0 6px 16px rgba(0,0,0,0.12)',
       buttonColor: theme.primary,
       buttonIconColor: '#ffffff',
+      openingTimeAfterInitialLoadSec: 4,
+      animationOpeningSec: 0.5,
+      visible: false,
     },
   };
 }
@@ -159,6 +166,8 @@ function buildDefaultChatWindow(theme: { primary: string; secondary: string }): 
     useWebsiteTheme: true,
     offsetRight: null,
     offsetBottom: null,
+    animationOpeningSec: 0.3,
+    animationClosingSec: 0.2,
     clientName: 'Zotly Support',
     agentName: 'Sarah',
     accentColor: theme.primary,
@@ -444,7 +453,7 @@ export const chatStore = {
     if (gw) {
       gw.dismissed = true;
       gw.visible = false;
-      if (gw.inputBox) gw.inputBox.visible = false;
+      if (gw.inputBox) gw.inputBox = { ...gw.inputBox, visible: false };
       emit('store:greetWindow');
     }
 
@@ -577,7 +586,7 @@ export const chatStore = {
     const gw = getStore().greetWindow;
     gw.dismissed = true;
     gw.visible = false;
-    if (gw.inputBox) gw.inputBox.visible = false;
+    if (gw.inputBox) gw.inputBox = { ...gw.inputBox, visible: false };
     emit('store:greetWindow');
   },
 
@@ -861,7 +870,7 @@ export async function initStore(): Promise<void> {
       const inputDelay = parseFloat(String(gw.inputBox.openingTimeAfterInitialLoadSec ?? 4));
       setTimeout(() => {
         if (!gw.dismissed && !store!.chat.hasSentMessage) {
-          if (gw.inputBox) gw.inputBox.visible = true;
+          if (gw.inputBox) gw.inputBox = { ...gw.inputBox, visible: true };
           emit('store:greetWindow');
         }
       }, inputDelay * 1000);
