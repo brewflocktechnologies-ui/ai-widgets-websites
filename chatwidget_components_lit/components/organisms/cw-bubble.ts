@@ -123,7 +123,7 @@ export class CwBubble extends LitElement {
 
     const borderRadius = getBorderRadius(settings.borderRadius);
     const bg = getCompositeBackground(settings);
-    const boxShadow = [getBoxShadow(settings), getInnerShadow(settings as any)].filter(Boolean).join(', ');
+    const boxShadow = [getBoxShadow(settings), getInnerShadow(settings as any)].filter(b => b && b !== 'none').join(', ') || 'none';
 
     const hoverScale = settings.hoverScale !== undefined ? settings.hoverScale : 1.05;
     const transform = this.hovered && !this.panelOpen ? `scale(${hoverScale})` : 'scale(1.0)';

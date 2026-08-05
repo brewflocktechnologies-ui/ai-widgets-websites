@@ -70,9 +70,8 @@ export class CwComposer extends LitElement {
         cursor: default;
       }
       .send-icon {
-        transform: rotate(45deg);
         margin-left: 2px;
-        margin-top: -2px;
+        margin-top: 1px;
       }
     `
   ];
@@ -216,7 +215,7 @@ export class CwComposer extends LitElement {
                 </svg>
               `
             : html`
-                <svg class="send-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <svg class="send-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                   <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                 </svg>
               `

@@ -1,11 +1,11 @@
-import { LitElement, html, css, type PropertyValues } from 'lit';
+import { LitElement, html, css, PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { GreetWindowState, ChatbarState, BubbleState } from '../../store/types.js';
-import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
+import { GLOBAL_STYLES } from '../../tokens/global-styles.js';
 import { getAnimClass } from '../../utils/style-helpers.js';
 import { EnterLeaveController } from '../../utils/transition.js';
-import '../atoms/cw-icon.js';
 import '../molecules/cw-greet-input.js';
+import '../atoms/cw-icon.js';
 
 @customElement('cw-greet-window')
 export class CwGreetWindow extends LitElement {
@@ -14,13 +14,12 @@ export class CwGreetWindow extends LitElement {
   @property({ type: Object }) bubbleConfig?: BubbleState;
   @property({ type: Boolean }) panelOpen = false;
   @property({ type: Boolean }) hasSentMessage = false;
-  @property({ type: Boolean }) visible = false;
+  @property({ type: Boolean }) visible = true;
   @property({ type: Boolean }) dismissed = false;
-  @property({ type: Number }) rev = 0;
 
   private transition = new EnterLeaveController(this, {
-    enterMs: () => (this.config?.animationOpeningSec !== undefined ? this.config.animationOpeningSec : 0.3) * 1000,
-    leaveMs: () => (this.config?.animationClosingSec !== undefined ? this.config.animationClosingSec : 0.3) * 1000,
+    enterMs: () => 300,
+    leaveMs: () => 300,
   });
 
   static styles = [
@@ -40,15 +39,14 @@ export class CwGreetWindow extends LitElement {
         gap: 12px;
         transition: opacity 0.3s ease, transform 0.3s ease;
         max-width: calc(100% - 24px);
-      }
-      .close-row {
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-        padding-right: 2px;
-        pointer-events: auto;
+        padding-top: 14px;
+        padding-right: 8px;
       }
       .close-btn {
+        position: absolute;
+        top: -12px;
+        right: -8px;
+        z-index: 20;
         border: none;
         background: #475569;
         color: #ffffff;
@@ -59,12 +57,13 @@ export class CwGreetWindow extends LitElement {
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         transition: transform 0.2s, background-color 0.2s;
+        pointer-events: auto;
       }
       .close-btn:hover {
         background: #1e293b;
-        transform: scale(1.05);
+        transform: scale(1.1);
       }
       .greet-card {
         position: relative;
@@ -73,7 +72,7 @@ export class CwGreetWindow extends LitElement {
         width: 100%;
         max-width: 100%;
         max-height: 100%;
-        overflow-y: auto;
+        overflow: visible;
         cursor: pointer;
         pointer-events: auto;
         box-sizing: border-box;
@@ -150,58 +149,67 @@ export class CwGreetWindow extends LitElement {
         class="greet-wrapper"
         style="bottom: ${bottomPx}px; right: ${rawRight}px; width: ${widthVal}px; max-width: calc(100% - 24px); max-height: ${maxHeightPx}; opacity: ${isHidden ? '0' : '1'}; transform: ${isHidden ? 'translateY(16px)' : 'translateY(0)'}; transition: opacity ${durationSec}s ease, transform ${durationSec}s ease; transition-delay: ${transitionDelay}"
       >
-        <!-- Close Button -->
-        <div class="close-row">
-          <button type="button" class="close-btn" @click="${this.handleDismiss}">
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
-
         <!-- Greet Card -->
         <div
           class="greet-card"
           style="background-color: ${g.backgroundColor || '#ffffff'}; border-radius: ${(g.borderRadius || 16)}px; padding: ${g.padding || '24px 20px'}; box-shadow: ${g.boxShadow || '0 12px 28px -6px rgba(0,0,0,0.15), 0 8px 14px -4px rgba(0,0,0,0.1)'}"
           @click="${this.handleCardClick}"
         >
-          ${g.imageUrl || (g.iconType === 'lucide' && g.lucideIcon)
-            ? html`
-                <div style="width: 100%; display: flex; align-items: center; margin-bottom: 16px; justify-content: ${iconAlign}">
-                  ${g.imageUrl
-                    ? html`
-                        <img
-                          src="${g.imageUrl}"
-                          class="${getAnimClass(g.iconAnimation)}"
-                          style="display: block; margin: ${g.iconAlign === 'center' ? '0 auto' : '0'}; height: ${(g.imageHeight || 70)}px; width: ${g.imageWidth ? `${g.imageWidth}px` : 'auto'}; object-fit: contain; padding: ${g.imagePadding || '0px'}"
-                        />
-                      `
-                    : html`
-                        <div
-                          class="${getAnimClass(g.iconAnimation)}"
-                          style="width: ${(g.iconSize || 48)}px; height: ${(g.iconSize || 48)}px; color: ${g.iconColor || '#9333EA'}"
-                        >
-                          <cw-icon .name="${g.lucideIcon}" .size="${g.iconSize || 48}" .color="${g.iconColor || '#9333EA'}"></cw-icon>
-                        </div>
-                      `
-                  }
-                </div>
-              `
-            : ''
-          }
+          <!-- Floating Close Button outside top right -->
+          <button type="button" class="close-btn" aria-label="Close greet window" @click="${this.handleDismiss}">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
 
-          <h3 style="color: ${g.titleColor || '#1e293b'}; font-size: ${g.titleFontSize || '15px'}; font-weight: 700; line-height: 1.4; margin: 0 0 8px 0; letter-spacing: -0.01em">
-            ${g.title}
-          </h3>
+          <!-- Icon / Image Area (Lucide icon default on top) -->
+          <div style="width: 100%; display: flex; align-items: center; margin-bottom: 16px; justify-content: ${iconAlign}">
+            ${g.imageUrl
+              ? html`
+                  <img
+                    src="${g.imageUrl}"
+                    class="${getAnimClass(g.iconAnimation)}"
+                    style="display: block; margin: ${g.iconAlign === 'center' ? '0 auto' : '0'}; height: ${(g.imageHeight || 70)}px; width: ${g.imageWidth ? `${g.imageWidth}px` : 'auto'}; object-fit: contain; padding: ${g.imagePadding || '0px'}"
+                  />
+                `
+              : html`
+                  <div
+                    class="${getAnimClass(g.iconAnimation)}"
+                    style="color: ${g.iconColor || '#0b5fff'}; display: flex; align-items: center; justify-content: center"
+                  >
+                    <cw-icon .name="${g.lucideIcon || 'Sparkles'}" .size="${g.iconSize || 48}"></cw-icon>
+                  </div>
+                `
+            }
+          </div>
 
-          <p style="color: ${g.descriptionColor || '#475569'}; font-size: ${g.descriptionFontSize || '14px'}; line-height: 1.5; margin: 0">
-            ${g.description}
-          </p>
+          <div style="display: flex; flex-direction: column; gap: 8px; text-align: ${g.textAlign || 'center'}; width: 100%">
+            <h3 style="margin: 0; font-size: ${(g.fontSize || 16)}px; font-weight: 700; color: ${g.titleColor || '#1e293b'}; line-height: 1.35">
+              ${g.title || 'Hi there! 👋'}
+            </h3>
+            ${g.description
+              ? html`
+                  <p style="margin: 0; font-size: 14px; color: ${g.descriptionColor || '#475569'}; line-height: 1.45">
+                    ${g.description}
+                  </p>
+                `
+              : ''
+            }
+          </div>
         </div>
 
-        <!-- Quick Input Box -->
-        <cw-greet-input .config="${g.inputBox}" .accentColor="${g.iconColor || '#9333EA'}"></cw-greet-input>
+        <!-- Optional Input Box -->
+        ${g.inputBox && g.inputBox.enabled
+          ? html`
+              <cw-greet-input
+                .config="${g.inputBox}"
+                .visible="${this.visible && (g.inputBox.visible !== undefined ? g.inputBox.visible : true)}"
+                .accentColor="${g.iconColor || '#0b5fff'}"
+              ></cw-greet-input>
+            `
+          : ''
+        }
       </div>
     `;
   }

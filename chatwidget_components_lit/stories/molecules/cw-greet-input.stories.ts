@@ -27,3 +27,22 @@ export const SeparatedLayout = {
     </div>
   `,
 };
+
+export const CombinedLayout = {
+  args: {
+    accentColor: '#0b5fff',
+    config: {
+      enabled: true,
+      visible: true,
+      layout: 'joined',
+      placeholder: 'Write your message...',
+      buttonColor: '#0b5fff',
+      buttonIconColor: '#ffffff',
+    },
+  },
+  render: (args: any) => html`
+    <div style="width: 320px; padding: 16px; background: #f8fafc; border-radius: 16px;">
+      <cw-greet-input .config="${args.config}" .accentColor="${args.accentColor}"></cw-greet-input>
+    </div>
+  `,
+};

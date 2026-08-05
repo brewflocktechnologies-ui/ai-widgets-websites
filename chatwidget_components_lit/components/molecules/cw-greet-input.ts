@@ -100,8 +100,11 @@ export class CwGreetInput extends LitElement {
       `transition: opacity ${openingSec}s ease, transform ${openingSec}s ease;`;
 
     if (isSeparated) {
-      const btnBg = ib.buttonBgColor || ib.buttonColor || '#ffffff';
-      const btnIconColor = ib.buttonIconColor || this.accentColor;
+      const btnBg = ib.buttonBgColor || ib.buttonColor || this.accentColor || '#0b5fff';
+      let btnIconColor = ib.buttonIconColor || '#ffffff';
+      if (btnIconColor.toLowerCase() === btnBg.toLowerCase() || btnBg !== '#ffffff') {
+        btnIconColor = '#ffffff';
+      }
       const btnSize = ib.buttonSize || 42;
 
       return html`
@@ -133,8 +136,11 @@ export class CwGreetInput extends LitElement {
     }
 
     // Joined layout (default)
-    const btnColor = ib.buttonColor || '#9333EA';
-    const btnIconColor = ib.buttonIconColor || '#ffffff';
+    const btnColor = ib.buttonColor || this.accentColor || '#0b5fff';
+    let btnIconColor = ib.buttonIconColor || '#ffffff';
+    if (btnIconColor.toLowerCase() === btnColor.toLowerCase()) {
+      btnIconColor = '#ffffff';
+    }
 
     return html`
       <div

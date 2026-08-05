@@ -80,14 +80,15 @@ export function getBoxShadow(config: {
   boxShadowBlur?: number;
   boxShadowOpacity?: number;
 }): string {
-  const {
-    boxShadowOffsetX = 0,
-    boxShadowOffsetY = 8,
-    boxShadowSpread = 0,
-    boxShadowBlur = 20,
-    boxShadowOpacity = 0.25,
-  } = config;
-  return `${boxShadowOffsetX}px ${boxShadowOffsetY}px ${boxShadowSpread}px ${boxShadowBlur}px rgba(0,0,0,${boxShadowOpacity})`;
+  const opacity = config.boxShadowOpacity !== undefined ? config.boxShadowOpacity : 0.25;
+  if (opacity <= 0) return 'none';
+
+  const offsetX = config.boxShadowOffsetX !== undefined ? config.boxShadowOffsetX : 0;
+  const offsetY = config.boxShadowOffsetY !== undefined ? config.boxShadowOffsetY : 8;
+  const blur = config.boxShadowBlur !== undefined ? config.boxShadowBlur : 20;
+  const spread = config.boxShadowSpread !== undefined ? config.boxShadowSpread : 0;
+
+  return `${offsetX}px ${offsetY}px ${blur}px ${spread}px rgba(0,0,0,${opacity})`;
 }
 
 export function getInnerShadow(config: {
