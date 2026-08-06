@@ -15,6 +15,10 @@ export class CwImageCropper extends LitElement {
   @property({ type: Boolean }) showRotate = true;
   @property({ type: Boolean }) showAspectPills = true;
   @property({ type: Number }) exportSize = 250;
+  /** When true (default) the modal is fixed to the viewport; set false to contain it inside a positioned parent (used by stories). */
+  @property({ type: Boolean }) fixed = true;
+  /** Backdrop dimming (0 = transparent so the card can be previewed on a light background). */
+  @property({ type: Number }) backdropOpacity = 0.75;
 
   @state() private zoom = 1;
   @state() private rotation = 0;
@@ -363,7 +367,7 @@ export class CwImageCropper extends LitElement {
     const overlayHeight = this.aspectRatio === '4:3' ? 150 : 200;
 
     return html`
-      <div class="modal-backdrop" @click="${(e: Event) => { if (e.target === e.currentTarget) this.closeModal(); }}">
+      <div class="modal-backdrop" style="position: ${this.fixed ? 'fixed' : 'absolute'}; background: rgba(9, 13, 22, ${this.backdropOpacity});" @click="${(e: Event) => { if (e.target === e.currentTarget) this.closeModal(); }}">
         <div class="cropper-card">
           <div class="header">
             <h3>${this.titleText}</h3>

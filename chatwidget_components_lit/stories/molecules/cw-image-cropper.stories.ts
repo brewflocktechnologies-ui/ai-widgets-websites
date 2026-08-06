@@ -20,6 +20,7 @@ export default {
     showRotate: { control: 'boolean', description: 'Show 90° rotate button' },
     showAspectPills: { control: 'boolean', description: 'Show aspect ratio selection pills' },
     exportSize: { control: { type: 'number', min: 100, max: 800, step: 50 }, description: 'Target export width resolution in pixels' },
+    backdropOpacity: { control: { type: 'number', min: 0, max: 1, step: 0.05 }, description: 'Backdrop dimming behind the modal (0 = transparent)' },
   },
 };
 
@@ -37,10 +38,13 @@ export const ConfigurableCropperModal = {
     showRotate: true,
     showAspectPills: true,
     exportSize: 250,
+    backdropOpacity: 0,
   },
   render: (args: any) => html`
-    <div style="position: relative; height: 550px; background: #f1f5f9; display: flex; align-items: center; justify-content: center;">
+    <div style="position: relative; width: 520px; height: 620px; background: #f1f5f9; border-radius: 20px; overflow: hidden;">
       <cw-image-cropper
+        .fixed="${false}"
+        .backdropOpacity="${args.backdropOpacity}"
         .open="${args.open}"
         .imageSrc="${args.imageSrc}"
         .titleText="${args.titleText}"
