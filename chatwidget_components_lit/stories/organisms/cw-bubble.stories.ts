@@ -1,6 +1,14 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-bubble.js';
 
+/**
+ * The bubble supports many independent, combinable visual features
+ * (glass, neon, outline ring, tooltips, hover dots, icon types, overlays,
+ * badges, gradients). `ConfigurableBubble` is the playground that exposes
+ * every control; the curated stories below lock in canonical looks for
+ * visual regression and quick reference.
+ */
+
 export default {
   title: 'Organisms/Bubble',
   component: 'cw-bubble',
@@ -29,6 +37,25 @@ export default {
     backgroundOverlayType: { control: 'select', options: ['none', 'image', 'lucide'] },
     backgroundImageUrl: { control: 'text' },
   },
+};
+
+/** Shared base config for the curated looks. */
+const baseConfig = {
+  useWebsiteTheme: false,
+  position: 'bottom-right',
+  offsetRight: 16,
+  offsetBottom: 16,
+  width: 60,
+  height: 60,
+  backgroundColor: '#0b5fff',
+  lucideIcon: 'MessageCircle',
+  iconWidth: 26,
+  iconHeight: 26,
+  iconColor: '#ffffff',
+  boxShadowOffsetY: 6,
+  boxShadowBlur: 16,
+  boxShadowOpacity: 0.2,
+  hideOnOpen: true,
 };
 
 export const ConfigurableBubble = {
@@ -90,3 +117,135 @@ export const ConfigurableBubble = {
     </div>
   `,
 };
+
+export const Default = {
+  render: () => html`
+    <div style="position: relative; height: 120px;">
+      <cw-bubble .config="${{ ...baseConfig }}"></cw-bubble>
+    </div>
+  `,
+};
+
+export const GradientBackground = {
+  render: () => html`
+    <div style="position: relative; height: 120px;">
+      <cw-bubble
+        .config="${{
+          ...baseConfig,
+          backgroundColor: '#0b5fff',
+          gradientType: 'linear',
+          gradientAngle: 135,
+          gradientStops: [
+            { color: '#667eea', pos: 0 },
+            { color: '#764ba2', pos: 100 },
+          ],
+        }}"
+      ></cw-bubble>
+    </div>
+  `,
+};
+
+
+export const NeonGlow = {
+  render: () => html`
+    <cw-bubble
+      .config="${{
+        ...baseConfig,
+        backgroundColor: '#0f172a',
+        lucideIcon: 'MessageSquare',
+        neon: { enabled: true, color: '#22d3ee', intensity: 0.9 },
+      }}"
+    ></cw-bubble>
+  `,
+};
+
+export const OutlineRing = {
+  render: () => html`
+    <div style="position: relative; height: 120px;">
+      <cw-bubble
+        .config="${{
+          ...baseConfig,
+          backgroundColor: '#ffffff',
+          iconColor: '#0b5fff',
+          border: { width: 2, color: '#e2e8f0', style: 'solid' },
+          outlineRing: { enabled: true, width: 3, color: '#0b5fff', opacity: 0.35 },
+        }}"
+      ></cw-bubble>
+    </div>
+  `,
+};
+
+export const ImageIcon = {
+  render: () => html`
+    <cw-bubble
+      .config="${{
+        ...baseConfig,
+        backgroundColor: '#ffffff',
+        iconType: 'image',
+        iconImageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=100&auto=format&fit=crop&q=80',
+        iconFit: 'cover',
+        border: { width: 2, color: '#ffffff', style: 'solid' },
+        boxShadowOffsetY: 6,
+        boxShadowBlur: 16,
+        boxShadowOpacity: 0.25,
+      }}"
+    ></cw-bubble>
+  `,
+};
+
+export const BackgroundOverlayImage = {
+  render: () => html`
+    <div style="position: relative; height: 140px;">
+      <cw-bubble
+        .config="${{
+          ...baseConfig,
+          backgroundColor: '#0b5fff',
+          lucideIcon: 'MessageCircle',
+          backgroundOverlayType: 'image',
+          backgroundImageUrl: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=200&auto=format&fit=crop&q=80',
+          backgroundImageSize: 'cover',
+          backgroundImageOpacity: 0.3,
+          backgroundBlendMode: 'multiply',
+        }}"
+      ></cw-bubble>
+    </div>
+  `,
+};
+
+export const WithTooltip = {
+  render: () => html`
+    <div style="position: relative; height: 140px; padding: 24px 60px;">
+      <cw-bubble
+        .config="${{
+          ...baseConfig,
+          tooltip: {
+            enabled: true,
+            text: 'Questions about PayPal?',
+            position: 'left',
+            backgroundColor: '#ffffff',
+            textColor: '#374151',
+            fontSize: 14,
+            padding: '8px 16px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            arrowEnabled: true,
+          },
+        }}"
+      ></cw-bubble>
+    </div>
+  `,
+};
+
+export const HoverDots = {
+  render: () => html`
+    <div style="position: relative; height: 120px;">
+      <cw-bubble
+        .config="${{
+          ...baseConfig,
+          dots: { color: '#ffffff', size: 6, spacing: 6, animation: 'bounce' },
+        }}"
+      ></cw-bubble>
+      <p style="position: absolute; top: 8px; left: 16px; margin: 0; font-size: 12px; color: #71717a; font-family: system-ui, sans-serif;">Hover the bubble to see the dots animation</p>
+    </div>
+  `,
+};
+

@@ -66,6 +66,8 @@ export class CwBubble extends LitElement {
         justify-content: center;
         pointer-events: none;
         color: #ffffff;
+        border-radius: inherit;
+        overflow: hidden;
       }
       .dots-container {
         position: absolute;
@@ -233,7 +235,7 @@ export class CwBubble extends LitElement {
                               <img
                                 src="${settings.iconImageUrl || settings.backgroundImageUrl}"
                                 alt="bubble icon"
-                                style="width: ${(settings.iconWidth || 26)}px; height: ${(settings.iconHeight || 26)}px; object-fit: ${settings.iconFit || 'contain'}; opacity: ${settings.iconOpacity !== undefined ? settings.iconOpacity : 1}; mix-blend-mode: ${settings.iconBlend || 'normal'}; border-radius: 50%"
+                                style="width: 100%; height: 100%; object-fit: ${settings.iconFit || 'cover'}; opacity: ${settings.iconOpacity !== undefined ? settings.iconOpacity : 1}; mix-blend-mode: ${settings.iconBlend || 'normal'}; border-radius: inherit"
                               />
                             `
                           : settings.iconType === 'customSvg' && settings.customSvg
