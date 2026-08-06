@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { WelcomeConfig } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
+import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 
 @customElement('cw-welcome-card')
 export class CwWelcomeCard extends LitElement {
@@ -10,6 +11,7 @@ export class CwWelcomeCard extends LitElement {
 
   static styles = [
     GLOBAL_STYLES,
+    REDUCED_MOTION_CSS,
     css`
       :host {
         display: block;

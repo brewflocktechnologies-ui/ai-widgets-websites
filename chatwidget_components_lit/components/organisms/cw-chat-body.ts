@@ -2,10 +2,12 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { ChatState, ChatWindowState, Message } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
+import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import '../molecules/cw-welcome-card.js';
 import '../molecules/cw-message-bubble.js';
 import '../molecules/cw-composer.js';
 import '../atoms/cw-typing-dots.js';
+import type { CwComposer } from '../molecules/cw-composer.js';
 
 /**
  * cw-chat-body
@@ -28,6 +30,7 @@ export class CwChatBody extends LitElement {
 
   static styles = [
     GLOBAL_STYLES,
+    REDUCED_MOTION_CSS,
     css`
       :host {
         display: flex;
@@ -331,6 +334,12 @@ export class CwChatBody extends LitElement {
     this.emit('cw:attach-files', e.target);
   }
 
+  /** Delegates focus to the composer (used by the panel when the chat opens). */
+  focusInput() {
+    const composer = this.renderRoot?.querySelector<CwComposer>('cw-composer');
+    composer?.focusInput?.();
+  }
+
   render() {
     const cs = this.chatState;
     const cw = this.chatWindowConfig;
@@ -477,7 +486,7 @@ export class CwChatBody extends LitElement {
         <!-- ACTIVE CHAT / CLOSED MESSAGES -->
         ${isActive || isClosed
           ? html`
-              <div class="messages-area" style="background: ${cw.bodyBg || 'var(--cw-bg)'}">
+              <div class="messages-area" role="log" aria-live="polite" aria-relevant="additions" style="background: ${cw.bodyBg || 'var(--cw-bg)'}">
                 <input
                   type="file"
                   id="cw-file-input"

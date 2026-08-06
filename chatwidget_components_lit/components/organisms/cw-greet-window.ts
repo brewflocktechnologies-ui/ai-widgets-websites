@@ -2,6 +2,7 @@ import { LitElement, html, css, PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { GreetWindowState, ChatbarState, BubbleState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/global-styles.js';
+import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import { getAnimClass } from '../../utils/style-helpers.js';
 import { EnterLeaveController } from '../../utils/transition.js';
 import '../molecules/cw-greet-input.js';
@@ -25,6 +26,7 @@ export class CwGreetWindow extends LitElement {
 
   static styles = [
     GLOBAL_STYLES,
+    REDUCED_MOTION_CSS,
     css`
       :host {
         display: block;

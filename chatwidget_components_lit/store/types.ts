@@ -189,6 +189,9 @@ export interface ChatWindowState {
 }
 
 export interface FeaturesState {
+  /** Master gate: voice/video call UI only shows when these are explicitly enabled. */
+  voiceCallEnabled?: boolean;
+  videoCallEnabled?: boolean;
   voiceCallMaster?: boolean;
   voiceCallAgents?: boolean;
   voiceCallVisitors?: boolean;

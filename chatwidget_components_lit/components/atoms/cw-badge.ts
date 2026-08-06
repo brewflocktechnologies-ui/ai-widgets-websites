@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { BadgeConfig } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/global-styles.js';
+import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 
 @customElement('cw-badge')
 export class CwBadge extends LitElement {
@@ -10,6 +11,7 @@ export class CwBadge extends LitElement {
 
   static styles = [
     GLOBAL_STYLES,
+    REDUCED_MOTION_CSS,
     css`
       :host {
         display: inline-flex;

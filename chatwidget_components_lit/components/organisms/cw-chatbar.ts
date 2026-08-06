@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { ChatbarState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
+import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import {
   getBorderRadius,
   getChatbarBackground,
@@ -22,6 +23,7 @@ export class CwChatbar extends LitElement {
 
   static styles = [
     GLOBAL_STYLES,
+    REDUCED_MOTION_CSS,
     css`
       :host {
         display: block;
@@ -100,6 +102,18 @@ export class CwChatbar extends LitElement {
     );
   }
 
+  private handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this.handleClick();
+    }
+  }
+
+  /** Moves keyboard focus to the launcher (used when the panel closes). */
+  focus() {
+    this.shadowRoot?.querySelector<HTMLElement>('.chatbar-wrapper')?.focus();
+  }
+
   render() {
     const s = this.config || ({} as ChatbarState);
     if (!s.enabled || (s.hideOnOpen && this.panelOpen)) return html``;
@@ -125,10 +139,14 @@ export class CwChatbar extends LitElement {
     return html`
       <div
         class="chatbar-wrapper"
-        style="width: ${widthVal}px; height: ${heightVal}; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${rawBottom}px; right: ${rawRight}px; background: ${bg}; color: ${s.textColor || '#ffffff'}; border-radius: ${borderRadius}; box-shadow: ${s.shadow !== false ? '0 8px 24px rgba(0,0,0,0.18)' : 'none'}; padding: ${padding}; transform: ${transform}; flex-direction: ${isCard ? 'column' : 'row'}; gap: ${gap}"
+        role="button"
+        tabindex="0"
+        aria-label="${this.panelOpen ? 'Close chat' : 'Open chat'}"
+        style="width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${rawBottom}px; right: ${rawRight}px; background: ${bg}; color: ${s.textColor || '#ffffff'}; border-radius: ${borderRadius}; box-shadow: ${s.shadow ? '0 4px 16px rgba(0,0,0,0.15)' : 'none'}; padding: ${padding}; transform: ${transform}; flex-direction: ${isCard ? 'column' : 'row'}; gap: ${gap}"
         @mouseenter="${() => (this.hovered = true)}"
         @mouseleave="${() => (this.hovered = false)}"
         @click="${this.handleClick}"
+        @keydown="${this.handleKeyDown}"
       >
         ${isCard
           ? html`

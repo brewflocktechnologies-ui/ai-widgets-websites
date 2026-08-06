@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 
 @customElement('cw-avatar')
 export class CwAvatar extends LitElement {
@@ -15,7 +16,9 @@ export class CwAvatar extends LitElement {
   @property({ type: Boolean }) showOnlineDot = true;
   @property({ type: Boolean }) showOnline = true;
 
-  static styles = css`
+  static styles = [
+    REDUCED_MOTION_CSS,
+    css`
     :host {
       display: inline-flex;
       position: relative;
@@ -41,9 +44,11 @@ export class CwAvatar extends LitElement {
       position: absolute;
       bottom: 0;
       right: 0;
+      z-index: 2;
       display: flex;
       align-items: center;
       justify-content: center;
+      transform: translate(25%, 25%);
     }
     .dot-pulse {
       position: absolute;
@@ -66,7 +71,8 @@ export class CwAvatar extends LitElement {
       50% { transform: scale(1.6); opacity: 0.3; }
       100% { transform: scale(2.4); opacity: 0; }
     }
-  `;
+  `,
+  ];
 
   render() {
     const initial = (this.name || 'S').charAt(0).toUpperCase();
@@ -77,9 +83,9 @@ export class CwAvatar extends LitElement {
 
     const dotSize = this.activeDot?.size !== undefined ? this.activeDot.size : 8;
     const dotColor = this.activeDot?.color || '#22c55e';
-    const dotAnimate = this.activeDot?.animate !== false;
+    const dotAnimate = this.activeDot?.animate !== true;
     const dotBorderWidth = this.activeDot?.borderWidth !== undefined ? this.activeDot.borderWidth : 0;
-    const dotBorderColor = this.activeDot?.borderColor || 'transparent';
+    const dotBorderColor = this.activeDot?.borderColor || '#ffffff';
 
     return html`
       <div class="avatar-box" style="width: ${this.size}px; height: ${this.size}px; font-size: ${Math.floor(this.size * 0.45)}px; background: ${background}; color: ${textCol}">
@@ -87,16 +93,16 @@ export class CwAvatar extends LitElement {
           ? html`<img class="avatar-img" src="${imgUrl}" alt="${this.name}" />`
           : html`<span>${initial}</span>`
         }
-        ${showDot
-          ? html`
-              <div class="dot-wrapper" style="width: ${dotSize}px; height: ${dotSize}px">
-                ${dotAnimate ? html`<span class="dot-pulse" style="background-color: ${dotColor}"></span>` : ''}
-                <span class="dot-solid" style="background-color: ${dotColor}; border: ${dotBorderWidth}px solid ${dotBorderColor}"></span>
-              </div>
-            `
-          : ''
-        }
       </div>
+      ${showDot
+        ? html`
+            <div class="dot-wrapper" style="width: ${dotSize}px; height: ${dotSize}px">
+              ${dotAnimate ? html`<span class="dot-pulse" style="background-color: ${dotColor}"></span>` : ''}
+              <span class="dot-solid" style="background-color: ${dotColor}; border: ${dotBorderWidth}px solid ${dotBorderColor}"></span>
+            </div>
+          `
+        : ''
+      }
     `;
   }
 }

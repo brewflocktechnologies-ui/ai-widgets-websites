@@ -35,6 +35,7 @@ export class CwWidgetRoot extends LitElement {
 
   private toggleListener = () => this.handleToggleWidget();
   private closeListener = () => this.handleCloseWidget();
+  private onKeydown = (e: KeyboardEvent) => this.handleKeydown(e);
 
   async connectedCallback() {
     super.connectedCallback();
@@ -51,6 +52,8 @@ export class CwWidgetRoot extends LitElement {
       window.addEventListener('toggle-contact-widget', this.toggleListener);
       window.addEventListener('close-contact-widget', this.closeListener);
 
+      this.addEventListener('keydown', this.onKeydown);
+
       this.registerLeafEvents();
       this.initialized = true;
       this.requestUpdate();
@@ -62,6 +65,7 @@ export class CwWidgetRoot extends LitElement {
     this.unsubAll?.();
     window.removeEventListener('toggle-contact-widget', this.toggleListener);
     window.removeEventListener('close-contact-widget', this.closeListener);
+    this.removeEventListener('keydown', this.onKeydown);
     for (const [name, fn] of this.eventListeners) {
       this.removeEventListener(name, fn);
     }
@@ -138,11 +142,75 @@ export class CwWidgetRoot extends LitElement {
     chatStore.submitOffline();
   }
 
+  // -------------------------------------------------------------------------
+  // Keyboard accessibility (Escape to close + focus trap while open)
+  // -------------------------------------------------------------------------
+
+  private handleKeydown(e: KeyboardEvent) {
+    if (!this.panelOpen) return;
+
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      const cs = chatStore.get();
+      if (cs.confirmBox) {
+        chatStore.cancelEndChat();
+      } else {
+        this.handleCloseWidget();
+      }
+      return;
+    }
+
+    if (e.key === 'Tab') {
+      const focusables = this.collectFocusables();
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const path = e.composedPath();
+      const target = (path[0] as HTMLElement) || null;
+
+      if (!path.includes(this)) {
+        // Focus escaped the widget — pull it back to the first control.
+        e.preventDefault();
+        first.focus();
+      } else if (e.shiftKey && target === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && target === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
+  /** Collects every native focusable control across nested shadow roots, in DOM order. */
+  private collectFocusables(): HTMLElement[] {
+    const sel = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const out: HTMLElement[] = [];
+    const visit = (root: ShadowRoot) => {
+      root.querySelectorAll<HTMLElement>('*').forEach((el) => {
+        if (el.shadowRoot) visit(el.shadowRoot);
+        if (el.matches(sel)) out.push(el);
+      });
+    };
+    if (this.shadowRoot) visit(this.shadowRoot);
+    return out;
+  }
+
+  /** Returns keyboard focus to the launcher after the panel closes. */
+  private focusLauncher() {
+    setTimeout(() => {
+      const launcher = this.renderRoot?.querySelector<HTMLElement>('cw-bubble, cw-chatbar');
+      (launcher as unknown as { focus?: () => void })?.focus?.();
+    }, 60);
+  }
+
   private handleToggleWidget() {
     this.panelOpen = !this.panelOpen;
     chatStore.get().panelOpen = this.panelOpen;
     if (this.panelOpen) {
       chatStore.get().unreadCount = 0;
+    } else {
+      this.focusLauncher();
     }
     this.requestUpdate();
   }
@@ -150,6 +218,7 @@ export class CwWidgetRoot extends LitElement {
   private handleCloseWidget() {
     this.panelOpen = false;
     chatStore.get().panelOpen = false;
+    this.focusLauncher();
     this.requestUpdate();
   }
 

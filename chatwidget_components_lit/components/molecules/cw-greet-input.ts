@@ -2,6 +2,7 @@ import { LitElement, html, css, type PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { InputBoxConfig } from '../../store/types.js';
 import { EnterLeaveController } from '../../utils/transition.js';
+import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 
 /**
  * cw-greet-input
@@ -21,7 +22,9 @@ export class CwGreetInput extends LitElement {
     leaveMs: () => 0,
   });
 
-  static styles = css`
+  static styles = [
+    REDUCED_MOTION_CSS,
+    css`
     :host {
       display: block;
       width: 100%;
@@ -55,7 +58,8 @@ export class CwGreetInput extends LitElement {
     button:hover {
       transform: scale(1.05);
     }
-  `;
+  `,
+  ];
 
   private emit(name: string, detail?: unknown) {
     this.dispatchEvent(

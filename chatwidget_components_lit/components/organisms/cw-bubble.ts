@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { BubbleState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
+import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import {
   getBorderRadius,
   getCompositeBackground,
@@ -27,6 +28,7 @@ export class CwBubble extends LitElement {
 
   static styles = [
     GLOBAL_STYLES,
+    REDUCED_MOTION_CSS,
     css`
       :host {
         display: block;
@@ -114,6 +116,18 @@ export class CwBubble extends LitElement {
     );
   }
 
+  private handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this.handleClick();
+    }
+  }
+
+  /** Moves keyboard focus to the launcher (used when the panel closes). */
+  focus() {
+    this.shadowRoot?.querySelector<HTMLElement>('.bubble-wrapper')?.focus();
+  }
+
   render() {
     const settings = this.config;
 
@@ -194,10 +208,14 @@ export class CwBubble extends LitElement {
     return html`
       <div
         class="bubble-wrapper"
+        role="button"
+        tabindex="0"
+        aria-label="${this.panelOpen ? 'Close chat' : 'Open chat'}"
         style="position: ${this.fixed ? 'fixed' : 'absolute'}; width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${rawBottom}px; right: ${rawRight}px; border-radius: ${borderRadius}; background: ${bg}; background-blend-mode: ${settings.backgroundBlendMode || 'normal'}; box-shadow: ${boxShadow}; transform: ${transform}; ${borderStyle} ${glassStyle} ${neonStyle} ${entryAnim}"
         @mouseenter="${() => (this.hovered = true)}"
         @mouseleave="${() => (this.hovered = false)}"
         @click="${this.handleClick}"
+        @keydown="${this.handleKeyDown}"
       >
         ${settings.backgroundOverlayType === 'image' && settings.backgroundImageUrl
           ? html`

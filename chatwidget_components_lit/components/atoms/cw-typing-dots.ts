@@ -1,9 +1,12 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 
 @customElement('cw-typing-dots')
 export class CwTypingDots extends LitElement {
-  static styles = css`
+  static styles = [
+    REDUCED_MOTION_CSS,
+    css`
     :host {
       display: inline-flex;
       align-items: center;
@@ -37,7 +40,8 @@ export class CwTypingDots extends LitElement {
         opacity: 1;
       }
     }
-  `;
+  `,
+  ];
 
   render() {
     return html`

@@ -290,6 +290,8 @@ function buildDefaultChatWindow(theme: { primary: string; secondary: string }): 
 
 function buildDefaultFeatures(): FeaturesState {
   return {
+    voiceCallEnabled: false,
+    videoCallEnabled: false,
     voiceCallMaster: false,
     voiceCallAgents: false,
     voiceCallVisitors: false,

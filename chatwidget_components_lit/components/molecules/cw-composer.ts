@@ -110,6 +110,11 @@ export class CwComposer extends LitElement {
     this.emit('cw:toggle-emoji');
   }
 
+  /** Moves keyboard focus to the message input. */
+  focusInput() {
+    this.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea')?.focus();
+  }
+
   render() {
     const cw = this.config;
     const isFocused = this.focused;

@@ -2,9 +2,11 @@ import { LitElement, html, css, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { ChatWindowState, ChatState, FeaturesState, ChatbarState, BubbleState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
+import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import { EnterLeaveController } from '../../utils/transition.js';
 import '../molecules/cw-chat-header.js';
 import './cw-chat-body.js';
+import type { CwChatBody } from './cw-chat-body.js';
 
 @customElement('cw-chat-panel')
 export class CwChatPanel extends LitElement {
@@ -21,8 +23,12 @@ export class CwChatPanel extends LitElement {
     leaveMs: () => (this.chatWindowConfig?.animationClosingSec !== undefined ? this.chatWindowConfig.animationClosingSec : 0.2) * 1000,
   });
 
+  /** Guards "focus on open" so it runs once per open instead of every render. */
+  private didFocus = false;
+
   static styles = [
     GLOBAL_STYLES,
+    REDUCED_MOTION_CSS,
     css`
       :host {
         display: block;
@@ -102,6 +108,31 @@ export class CwChatPanel extends LitElement {
     this.transition.setTarget(!!this.panelOpen);
   }
 
+  protected updated(_changed: PropertyValues<this>) {
+    super.updated(_changed);
+    if (this.panelOpen) {
+      // Only move focus once per open, after the enter transition finishes.
+      if (this.transition.phase === 'open' && !this.didFocus) {
+        this.didFocus = true;
+        this.focusOnOpen();
+      }
+    } else {
+      this.didFocus = false;
+    }
+  }
+
+  /** Moves focus into the dialog (composer for active chats, panel otherwise). */
+  private focusOnOpen() {
+    const panel = this.shadowRoot?.querySelector<HTMLElement>('.panel');
+    panel?.focus();
+    if (this.chatState?.state === 'active') {
+      setTimeout(() => {
+        const body = this.renderRoot?.querySelector<CwChatBody>('cw-chat-body');
+        body?.focusInput?.();
+      }, 60);
+    }
+  }
+
   render() {
     const cw = this.chatWindowConfig;
     const cs = this.chatState;
@@ -162,6 +193,10 @@ export class CwChatPanel extends LitElement {
       >
         <div
           class="panel"
+          role="dialog"
+          aria-modal="${this.panelOpen ? 'true' : 'false'}"
+          aria-label="Chat window"
+          tabindex="-1"
           style="box-shadow: ${shadow}; border: ${border}; border-radius: ${borderRadius}; background: ${cw.bodyBg || 'var(--cw-bg)'}; --cw-accent: ${cw.accentColor || '#0b5fff'}"
         >
           <!-- HEADER -->
