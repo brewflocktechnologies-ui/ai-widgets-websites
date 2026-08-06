@@ -29,8 +29,9 @@ export const ConfigurableChatPanel = {
     bodyBg: '#f8fafc',
   },
   render: (args: any) => html`
-    <div style="position: relative; height: 560px;">
+    <div style="position: relative; width: 400px; height: 560px;">
       <cw-chat-panel
+        .fixed="${false}"
         .panelOpen="${args.panelOpen}"
         .chatWindowConfig="${{
           widgetWidth: args.widgetWidth,

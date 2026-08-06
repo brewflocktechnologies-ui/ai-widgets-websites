@@ -45,8 +45,9 @@ export const BarPreset = {
   render:(args: any) => {
     const isCard = args.layout === 'card';
     return html`
-      <div style="position: relative; height: ${isCard ? '260px' : '100px'};">
+      <div style="position: relative; width: ${isCard ? '280px' : '300px'}; height: ${isCard ? '300px' : '120px'};">
         <cw-chatbar
+          .fixed="${false}"
           .panelOpen="${args.panelOpen}"
           .unreadCount="${args.unreadCount}"
           .config="${{
@@ -93,8 +94,9 @@ export const CardPreset = {
     shadow: true,
   },
   render: (args: any) => html`
-    <div style="position: relative; height: 260px;">
+    <div style="position: relative; width: 280px; height: 300px;">
       <cw-chatbar
+        .fixed="${false}"
         .panelOpen="${args.panelOpen}"
         .unreadCount="${args.unreadCount}"
         .config="${{

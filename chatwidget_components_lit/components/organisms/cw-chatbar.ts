@@ -17,6 +17,8 @@ export class CwChatbar extends LitElement {
   @property({ type: Boolean }) panelOpen = false;
   @property({ type: Number }) unreadCount = 0;
   @property({ type: Number }) rev = 0;
+  /** When true (default) the bar is fixed to the viewport; set false to position it inside a container (used by stories). */
+  @property({ type: Boolean }) fixed = true;
 
   @state() hovered = false;
 
@@ -136,7 +138,7 @@ export class CwChatbar extends LitElement {
         role="button"
         tabindex="0"
         aria-label="${this.panelOpen ? 'Close chat' : 'Open chat'}"
-        style="width: ${widthVal}px; height: ${heightVal}; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${rawBottom}px; right: ${rawRight}px; background: ${bg}; color: ${s.textColor || '#ffffff'}; border-radius: ${borderRadius}; box-shadow: ${s.shadow !== false ? '0 8px 24px rgba(0,0,0,0.18)' : 'none'}; padding: ${padding}; transform: ${transform}; flex-direction: ${isCard ? 'column' : 'row'}; gap: ${gap}"
+        style="position: ${this.fixed ? 'fixed' : 'absolute'}; width: ${widthVal}px; height: ${heightVal}; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${rawBottom}px; right: ${rawRight}px; background: ${bg}; color: ${s.textColor || '#ffffff'}; border-radius: ${borderRadius}; box-shadow: ${s.shadow !== false ? '0 8px 24px rgba(0,0,0,0.18)' : 'none'}; padding: ${padding}; transform: ${transform}; flex-direction: ${isCard ? 'column' : 'row'}; gap: ${gap}"
         @mouseenter="${() => (this.hovered = true)}"
         @mouseleave="${() => (this.hovered = false)}"
         @click="${this.handleClick}"

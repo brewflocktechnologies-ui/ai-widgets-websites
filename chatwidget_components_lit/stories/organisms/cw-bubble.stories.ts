@@ -62,9 +62,9 @@ const baseConfig = {
   hideOnOpen: true,
 };
 
-/** Positions the (absolute) bubble inside its own canvas. */
+/** Positions the (absolute) bubble inside its own centered canvas. */
 const scene = (inner: any) => html`
-  <div style="position: relative; height: 180px; width: 100%;">
+  <div style="position: relative; width: 280px; height: 180px;">
     ${inner}
   </div>
 `;

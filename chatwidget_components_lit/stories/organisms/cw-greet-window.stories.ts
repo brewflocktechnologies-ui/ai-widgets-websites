@@ -56,8 +56,9 @@ export const ConfigurableGreetWindow = {
     buttonIconColor: '#ffffff',
   },
   render: (args: any) => html`
-    <div style="position: relative; height: 380px;">
+    <div style="position: relative; width: 380px; height: 440px;">
       <cw-greet-window
+        .fixed="${false}"
         .panelOpen="${args.panelOpen}"
         .config="${{
           enabled: args.enabled,

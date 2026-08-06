@@ -18,6 +18,8 @@ export class CwGreetWindow extends LitElement {
   @property({ type: Boolean }) visible = true;
   @property({ type: Boolean }) dismissed = false;
   @property({ type: Number }) rev = 0;
+  /** When true (default) the window is fixed to the viewport; set false to position it inside a container (used by stories). */
+  @property({ type: Boolean }) fixed = true;
 
   private transition = new EnterLeaveController(this, {
     enterMs: () => 300,
@@ -150,7 +152,7 @@ export class CwGreetWindow extends LitElement {
     return html`
       <div
         class="greet-wrapper"
-        style="bottom: ${bottomPx}px; right: ${rawRight}px; width: ${widthVal}px; max-width: calc(100% - 24px); max-height: ${maxHeightPx}; opacity: ${isHidden ? '0' : '1'}; transform: ${isHidden ? 'translateY(16px)' : 'translateY(0)'}; transition: opacity ${durationSec}s ease, transform ${durationSec}s ease; transition-delay: ${transitionDelay}"
+        style="position: ${this.fixed ? 'fixed' : 'absolute'}; bottom: ${bottomPx}px; right: ${rawRight}px; width: ${widthVal}px; max-width: calc(100% - 24px); max-height: ${maxHeightPx}; opacity: ${isHidden ? '0' : '1'}; transform: ${isHidden ? 'translateY(16px)' : 'translateY(0)'}; transition: opacity ${durationSec}s ease, transform ${durationSec}s ease; transition-delay: ${transitionDelay}"
       >
         <!-- Greet Card -->
         <div

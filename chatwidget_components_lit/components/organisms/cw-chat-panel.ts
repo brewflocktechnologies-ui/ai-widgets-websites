@@ -17,6 +17,8 @@ export class CwChatPanel extends LitElement {
   @property({ type: Object }) bubbleConfig?: BubbleState;
   @property({ type: Boolean }) panelOpen = false;
   @property({ type: Number }) rev = 0;
+  /** When true (default) the panel is fixed to the viewport; set false to position it inside a container (used by stories). */
+  @property({ type: Boolean }) fixed = true;
 
   private transition = new EnterLeaveController(this, {
     enterMs: () => (this.chatWindowConfig?.animationOpeningSec !== undefined ? this.chatWindowConfig.animationOpeningSec : 0.3) * 1000,
@@ -189,7 +191,7 @@ export class CwChatPanel extends LitElement {
     return html`
       <div
         class="panel-wrapper zotly-widget-panel-wrapper"
-        style="width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: ${maxHeightPx}; position: fixed; bottom: ${bottomPx}px; right: ${rawRight}px; opacity: ${isHidden ? '0' : '1'}; transform: ${isHidden ? 'scale(0.5) translateY(32px)' : 'scale(1) translateY(0)'}; transform-origin: bottom right; transition: opacity ${durationSec}s ease, transform ${durationSec}s ease"
+        style="position: ${this.fixed ? 'fixed' : 'absolute'}; width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: ${maxHeightPx}; bottom: ${bottomPx}px; right: ${rawRight}px; opacity: ${isHidden ? '0' : '1'}; transform: ${isHidden ? 'scale(0.5) translateY(32px)' : 'scale(1) translateY(0)'}; transform-origin: bottom right; transition: opacity ${durationSec}s ease, transform ${durationSec}s ease"
       >
         <div
           class="panel"
