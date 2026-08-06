@@ -6,6 +6,7 @@ import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import '../molecules/cw-welcome-card.js';
 import '../molecules/cw-message-bubble.js';
 import '../molecules/cw-composer.js';
+import '../molecules/cw-image-cropper.js';
 import '../atoms/cw-typing-dots.js';
 import type { CwComposer } from '../molecules/cw-composer.js';
 
@@ -25,6 +26,8 @@ export class CwChatBody extends LitElement {
   @state() private offlineName = '';
   @state() private offlineEmail = '';
   @state() private offlineMessage = '';
+  @state() private cropperOpen = false;
+  @state() private pendingImageSrc = '';
 
   private lastCount = -1;
 
@@ -331,7 +334,18 @@ export class CwChatBody extends LitElement {
   }
 
   private handleFileSelect(e: Event) {
-    this.emit('cw:attach-files', e.target);
+    const input = e.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        this.pendingImageSrc = evt.target?.result as string;
+        this.cropperOpen = true;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      this.emit('cw:attach-files', e.target);
+    }
   }
 
   /** Delegates focus to the composer (used by the panel when the chat opens). */
@@ -640,6 +654,16 @@ export class CwChatBody extends LitElement {
             `
           : ''
         }
+
+        <cw-image-cropper
+          .open="${this.cropperOpen}"
+          .imageSrc="${this.pendingImageSrc}"
+          @cw:image-cropped="${(e: CustomEvent) => {
+            this.cropperOpen = false;
+            this.emit('cw:send', `[Cropped Image: ${e.detail.dataUrl.slice(0, 40)}...]`);
+          }}"
+          @cw:close="${() => (this.cropperOpen = false)}"
+        ></cw-image-cropper>
       </div>
     `;
   }

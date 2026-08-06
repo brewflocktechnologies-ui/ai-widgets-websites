@@ -37,6 +37,7 @@ export * from './components/molecules/cw-composer.js';
 export * from './components/molecules/cw-greet-input.js';
 export * from './components/molecules/cw-welcome-card.js';
 export * from './components/molecules/cw-forms-preview.js';
+export * from './components/molecules/cw-image-cropper.js';
 
 // Organisms
 export * from './components/organisms/cw-bubble.js';
