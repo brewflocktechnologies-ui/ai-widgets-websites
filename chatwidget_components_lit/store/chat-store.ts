@@ -341,7 +341,7 @@ function buildDefaultChatbar(theme: { primary: string; secondary: string }): Cha
     iconWidth: 20,
     iconHeight: 20,
     width: 255,
-    height: 40,
+    height: 44,
     shadow: true,
     borderRadius: { tl: 20, tr: 20, bl: 20, br: 20 },
     hideOnOpen: true,

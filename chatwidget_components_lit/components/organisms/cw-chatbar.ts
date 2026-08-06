@@ -2,7 +2,6 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { ChatbarState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
-import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import {
   getBorderRadius,
   getChatbarBackground,
@@ -23,7 +22,6 @@ export class CwChatbar extends LitElement {
 
   static styles = [
     GLOBAL_STYLES,
-    REDUCED_MOTION_CSS,
     css`
       :host {
         display: block;
@@ -32,6 +30,7 @@ export class CwChatbar extends LitElement {
         position: fixed;
         z-index: 40;
         display: flex;
+        align-items: center;
         cursor: pointer;
         user-select: none;
         box-sizing: border-box;
@@ -109,11 +108,6 @@ export class CwChatbar extends LitElement {
     }
   }
 
-  /** Moves keyboard focus to the launcher (used when the panel closes). */
-  focus() {
-    this.shadowRoot?.querySelector<HTMLElement>('.chatbar-wrapper')?.focus();
-  }
-
   render() {
     const s = this.config || ({} as ChatbarState);
     if (!s.enabled || (s.hideOnOpen && this.panelOpen)) return html``;
@@ -125,7 +119,7 @@ export class CwChatbar extends LitElement {
 
     const heightVal = isCard
       ? (s.height && s.height >= 120 ? `${s.height}px` : 'auto')
-      : `${s.height || 40}px`;
+      : `${s.height && s.height >= 30 ? s.height : 46}px`;
 
     const rawBottom = s.offsetBottom !== undefined ? s.offsetBottom : 16;
     const rawRight = s.offsetRight !== undefined ? s.offsetRight : 16;
@@ -133,7 +127,7 @@ export class CwChatbar extends LitElement {
     const bg = getChatbarBackground(s);
     const borderRadius = getBorderRadius(s.borderRadius, isCard ? '24px' : '9999px');
     const transform = this.hovered ? 'scale(1.02)' : 'scale(1.0)';
-    const padding = s.padding !== undefined ? s.padding : isCard ? '24px 20px' : '0 16px';
+    const padding = s.padding !== undefined ? s.padding : isCard ? '24px 20px' : '0 18px';
     const gap = s.gap !== undefined ? `${s.gap}px` : isCard ? '12px' : '0';
 
     return html`
@@ -142,7 +136,7 @@ export class CwChatbar extends LitElement {
         role="button"
         tabindex="0"
         aria-label="${this.panelOpen ? 'Close chat' : 'Open chat'}"
-        style="width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${rawBottom}px; right: ${rawRight}px; background: ${bg}; color: ${s.textColor || '#ffffff'}; border-radius: ${borderRadius}; box-shadow: ${s.shadow ? '0 4px 16px rgba(0,0,0,0.15)' : 'none'}; padding: ${padding}; transform: ${transform}; flex-direction: ${isCard ? 'column' : 'row'}; gap: ${gap}"
+        style="width: ${widthVal}px; height: ${heightVal}; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${rawBottom}px; right: ${rawRight}px; background: ${bg}; color: ${s.textColor || '#ffffff'}; border-radius: ${borderRadius}; box-shadow: ${s.shadow !== false ? '0 8px 24px rgba(0,0,0,0.18)' : 'none'}; padding: ${padding}; transform: ${transform}; flex-direction: ${isCard ? 'column' : 'row'}; gap: ${gap}"
         @mouseenter="${() => (this.hovered = true)}"
         @mouseleave="${() => (this.hovered = false)}"
         @click="${this.handleClick}"
@@ -189,32 +183,32 @@ export class CwChatbar extends LitElement {
               <!-- BAR LAYOUT (Horizontal) -->
               <div class="bar-layout">
                 <span
-                  style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; text-align: left; font-size: ${getChatbarFontSize(s.textSize, typeof s.height === 'number' ? s.height : 40)}; letter-spacing: ${(s.letterSpacing || 0)}px; color: ${s.textColor || '#ffffff'}"
+                  style="font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; text-align: left; font-size: ${getChatbarFontSize(s.textSize, typeof s.height === 'number' ? s.height : 46)}; letter-spacing: ${(s.letterSpacing || 0)}px; color: ${s.textColor || '#ffffff'}"
                 >
                   ${(s.text || 'Chat with us').replace(/\n/g, ' ')}
                 </span>
 
-                <div style="display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; margin-left: 8px">
+                <div style="display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; margin-left: 10px">
                   ${s.iconType === 'image' && s.iconImageUrl
                     ? html`
                         <img
                           src="${s.iconImageUrl}"
                           alt="icon"
-                          style="object-fit: ${s.iconFit || 'contain'}; opacity: ${s.iconOpacity !== undefined ? s.iconOpacity : 1}; width: ${getChatbarIconWidth(s.iconWidth, typeof s.height === 'number' ? s.height : 40, 'image')}px; height: ${getChatbarIconHeight(s.iconHeight, typeof s.height === 'number' ? s.height : 40, 'image')}px; mix-blend-mode: ${s.iconBlend || 'normal'}"
+                          style="object-fit: ${s.iconFit || 'contain'}; opacity: ${s.iconOpacity !== undefined ? s.iconOpacity : 1}; width: ${getChatbarIconWidth(s.iconWidth, typeof s.height === 'number' ? s.height : 46, 'image')}px; height: ${getChatbarIconHeight(s.iconHeight, typeof s.height === 'number' ? s.height : 46, 'image')}px; mix-blend-mode: ${s.iconBlend || 'normal'}"
                         />
                       `
                     : s.iconType === 'customSvg' && s.customSvg
                     ? html`
                         <cw-icon
                           .customSvg="${s.customSvg}"
-                          .size="${getChatbarIconWidth(s.iconWidth, typeof s.height === 'number' ? s.height : 40, 'customSvg')}"
+                          .size="${getChatbarIconWidth(s.iconWidth, typeof s.height === 'number' ? s.height : 46, 'customSvg')}"
                           .color="${s.iconColor || '#ffffff'}"
                         ></cw-icon>
                       `
                     : html`
                         <cw-icon
                           .name="${s.lucideIcon || 'MessageCircle'}"
-                          .size="${getChatbarIconWidth(s.iconWidth, typeof s.height === 'number' ? s.height : 40, 'lucide')}"
+                          .size="${getChatbarIconWidth(s.iconWidth, typeof s.height === 'number' ? s.height : 46, 'lucide')}"
                           .color="${s.iconColor || '#ffffff'}"
                         ></cw-icon>
                       `
