@@ -4,6 +4,7 @@ import '../../components/molecules/cw-chat-header.js';
 export default {
   title: 'Molecules/ChatHeader',
   component: 'cw-chat-header',
+  tags: ['autodocs'],
   argTypes: {
     clientName: { control: 'text' },
     agentName: { control: 'text' },

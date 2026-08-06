@@ -4,6 +4,7 @@ import '../../components/molecules/cw-forms-preview.js';
 export default {
   title: 'Molecules/FormsPreview',
   component: 'cw-forms-preview',
+  tags: ['autodocs'],
   argTypes: {
     type: { control: 'select', options: ['prechat', 'postchat', 'ticket'] },
     heading: { control: 'text' },

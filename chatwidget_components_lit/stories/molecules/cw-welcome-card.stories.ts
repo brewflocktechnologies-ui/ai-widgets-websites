@@ -11,6 +11,7 @@ import '../../components/molecules/cw-welcome-card.js';
 export default {
   title: 'Molecules/WelcomeCard',
   component: 'cw-welcome-card',
+  tags: ['autodocs'],
   argTypes: {
     enabled: { control: 'boolean' },
     cardLayout: {

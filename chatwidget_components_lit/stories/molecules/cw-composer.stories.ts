@@ -4,6 +4,7 @@ import '../../components/molecules/cw-composer.js';
 export default {
   title: 'Molecules/Composer',
   component: 'cw-composer',
+  tags: ['autodocs'],
   argTypes: {
     draft: { control: 'text' },
     attachmentsEnabled: { control: 'boolean' },

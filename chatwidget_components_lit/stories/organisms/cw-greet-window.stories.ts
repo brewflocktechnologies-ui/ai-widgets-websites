@@ -4,6 +4,7 @@ import '../../components/organisms/cw-greet-window.js';
 export default {
   title: 'Organisms/GreetWindow',
   component: 'cw-greet-window',
+  tags: ['autodocs'],
   argTypes: {
     panelOpen: { control: 'boolean' },
     enabled: { control: 'boolean' },

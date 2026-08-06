@@ -20,6 +20,8 @@ export class CwBubble extends LitElement {
   @property({ type: Number }) unreadCount = 0;
   @property({ type: Boolean }) hasSentMessage = false;
   @property({ type: Number }) rev = 0;
+  /** When true (default) the bubble is fixed to the viewport; set false to position it inside a positioned container (used by stories). */
+  @property({ type: Boolean }) fixed = true;
 
   @state() hovered = false;
 
@@ -192,7 +194,7 @@ export class CwBubble extends LitElement {
     return html`
       <div
         class="bubble-wrapper"
-        style="width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${rawBottom}px; right: ${rawRight}px; border-radius: ${borderRadius}; background: ${bg}; background-blend-mode: ${settings.backgroundBlendMode || 'normal'}; box-shadow: ${boxShadow}; transform: ${transform}; ${borderStyle} ${glassStyle} ${neonStyle} ${entryAnim}"
+        style="position: ${this.fixed ? 'fixed' : 'absolute'}; width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${rawBottom}px; right: ${rawRight}px; border-radius: ${borderRadius}; background: ${bg}; background-blend-mode: ${settings.backgroundBlendMode || 'normal'}; box-shadow: ${boxShadow}; transform: ${transform}; ${borderStyle} ${glassStyle} ${neonStyle} ${entryAnim}"
         @mouseenter="${() => (this.hovered = true)}"
         @mouseleave="${() => (this.hovered = false)}"
         @click="${this.handleClick}"

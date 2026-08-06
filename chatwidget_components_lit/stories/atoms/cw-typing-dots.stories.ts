@@ -4,6 +4,7 @@ import '../../components/atoms/cw-typing-dots.js';
 export default {
   title: 'Atoms/TypingDots',
   component: 'cw-typing-dots',
+  tags: ['autodocs'],
 };
 
 export const Default = {

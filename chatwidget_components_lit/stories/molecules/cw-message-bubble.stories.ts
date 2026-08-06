@@ -4,6 +4,7 @@ import '../../components/molecules/cw-message-bubble.js';
 export default {
   title: 'Molecules/MessageBubble',
   component: 'cw-message-bubble',
+  tags: ['autodocs'],
   argTypes: {
     senderType: { control: 'select', options: ['AGENT', 'VISITOR'] },
     body: { control: 'text' },

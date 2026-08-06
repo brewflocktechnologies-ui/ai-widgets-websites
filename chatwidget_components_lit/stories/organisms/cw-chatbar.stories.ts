@@ -4,6 +4,7 @@ import '../../components/organisms/cw-chatbar.js';
 export default {
   title: 'Organisms/Chatbar',
   component: 'cw-chatbar',
+  tags: ['autodocs'],
   argTypes: {
     panelOpen: { control: 'boolean' },
     unreadCount: { control: { type: 'number', min: 0, max: 99 } },

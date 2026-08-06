@@ -4,6 +4,7 @@ import '../../components/atoms/cw-message-tick.js';
 export default {
   title: 'Atoms/MessageTick',
   component: 'cw-message-tick',
+  tags: ['autodocs'],
   argTypes: {
     status: {
       control: { type: 'select' },

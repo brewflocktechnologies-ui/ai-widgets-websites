@@ -1,0 +1,118 @@
+import { Meta, Title, Subtitle, Heading, Canvas, Controls, Stories, Source, ArgTypes } from '@storybook/blocks';
+import * as WidgetRootStories from './cw-widget-root.stories';
+
+<Meta of={WidgetRootStories} />
+
+<Title>cw-widget-root — Template</Title>
+
+<Subtitle>The single "smart" container that owns state and wires the whole chat widget.</Subtitle>
+
+The widget root is the top of the atomic hierarchy. Every other component is **presentational** —
+it receives configuration via properties and reports user intent back up through composed
+`cw:*` custom events. `cw-widget-root` is the **only** component that talks to the store.
+
+<Heading as="h2">Why "Template"?</Heading>
+
+In atomic design, a **template** arranges organisms into a concrete page/surface layout without
+final content. `cw-widget-root` plays that role for the chat widget: it composes the floating
+trigger, the greet window and the chat panel, binds them to the shared store, and re-renders
+the tree whenever store state changes.
+
+<Heading as="h2">Component tree</Heading>
+
+```
+cw-widget-root                              ← Template (store-aware)
+├── cw-chatbar  OR  cw-bubble               ← Floating trigger (config decides which)
+├── cw-greet-window                         ← Floating greet card
+│   └── cw-greet-input
+└── cw-chat-panel                           ← Main chat surface
+    ├── cw-chat-header
+    └── cw-chat-body
+        ├── cw-welcome-card
+        ├── cw-message-bubble
+        ├── cw-composer
+        ├── cw-typing-dots
+        └── cw-forms-preview
+```
+
+<Heading as="h2">How it works</Heading>
+
+1. On connect, the root calls `initStore()` and subscribes to every store slice
+   (`bubble`, `chatbar`, `greetWindow`, `chatWindow`, `features`, `chat`).
+2. Each store notification bumps a local `rev` counter, forcing presentational children
+   to re-render even when config objects are mutated in place.
+3. Leaf components dispatch composed `cw:*` events. The root listens and translates each
+   event into the matching store action — leaves never touch the store directly.
+
+<Heading as="h2">Event wiring</Heading>
+
+The table below is the full contract between the UI leaves and the store. All events bubble
+and are composed, so they cross shadow DOM boundaries and are caught by the root listener.
+
+| Event | Detail | Store action |
+| --- | --- | --- |
+| `cw:toggle` | — | Toggle panel open/closed |
+| `cw:close-panel` | — | Close the panel |
+| `cw:start-chat` | — | `chatStore.startFromWelcome()` |
+| `cw:greet-dismiss` | — | `chatStore.dismissGreetWindow()` |
+| `cw:greet-input` | `string` | Set the greeting draft |
+| `cw:greet-submit` | `string` | Open panel, start chat, send draft |
+| `cw:draft-change` | `string` | Set the composer draft |
+| `cw:send` | — | `chatStore.send()` |
+| `cw:toggle-attach` | — | Toggle the attach popup |
+| `cw:toggle-emoji` | — | Toggle the emoji picker |
+| `cw:attach-files` | `HTMLInputElement` | `chatStore.uploadImage()` |
+| `cw:capture-screenshot` | — | `chatStore.captureScreenshot()` |
+| `cw:dismiss-consent` | — | `chatStore.dismissConsent()` |
+| `cw:download-transcript` | — | `chatStore.downloadTranscript()` |
+| `cw:toggle-sounds` | — | `chatStore.toggleSounds()` |
+| `cw:insert-emoji` | `string` | `chatStore.insertEmoji()` |
+| `cw:submit-offline` | `{ name, email, message }` | `chatStore.submitOffline()` |
+| `cw:start-new` | — | `chatStore.startNew()` |
+| `cw:toggle-expand` | — | Expand/collapse the panel |
+| `cw:open-menu` | — | Toggle the chat options menu |
+| `cw:end-chat` | — | `chatStore.askEndChat()` |
+| `cw:confirm-end` | — | `chatStore.confirmEnd()` |
+| `cw:confirm-cancel` | — | `chatStore.cancelEndChat()` |
+
+<Heading as="h2">Global window events</Heading>
+
+The root also listens for two host-page events so any script on your site can control the widget:
+
+- `toggle-contact-widget` — toggles the panel
+- `close-contact-widget` — closes the panel
+
+```js
+window.dispatchEvent(new Event('toggle-contact-widget'));
+window.dispatchEvent(new Event('close-contact-widget'));
+```
+
+<Heading as="h2">Live example</Heading>
+
+<Canvas of={WidgetRootStories.ConfigurableLiveWidget} />
+
+Use the controls to experiment with the trigger type, welcome/greet behaviour and animations:
+
+<Controls of={WidgetRootStories.ConfigurableLiveWidget} />
+
+<Heading as="h2">Prop reference</Heading>
+
+<ArgTypes of={WidgetRootStories} />
+
+<Heading as="h2">Embedding the widget</Heading>
+
+The template mounts itself when included on a page. Script-tag usage:
+
+```html
+<script src="/path/to/chatwidget_components_lit/dist/index.es.js"></script>
+```
+
+Or mount it programmatically from your own bundle:
+
+```js
+import { mountChatWidget } from 'chatwidget-components-lit';
+
+const root = mountChatWidget(document.body);
+```
+
+<Stories />

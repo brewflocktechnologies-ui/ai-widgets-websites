@@ -4,6 +4,7 @@ import '../../components/atoms/cw-avatar.js';
 export default {
   title: 'Atoms/Avatar',
   component: 'cw-avatar',
+  tags: ['autodocs'],
   argTypes: {
     name: { control: 'text' },
     src: { control: 'text' },

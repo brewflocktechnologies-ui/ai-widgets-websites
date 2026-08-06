@@ -4,6 +4,7 @@ import '../../components/organisms/cw-chat-panel.js';
 export default {
   title: 'Organisms/ChatPanel',
   component: 'cw-chat-panel',
+  tags: ['autodocs'],
   argTypes: {
     panelOpen: { control: 'boolean' },
     state: { control: 'select', options: ['active', 'welcome', 'prechat', 'postchat'] },

@@ -4,6 +4,7 @@ import '../../components/molecules/cw-greet-input.js';
 export default {
   title: 'Molecules/GreetInput',
   component: 'cw-greet-input',
+  tags: ['autodocs'],
   argTypes: {
     enabled: { control: 'boolean' },
     openingTimeAfterInitialLoadSec: { control: { type: 'number', min: 0, max: 10, step: 0.5 } },

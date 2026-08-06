@@ -1,0 +1,64 @@
+import { Meta, Title, Subtitle, Heading } from '@storybook/blocks';
+
+<Meta title="Introduction" />
+
+<Title>Zotly Chat Widget — Design System</Title>
+
+<Subtitle>An atomic design system for the chat widget, built with Lit web components.</Subtitle>
+
+This Storybook documents the widget's component library, organised using **atomic design**:
+a strict one-way hierarchy from tiny atoms up to the single smart template that wires them together.
+
+<Heading as="h2">The hierarchy</Heading>
+
+- **Atoms** — the smallest building blocks (icon, avatar, badge, status ticks…). No business logic.
+- **Molecules** — groups of atoms that form a meaningful UI unit (composer, message bubble, forms…).
+- **Organisms** — sections composed of molecules (chat panel, header, floating trigger…).
+- **Templates** — the full surface layout with the wiring (`cw-widget-root`).
+
+Every leaf is **presentational**: it receives config via properties and pushes user intent up
+through composed `cw:*` custom events. Only the template talks to the store.
+
+<Heading as="h2">Atoms</Heading>
+
+| Component | Purpose | Docs |
+| --- | --- | --- |
+| `cw-icon` | Central SVG icon registry | [docs](?path=/docs/atoms-icon--docs) |
+| `cw-avatar` | Avatar with initials / image + status dot | [docs](?path=/docs/atoms-avatar--docs) |
+| `cw-badge` | Unread count pill with animations | [docs](?path=/docs/atoms-badge--docs) |
+| `cw-message-tick` | sent / delivered / read status | [docs](?path=/docs/atoms-messagetick--docs) |
+| `cw-typing-dots` | Typing indicator dots | [docs](?path=/docs/atoms-typingdots--docs) |
+
+<Heading as="h2">Molecules</Heading>
+
+| Component | Purpose | Docs |
+| --- | --- | --- |
+| `cw-composer` | Attach + input + emoji + send | [docs](?path=/docs/molecules-composer--docs) |
+| `cw-message-bubble` | Single chat message (avatar + bubble + time + tick) | [docs](?path=/docs/molecules-messagebubble--docs) |
+| `cw-welcome-card` | Welcome / hero surface | [docs](?path=/docs/molecules-welcomecard--docs) |
+| `cw-greet-input` | Greet window input box | [docs](?path=/docs/molecules-greetinput--docs) |
+| `cw-forms-preview` | Pre-chat / post-chat / ticket form previews | [docs](?path=/docs/molecules-formspreview--docs) |
+| `cw-chat-header` | Chat header (avatar, actions, menu) | [docs](?path=/docs/molecules-chatheader--docs) |
+
+<Heading as="h2">Organisms</Heading>
+
+| Component | Purpose | Docs |
+| --- | --- | --- |
+| `cw-bubble` | Floating circular trigger (glass/neon/tooltip/badge) | [docs](?path=/docs/organisms-bubble--docs) |
+| `cw-chatbar` | Floating bar / card trigger | [docs](?path=/docs/organisms-chatbar--docs) |
+| `cw-greet-window` | Floating greet card + input | [docs](?path=/docs/organisms-greetwindow--docs) |
+| `cw-chat-body` | Chat surface (states, messages, composer) | [docs](?path=/docs/organisms-chatbody--docs) |
+| `cw-chat-panel` | Panel shell (header + body + modal) | [docs](?path=/docs/organisms-chatpanel--docs) |
+
+<Heading as="h2">Templates</Heading>
+
+| Component | Purpose | Docs |
+| --- | --- | --- |
+| `cw-widget-root` | The smart container — store wiring, event bus, layout | [comprehensive docs](?path=/docs/templates-widgetroot--docs) |
+
+<Heading as="h2">Guiding rules</Heading>
+
+1. **Data flows down** — config is always passed as component properties.
+2. **Events flow up** — leaves never import or mutate the store.
+3. **No `cw:*` side effects in leaves** — everything is delegated to the root.
+4. **One source of truth** — `chatStore` owns all widget state.

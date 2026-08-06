@@ -4,6 +4,7 @@ import '../../components/organisms/cw-chat-body.js';
 export default {
   title: 'Organisms/ChatBody',
   component: 'cw-chat-body',
+  tags: ['autodocs'],
   argTypes: {
     state: { control: 'select', options: ['active', 'welcome', 'prechat', 'postchat'] },
     agentName: { control: 'text' },

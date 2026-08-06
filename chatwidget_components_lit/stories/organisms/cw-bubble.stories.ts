@@ -7,11 +7,15 @@ import '../../components/organisms/cw-bubble.js';
  * badges, gradients). `ConfigurableBubble` is the playground that exposes
  * every control; the curated stories below lock in canonical looks for
  * visual regression and quick reference.
+ *
+ * NOTE: stories render the bubble with `fixed="false"` so it sits inside its
+ * own canvas instead of the real-widget `position: fixed` viewport behaviour.
  */
 
 export default {
   title: 'Organisms/Bubble',
   component: 'cw-bubble',
+  tags: ['autodocs'],
   argTypes: {
     panelOpen: { control: 'boolean' },
     unreadCount: { control: { type: 'number', min: 0, max: 99 } },
@@ -58,6 +62,13 @@ const baseConfig = {
   hideOnOpen: true,
 };
 
+/** Positions the (absolute) bubble inside its own canvas. */
+const scene = (inner: any) => html`
+  <div style="position: relative; height: 180px; width: 100%;">
+    ${inner}
+  </div>
+`;
+
 export const ConfigurableBubble = {
   args: {
     panelOpen: false,
@@ -84,9 +95,10 @@ export const ConfigurableBubble = {
     backgroundOverlayType: 'none',
     backgroundImageUrl: '',
   },
-  render: (args: any) => html`
-    <div style="position: relative; height: 120px;">
+  render: (args: any) =>
+    scene(html`
       <cw-bubble
+        .fixed="${false}"
         .panelOpen="${args.panelOpen}"
         .unreadCount="${args.unreadCount}"
         .config="${{
@@ -114,22 +126,19 @@ export const ConfigurableBubble = {
           boxShadowOpacity: 0.2,
         }}"
       ></cw-bubble>
-    </div>
-  `,
+    `),
 };
 
 export const Default = {
-  render: () => html`
-    <div style="position: relative; height: 120px;">
-      <cw-bubble .config="${{ ...baseConfig }}"></cw-bubble>
-    </div>
-  `,
+  render: () =>
+    scene(html`<cw-bubble .fixed="${false}" .config="${{ ...baseConfig }}"></cw-bubble>`),
 };
 
 export const GradientBackground = {
-  render: () => html`
-    <div style="position: relative; height: 120px;">
+  render: () =>
+    scene(html`
       <cw-bubble
+        .fixed="${false}"
         .config="${{
           ...baseConfig,
           backgroundColor: '#0b5fff',
@@ -141,28 +150,29 @@ export const GradientBackground = {
           ],
         }}"
       ></cw-bubble>
-    </div>
-  `,
+    `),
 };
 
-
 export const NeonGlow = {
-  render: () => html`
-    <cw-bubble
-      .config="${{
-        ...baseConfig,
-        backgroundColor: '#0f172a',
-        lucideIcon: 'MessageSquare',
-        neon: { enabled: true, color: '#22d3ee', intensity: 0.9 },
-      }}"
-    ></cw-bubble>
-  `,
+  render: () =>
+    scene(html`
+      <cw-bubble
+        .fixed="${false}"
+        .config="${{
+          ...baseConfig,
+          backgroundColor: '#0f172a',
+          lucideIcon: 'MessageSquare',
+          neon: { enabled: true, color: '#22d3ee', intensity: 0.9 },
+        }}"
+      ></cw-bubble>
+    `),
 };
 
 export const OutlineRing = {
-  render: () => html`
-    <div style="position: relative; height: 120px;">
+  render: () =>
+    scene(html`
       <cw-bubble
+        .fixed="${false}"
         .config="${{
           ...baseConfig,
           backgroundColor: '#ffffff',
@@ -171,32 +181,34 @@ export const OutlineRing = {
           outlineRing: { enabled: true, width: 3, color: '#0b5fff', opacity: 0.35 },
         }}"
       ></cw-bubble>
-    </div>
-  `,
+    `),
 };
 
 export const ImageIcon = {
-  render: () => html`
-    <cw-bubble
-      .config="${{
-        ...baseConfig,
-        backgroundColor: '#ffffff',
-        iconType: 'image',
-        iconImageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=100&auto=format&fit=crop&q=80',
-        iconFit: 'cover',
-        border: { width: 2, color: '#ffffff', style: 'solid' },
-        boxShadowOffsetY: 6,
-        boxShadowBlur: 16,
-        boxShadowOpacity: 0.25,
-      }}"
-    ></cw-bubble>
-  `,
+  render: () =>
+    scene(html`
+      <cw-bubble
+        .fixed="${false}"
+        .config="${{
+          ...baseConfig,
+          backgroundColor: '#ffffff',
+          iconType: 'image',
+          iconImageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=100&auto=format&fit=crop&q=80',
+          iconFit: 'cover',
+          border: { width: 2, color: '#ffffff', style: 'solid' },
+          boxShadowOffsetY: 6,
+          boxShadowBlur: 16,
+          boxShadowOpacity: 0.25,
+        }}"
+      ></cw-bubble>
+    `),
 };
 
 export const BackgroundOverlayImage = {
-  render: () => html`
-    <div style="position: relative; height: 140px;">
+  render: () =>
+    scene(html`
       <cw-bubble
+        .fixed="${false}"
         .config="${{
           ...baseConfig,
           backgroundColor: '#0b5fff',
@@ -208,14 +220,14 @@ export const BackgroundOverlayImage = {
           backgroundBlendMode: 'multiply',
         }}"
       ></cw-bubble>
-    </div>
-  `,
+    `),
 };
 
 export const WithTooltip = {
-  render: () => html`
-    <div style="position: relative; height: 140px; padding: 24px 60px;">
+  render: () =>
+    scene(html`
       <cw-bubble
+        .fixed="${false}"
         .config="${{
           ...baseConfig,
           tooltip: {
@@ -231,21 +243,19 @@ export const WithTooltip = {
           },
         }}"
       ></cw-bubble>
-    </div>
-  `,
+    `),
 };
 
 export const HoverDots = {
-  render: () => html`
-    <div style="position: relative; height: 120px;">
+  render: () =>
+    scene(html`
       <cw-bubble
+        .fixed="${false}"
         .config="${{
           ...baseConfig,
           dots: { color: '#ffffff', size: 6, spacing: 6, animation: 'bounce' },
         }}"
       ></cw-bubble>
       <p style="position: absolute; top: 8px; left: 16px; margin: 0; font-size: 12px; color: #71717a; font-family: system-ui, sans-serif;">Hover the bubble to see the dots animation</p>
-    </div>
-  `,
+    `),
 };
-

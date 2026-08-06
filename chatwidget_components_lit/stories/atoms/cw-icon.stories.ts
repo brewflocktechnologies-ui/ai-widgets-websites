@@ -4,6 +4,7 @@ import '../../components/atoms/cw-icon.js';
 export default {
   title: 'Atoms/Icon',
   component: 'cw-icon',
+  tags: ['autodocs'],
   argTypes: {
     name: { control: 'text' },
     size: { control: 'number' },

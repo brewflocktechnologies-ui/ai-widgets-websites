@@ -4,6 +4,7 @@ import '../../components/atoms/cw-badge.js';
 export default {
   title: 'Atoms/Badge',
   component: 'cw-badge',
+  tags: ['autodocs'],
   argTypes: {
     count: { control: { type: 'number', min: 1, max: 999 } },
     position: {
