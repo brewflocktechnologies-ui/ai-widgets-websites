@@ -14,55 +14,102 @@ export default {
     bgColor: { control: 'color' },
     textColor: { control: 'color' },
     buttonBg: { control: 'color' },
+    buttonTextColor: { control: 'color' },
     textSize: { control: { type: 'number', min: 12, max: 24 } },
     lucideIcon: { control: 'text' },
-    iconWidth: { control: { type: 'number', min: 14, max: 32 } },
-    iconHeight: { control: { type: 'number', min: 14, max: 32 } },
-    width: { control: { type: 'number', min: 140, max: 360 } },
-    height: { control: { type: 'number', min: 32, max: 280 } },
+    iconWidth: { control: { type: 'number', min: 14, max: 48 } },
+    iconHeight: { control: { type: 'number', min: 14, max: 48 } },
     shadow: { control: 'boolean' },
   },
 };
 
-export const ConfigurableChatbar = {
+export const BarPreset = {
+  args:{
+    panelOpen:false,
+    unreadCount:1,
+    layout:'bar',
+    text:'Chat with us',
+    cardText:'Questions about PhonePe for business?',
+    buttonText:'Chat Now',
+    bgColor:"#8133d5",
+    textColor:'#ffffff',
+    buttonBg:'#ffffff',
+    buttonTextColor:"#ffffff",
+    textSize:16,
+    lucideIcon:"Chat",
+    iconWidth:36,
+    iconHeight:36,
+    shadow:true,
+  },
+  render:(args: any) => {
+    const isCard = args.layout === 'card';
+    return html`
+      <div style="position: relative; height: ${isCard ? '260px' : '100px'};">
+        <cw-chatbar
+          .panelOpen="${args.panelOpen}"
+          .unreadCount="${args.unreadCount}"
+          .config="${{
+            enabled:true,
+            layout:args.layout,
+            text:args.text,
+            cardText:args.cardText,
+            buttonText:args.buttonText,
+            bgColor:args.bgColor,
+            textColor:args.textColor,
+            buttonBg:args.buttonBg,
+            buttonTextColor:args.buttonTextColor,
+            textSize:args.textSize,
+            lucideIcon:args.lucideIcon,
+            iconWidth:args.iconWidth,
+            iconHeight:args.iconHeight,
+            width:isCard ? 250 : 255,
+            height:isCard ? undefined : 40,
+            shadow:args.shadow,
+            offsetRight:16,
+            offsetBottom:16,
+          }}"
+        ></cw-chatbar>
+      </div>
+    `;
+  },
+};
+
+export const CardPreset = {
   args: {
     panelOpen: false,
-    unreadCount: 1,
-    layout: 'bar',
-    text: 'Chat with us',
-    cardText: 'Questions about pricing?',
+    unreadCount: 0,
+    layout: 'card',
+    cardText: 'Questions about PhonePe for business?',
     buttonText: 'Chat Now',
-    bgColor: '#0b5fff',
+    bgColor: '#5f259f',
     textColor: '#ffffff',
     buttonBg: '#ffffff',
-    textSize: 14,
-    lucideIcon: 'MessageCircle',
-    iconWidth: 20,
-    iconHeight: 20,
-    width: 255,
-    height: 40,
+    buttonTextColor: '#5f259f',
+    textSize: 16,
+    lucideIcon: 'Sparkles',
+    iconWidth: 36,
+    iconHeight: 36,
     shadow: true,
   },
   render: (args: any) => html`
-    <div style="position: relative; height: ${args.layout === 'card' ? '260px' : '100px'};">
+    <div style="position: relative; height: 260px;">
       <cw-chatbar
         .panelOpen="${args.panelOpen}"
         .unreadCount="${args.unreadCount}"
         .config="${{
           enabled: true,
-          layout: args.layout,
-          text: args.text,
+          layout: 'card',
           cardText: args.cardText,
           buttonText: args.buttonText,
           bgColor: args.bgColor,
           textColor: args.textColor,
           buttonBg: args.buttonBg,
+          buttonTextColor: args.buttonTextColor,
           textSize: args.textSize,
           lucideIcon: args.lucideIcon,
           iconWidth: args.iconWidth,
           iconHeight: args.iconHeight,
-          width: args.width,
-          height: args.height,
+          width: 250,
           shadow: args.shadow,
           offsetRight: 16,
           offsetBottom: 16,

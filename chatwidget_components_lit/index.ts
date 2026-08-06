@@ -42,7 +42,7 @@ export * from './components/molecules/cw-forms-preview.js';
 export * from './components/organisms/cw-bubble.js';
 export * from './components/organisms/cw-chatbar.js';
 export * from './components/organisms/cw-greet-window.js';
-export * from './components/organisms/cw-chat-header.js';
+export * from './components/molecules/cw-chat-header.js';
 export * from './components/organisms/cw-chat-body.js';
 export * from './components/organisms/cw-chat-panel.js';
 

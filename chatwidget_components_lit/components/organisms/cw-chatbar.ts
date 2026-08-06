@@ -33,7 +33,7 @@ export class CwChatbar extends LitElement {
         cursor: pointer;
         user-select: none;
         box-sizing: border-box;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, width 0.2s ease, height 0.2s ease;
         max-width: calc(100% - 24px);
         max-height: calc(100% - 24px);
       }
@@ -44,7 +44,9 @@ export class CwChatbar extends LitElement {
         justify-content: space-between;
         width: 100%;
         height: 100%;
+        min-height: 170px;
         box-sizing: border-box;
+        position: relative;
       }
       .bar-layout {
         display: flex;
@@ -55,8 +57,8 @@ export class CwChatbar extends LitElement {
       }
       .badge {
         position: absolute;
-        top: -6px;
-        right: -6px;
+        top: -8px;
+        right: -8px;
         background-color: #dc2626;
         color: #ffffff;
         font-weight: 700;
@@ -103,50 +105,58 @@ export class CwChatbar extends LitElement {
     if (!s.enabled || (s.hideOnOpen && this.panelOpen)) return html``;
 
     const isCard = s.layout === 'card';
-    const widthVal = s.width || (isCard ? 240 : 255);
-    const heightVal = s.height || (isCard ? 220 : 40);
-    const rawBottom = s.offsetBottom !== undefined ? s.offsetBottom : 12;
+    const widthVal = isCard
+      ? (s.width && s.width >= 180 ? s.width : 250)
+      : (s.width && s.width >= 100 ? s.width : 255);
+
+    const heightVal = isCard
+      ? (s.height && s.height >= 120 ? `${s.height}px` : 'auto')
+      : `${s.height || 40}px`;
+
+    const rawBottom = s.offsetBottom !== undefined ? s.offsetBottom : 16;
     const rawRight = s.offsetRight !== undefined ? s.offsetRight : 16;
 
     const bg = getChatbarBackground(s);
-    const borderRadius = getBorderRadius(s.borderRadius, '20px');
+    const borderRadius = getBorderRadius(s.borderRadius, isCard ? '24px' : '9999px');
     const transform = this.hovered ? 'scale(1.02)' : 'scale(1.0)';
-    const padding = s.padding !== undefined ? s.padding : isCard ? '24px 16px' : '0 16px';
-    const gap = s.gap !== undefined ? `${s.gap}px` : isCard ? '14px' : '0';
+    const padding = s.padding !== undefined ? s.padding : isCard ? '24px 20px' : '0 16px';
+    const gap = s.gap !== undefined ? `${s.gap}px` : isCard ? '12px' : '0';
 
     return html`
       <div
         class="chatbar-wrapper"
-        style="width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${rawBottom}px; right: ${rawRight}px; background: ${bg}; color: ${s.textColor || '#ffffff'}; border-radius: ${borderRadius}; box-shadow: ${s.shadow ? '0 4px 16px rgba(0,0,0,0.15)' : 'none'}; padding: ${padding}; transform: ${transform}; flex-direction: ${isCard ? 'column' : 'row'}; gap: ${gap}"
+        style="width: ${widthVal}px; height: ${heightVal}; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${rawBottom}px; right: ${rawRight}px; background: ${bg}; color: ${s.textColor || '#ffffff'}; border-radius: ${borderRadius}; box-shadow: ${s.shadow !== false ? '0 8px 24px rgba(0,0,0,0.18)' : 'none'}; padding: ${padding}; transform: ${transform}; flex-direction: ${isCard ? 'column' : 'row'}; gap: ${gap}"
         @mouseenter="${() => (this.hovered = true)}"
         @mouseleave="${() => (this.hovered = false)}"
         @click="${this.handleClick}"
       >
         ${isCard
           ? html`
-              <!-- CARD LAYOUT (Vertical) -->
-              <div class="card-layout" style="gap: ${s.gap !== undefined ? s.gap : 14}px">
-                <div style="display: flex; align-items: center; justify-content: center; position: relative">
+              <!-- CARD LAYOUT (Centered Icon & Action Button like Image 2) -->
+              <div class="card-layout">
+                <div style="display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 4px">
                   ${s.iconType === 'image' && s.iconImageUrl
                     ? html`
                         <img
                           src="${s.iconImageUrl}"
                           alt="icon"
-                          style="object-fit: ${s.iconFit || 'contain'}; opacity: ${s.iconOpacity !== undefined ? s.iconOpacity : 1}; width: ${(s.iconWidth || 24)}px; height: ${(s.iconHeight || 24)}px; mix-blend-mode: ${s.iconBlend || 'normal'}"
+                          style="object-fit: ${s.iconFit || 'contain'}; opacity: ${s.iconOpacity !== undefined ? s.iconOpacity : 1}; width: ${(s.iconWidth || 36)}px; height: ${(s.iconHeight || 36)}px; mix-blend-mode: ${s.iconBlend || 'normal'}"
                         />
                       `
                     : s.iconType === 'customSvg' && s.customSvg
-                    ? html`<cw-icon .customSvg="${s.customSvg}" .size="${s.iconWidth || 28}" .color="${s.iconColor || '#ffffff'}"></cw-icon>`
-                    : html`<cw-icon .name="${s.lucideIcon || 'MessageCircle'}" .size="${s.iconWidth || 24}" .color="${s.iconColor || '#ffffff'}"></cw-icon>`
+                    ? html`<cw-icon .customSvg="${s.customSvg}" .size="${s.iconWidth || 36}" .color="${s.iconColor || s.textColor || '#ffffff'}"></cw-icon>`
+                    : html`<cw-icon .name="${s.lucideIcon || 'Sparkles'}" .size="${s.iconWidth || 36}" .color="${s.iconColor || s.textColor || '#ffffff'}"></cw-icon>`
                   }
                 </div>
 
-                <span style="font-weight: 700; line-height: 1.35; white-space: pre-line; text-align: center; font-size: ${(s.textSize || 16)}px; letter-spacing: ${(s.letterSpacing || 0)}px">
-                  ${s.cardText || s.text || 'Questions about PayPal?'}
-                </span>
+                <div
+                  style="font-weight: 700; line-height: 1.35; text-align: center; font-size: ${(s.textSize || 16)}px; letter-spacing: ${(s.letterSpacing || 0)}px; color: ${s.textColor || '#ffffff'}; margin: 16px 0; width: 100%"
+                >
+                  ${s.cardText || s.text || 'Questions about PhonePe for business?'}
+                </div>
 
                 <div
-                  style="background-color: ${s.buttonBg || '#ffffff'}; color: ${s.buttonTextColor || s.bgColor || '#003087'}; font-weight: 700; border-radius: 9999px; display: flex; align-items: center; justify-content: center; padding: 10px 24px; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 85%"
+                  style="background-color: ${s.buttonBg || '#ffffff'}; color: ${s.buttonTextColor || s.bgColor || '#5f259f'}; font-weight: 700; border-radius: 9999px; display: flex; align-items: center; justify-content: center; padding: 11px 24px; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); width: 100%; box-sizing: border-box; margin-top: auto"
                 >
                   <span>${s.buttonText || 'Chat Now'}</span>
                 </div>
@@ -161,7 +171,7 @@ export class CwChatbar extends LitElement {
               <!-- BAR LAYOUT (Horizontal) -->
               <div class="bar-layout">
                 <span
-                  style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; text-align: left; font-size: ${getChatbarFontSize(s.textSize, s.height)}; letter-spacing: ${(s.letterSpacing || 0)}px; color: ${s.textColor || '#ffffff'}"
+                  style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; text-align: left; font-size: ${getChatbarFontSize(s.textSize, typeof s.height === 'number' ? s.height : 40)}; letter-spacing: ${(s.letterSpacing || 0)}px; color: ${s.textColor || '#ffffff'}"
                 >
                   ${(s.text || 'Chat with us').replace(/\n/g, ' ')}
                 </span>
@@ -172,21 +182,21 @@ export class CwChatbar extends LitElement {
                         <img
                           src="${s.iconImageUrl}"
                           alt="icon"
-                          style="object-fit: ${s.iconFit || 'contain'}; opacity: ${s.iconOpacity !== undefined ? s.iconOpacity : 1}; width: ${getChatbarIconWidth(s.iconWidth, s.height, 'image')}px; height: ${getChatbarIconHeight(s.iconHeight, s.height, 'image')}px; mix-blend-mode: ${s.iconBlend || 'normal'}"
+                          style="object-fit: ${s.iconFit || 'contain'}; opacity: ${s.iconOpacity !== undefined ? s.iconOpacity : 1}; width: ${getChatbarIconWidth(s.iconWidth, typeof s.height === 'number' ? s.height : 40, 'image')}px; height: ${getChatbarIconHeight(s.iconHeight, typeof s.height === 'number' ? s.height : 40, 'image')}px; mix-blend-mode: ${s.iconBlend || 'normal'}"
                         />
                       `
                     : s.iconType === 'customSvg' && s.customSvg
                     ? html`
                         <cw-icon
                           .customSvg="${s.customSvg}"
-                          .size="${getChatbarIconWidth(s.iconWidth, s.height, 'customSvg')}"
+                          .size="${getChatbarIconWidth(s.iconWidth, typeof s.height === 'number' ? s.height : 40, 'customSvg')}"
                           .color="${s.iconColor || '#ffffff'}"
                         ></cw-icon>
                       `
                     : html`
                         <cw-icon
                           .name="${s.lucideIcon || 'MessageCircle'}"
-                          .size="${getChatbarIconWidth(s.iconWidth, s.height, 'lucide')}"
+                          .size="${getChatbarIconWidth(s.iconWidth, typeof s.height === 'number' ? s.height : 40, 'lucide')}"
                           .color="${s.iconColor || '#ffffff'}"
                         ></cw-icon>
                       `

@@ -1,8 +1,8 @@
 import { html } from 'lit';
-import '../../components/organisms/cw-chat-header.js';
+import '../../components/molecules/cw-chat-header.js';
 
 export default {
-  title: 'Organisms/ChatHeader',
+  title: 'Molecules/ChatHeader',
   component: 'cw-chat-header',
   argTypes: {
     clientName: { control: 'text' },

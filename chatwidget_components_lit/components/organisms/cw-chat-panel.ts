@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import type { ChatWindowState, ChatState, FeaturesState, ChatbarState, BubbleState } from '../../store/types.js';
 import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
 import { EnterLeaveController } from '../../utils/transition.js';
-import './cw-chat-header.js';
+import '../molecules/cw-chat-header.js';
 import './cw-chat-body.js';
 
 @customElement('cw-chat-panel')
