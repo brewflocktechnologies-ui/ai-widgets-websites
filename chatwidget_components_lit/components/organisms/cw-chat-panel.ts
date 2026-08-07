@@ -1,7 +1,7 @@
 import { LitElement, html, css, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { ChatWindowState, ChatState, FeaturesState, ChatbarState, BubbleState } from '../../store/types.js';
-import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
+import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import { EnterLeaveController } from '../../utils/transition.js';
 import '../molecules/cw-chat-header.js';
@@ -29,7 +29,7 @@ export class CwChatPanel extends LitElement {
   private didFocus = false;
 
   static styles = [
-    GLOBAL_STYLES,
+    CORE_STYLES,
     REDUCED_MOTION_CSS,
     css`
       :host {

@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { ChatWindowState } from '../../store/types.js';
-import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
+import { CORE_STYLES } from '../../tokens/core-styles.js';
 
 /**
  * cw-composer
@@ -21,7 +21,7 @@ export class CwComposer extends LitElement {
   @state() focused = false;
 
   static styles = [
-    GLOBAL_STYLES,
+    CORE_STYLES,
     css`
       :host {
         display: block;

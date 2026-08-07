@@ -4,6 +4,8 @@
  */
 
 export * from './tokens/design-tokens.js';
+export * from './tokens/core-styles.js';
+export * from './tokens/accessibility.js';
 export * from './utils/theme.js';
 export * from './utils/config.js';
 export * from './utils/transition.js';

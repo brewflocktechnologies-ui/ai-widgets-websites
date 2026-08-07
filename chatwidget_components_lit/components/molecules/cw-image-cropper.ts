@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
-import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
+import { CORE_STYLES } from '../../tokens/core-styles.js';
 import '../atoms/cw-icon.js';
 
 @customElement('cw-image-cropper')
@@ -34,7 +34,7 @@ export class CwImageCropper extends LitElement {
   private imageObj: HTMLImageElement | null = null;
 
   static styles = [
-    GLOBAL_STYLES,
+    CORE_STYLES,
     css`
       :host {
         display: block;

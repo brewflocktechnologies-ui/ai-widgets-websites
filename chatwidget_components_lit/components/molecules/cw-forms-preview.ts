@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { GLOBAL_STYLES } from '../../tokens/global-styles.js';
+import { CORE_STYLES } from '../../tokens/core-styles.js';
 
 @customElement('cw-forms-preview')
 export class CwFormsPreview extends LitElement {
@@ -10,7 +10,7 @@ export class CwFormsPreview extends LitElement {
   @property({ type: String }) accentColor = '#0b5fff';
 
   static styles = [
-    GLOBAL_STYLES,
+    CORE_STYLES,
     css`
       :host {
         display: block;

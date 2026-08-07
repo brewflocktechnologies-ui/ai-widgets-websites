@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { ChatWindowState, FeaturesState } from '../../store/types.js';
-import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
+import { CORE_STYLES } from '../../tokens/core-styles.js';
 import '../atoms/cw-avatar.js';
 
 @customElement('cw-chat-header')
@@ -15,7 +15,7 @@ export class CwChatHeader extends LitElement {
   @property({ type: Number }) rev = 0;
 
   static styles = [
-    GLOBAL_STYLES,
+    CORE_STYLES,
     css`
       :host {
         display: block;

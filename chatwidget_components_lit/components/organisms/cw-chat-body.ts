@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { ChatState, ChatWindowState, Message } from '../../store/types.js';
-import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
+import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import '../molecules/cw-welcome-card.js';
 import '../molecules/cw-message-bubble.js';
@@ -32,7 +32,7 @@ export class CwChatBody extends LitElement {
   private lastCount = -1;
 
   static styles = [
-    GLOBAL_STYLES,
+    CORE_STYLES,
     REDUCED_MOTION_CSS,
     css`
       :host {

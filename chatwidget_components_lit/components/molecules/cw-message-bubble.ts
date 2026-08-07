@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { Message, ChatWindowState } from '../../store/types.js';
-import { GLOBAL_STYLES } from '../../tokens/global-styles.js';
+import { CORE_STYLES } from '../../tokens/core-styles.js';
 import '../atoms/cw-message-tick.js';
 
 @customElement('cw-message-bubble')
@@ -13,7 +13,7 @@ export class CwMessageBubble extends LitElement {
   @property({ type: String }) agentName = '';
 
   static styles = [
-    GLOBAL_STYLES,
+    CORE_STYLES,
     css`
       :host {
         display: block;

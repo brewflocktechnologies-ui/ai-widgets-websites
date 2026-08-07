@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { BubbleState } from '../../store/types.js';
-import { GLOBAL_STYLES } from '../../tokens/design-tokens.js';
+import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import {
   getBorderRadius,
@@ -27,7 +27,7 @@ export class CwBubble extends LitElement {
   @state() hovered = false;
 
   static styles = [
-    GLOBAL_STYLES,
+    CORE_STYLES,
     REDUCED_MOTION_CSS,
     css`
       :host {
