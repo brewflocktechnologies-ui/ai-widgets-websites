@@ -78,7 +78,7 @@ export class CwBadge extends LitElement {
 
     const styleObj: Record<string, string> = {
       position: 'absolute',
-      backgroundColor: b.backgroundColor || '#dc2626',
+      backgroundColor: b.backgroundColor || 'var(--cw-error)',
       color: b.textColor || '#ffffff',
       fontSize: `${b.fontSize || 11}px`,
       lineHeight: '1',

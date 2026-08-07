@@ -63,7 +63,7 @@ export class CwChatBody extends LitElement {
       .day-divider {
         text-align: center;
         font-size: 11px;
-        color: var(--cw-muted, #71717a);
+        color: var(--cw-muted);
         margin: 12px 0 8px 0;
         position: relative;
       }
@@ -125,7 +125,7 @@ export class CwChatBody extends LitElement {
         padding: 12px;
         border-radius: 9999px;
         border: none;
-        background: var(--cw-accent, #0b5fff);
+        background: var(--cw-accent);
         color: #ffffff;
         font-weight: 700;
         font-size: 14px;
@@ -162,7 +162,7 @@ export class CwChatBody extends LitElement {
         height: 48px;
         border-radius: 50%;
         background: rgba(34, 197, 94, 0.1);
-        color: #22c55e;
+        color: var(--cw-success);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -193,7 +193,7 @@ export class CwChatBody extends LitElement {
         bottom: 60px;
         left: 16px;
         background: var(--cw-surface, #ffffff);
-        border: 1px solid var(--cw-border, #e5e7eb);
+        border: 1px solid var(--cw-border);
         border-radius: 12px;
         box-shadow: 0 4px 16px rgba(0,0,0,0.12);
         display: flex;
@@ -228,7 +228,7 @@ export class CwChatBody extends LitElement {
         bottom: 60px;
         right: 16px;
         background: var(--cw-surface, #ffffff);
-        border: 1px solid var(--cw-border, #e5e7eb);
+        border: 1px solid var(--cw-border);
         border-radius: 12px;
         box-shadow: 0 4px 16px rgba(0,0,0,0.12);
         display: grid;
@@ -284,7 +284,7 @@ export class CwChatBody extends LitElement {
         padding: 10px 20px;
         border-radius: 9999px;
         border: none;
-        background: var(--cw-accent, #0b5fff);
+        background: var(--cw-accent);
         color: #ffffff;
         font-weight: 700;
         cursor: pointer;
@@ -374,7 +374,7 @@ export class CwChatBody extends LitElement {
     return html`
       <div
         class="panel-body"
-        style="background: ${isWelcome ? cw.welcome?.bgGradient || 'linear-gradient(135deg, #0b5fff, #22d3ee)' : cw.bodyBg || 'var(--cw-bg)'}; padding: ${isWelcome ? '0px' : ''}"
+        style="background: ${isWelcome ? cw.welcome?.bgGradient || 'linear-gradient(135deg, var(--cw-accent), #22d3ee)' : cw.bodyBg || 'var(--cw-bg)'}; padding: ${isWelcome ? '0px' : ''}"
       >
         <!-- WELCOME SCREEN -->
         ${isWelcome
@@ -629,7 +629,7 @@ export class CwChatBody extends LitElement {
                         ? html`
                             <div class="powered" style="font-size: ${cw.footerFontSize || '11px'}; color: ${cw.footerTextColor || 'var(--cw-muted)'}">
                               <span>Powered by</span>
-                              <a href="${cw.poweredByLink || '#'}" target="_blank" style="color: ${cw.poweredByColor || '#a1a1aa'}">
+                              <a href="${cw.poweredByLink || '#'}" target="_blank" style="color: ${cw.poweredByColor || 'var(--cw-muted)'}">
                                 ${cw.poweredByText || 'vAInatheya.ai'}
                               </a>
                             </div>

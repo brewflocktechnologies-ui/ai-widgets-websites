@@ -49,7 +49,7 @@ export class CwComposer extends LitElement {
         box-sizing: border-box;
       }
       textarea::placeholder {
-        color: var(--placeholder-color, #a1a1aa) !important;
+        color: var(--placeholder-color, var(--cw-muted)) !important;
       }
       button {
         display: inline-flex;
@@ -126,7 +126,7 @@ export class CwComposer extends LitElement {
     const borderRadius = cw.inputBorderRadius || '9999px';
 
     const borderColor = isFocused
-      ? cw.inputFocusBorderColor || cw.accentColor || '#0b5fff'
+      ? cw.inputFocusBorderColor || cw.accentColor || 'var(--cw-accent)'
       : cw.inputBorderColor || 'var(--cw-border)';
 
     const boxShadow = isFocused
@@ -134,19 +134,19 @@ export class CwComposer extends LitElement {
       : 'none';
 
     const inputTextColor = cw.inputTextColor || 'var(--cw-ink)';
-    const placeholderColor = cw.inputPlaceholderColor || '#a1a1aa';
+    const placeholderColor = cw.inputPlaceholderColor || 'var(--cw-muted)';
     const textareaFontSize = cw.textareaFontSize || '14px';
 
     const attachBg = cw.attachButtonBg || '#ffffff';
-    const attachColor = cw.attachButtonColor || '#71717a';
-    const emojiColor = cw.emojiButtonColor || '#71717a';
+    const attachColor = cw.attachButtonColor || 'var(--cw-muted)';
+    const emojiColor = cw.emojiButtonColor || 'var(--cw-muted)';
 
     const sendBg = !canSend
-      ? cw.sendButtonBgInactive || '#e4e4e7'
-      : cw.sendButtonBgActive || cw.accentColor || '#0b5fff';
+      ? cw.sendButtonBgInactive || 'var(--cw-border)'
+      : cw.sendButtonBgActive || cw.accentColor || 'var(--cw-accent)';
 
     const sendColor = !canSend
-      ? cw.sendButtonColorInactive || '#a1a1aa'
+      ? cw.sendButtonColorInactive || 'var(--cw-muted)'
       : cw.sendButtonColorActive || '#ffffff';
 
     return html`

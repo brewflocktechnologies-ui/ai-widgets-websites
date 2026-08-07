@@ -110,7 +110,7 @@ export class CwGreetInput extends LitElement {
       : '24px';
 
     if (isSeparated) {
-      const btnBg = ib.buttonBgColor || ib.buttonColor || this.accentColor || '#0b5fff';
+      const btnBg = ib.buttonBgColor || ib.buttonColor || this.accentColor || 'var(--cw-accent, #0b5fff)';
       let btnIconColor = ib.buttonIconColor || '#ffffff';
       if (btnIconColor.toLowerCase() === btnBg.toLowerCase() || btnBg !== '#ffffff') {
         btnIconColor = '#ffffff';
@@ -126,7 +126,7 @@ export class CwGreetInput extends LitElement {
               type="text"
               .value="${this.draft}"
               placeholder="${ib.placeholder || 'Write your message...'}"
-              style="color: ${ib.textColor || '#1e293b'}"
+              style="color: ${ib.textColor || 'var(--cw-ink, #1e293b)'}"
               @input="${this.handleInput}"
               @keydown="${this.handleKeyDown}"
             />
@@ -146,7 +146,7 @@ export class CwGreetInput extends LitElement {
     }
 
     // Joined layout (default)
-    const btnColor = ib.buttonColor || this.accentColor || '#0b5fff';
+    const btnColor = ib.buttonColor || this.accentColor || 'var(--cw-accent, #0b5fff)';
     let btnIconColor = ib.buttonIconColor || '#ffffff';
     if (btnIconColor.toLowerCase() === btnColor.toLowerCase()) {
       btnIconColor = '#ffffff';
@@ -161,7 +161,7 @@ export class CwGreetInput extends LitElement {
           type="text"
           .value="${this.draft}"
           placeholder="${ib.placeholder || 'Write your message...'}"
-          style="color: ${ib.textColor || '#1e293b'}"
+          style="color: ${ib.textColor || 'var(--cw-ink, #1e293b)'}"
           @input="${this.handleInput}"
           @keydown="${this.handleKeyDown}"
         />

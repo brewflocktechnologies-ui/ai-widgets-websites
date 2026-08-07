@@ -182,7 +182,7 @@ export class CwChatPanel extends LitElement {
       : 'none';
 
     const border = cw.widgetBorderEnabled
-      ? `${cw.widgetBorderWidth || 1}px solid ${cw.widgetBorderColor || '#e5e7eb'}`
+      ? `${cw.widgetBorderWidth || 1}px solid ${cw.widgetBorderColor || 'var(--cw-border)'}`
       : 'none';
 
     const borderRadius = `${cw.widgetBorderRadius || 24}px`;
@@ -226,7 +226,7 @@ export class CwChatPanel extends LitElement {
             ? html`
                 <div class="modal-overlay" @click="${(e: Event) => { if (e.target === e.currentTarget) this.emit('cw:confirm-cancel'); }}">
                   <div class="modal-card" style="background: ${cw.modalCardBg || '#ffffff'}; border-radius: ${(cw.modalBorderRadius || 24)}px">
-                    <p class="modal-message" style="color: ${cw.modalMessageColor || '#101828'}">${cs.confirmBox.message}</p>
+                    <p class="modal-message" style="color: ${cw.modalMessageColor || 'var(--cw-ink)'}">${cs.confirmBox.message}</p>
                     <div class="modal-actions">
                       <button
                         type="button"

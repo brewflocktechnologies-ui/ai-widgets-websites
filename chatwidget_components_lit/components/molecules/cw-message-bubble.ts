@@ -44,7 +44,7 @@ export class CwMessageBubble extends LitElement {
         font-weight: 700;
         flex-shrink: 0;
         overflow: hidden;
-        background-color: #0b5fff;
+        background-color: var(--cw-accent);
         color: #ffffff;
       }
       .msg-avatar img {
@@ -95,16 +95,16 @@ export class CwMessageBubble extends LitElement {
     const isAgent = m.senderType === 'AGENT';
 
     const bg = isVisitor
-      ? cw.visitorBubbleBg || 'linear-gradient(135deg, #0b5fff, #22d3ee)'
+      ? cw.visitorBubbleBg || 'linear-gradient(135deg, var(--cw-accent), #22d3ee)'
       : cw.agentBubbleBg || '#ffffff';
 
     const color = isVisitor
       ? cw.visitorBubbleColor || '#ffffff'
-      : cw.agentBubbleColor || '#1e293b';
+      : cw.agentBubbleColor || 'var(--cw-ink)';
 
     const borderColor = isVisitor
       ? 'transparent'
-      : cw.agentBubbleBorderColor || '#e2e8f0';
+      : cw.agentBubbleBorderColor || 'var(--cw-border)';
 
     const boxShadow = isVisitor
       ? cw.visitorBubbleBg ? 'none' : '0 2px 8px rgba(11, 95, 255, 0.2)'
@@ -122,7 +122,7 @@ export class CwMessageBubble extends LitElement {
       ? cw.visitorBubbleFontSize || '14px'
       : cw.agentBubbleFontSize || '14px';
 
-    const avatarBg = cw.agentAvatarBg || '#0b5fff';
+    const avatarBg = cw.agentAvatarBg || 'var(--cw-accent)';
     const avatarColor = cw.agentAvatarColor || '#ffffff';
 
     const formattedTime = m.created

@@ -82,7 +82,7 @@ export class CwAvatar extends LitElement {
     const showDot = this.showOnlineDot && this.showOnline;
 
     const dotSize = this.activeDot?.size !== undefined ? this.activeDot.size : 8;
-    const dotColor = this.activeDot?.color || '#22c55e';
+    const dotColor = this.activeDot?.color || 'var(--cw-success, #22c55e)';
     const dotAnimate = this.activeDot?.animate !== true;
     const dotBorderWidth = this.activeDot?.borderWidth !== undefined ? this.activeDot.borderWidth : 0;
     const dotBorderColor = this.activeDot?.borderColor || '#ffffff';

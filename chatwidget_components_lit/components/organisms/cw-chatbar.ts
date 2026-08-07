@@ -62,7 +62,7 @@ export class CwChatbar extends LitElement {
         position: absolute;
         top: -8px;
         right: -8px;
-        background-color: #dc2626;
+        background-color: var(--cw-error);
         color: #ffffff;
         font-weight: 700;
         border-radius: 9999px;
@@ -80,7 +80,7 @@ export class CwChatbar extends LitElement {
         position: absolute;
         top: -10px;
         right: -10px;
-        background-color: #dc2626;
+        background-color: var(--cw-error);
         color: #ffffff;
         font-weight: 700;
         border-radius: 9999px;

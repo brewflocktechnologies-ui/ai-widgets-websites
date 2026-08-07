@@ -9,7 +9,7 @@ export class CwImageCropper extends LitElement {
   @property({ type: String }) imageSrc = '';
   @property({ type: String }) titleText = 'Crop & Resize Image';
   @property({ type: String }) cropShape: 'circle' | 'square' | 'rounded' = 'square';
-  @property({ type: String }) primaryColor = '#0b5fff';
+  @property({ type: String }) primaryColor = 'var(--cw-accent)';
   @property({ type: String }) cancelText = 'Cancel';
   @property({ type: String }) applyText = 'Crop & Apply';
   @property({ type: Boolean }) showRotate = true;
@@ -74,13 +74,13 @@ export class CwImageCropper extends LitElement {
         margin: 0;
         font-size: 17px;
         font-weight: 700;
-        color: #0f172a;
+        color: var(--cw-ink);
       }
       .close-btn {
         background: transparent;
         border: none;
         cursor: pointer;
-        color: #64748b;
+        color: var(--cw-muted);
         padding: 6px;
         border-radius: 50%;
         display: flex;
@@ -90,7 +90,7 @@ export class CwImageCropper extends LitElement {
       }
       .close-btn:hover {
         background: #f1f5f9;
-        color: #0f172a;
+        color: var(--cw-ink);
       }
       .canvas-container {
         position: relative;
@@ -136,7 +136,7 @@ export class CwImageCropper extends LitElement {
         align-items: center;
         gap: 8px;
         font-size: 13px;
-        color: #475569;
+        color: var(--cw-muted);
         font-weight: 600;
       }
       .zoom-slider {
@@ -149,21 +149,21 @@ export class CwImageCropper extends LitElement {
       }
       .pill-btn {
         background: #ffffff;
-        border: 1px solid #cbd5e1;
+        border: 1px solid var(--cw-border);
         padding: 5px 12px;
         border-radius: 9999px;
         font-size: 12px;
         font-weight: 600;
-        color: #334155;
+        color: var(--cw-muted);
         cursor: pointer;
         transition: all 0.15s;
       }
       .pill-btn:hover {
-        border-color: #94a3b8;
+        border-color: var(--cw-muted);
       }
       .icon-action-btn {
         background: #ffffff;
-        border: 1px solid #cbd5e1;
+        border: 1px solid var(--cw-border);
         width: 34px;
         height: 34px;
         border-radius: 10px;
@@ -171,7 +171,7 @@ export class CwImageCropper extends LitElement {
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        color: #334155;
+        color: var(--cw-muted);
         transition: background 0.15s;
       }
       .icon-action-btn:hover {
@@ -183,17 +183,17 @@ export class CwImageCropper extends LitElement {
         align-items: center;
         justify-content: flex-end;
         gap: 12px;
-        border-top: 1px solid #e2e8f0;
+        border-top: 1px solid var(--cw-border);
         background: #ffffff;
       }
       .btn-cancel {
         background: transparent;
-        border: 1px solid #cbd5e1;
+        border: 1px solid var(--cw-border);
         padding: 9px 18px;
         border-radius: 9999px;
         font-size: 13px;
         font-weight: 600;
-        color: #475569;
+        color: var(--cw-muted);
         cursor: pointer;
       }
       .btn-cancel:hover {

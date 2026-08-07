@@ -67,7 +67,7 @@ export class CwGreetWindow extends LitElement {
         pointer-events: auto;
       }
       .close-btn:hover {
-        background: #1e293b;
+        background: var(--cw-ink);
         transform: scale(1.1);
       }
       .greet-card {
@@ -181,7 +181,7 @@ export class CwGreetWindow extends LitElement {
               : html`
                   <div
                     class="${getAnimClass(g.iconAnimation)}"
-                    style="color: ${g.iconColor || '#0b5fff'}; display: flex; align-items: center; justify-content: center"
+                    style="color: ${g.iconColor || 'var(--cw-accent)'}; display: flex; align-items: center; justify-content: center"
                   >
                     <cw-icon .name="${g.lucideIcon || 'Sparkles'}" .size="${g.iconSize || 48}"></cw-icon>
                   </div>
@@ -190,7 +190,7 @@ export class CwGreetWindow extends LitElement {
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 8px; text-align: ${g.textAlign || 'center'}; width: 100%">
-            <h3 style="margin: 0; font-size: ${(g.fontSize || 16)}px; font-weight: 700; color: ${g.titleColor || '#1e293b'}; line-height: 1.35">
+            <h3 style="margin: 0; font-size: ${(g.fontSize || 16)}px; font-weight: 700; color: ${g.titleColor || 'var(--cw-ink)'}; line-height: 1.35">
               ${g.title || 'Hi there! 👋'}
             </h3>
             ${g.description
@@ -210,7 +210,7 @@ export class CwGreetWindow extends LitElement {
               <cw-greet-input
                 .config="${g.inputBox}"
                 .visible="${this.visible && (g.inputBox.visible !== undefined ? g.inputBox.visible : true)}"
-                .accentColor="${g.iconColor || '#0b5fff'}"
+                .accentColor="${g.iconColor || 'var(--cw-accent)'}"
               ></cw-greet-input>
             `
           : ''
