@@ -4,6 +4,7 @@ import {
   observeDarkMode
 } from '../utils/theme.js';
 import { getClientId, fetchClientConfig } from '../utils/config.js';
+import { sanitizeConfig } from '../tokens/merge.js';
 
 // Types live in ./types.js (pure, side-effect-free) so presentational
 // components can depend on them without coupling to the store singleton.
@@ -720,8 +721,14 @@ export async function initStore(): Promise<void> {
   emit('store:chatbar');
 
   try {
-    const { bubbleConfig, chatConfig, chatbarConfig, greetWindowConfig } =
-      await fetchClientConfig(clientId);
+    const rawConfig = await fetchClientConfig(clientId);
+
+    // Untrusted remote config: strip CSS-injection payloads before merging.
+    let { bubbleConfig, chatConfig, chatbarConfig, greetWindowConfig } = rawConfig;
+    bubbleConfig = sanitizeConfig(bubbleConfig).value;
+    greetWindowConfig = sanitizeConfig(greetWindowConfig).value;
+    chatbarConfig = sanitizeConfig(chatbarConfig).value;
+    chatConfig = sanitizeConfig(chatConfig).value;
 
     // Apply bubble config
     if (bubbleConfig && Object.keys(bubbleConfig).length > 0) {
