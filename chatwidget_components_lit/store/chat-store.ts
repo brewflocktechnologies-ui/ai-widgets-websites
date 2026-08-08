@@ -901,6 +901,7 @@ export async function initStore(): Promise<void> {
   // Store is fully built: replay any overrides queued by stories/templates.
   storeReady = true;
   applyStoreConfig(lastOverrides as UpdateStoreConfigOverrides);
+  restoreFromLocalStorage();
 }
 
 type UpdateStoreConfigOverrides = {
@@ -921,17 +922,59 @@ type UpdateStoreConfigOverrides = {
   greetWindow?: Partial<GreetWindowState>;
   chatWindow?: Partial<ChatWindowState>;
   chat?: Partial<ChatState>;
+  features?: Partial<FeaturesState>;
 };
+
+const CONFIG_STORAGE_KEY = 'zotly_active_config_token';
+
+function saveToLocalStorage() {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      const full = exportFullStoreConfig();
+      if (full && Object.keys(full).length > 0) {
+        localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(full));
+      }
+    }
+  } catch (_) {}
+}
+
+export function restoreFromLocalStorage(): boolean {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      const saved = localStorage.getItem(CONFIG_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') {
+          injectStoreConfig(parsed, false);
+          return true;
+        }
+      }
+    }
+  } catch (_) {}
+  return false;
+}
+
+export function resetStoreConfig(): void {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem(CONFIG_STORAGE_KEY);
+    }
+  } catch (_) {}
+  initStore();
+}
 
 /**
  * Applies overrides onto the shared store. If the store isn't initialized yet,
  * the latest overrides are retained and replayed after every `initStore()`, so
  * the atom/molecule stories and the template always read the same source.
  */
-export function updateStoreConfig(overrides: UpdateStoreConfigOverrides) {
+export function updateStoreConfig(overrides: UpdateStoreConfigOverrides, persist: boolean = true) {
   if (overrides && typeof overrides === 'object') {
     lastOverrides = { ...lastOverrides, ...(overrides as Record<string, unknown>) };
-    if (storeReady) applyStoreConfig(overrides);
+    if (storeReady) {
+      applyStoreConfig(overrides);
+      if (persist) saveToLocalStorage();
+    }
   }
 }
 
@@ -1022,11 +1065,16 @@ function applyStoreConfig(overrides: UpdateStoreConfigOverrides) {
     emit('store:chat');
   }
 
+  if (overrides.features && typeof overrides.features === 'object') {
+    Object.assign(store.features, overrides.features);
+    emit('store:features');
+  }
+
   if (overrides.triggerType !== undefined) {
     if (overrides.triggerType === 'chatbar') {
-      Object.assign(store.chatbar, CHATBAR_BAR_PRESET);
+      store.chatbar = { ...CHATBAR_BAR_PRESET, ...store.chatbar, enabled: true };
     } else if (overrides.triggerType === 'chatcard') {
-      Object.assign(store.chatbar, CHATBAR_CARD_PRESET);
+      store.chatbar = { ...CHATBAR_CARD_PRESET, ...store.chatbar, enabled: true };
     }
     store.chatbar.enabled = overrides.triggerType !== 'bubble';
     store.bubble.enabled = overrides.triggerType === 'bubble';
@@ -1038,3 +1086,52 @@ function applyStoreConfig(overrides: UpdateStoreConfigOverrides) {
   emit('store:chatWindow');
   emit('store:chat');
 }
+
+/**
+ * Serializes the current active state of all store singletons into a full JSON configuration token,
+ * matching the schema of default.json.
+ */
+export function exportFullStoreConfig(): Record<string, any> {
+  const store = getStore();
+  if (!store) return {};
+
+  return {
+    clientId: store.chat.clientName || 'default',
+    clientName: store.chat.clientName || 'Default Widget',
+    features: JSON.parse(JSON.stringify(store.features || {})),
+    messages: JSON.parse(JSON.stringify(store.chat.messages || [])),
+    greetWindow: JSON.parse(JSON.stringify(store.greetWindow || {})),
+    bubble: JSON.parse(JSON.stringify(store.bubble || {})),
+    chatWindow: JSON.parse(JSON.stringify(store.chatWindow || {})),
+    chatbar: JSON.parse(JSON.stringify(store.chatbar || {}))
+  };
+}
+
+/**
+ * Hydrates all store singletons with a full or partial JSON configuration token.
+ */
+export function injectStoreConfig(token: Record<string, any>, persist: boolean = true): void {
+  if (!token || typeof token !== 'object') return;
+
+  const store = getStore();
+  if (token.features && store) {
+    Object.assign(store.features, token.features);
+    emit('store:features');
+  }
+
+  const overrides: UpdateStoreConfigOverrides = {
+    bubble: token.bubble || {},
+    chatbar: token.chatbar || {},
+    greetWindow: token.greetWindow || {},
+    chatWindow: token.chatWindow || token.chatConfig || {},
+    chat: {
+      ...(token.chat || {}),
+      ...(token.messages ? { messages: token.messages } : {}),
+      ...(token.clientName ? { clientName: token.clientName } : {})
+    }
+  };
+
+  updateStoreConfig(overrides, persist);
+}
+
+

@@ -28,6 +28,7 @@ export {
   formatTime
 } from './utils/style-helpers.js';
 export * from './store/chat-store.js';
+import { injectStoreConfig } from './store/chat-store.js';
 
 // Atoms
 export * from './components/atoms/cw-icon.js';
@@ -64,3 +65,18 @@ export function mountChatWidget(container: HTMLElement = document.body): HTMLEle
   }
   return root;
 }
+
+/**
+ * Mounts the widget into container and hydrates the store using the provided JSON token.
+ */
+export function mountChatWidgetWithToken(
+  token: Record<string, any>,
+  container: HTMLElement = document.body
+): HTMLElement {
+  if (token) {
+    injectStoreConfig(token);
+  }
+  return mountChatWidget(container);
+}
+
+

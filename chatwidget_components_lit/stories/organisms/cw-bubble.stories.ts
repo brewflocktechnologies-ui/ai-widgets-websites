@@ -41,6 +41,18 @@ export default {
     outlineRingWidth: { control: { type: 'number', min: 1, max: 10 } },
     backgroundOverlayType: { control: 'select', options: ['none', 'image', 'lucide'] },
     backgroundImageUrl: { control: 'text' },
+    enableTooltip: { control: 'boolean' },
+    tooltipText: { control: 'text' },
+    tooltipPosition: { control: 'select', options: ['left', 'right', 'top', 'bottom'] },
+    tooltipBg: { control: 'color' },
+    tooltipTextColor: { control: 'color' },
+    tooltipFontSize: { control: { type: 'number', min: 10, max: 20 } },
+    tooltipRadius: { control: { type: 'number', min: 0, max: 24 } },
+    tooltipPadding: { control: 'text' },
+    tooltipShadow: { control: 'boolean' },
+    tooltipArrow: { control: 'boolean' },
+    tooltipBorderColor: { control: 'color' },
+    tooltipBorderWidth: { control: { type: 'number', min: 0, max: 4 } },
   },
 };
 
@@ -95,6 +107,18 @@ export const ConfigurableBubble = {
     outlineRingWidth:3,
     backgroundOverlayType:'none',
     backgroundImageUrl:'',
+    enableTooltip:true,
+    tooltipText:'Chat with us',
+    tooltipPosition:'left',
+    tooltipBg:'#ffffff',
+    tooltipTextColor:'#374151',
+    tooltipFontSize:14,
+    tooltipRadius:20,
+    tooltipPadding:'8px 16px',
+    tooltipShadow:true,
+    tooltipArrow:true,
+    tooltipBorderColor:'#0b5fff',
+    tooltipBorderWidth:0,
   },
 render:(args: any) => {
     const config: any = {
@@ -120,6 +144,27 @@ render:(args: any) => {
       boxShadowOffsetY:6,
       boxShadowBlur:16,
       boxShadowOpacity:0.2,
+      tooltip:args.enableTooltip
+        ? {
+            enabled:true,
+            text:args.tooltipText,
+            position:args.tooltipPosition,
+            backgroundColor:args.tooltipBg,
+            textColor:args.tooltipTextColor,
+            fontSize:args.tooltipFontSize,
+            borderRadius:{
+              tl:args.tooltipRadius,
+              tr:args.tooltipRadius,
+              br:args.tooltipRadius,
+              bl:args.tooltipRadius,
+            },
+            padding:args.tooltipPadding,
+            boxShadow:args.tooltipShadow ? '0 4px 12px rgba(0,0,0,0.1)' : 'none',
+            arrowEnabled:args.tooltipArrow,
+            borderColor:args.tooltipBorderColor,
+            borderWidth:args.tooltipBorderWidth,
+          }
+        : undefined,
     };
 
     // Single source of truth: the same config is written to the shared store,
