@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-bubble.js';
+import { updateStoreConfig } from '../../store/chat-store.js';
 
 /**
  * The bubble supports many independent, combinable visual features
@@ -70,68 +71,78 @@ const scene = (inner: any) => html`
 `;
 
 export const ConfigurableBubble = {
-  args: {
-    panelOpen: false,
-    unreadCount: 2,
-    position: 'bottom-right',
-    width: 60,
-    height: 60,
-    backgroundColor: '#0b5fff',
-    lucideIcon: 'MessageCircle',
-    iconWidth: 26,
-    iconHeight: 26,
-    iconColor: '#ffffff',
-    gradientType: 'none',
-    gradientAngle: 135,
-    enableGlass: false,
-    glassBlur: 16,
-    glassOpacity: 0.4,
-    enableNeon: false,
-    neonColor: '#10b981',
-    neonIntensity: 1.0,
-    enableOutlineRing: false,
-    outlineRingColor: '#22d3ee',
-    outlineRingWidth: 3,
-    backgroundOverlayType: 'none',
-    backgroundImageUrl: '',
+  args:{
+    panelOpen:false,
+    unreadCount:1,
+    position:'bottom-right',
+    width:60,
+    height:60,
+    backgroundColor:"#254276",
+    lucideIcon:"MessageSquare",
+    iconWidth:26,
+    iconHeight:26,
+    iconColor:'#ffffff',
+    gradientType:'none',
+    gradientAngle:135,
+    enableGlass:false,
+    glassBlur:16,
+    glassOpacity:0.4,
+    enableNeon:false,
+    neonColor:'#10b981',
+    neonIntensity:1.0,
+    enableOutlineRing:false,
+    outlineRingColor:'#22d3ee',
+    outlineRingWidth:3,
+    backgroundOverlayType:'none',
+    backgroundImageUrl:'',
   },
-  render: (args: any) =>
-    scene(html`
+render:(args: any) => {
+    const config: any = {
+      useWebsiteTheme:false,
+      position:args.position,
+      offsetRight:16,
+      offsetBottom:16,
+      width:args.width,
+      height:args.height,
+      backgroundColor:args.backgroundColor,
+      lucideIcon:args.lucideIcon,
+      iconWidth:args.iconWidth,
+      iconHeight:args.iconHeight,
+      iconColor:args.iconColor,
+      gradientType:args.gradientType === 'none' ? undefined : args.gradientType,
+      gradientAngle:args.gradientAngle,
+      gradientStops:args.gradientType === 'linear' ? [{ color: '#0b5fff', pos: 0 }, { color: '#22d3ee', pos: 100 }] : undefined,
+      glass:args.enableGlass ? { enabled: true, blur: args.glassBlur, bgOpacity: args.glassOpacity } : undefined,
+      neon:args.enableNeon ? { enabled: true, color: args.neonColor, intensity: args.neonIntensity } : undefined,
+      outlineRing:args.enableOutlineRing ? { enabled: true, color: args.outlineRingColor, width: args.outlineRingWidth, opacity: 0.8 } : undefined,
+      backgroundOverlayType:args.backgroundOverlayType === 'none' ? undefined : args.backgroundOverlayType,
+      backgroundImageUrl:args.backgroundImageUrl || undefined,
+      boxShadowOffsetY:6,
+      boxShadowBlur:16,
+      boxShadowOpacity:0.2,
+    };
+
+    // Single source of truth: the same config is written to the shared store,
+    // which is exactly what the template's cw-widget-root reads back.
+    updateStoreConfig({ bubble: config });
+
+    return scene(html`
       <cw-bubble
         .fixed="${false}"
         .panelOpen="${args.panelOpen}"
         .unreadCount="${args.unreadCount}"
-        .config="${{
-          useWebsiteTheme: false,
-          position: args.position,
-          offsetRight: 16,
-          offsetBottom: 16,
-          width: args.width,
-          height: args.height,
-          backgroundColor: args.backgroundColor,
-          lucideIcon: args.lucideIcon,
-          iconWidth: args.iconWidth,
-          iconHeight: args.iconHeight,
-          iconColor: args.iconColor,
-          gradientType: args.gradientType === 'none' ? undefined : args.gradientType,
-          gradientAngle: args.gradientAngle,
-          gradientStops: args.gradientType === 'linear' ? [{ color: '#0b5fff', pos: 0 }, { color: '#22d3ee', pos: 100 }] : undefined,
-          glass: args.enableGlass ? { enabled: true, blur: args.glassBlur, bgOpacity: args.glassOpacity } : undefined,
-          neon: args.enableNeon ? { enabled: true, color: args.neonColor, intensity: args.neonIntensity } : undefined,
-          outlineRing: args.enableOutlineRing ? { enabled: true, color: args.outlineRingColor, width: args.outlineRingWidth, opacity: 0.8 } : undefined,
-          backgroundOverlayType: args.backgroundOverlayType === 'none' ? undefined : args.backgroundOverlayType,
-          backgroundImageUrl: args.backgroundImageUrl || undefined,
-          boxShadowOffsetY: 6,
-          boxShadowBlur: 16,
-          boxShadowOpacity: 0.2,
-        }}"
+        .config="${config}"
       ></cw-bubble>
-    `),
+    `);
+  },
 };
 
 export const Default = {
-  render: () =>
-    scene(html`<cw-bubble .fixed="${false}" .config="${{ ...baseConfig }}"></cw-bubble>`),
+  args:{
+    lucideIcon:"MessageSquare"
+  },
+  render:() =>
+    scene(html`<cw-bubble .fixed="${false}" .config="${{ ...baseConfig }}"></cw-bubble>`)
 };
 
 export const GradientBackground = {

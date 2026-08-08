@@ -53,7 +53,7 @@ export const ConfigurableLiveWidget = {
     });
 
     return html`
-      <div style="position: relative; height: 650px; width: 100%;">
+      <div style="position: relative; height: 650px; width: 420px;">
         <cw-widget-root></cw-widget-root>
       </div>
     `;

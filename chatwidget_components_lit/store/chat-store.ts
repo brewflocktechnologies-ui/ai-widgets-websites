@@ -392,6 +392,8 @@ function buildDefaultChat(chatConfig?: Record<string, any>): ChatState {
 }
 
 let store: FullStore | null = null;
+let storeReady = false;
+let lastOverrides: Record<string, unknown> = {};
 
 function getStore(): FullStore {
   if (!store) {
@@ -894,9 +896,13 @@ export async function initStore(): Promise<void> {
       }, inputDelay * 1000);
     }
   }
+
+  // Store is fully built: replay any overrides queued by stories/templates.
+  storeReady = true;
+  applyStoreConfig(lastOverrides as UpdateStoreConfigOverrides);
 }
 
-export function updateStoreConfig(overrides: {
+type UpdateStoreConfigOverrides = {
   enableWelcomeCard?: boolean;
   enableGreetWindow?: boolean;
   enableInputCard?: boolean;
@@ -909,7 +915,22 @@ export function updateStoreConfig(overrides: {
   chatAnimOpenSec?: number;
   chatAnimCloseSec?: number;
   triggerType?: 'bubble' | 'chatbar';
-}) {
+  bubble?: Partial<BubbleState>;
+};
+
+/**
+ * Applies overrides onto the shared store. If the store isn't initialized yet,
+ * the latest overrides are retained and replayed after every `initStore()`, so
+ * the atom/molecule stories and the template always read the same source.
+ */
+export function updateStoreConfig(overrides: UpdateStoreConfigOverrides) {
+  if (overrides && typeof overrides === 'object') {
+    lastOverrides = { ...lastOverrides, ...(overrides as Record<string, unknown>) };
+    if (storeReady) applyStoreConfig(overrides);
+  }
+}
+
+function applyStoreConfig(overrides: UpdateStoreConfigOverrides) {
   const store = getStore();
   if (!store) return;
 
@@ -965,6 +986,11 @@ export function updateStoreConfig(overrides: {
       store.bubble.enabled = true;
     }
     emit('store:chatbar');
+    emit('store:bubble');
+  }
+
+  if (overrides.bubble && typeof overrides.bubble === 'object') {
+    Object.assign(store.bubble, overrides.bubble);
     emit('store:bubble');
   }
 
