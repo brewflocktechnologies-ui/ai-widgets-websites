@@ -5,6 +5,7 @@ import {
 } from '../utils/theme.js';
 import { getClientId, fetchClientConfig } from '../utils/config.js';
 import { sanitizeConfig } from '../tokens/merge.js';
+import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from '../tokens/chatbar-presets.js';
 
 // Types live in ./types.js (pure, side-effect-free) so presentational
 // components can depend on them without coupling to the store singleton.
@@ -914,7 +915,7 @@ type UpdateStoreConfigOverrides = {
   chatAnimStyle?: 'drop-in' | 'slide-up' | 'pop-in' | 'fade-in';
   chatAnimOpenSec?: number;
   chatAnimCloseSec?: number;
-  triggerType?: 'bubble' | 'chatbar';
+  triggerType?: 'bubble' | 'chatbar' | 'chatcard';
   bubble?: Partial<BubbleState>;
   chatbar?: Partial<ChatbarState>;
   greetWindow?: Partial<GreetWindowState>;
@@ -984,7 +985,13 @@ function applyStoreConfig(overrides: UpdateStoreConfigOverrides) {
 
   if (overrides.triggerType !== undefined) {
     if (overrides.triggerType === 'chatbar') {
+      Object.assign(store.chatbar, CHATBAR_BAR_PRESET);
       store.chatbar.enabled = true;
+      store.bubble.enabled = false;
+    } else if (overrides.triggerType === 'chatcard') {
+      Object.assign(store.chatbar, CHATBAR_CARD_PRESET);
+      store.chatbar.enabled = true;
+      store.bubble.enabled = false;
     } else {
       store.chatbar.enabled = false;
       store.bubble.enabled = true;

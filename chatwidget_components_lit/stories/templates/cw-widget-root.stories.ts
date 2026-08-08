@@ -9,7 +9,7 @@ export default {
     enableWelcomeCard: { control: 'boolean', name: 'Enable Welcome Card' },
     enableGreetWindow: { control: 'boolean', name: 'Enable Greet Window' },
     enableInputCard: { control: 'boolean', name: 'Enable Input Card' },
-    triggerType: { control: 'select', options: ['bubble', 'chatbar'], name: 'Trigger Type' },
+    triggerType: { control: 'select', options: ['bubble', 'chatbar', 'chatcard'], name: 'Trigger Type' },
     greetDelaySec: { control: { type: 'number', min: 0, max: 10, step: 0.5 }, name: 'Greet Window Delay (sec)' },
     greetAnimOpenSec: { control: { type: 'number', min: 0.1, max: 3, step: 0.1 }, name: 'Greet Open Anim Duration (sec)' },
     greetAnimCloseSec: { control: { type: 'number', min: 0.1, max: 3, step: 0.1 }, name: 'Greet Close Anim Duration (sec)' },

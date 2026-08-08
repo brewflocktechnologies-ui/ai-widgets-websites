@@ -1,6 +1,7 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-chatbar.js';
 import { updateStoreConfig } from '../../store/chat-store.js';
+import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from '../../tokens/chatbar-presets.js';
 
 export default {
   title: 'Organisms/Chatbar',
@@ -46,26 +47,29 @@ export const BarPreset = {
   render:(args: any) => {
     const isCard = args.layout === 'card';
     const config: any = {
-      enabled:true,
-      layout:args.layout,
-      text:args.text,
-      cardText:args.cardText,
-      buttonText:args.buttonText,
-      bgColor:args.bgColor,
-      textColor:args.textColor,
-      buttonBg:args.buttonBg,
-      buttonTextColor:args.buttonTextColor,
-      textSize:args.textSize,
-      lucideIcon:args.lucideIcon,
-      iconWidth:args.iconWidth,
-      iconHeight:args.iconHeight,
-      width:isCard ? 250 : 255,
-      height:isCard ? undefined : 40,
-      shadow:args.shadow,
-      offsetRight:16,
-      offsetBottom:16,
+      ...CHATBAR_BAR_PRESET,
+      layout: args.layout,
+      text: args.text,
+      cardText: args.cardText,
+      buttonText: args.buttonText,
+      bgColor: args.bgColor,
+      textColor: args.textColor,
+      buttonBg: args.buttonBg,
+      buttonTextColor: args.buttonTextColor,
+      textSize: args.textSize,
+      lucideIcon: args.lucideIcon,
+      iconWidth: args.iconWidth,
+      iconHeight: args.iconHeight,
+      width: isCard ? CHATBAR_CARD_PRESET.width : 255,
+      height: isCard ? CHATBAR_CARD_PRESET.height : 40,
+      borderRadius: isCard ? CHATBAR_CARD_PRESET.borderRadius : CHATBAR_BAR_PRESET.borderRadius,
+      padding: isCard ? CHATBAR_CARD_PRESET.padding : CHATBAR_BAR_PRESET.padding,
+      gap: isCard ? CHATBAR_CARD_PRESET.gap : CHATBAR_BAR_PRESET.gap,
+      shadow: args.shadow,
+      offsetRight: 16,
+      offsetBottom: 16,
     };
-    updateStoreConfig({ chatbar: config, triggerType: 'chatbar' });
+    updateStoreConfig({ chatbar: config, triggerType: isCard ? 'chatcard' : 'chatbar' });
     return html`
       <div style="position: relative; width: ${isCard ? '280px' : '300px'}; height: ${isCard ? '300px' : '120px'};">
         <cw-chatbar
@@ -98,8 +102,7 @@ export const CardPreset = {
   },
   render: (args: any) => {
     const config: any = {
-      enabled: true,
-      layout: 'card',
+      ...CHATBAR_CARD_PRESET,
       cardText: args.cardText,
       buttonText: args.buttonText,
       bgColor: args.bgColor,
@@ -110,12 +113,11 @@ export const CardPreset = {
       lucideIcon: args.lucideIcon,
       iconWidth: args.iconWidth,
       iconHeight: args.iconHeight,
-      width: 250,
       shadow: args.shadow,
       offsetRight: 16,
       offsetBottom: 16,
     };
-    updateStoreConfig({ chatbar: config, triggerType: 'chatbar' });
+    updateStoreConfig({ chatbar: config, triggerType: 'chatcard' });
     return html`
       <div style="position: relative; width: 280px; height: 300px;">
         <cw-chatbar
