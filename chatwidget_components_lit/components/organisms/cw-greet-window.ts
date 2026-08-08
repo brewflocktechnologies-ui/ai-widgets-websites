@@ -49,7 +49,7 @@ export class CwGreetWindow extends LitElement {
       }
       .close-btn {
         position: absolute;
-        top: -12px;
+        top: -30px;
         right: -8px;
         z-index: 20;
         border: none;
