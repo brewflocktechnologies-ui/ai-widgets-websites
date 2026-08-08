@@ -983,23 +983,6 @@ function applyStoreConfig(overrides: UpdateStoreConfigOverrides) {
     store.chatWindow.animationClosingSec = overrides.chatAnimCloseSec;
   }
 
-  if (overrides.triggerType !== undefined) {
-    if (overrides.triggerType === 'chatbar') {
-      Object.assign(store.chatbar, CHATBAR_BAR_PRESET);
-      store.chatbar.enabled = true;
-      store.bubble.enabled = false;
-    } else if (overrides.triggerType === 'chatcard') {
-      Object.assign(store.chatbar, CHATBAR_CARD_PRESET);
-      store.chatbar.enabled = true;
-      store.bubble.enabled = false;
-    } else {
-      store.chatbar.enabled = false;
-      store.bubble.enabled = true;
-    }
-    emit('store:chatbar');
-    emit('store:bubble');
-  }
-
   if (overrides.bubble && typeof overrides.bubble === 'object') {
     Object.assign(store.bubble, overrides.bubble);
     emit('store:bubble');
@@ -1037,6 +1020,18 @@ function applyStoreConfig(overrides: UpdateStoreConfigOverrides) {
   if (overrides.chat && typeof overrides.chat === 'object') {
     Object.assign(store.chat, overrides.chat);
     emit('store:chat');
+  }
+
+  if (overrides.triggerType !== undefined) {
+    if (overrides.triggerType === 'chatbar') {
+      Object.assign(store.chatbar, CHATBAR_BAR_PRESET);
+    } else if (overrides.triggerType === 'chatcard') {
+      Object.assign(store.chatbar, CHATBAR_CARD_PRESET);
+    }
+    store.chatbar.enabled = overrides.triggerType !== 'bubble';
+    store.bubble.enabled = overrides.triggerType === 'bubble';
+    emit('store:chatbar');
+    emit('store:bubble');
   }
 
   emit('store:greetWindow');
