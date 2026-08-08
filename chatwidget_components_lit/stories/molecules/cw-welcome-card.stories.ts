@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../../components/molecules/cw-welcome-card.js';
+import { updateStoreConfig } from '../../store/chat-store.js';
 
 /**
  * The welcome card has a few independent visual dimensions (layout mode,
@@ -73,57 +74,64 @@ const frame = (inner: any) => html`
 `;
 
 export const ConfigurableWelcomeCard = {
-  args: {
-    enabled: true,
-    cardLayout: 'glassy',
-    title: 'Hi there! 👋 How can we help you today?',
-    titleFontSize: '24px',
-    description: 'Our support heroes are here to assist you.',
-    descriptionFontSize: '14px',
-    bgGradient: 'linear-gradient(135deg, #0b5fff, #22d3ee)',
-    headerTextColor: '#ffffff',
-    subtextColor: 'rgba(255, 255, 255, 0.9)',
-    avatarAlign: 'center',
-    buttonText: 'Start Conversation',
-    buttonSubtext: 'Typically replies in 5 minutes',
-    buttonBg: '#ffffff',
-    buttonTextColor: '#111827',
-    buttonIconColor: '#0b5fff',
-    buttonBorderRadius: 24,
-    cardBg: 'rgba(255, 255, 255, 0.12)',
-    cardBorder: '1px solid rgba(255, 255, 255, 0.22)',
-    cardBorderRadius: 24,
-    cardBlur: 16,
+  args:{
+    enabled:true,
+    cardLayout:"normal",
+    title:"Hi there! 👋 How can we help you today?sfawdwfawf",
+    titleFontSize:'24px',
+    description:'Our support heroes are here to assist you.',
+    descriptionFontSize:'14px',
+    bgGradient:'linear-gradient(135deg, #0b5fff, #22d3ee)',
+    headerTextColor:'#ffffff',
+    subtextColor:'rgba(255, 255, 255, 0.9)',
+    avatarAlign:'center',
+    buttonText:'Start Conversation',
+    buttonSubtext:'Typically replies in 5 minutes',
+    buttonBg:'#ffffff',
+    buttonTextColor:'#111827',
+    buttonIconColor:'#0b5fff',
+    buttonBorderRadius:24,
+    cardBg:'rgba(255, 255, 255, 0.12)',
+    cardBorder:'1px solid rgba(255, 255, 255, 0.22)',
+    cardBorderRadius:24,
+    cardBlur:16,
   },
-  render: (args: any) =>
-    frame(html`
+  render:(args: any) => {
+    const config = {
+      enabled:args.enabled,
+      cardLayout:args.cardLayout,
+      title:args.title,
+      titleFontSize:args.titleFontSize,
+      description:args.description,
+      descriptionFontSize:args.descriptionFontSize,
+      bgGradient:args.bgGradient,
+      headerTextColor:args.headerTextColor,
+      subtextColor:args.subtextColor,
+      avatars:sampleAvatars,
+      avatarAlign:args.avatarAlign,
+      buttonText:args.buttonText,
+      buttonSubtext:args.buttonSubtext,
+      buttonBg:args.buttonBg,
+      buttonTextColor:args.buttonTextColor,
+      buttonIconColor:args.buttonIconColor,
+      buttonBorderRadius:args.buttonBorderRadius,
+      cardBg:args.cardBg,
+      cardBorder:args.cardBorder,
+      cardBorderRadius:args.cardBorderRadius,
+      cardBlur:args.cardBlur,
+    };
+    updateStoreConfig({
+      chatWindow:{
+        welcome:config as any
+      }
+    });
+    return frame(html`
       <cw-welcome-card
-        .config="${{
-          enabled: args.enabled,
-          cardLayout: args.cardLayout,
-          title: args.title,
-          titleFontSize: args.titleFontSize,
-          description: args.description,
-          descriptionFontSize: args.descriptionFontSize,
-          bgGradient: args.bgGradient,
-          headerTextColor: args.headerTextColor,
-          subtextColor: args.subtextColor,
-          avatars: sampleAvatars,
-          avatarAlign: args.avatarAlign,
-          buttonText: args.buttonText,
-          buttonSubtext: args.buttonSubtext,
-          buttonBg: args.buttonBg,
-          buttonTextColor: args.buttonTextColor,
-          buttonIconColor: args.buttonIconColor,
-          buttonBorderRadius: args.buttonBorderRadius,
-          cardBg: args.cardBg,
-          cardBorder: args.cardBorder,
-          cardBorderRadius: args.cardBorderRadius,
-          cardBlur: args.cardBlur,
-        }}"
+        .config="${config}"
         .accentColor="${args.buttonIconColor}"
       ></cw-welcome-card>
-    `),
+    `);
+  },
 };
 
 export const Default = {

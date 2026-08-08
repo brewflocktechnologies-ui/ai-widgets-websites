@@ -916,6 +916,10 @@ type UpdateStoreConfigOverrides = {
   chatAnimCloseSec?: number;
   triggerType?: 'bubble' | 'chatbar';
   bubble?: Partial<BubbleState>;
+  chatbar?: Partial<ChatbarState>;
+  greetWindow?: Partial<GreetWindowState>;
+  chatWindow?: Partial<ChatWindowState>;
+  chat?: Partial<ChatState>;
 };
 
 /**
@@ -992,6 +996,40 @@ function applyStoreConfig(overrides: UpdateStoreConfigOverrides) {
   if (overrides.bubble && typeof overrides.bubble === 'object') {
     Object.assign(store.bubble, overrides.bubble);
     emit('store:bubble');
+  }
+
+  if (overrides.chatbar && typeof overrides.chatbar === 'object') {
+    Object.assign(store.chatbar, overrides.chatbar);
+    emit('store:chatbar');
+  }
+
+  if (overrides.greetWindow && typeof overrides.greetWindow === 'object') {
+    if (overrides.greetWindow.inputBox && store.greetWindow.inputBox) {
+      store.greetWindow.inputBox = {
+        ...store.greetWindow.inputBox,
+        ...overrides.greetWindow.inputBox
+      };
+    }
+    const { inputBox, ...rest } = overrides.greetWindow;
+    Object.assign(store.greetWindow, rest);
+    emit('store:greetWindow');
+  }
+
+  if (overrides.chatWindow && typeof overrides.chatWindow === 'object') {
+    if (overrides.chatWindow.welcome && store.chatWindow.welcome) {
+      store.chatWindow.welcome = {
+        ...store.chatWindow.welcome,
+        ...overrides.chatWindow.welcome
+      };
+    }
+    const { welcome, ...rest } = overrides.chatWindow;
+    Object.assign(store.chatWindow, rest);
+    emit('store:chatWindow');
+  }
+
+  if (overrides.chat && typeof overrides.chat === 'object') {
+    Object.assign(store.chat, overrides.chat);
+    emit('store:chat');
   }
 
   emit('store:greetWindow');

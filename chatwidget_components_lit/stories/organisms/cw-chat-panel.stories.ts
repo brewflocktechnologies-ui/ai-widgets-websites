@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-chat-panel.js';
+import { updateStoreConfig } from '../../store/chat-store.js';
 
 export default {
   title: 'Organisms/ChatPanel',
@@ -28,27 +29,35 @@ export const ConfigurableChatPanel = {
     headerBg: '#0b5fff',
     bodyBg: '#f8fafc',
   },
-  render: (args: any) => html`
-    <div style="position: relative; width: 400px; height: 560px;">
-      <cw-chat-panel
-        .fixed="${false}"
-        .panelOpen="${args.panelOpen}"
-        .chatWindowConfig="${{
-          widgetWidth: args.widgetWidth,
-          widgetHeight: args.widgetHeight,
-          headerBg: args.headerBg,
-          bodyBg: args.bodyBg,
-          accentColor: args.headerBg,
-        }}"
-        .chatState="${{
-          state: args.state,
-          clientName: args.clientName,
-          agentName: args.agentName,
-          messages: [
-            { key: 'm1', senderType: 'AGENT', senderName: args.agentName, body: 'Welcome! How can we assist you today?', created: new Date().toISOString() },
-          ],
-        }}"
-      ></cw-chat-panel>
-    </div>
-  `,
+  render: (args: any) => {
+    const chatWindowConfig = {
+      widgetWidth: args.widgetWidth,
+      widgetHeight: args.widgetHeight,
+      headerBg: args.headerBg,
+      bodyBg: args.bodyBg,
+      accentColor: args.headerBg,
+    };
+    const chatState = {
+      state: args.state,
+      clientName: args.clientName,
+      agentName: args.agentName,
+      messages: [
+        { key: 'm1', senderType: 'AGENT' as const, senderName: args.agentName, body: 'Welcome! How can we assist you today?', created: new Date().toISOString() },
+      ],
+    };
+    updateStoreConfig({
+      chatWindow: chatWindowConfig,
+      chat: chatState
+    });
+    return html`
+      <div style="position: relative; width: 400px; height: 560px;">
+        <cw-chat-panel
+          .fixed="${false}"
+          .panelOpen="${args.panelOpen}"
+          .chatWindowConfig="${chatWindowConfig}"
+          .chatState="${chatState}"
+        ></cw-chat-panel>
+      </div>
+    `;
+  },
 };

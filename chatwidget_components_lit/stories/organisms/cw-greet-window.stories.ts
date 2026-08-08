@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-greet-window.js';
+import { updateStoreConfig } from '../../store/chat-store.js';
 
 export default {
   title: 'Organisms/GreetWindow',
@@ -32,61 +33,64 @@ export default {
 };
 
 export const ConfigurableGreetWindow = {
-  args: {
-    panelOpen: false,
-    enabled: true,
-    title: 'Hi there! 👋 Need help growing your business?',
-    description: "Let's chat & find the right solution for you!",
-    titleColor: '#1e293b',
-    descriptionColor: '#475569',
-    backgroundColor: '#ffffff',
-    borderRadius: 16,
-    padding: '24px 20px',
-    width: 320,
-    lucideIcon: 'Sparkles',
-    iconSize: 48,
-    iconColor: '#0b5fff',
-    iconAnimation: 'wiggle',
-    imageUrl: '',
-
-    enableInputBox: true,
-    inputLayout: 'separated',
-    inputPlaceholder: 'Write your message...',
-    buttonColor: '#0b5fff',
-    buttonIconColor: '#ffffff',
+  args:{
+    panelOpen:false,
+    enabled:true,
+    title:"Hi there! 👋 Need help growing your business?sefsef",
+    description:"Let's chat & find the right solution for you!",
+    titleColor:'#1e293b',
+    descriptionColor:"#f97800",
+    backgroundColor:'#ffffff',
+    borderRadius:16,
+    padding:'24px 20px',
+    width:320,
+    lucideIcon:'Sparkles',
+    iconSize:48,
+    iconColor:'#0b5fff',
+    iconAnimation:'wiggle',
+    imageUrl:'',
+    enableInputBox:true,
+    inputLayout:"joined",
+    inputPlaceholder:'Write your message...',
+    buttonColor:'#0b5fff',
+    buttonIconColor:'#ffffff',
   },
-  render: (args: any) => html`
-    <div style="position: relative; width: 380px; height: 440px;">
-      <cw-greet-window
-        .fixed="${false}"
-        .panelOpen="${args.panelOpen}"
-        .config="${{
-          enabled: args.enabled,
-          dismissed: false,
-          visible: true,
-          width: args.width,
-          backgroundColor: args.backgroundColor,
-          borderRadius: args.borderRadius,
-          padding: args.padding,
-          title: args.title,
-          description: args.description,
-          titleColor: args.titleColor,
-          descriptionColor: args.descriptionColor,
-          lucideIcon: args.lucideIcon,
-          iconSize: args.iconSize,
-          iconColor: args.iconColor,
-          iconAnimation: args.iconAnimation,
-          imageUrl: args.imageUrl || undefined,
-          inputBox: args.enableInputBox ? {
-            enabled: true,
-            visible: true,
-            layout: args.inputLayout,
-            placeholder: args.inputPlaceholder,
-            buttonColor: args.buttonColor,
-            buttonIconColor: args.buttonIconColor,
-          } : undefined,
-        }}"
-      ></cw-greet-window>
-    </div>
-  `,
+  render:(args: any) => {
+    const config: any = {
+      enabled:args.enabled,
+      dismissed:false,
+      visible:true,
+      width:args.width,
+      backgroundColor:args.backgroundColor,
+      borderRadius:args.borderRadius,
+      padding:args.padding,
+      title:args.title,
+      description:args.description,
+      titleColor:args.titleColor,
+      descriptionColor:args.descriptionColor,
+      lucideIcon:args.lucideIcon,
+      iconSize:args.iconSize,
+      iconColor:args.iconColor,
+      iconAnimation:args.iconAnimation,
+      imageUrl:args.imageUrl || undefined,
+      inputBox:args.enableInputBox ? {
+        enabled:true,
+        visible:true,
+        layout:args.inputLayout,
+        placeholder:args.inputPlaceholder,
+        buttonColor:args.buttonColor,
+        buttonIconColor:args.buttonIconColor,
+      } : undefined,
+    };
+    updateStoreConfig({ greetWindow: config });
+    return html`
+      <div style="position: relative; width: 380px; height: 440px;">
+        <cw-greet-window
+          .fixed="${false}"
+          .panelOpen="${args.panelOpen}"
+          .config="${config}"
+        ></cw-greet-window>
+      </div>
+    `;
+  },
 };

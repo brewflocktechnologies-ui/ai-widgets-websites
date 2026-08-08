@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-chatbar.js';
+import { updateStoreConfig } from '../../store/chat-store.js';
 
 export default {
   title: 'Organisms/Chatbar',
@@ -32,7 +33,7 @@ export const BarPreset = {
     text:'Chat with us',
     cardText:'Questions about PhonePe for business?',
     buttonText:'Chat Now',
-    bgColor:"#8133d5",
+    bgColor:"#000000",
     textColor:'#ffffff',
     buttonBg:'#ffffff',
     buttonTextColor:"#ffffff",
@@ -44,32 +45,34 @@ export const BarPreset = {
   },
   render:(args: any) => {
     const isCard = args.layout === 'card';
+    const config: any = {
+      enabled:true,
+      layout:args.layout,
+      text:args.text,
+      cardText:args.cardText,
+      buttonText:args.buttonText,
+      bgColor:args.bgColor,
+      textColor:args.textColor,
+      buttonBg:args.buttonBg,
+      buttonTextColor:args.buttonTextColor,
+      textSize:args.textSize,
+      lucideIcon:args.lucideIcon,
+      iconWidth:args.iconWidth,
+      iconHeight:args.iconHeight,
+      width:isCard ? 250 : 255,
+      height:isCard ? undefined : 40,
+      shadow:args.shadow,
+      offsetRight:16,
+      offsetBottom:16,
+    };
+    updateStoreConfig({ chatbar: config, triggerType: 'chatbar' });
     return html`
       <div style="position: relative; width: ${isCard ? '280px' : '300px'}; height: ${isCard ? '300px' : '120px'};">
         <cw-chatbar
           .fixed="${false}"
           .panelOpen="${args.panelOpen}"
           .unreadCount="${args.unreadCount}"
-          .config="${{
-            enabled:true,
-            layout:args.layout,
-            text:args.text,
-            cardText:args.cardText,
-            buttonText:args.buttonText,
-            bgColor:args.bgColor,
-            textColor:args.textColor,
-            buttonBg:args.buttonBg,
-            buttonTextColor:args.buttonTextColor,
-            textSize:args.textSize,
-            lucideIcon:args.lucideIcon,
-            iconWidth:args.iconWidth,
-            iconHeight:args.iconHeight,
-            width:isCard ? 250 : 255,
-            height:isCard ? undefined : 40,
-            shadow:args.shadow,
-            offsetRight:16,
-            offsetBottom:16,
-          }}"
+          .config="${config}"
         ></cw-chatbar>
       </div>
     `;
@@ -93,31 +96,35 @@ export const CardPreset = {
     iconHeight: 36,
     shadow: true,
   },
-  render: (args: any) => html`
-    <div style="position: relative; width: 280px; height: 300px;">
-      <cw-chatbar
-        .fixed="${false}"
-        .panelOpen="${args.panelOpen}"
-        .unreadCount="${args.unreadCount}"
-        .config="${{
-          enabled: true,
-          layout: 'card',
-          cardText: args.cardText,
-          buttonText: args.buttonText,
-          bgColor: args.bgColor,
-          textColor: args.textColor,
-          buttonBg: args.buttonBg,
-          buttonTextColor: args.buttonTextColor,
-          textSize: args.textSize,
-          lucideIcon: args.lucideIcon,
-          iconWidth: args.iconWidth,
-          iconHeight: args.iconHeight,
-          width: 250,
-          shadow: args.shadow,
-          offsetRight: 16,
-          offsetBottom: 16,
-        }}"
-      ></cw-chatbar>
-    </div>
-  `,
+  render: (args: any) => {
+    const config: any = {
+      enabled: true,
+      layout: 'card',
+      cardText: args.cardText,
+      buttonText: args.buttonText,
+      bgColor: args.bgColor,
+      textColor: args.textColor,
+      buttonBg: args.buttonBg,
+      buttonTextColor: args.buttonTextColor,
+      textSize: args.textSize,
+      lucideIcon: args.lucideIcon,
+      iconWidth: args.iconWidth,
+      iconHeight: args.iconHeight,
+      width: 250,
+      shadow: args.shadow,
+      offsetRight: 16,
+      offsetBottom: 16,
+    };
+    updateStoreConfig({ chatbar: config, triggerType: 'chatbar' });
+    return html`
+      <div style="position: relative; width: 280px; height: 300px;">
+        <cw-chatbar
+          .fixed="${false}"
+          .panelOpen="${args.panelOpen}"
+          .unreadCount="${args.unreadCount}"
+          .config="${config}"
+        ></cw-chatbar>
+      </div>
+    `;
+  },
 };
