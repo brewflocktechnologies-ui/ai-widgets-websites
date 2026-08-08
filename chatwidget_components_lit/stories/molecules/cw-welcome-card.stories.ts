@@ -77,7 +77,7 @@ export const ConfigurableWelcomeCard = {
   args:{
     enabled:true,
     cardLayout:"normal",
-    title:"Hi there! 👋 How can we help you today?sfawdwfawf",
+    title:"Hi there! 👋 How can we help you today?",
     titleFontSize:'24px',
     description:'Our support heroes are here to assist you.',
     descriptionFontSize:'14px',

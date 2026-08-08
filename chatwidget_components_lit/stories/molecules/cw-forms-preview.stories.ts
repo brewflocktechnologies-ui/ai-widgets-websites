@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../../components/molecules/cw-forms-preview.js';
+import { updateStoreConfig } from '../../store/chat-store.js';
 
 export default {
   title: 'Molecules/FormsPreview',
@@ -16,26 +17,42 @@ export const PrechatForm = {
   args: {
     type: 'prechat',
   },
-  render: (args: any) => html`
-    <div style="width: 360px; padding: 24px; background: #f8fafc; border-radius: 16px;">
-      <cw-forms-preview
-        .type="${args.type}"
-      ></cw-forms-preview>
-    </div>
-  `,
+  render: (args: any) => {
+    updateStoreConfig({
+      chat: {
+        state: 'prechat'
+      }
+    });
+
+    return html`
+      <div style="width: 360px; padding: 24px; background: #f8fafc; border-radius: 16px;">
+        <cw-forms-preview
+          .type="${args.type}"
+        ></cw-forms-preview>
+      </div>
+    `;
+  },
 };
 
 export const PostchatForm = {
   args: {
     type: 'postchat',
   },
-  render: (args: any) => html`
-    <div style="width: 360px; padding: 24px; background: #f8fafc; border-radius: 16px;">
-      <cw-forms-preview
-        .type="${args.type}"
-      ></cw-forms-preview>
-    </div>
-  `,
+  render: (args: any) => {
+    updateStoreConfig({
+      chat: {
+        state: 'offline'
+      }
+    });
+
+    return html`
+      <div style="width: 360px; padding: 24px; background: #f8fafc; border-radius: 16px;">
+        <cw-forms-preview
+          .type="${args.type}"
+        ></cw-forms-preview>
+      </div>
+    `;
+  },
 };
 
 export const TicketForm = {
@@ -44,13 +61,22 @@ export const TicketForm = {
     heading: 'Submit a Support Ticket',
     subheading: 'We will get back to you within 24 hours.',
   },
-  render: (args: any) => html`
-    <div style="width: 360px; padding: 24px; background: #f8fafc; border-radius: 16px;">
-      <cw-forms-preview
-        .type="${args.type}"
-        .heading="${args.heading}"
-        .subheading="${args.subheading}"
-      ></cw-forms-preview>
-    </div>
-  `,
+  render: (args: any) => {
+    updateStoreConfig({
+      chat: {
+        state: 'offline'
+      }
+    });
+
+    return html`
+      <div style="width: 360px; padding: 24px; background: #f8fafc; border-radius: 16px;">
+        <cw-forms-preview
+          .type="${args.type}"
+          .heading="${args.heading}"
+          .subheading="${args.subheading}"
+        ></cw-forms-preview>
+      </div>
+    `;
+  },
 };
+

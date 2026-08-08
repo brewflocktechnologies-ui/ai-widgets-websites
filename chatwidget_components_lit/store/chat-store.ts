@@ -901,7 +901,45 @@ export async function initStore(): Promise<void> {
   // Store is fully built: replay any overrides queued by stories/templates.
   storeReady = true;
   applyStoreConfig(lastOverrides as UpdateStoreConfigOverrides);
-  restoreFromLocalStorage();
+  restoreTokenSession();
+}
+
+const TOKEN_SESSION_KEY = 'zotly_active_token_session';
+
+function saveTokenSession() {
+  try {
+    if (typeof sessionStorage !== 'undefined') {
+      const token = exportFullStoreConfig();
+      if (token && Object.keys(token).length > 0) {
+        sessionStorage.setItem(TOKEN_SESSION_KEY, JSON.stringify(token));
+      }
+    }
+  } catch (_) {}
+}
+
+export function restoreTokenSession(): boolean {
+  try {
+    if (typeof sessionStorage !== 'undefined') {
+      const saved = sessionStorage.getItem(TOKEN_SESSION_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') {
+          injectStoreConfig(parsed);
+          return true;
+        }
+      }
+    }
+  } catch (_) {}
+  return false;
+}
+
+export function resetStoreConfig(): void {
+  try {
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.removeItem(TOKEN_SESSION_KEY);
+    }
+  } catch (_) {}
+  initStore();
 }
 
 type UpdateStoreConfigOverrides = {
@@ -925,55 +963,17 @@ type UpdateStoreConfigOverrides = {
   features?: Partial<FeaturesState>;
 };
 
-const CONFIG_STORAGE_KEY = 'zotly_active_config_token';
-
-function saveToLocalStorage() {
-  try {
-    if (typeof localStorage !== 'undefined') {
-      const full = exportFullStoreConfig();
-      if (full && Object.keys(full).length > 0) {
-        localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(full));
-      }
-    }
-  } catch (_) {}
-}
-
-export function restoreFromLocalStorage(): boolean {
-  try {
-    if (typeof localStorage !== 'undefined') {
-      const saved = localStorage.getItem(CONFIG_STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed && typeof parsed === 'object') {
-          injectStoreConfig(parsed, false);
-          return true;
-        }
-      }
-    }
-  } catch (_) {}
-  return false;
-}
-
-export function resetStoreConfig(): void {
-  try {
-    if (typeof localStorage !== 'undefined') {
-      localStorage.removeItem(CONFIG_STORAGE_KEY);
-    }
-  } catch (_) {}
-  initStore();
-}
-
 /**
  * Applies overrides onto the shared store. If the store isn't initialized yet,
  * the latest overrides are retained and replayed after every `initStore()`, so
  * the atom/molecule stories and the template always read the same source.
  */
-export function updateStoreConfig(overrides: UpdateStoreConfigOverrides, persist: boolean = true) {
+export function updateStoreConfig(overrides: UpdateStoreConfigOverrides) {
   if (overrides && typeof overrides === 'object') {
     lastOverrides = { ...lastOverrides, ...(overrides as Record<string, unknown>) };
     if (storeReady) {
       applyStoreConfig(overrides);
-      if (persist) saveToLocalStorage();
+      saveTokenSession();
     }
   }
 }
@@ -1110,7 +1110,7 @@ export function exportFullStoreConfig(): Record<string, any> {
 /**
  * Hydrates all store singletons with a full or partial JSON configuration token.
  */
-export function injectStoreConfig(token: Record<string, any>, persist: boolean = true): void {
+export function injectStoreConfig(token: Record<string, any>): void {
   if (!token || typeof token !== 'object') return;
 
   const store = getStore();
@@ -1131,7 +1131,7 @@ export function injectStoreConfig(token: Record<string, any>, persist: boolean =
     }
   };
 
-  updateStoreConfig(overrides, persist);
+  updateStoreConfig(overrides);
 }
 
 

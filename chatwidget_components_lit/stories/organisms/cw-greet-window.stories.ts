@@ -36,10 +36,10 @@ export const ConfigurableGreetWindow = {
   args:{
     panelOpen:false,
     enabled:true,
-    title:"Hi there! 👋 Need help growing your business?sefsef",
+    title:"Hi there! 👋 Need using AI?",
     description:"Let's chat & find the right solution for you!",
     titleColor:'#1e293b',
-    descriptionColor:"#f97800",
+    descriptionColor:"#475569",
     backgroundColor:'#ffffff',
     borderRadius:16,
     padding:'24px 20px',

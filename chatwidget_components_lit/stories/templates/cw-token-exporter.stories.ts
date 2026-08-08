@@ -34,7 +34,6 @@ function downloadTokenFile(jsonString: string) {
 
 function handleResetConfig() {
   resetStoreConfig();
-  window.location.reload();
 }
 
 export const StorybookTokenExporter = {

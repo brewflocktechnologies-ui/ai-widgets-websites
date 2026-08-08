@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../../components/molecules/cw-chat-header.js';
+import { updateStoreConfig } from '../../store/chat-store.js';
 
 export default {
   title: 'Molecules/ChatHeader',
@@ -32,24 +33,43 @@ export const ConfigurableHeader = {
     headerSubtitleFontSize: '11px',
     enableCloseChatVisitor: true,
   },
-  render: (args: any) => html`
-    <div style="width: 350px; border-radius: 16px 16px 0 0; overflow: hidden;">
-      <cw-chat-header
-        .clientName="${args.clientName}"
-        .agentName="${args.agentName}"
-        .state="${args.state}"
-        .isExpanded="${args.isExpanded}"
-        .config="${{
-          headerBg: args.headerBg,
-          headerTextColor: args.headerTextColor,
-          headerPadding: args.headerPadding,
-          headerTitleFontSize: args.headerTitleFontSize,
-          headerSubtitleFontSize: args.headerSubtitleFontSize,
-        }}"
-        .features="${{
-          closeChatVisitor: args.enableCloseChatVisitor,
-        }}"
-      ></cw-chat-header>
-    </div>
-  `,
+  render: (args: any) => {
+    updateStoreConfig({
+      chatWindow: {
+        headerBg: args.headerBg,
+        headerTextColor: args.headerTextColor,
+        headerPadding: args.headerPadding,
+        headerTitleFontSize: args.headerTitleFontSize,
+        headerSubtitleFontSize: args.headerSubtitleFontSize,
+      },
+      features: {
+        closeChatVisitor: args.enableCloseChatVisitor,
+      },
+      chat: {
+        clientName: args.clientName,
+        agentName: args.agentName,
+      }
+    });
+
+    return html`
+      <div style="width: 350px; border-radius: 16px 16px 0 0; overflow: hidden;">
+        <cw-chat-header
+          .clientName="${args.clientName}"
+          .agentName="${args.agentName}"
+          .state="${args.state}"
+          .isExpanded="${args.isExpanded}"
+          .config="${{
+            headerBg: args.headerBg,
+            headerTextColor: args.headerTextColor,
+            headerPadding: args.headerPadding,
+            headerTitleFontSize: args.headerTitleFontSize,
+            headerSubtitleFontSize: args.headerSubtitleFontSize,
+          }}"
+          .features="${{
+            closeChatVisitor: args.enableCloseChatVisitor,
+          }}"
+        ></cw-chat-header>
+      </div>
+    `;
+  },
 };

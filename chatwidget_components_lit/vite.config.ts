@@ -3,10 +3,13 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   build: {
     lib: {
-      entry: './index.ts',
+      entry: {
+        index: './index.ts',
+        'widget-injector': './scripts/widget-injector.ts'
+      },
       name: 'ChatWidgetLit',
-      fileName: (format) => `index.${format}.js`,
-      formats: ['es', 'umd']
+      fileName: (format, entryName) => `${entryName}.${format === 'es' ? 'js' : format + '.js'}`,
+      formats: ['es']
     },
     rollupOptions: {
       external: [],
