@@ -86,6 +86,7 @@ export const CardPreset = {
     panelOpen: false,
     unreadCount: 0,
     layout: 'card',
+    text: 'Chat with us',
     cardText: 'Questions about PhonePe for business?',
     buttonText: 'Chat Now',
     bgColor: '#5f259f',
@@ -99,8 +100,11 @@ export const CardPreset = {
     shadow: true,
   },
   render: (args: any) => {
+    const isCard = args.layout === 'card';
     const config: any = {
       ...CHATBAR_CARD_PRESET,
+      layout: args.layout,
+      text: args.text,
       cardText: args.cardText,
       buttonText: args.buttonText,
       bgColor: args.bgColor,
@@ -111,12 +115,17 @@ export const CardPreset = {
       lucideIcon: args.lucideIcon,
       iconWidth: args.iconWidth,
       iconHeight: args.iconHeight,
+      width: isCard ? CHATBAR_CARD_PRESET.width : 255,
+      height: isCard ? CHATBAR_CARD_PRESET.height : 40,
+      borderRadius: isCard ? CHATBAR_CARD_PRESET.borderRadius : CHATBAR_BAR_PRESET.borderRadius,
+      padding: isCard ? CHATBAR_CARD_PRESET.padding : CHATBAR_BAR_PRESET.padding,
+      gap: isCard ? CHATBAR_CARD_PRESET.gap : CHATBAR_BAR_PRESET.gap,
       shadow: args.shadow,
       offsetRight: 16,
       offsetBottom: 16,
     };
     return html`
-      <div style="position: relative; width: 280px; height: 300px;">
+      <div style="position: relative; width: ${isCard ? '280px' : '300px'}; height: ${isCard ? '300px' : '120px'};">
         <cw-chatbar
           .fixed="${false}"
           .panelOpen="${args.panelOpen}"

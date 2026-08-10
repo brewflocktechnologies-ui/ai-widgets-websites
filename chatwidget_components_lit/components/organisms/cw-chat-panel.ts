@@ -175,7 +175,7 @@ export class CwChatPanel extends LitElement {
 
     const rawRight = (cw.offsetRight !== undefined && cw.offsetRight !== null && (cw.offsetRight as any) !== '')
       ? Number(cw.offsetRight)
-      : (cb?.enabled ? (cb.offsetRight !== undefined ? cb.offsetRight : 16) : (bb?.offsetRight !== undefined ? bb.offsetRight : 16));
+      : 16;
 
     const shadow = cw.widgetShadow
       ? `0 8px ${cw.widgetShadowBlur || 30}px ${cw.widgetShadowColor || 'rgba(0,0,0,0.12)'}`

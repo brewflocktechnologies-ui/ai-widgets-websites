@@ -120,8 +120,8 @@ export class CwChatbar extends LitElement {
       : (s.width && s.width >= 100 ? s.width : 255);
 
     const heightVal = isCard
-      ? (s.height && s.height >= 120 ? `${s.height}px` : 'auto')
-      : `${s.height && s.height >= 30 ? s.height : 46}px`;
+      ? (s.height && s.height >= 120 ? `${s.height}px` : '220px')
+      : `${s.height && s.height >= 30 && s.height <= 80 ? s.height : 46}px`;
 
     const rawBottom = s.offsetBottom !== undefined ? s.offsetBottom : 16;
     const rawRight = s.offsetRight !== undefined ? s.offsetRight : 16;
@@ -129,8 +129,8 @@ export class CwChatbar extends LitElement {
     const bg = getChatbarBackground(s);
     const borderRadius = getBorderRadius(s.borderRadius, isCard ? '24px' : '9999px');
     const transform = this.hovered ? 'scale(1.02)' : 'scale(1.0)';
-    const padding = s.padding !== undefined ? s.padding : isCard ? '24px 20px' : '0 18px';
-    const gap = s.gap !== undefined ? `${s.gap}px` : isCard ? '12px' : '0';
+    const padding = s.padding && s.padding !== (isCard ? '0 18px' : '24px 20px') ? s.padding : (isCard ? '24px 20px' : '0 18px');
+    const gap = s.gap !== undefined && s.gap !== (isCard ? 0 : 12) ? `${s.gap}px` : (isCard ? '12px' : '0');
 
     return html`
       <div

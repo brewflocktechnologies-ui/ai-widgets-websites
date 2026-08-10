@@ -11,6 +11,7 @@ import {
   featuresStore
 } from '../../store/chat-store.js';
 import { KEYFRAMES_CSS } from '../../tokens/design-tokens.js';
+import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from '../../tokens/chatbar-presets.js';
 import '../organisms/cw-bubble.js';
 import '../organisms/cw-chatbar.js';
 import '../organisms/cw-greet-window.js';
@@ -229,6 +230,8 @@ export class CwWidgetRoot extends LitElement {
 
   @state() panelOpen = false;
   @state() initialized = false;
+  @state() private userHasSentMessage = false;
+  @state() private activeTriggerOverride?: 'bubble' | 'chatbar' | 'chatcard';
   /** Increment on every store event so presentational children re-render. */
   @state() private rev = 0;
 
@@ -274,6 +277,14 @@ export class CwWidgetRoot extends LitElement {
     this.eventListeners = [];
   }
 
+  updated(changedProperties: Map<string, any>) {
+    super.updated(changedProperties);
+    if (changedProperties.has('triggerType')) {
+      this.activeTriggerOverride = undefined;
+      this.userHasSentMessage = false;
+    }
+  }
+
   static styles = css`
     :host {
       display: block;
@@ -291,9 +302,15 @@ export class CwWidgetRoot extends LitElement {
       ['cw:start-chat', () => chatStore.startFromWelcome()],
       ['cw:greet-dismiss', () => chatStore.dismissGreetWindow()],
       ['cw:greet-input', (e) => { chatStore.get().draft = e.detail; }],
-      ['cw:greet-submit', (e) => this.handleGreetSubmit((e.detail as string) || '')],
+      ['cw:greet-submit', (e) => {
+        this.userHasSentMessage = true;
+        this.handleGreetSubmit((e.detail as string) || '');
+      }],
       ['cw:draft-change', (e) => { chatStore.get().draft = e.detail; }],
-      ['cw:send', () => chatStore.send()],
+      ['cw:send', () => {
+        this.userHasSentMessage = true;
+        chatStore.send();
+      }],
       ['cw:toggle-attach', () => chatStore.toggleAttach()],
       ['cw:toggle-emoji', () => chatStore.toggleEmoji()],
       ['cw:attach-files', (e) => this.handleAttachFiles(e.detail as HTMLInputElement)],
@@ -302,7 +319,10 @@ export class CwWidgetRoot extends LitElement {
       ['cw:download-transcript', () => chatStore.downloadTranscript()],
       ['cw:toggle-sounds', () => chatStore.toggleSounds()],
       ['cw:insert-emoji', (e) => chatStore.insertEmoji(e.detail as string)],
-      ['cw:submit-offline', (e) => this.handleSubmitOffline(e.detail)],
+      ['cw:submit-offline', (e) => {
+        this.userHasSentMessage = true;
+        this.handleSubmitOffline(e.detail);
+      }],
       ['cw:start-new', () => chatStore.startNew()],
       ['cw:toggle-expand', () => chatStore.toggleExpand()],
       ['cw:open-menu', () => chatStore.toggleMenu()],
@@ -406,12 +426,23 @@ export class CwWidgetRoot extends LitElement {
     }, 60);
   }
 
+  private checkCardToBarCollapse() {
+    const cbs = chatbarStore.get();
+    const currentTrigger = this.activeTriggerOverride || this.triggerType || (cbs?.enabled ? (cbs.layout === 'card' ? 'chatcard' : 'chatbar') : 'bubble');
+    const hasVisitorMsg = this.userHasSentMessage || chatStore.get()?.messages?.some(m => m.senderType === 'VISITOR');
+    if (hasVisitorMsg && currentTrigger === 'chatcard') {
+      this.activeTriggerOverride = 'chatbar';
+      if (cbs) cbs.layout = 'bar';
+    }
+  }
+
   private handleToggleWidget() {
     this.panelOpen = !this.panelOpen;
     chatStore.get().panelOpen = this.panelOpen;
     if (this.panelOpen) {
       chatStore.get().unreadCount = 0;
     } else {
+      this.checkCardToBarCollapse();
       this.focusLauncher();
     }
     this.requestUpdate();
@@ -420,6 +451,7 @@ export class CwWidgetRoot extends LitElement {
   private handleCloseWidget() {
     this.panelOpen = false;
     chatStore.get().panelOpen = false;
+    this.checkCardToBarCollapse();
     this.focusLauncher();
     this.requestUpdate();
   }
@@ -434,7 +466,7 @@ export class CwWidgetRoot extends LitElement {
     const fs = featuresStore.get();
     const cs = chatStore.get();
 
-    const activeTrigger = this.triggerType || (cbs.enabled ? (cbs.layout === 'card' ? 'chatcard' : 'chatbar') : 'bubble');
+    const activeTrigger = this.activeTriggerOverride || this.triggerType || (cbs.enabled ? (cbs.layout === 'card' ? 'chatcard' : 'chatbar') : 'bubble');
     const isChatbarTrigger = activeTrigger === 'chatbar' || activeTrigger === 'chatcard';
 
     const barRight = this.barOffsetRight !== undefined ? this.barOffsetRight : (cbs.barOffsetRight ?? cbs.offsetRight ?? 16);
@@ -442,12 +474,20 @@ export class CwWidgetRoot extends LitElement {
     const cardRight = this.cardOffsetRight !== undefined ? this.cardOffsetRight : (cbs.cardOffsetRight ?? cbs.offsetRight ?? 16);
     const cardBottom = this.cardOffsetBottom !== undefined ? this.cardOffsetBottom : (cbs.cardOffsetBottom ?? cbs.offsetBottom ?? 12);
 
+    const isCardLayout = (this.chatbarLayout || (activeTrigger === 'chatcard' ? 'card' : 'bar')) === 'card';
+    const preset = isCardLayout ? CHATBAR_CARD_PRESET : CHATBAR_BAR_PRESET;
+
     const effectiveCbs = {
+      ...preset,
       ...cbs,
       enabled: isChatbarTrigger,
-      layout: (this.chatbarLayout || (activeTrigger === 'chatcard' ? 'card' : 'bar')) as 'bar' | 'card',
-      width: this.chatbarWidth || cbs.width,
-      height: this.chatbarHeight || cbs.height,
+      layout: isCardLayout ? 'card' : 'bar',
+      width: (this.chatbarWidth !== undefined && this.chatbarWidth !== CHATBAR_BAR_PRESET.width)
+        ? this.chatbarWidth
+        : preset.width,
+      height: (this.chatbarHeight !== undefined && this.chatbarHeight !== CHATBAR_BAR_PRESET.height)
+        ? this.chatbarHeight
+        : preset.height,
       bgColor: this.chatbarBg || cbs.bgColor,
       gradientEnabled: this.chatbarGradientEnabled !== undefined ? this.chatbarGradientEnabled : cbs.gradientEnabled,
       gradientStops: (this.chatbarGradientStart || this.chatbarGradientEnd)
@@ -456,9 +496,11 @@ export class CwWidgetRoot extends LitElement {
             { color: this.chatbarGradientEnd || cbs.gradientStops?.[1]?.color || cbs.bgColor, pos: 100 },
           ]
         : cbs.gradientStops,
-      borderRadius: this.chatbarBorderRadius !== undefined
+      borderRadius: (this.chatbarBorderRadius !== undefined && this.chatbarBorderRadius !== 20)
         ? { tl: this.chatbarBorderRadius, tr: this.chatbarBorderRadius, bl: this.chatbarBorderRadius, br: this.chatbarBorderRadius }
-        : cbs.borderRadius,
+        : preset.borderRadius,
+      padding: isCardLayout ? CHATBAR_CARD_PRESET.padding : (cbs.padding || CHATBAR_BAR_PRESET.padding),
+      gap: isCardLayout ? CHATBAR_CARD_PRESET.gap : (cbs.gap ?? CHATBAR_BAR_PRESET.gap),
       text: this.chatbarText || cbs.text,
       cardText: this.chatcardText || cbs.cardText,
       textSize: this.chatbarTextSize || cbs.textSize,
@@ -658,7 +700,7 @@ export class CwWidgetRoot extends LitElement {
       modalBorderRadius: this.modalBorderRadius || cws.modalBorderRadius,
       endChatConfirmBg: this.endChatConfirmBg || cws.endChatConfirmBg,
       endChatConfirmTextColor: this.endChatConfirmTextColor || cws.endChatConfirmTextColor,
-      offsetRight: activeOffsetRight,
+      offsetRight: 16,
       offsetBottom: activeOffsetBottom,
       welcome: {
         ...(cws.welcome || {}),

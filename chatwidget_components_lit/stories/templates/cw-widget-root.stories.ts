@@ -66,7 +66,6 @@ export default {
     // -------------------------------------------------------------------------
     // 3. Chatbar Trigger Layout
     // -------------------------------------------------------------------------
-    chatbarLayout: { control: 'select', options: ['bar', 'card'], name: 'Layout Style', table: { category: '3. Chatbar Trigger' } },
     chatbarWidth: { control: { type: 'number', min: 150, max: 400 }, name: 'Chatbar Width (px)', table: { category: '3. Chatbar Trigger' } },
     chatbarHeight: { control: { type: 'number', min: 30, max: 80 }, name: 'Chatbar Height (px)', table: { category: '3. Chatbar Trigger' } },
     chatbarBg: { control: 'color', name: 'Chatbar Background', table: { category: '3. Chatbar Trigger' } },
@@ -267,7 +266,6 @@ const DEFAULT_ARGS = {
   bubbleBadgeTextColor: '#ffffff',
 
   // 3. Chatbar Trigger
-  chatbarLayout: 'bar',
   chatbarWidth: 255,
   chatbarHeight: 40,
   chatbarBg: '#0b5fff',
@@ -454,7 +452,6 @@ const renderWidget = (args: any) => html`
       .bubbleBadgeBg="${args.bubbleBadgeBg}"
       .bubbleBadgeTextColor="${args.bubbleBadgeTextColor}"
 
-      .chatbarLayout="${args.chatbarLayout}"
       .chatbarWidth="${args.chatbarWidth}"
       .chatbarHeight="${args.chatbarHeight}"
       .chatbarBg="${args.chatbarBg}"

@@ -1062,9 +1062,9 @@ function applyStoreConfig(overrides: UpdateStoreConfigOverrides) {
 
   if (overrides.triggerType !== undefined) {
     if (overrides.triggerType === 'chatbar') {
-      store.chatbar = { ...CHATBAR_BAR_PRESET, ...store.chatbar, enabled: true };
+      store.chatbar = { ...CHATBAR_BAR_PRESET, enabled: true };
     } else if (overrides.triggerType === 'chatcard') {
-      store.chatbar = { ...CHATBAR_CARD_PRESET, ...store.chatbar, enabled: true };
+      store.chatbar = { ...CHATBAR_CARD_PRESET, enabled: true };
     }
     store.chatbar.enabled = overrides.triggerType !== 'bubble';
     store.bubble.enabled = overrides.triggerType === 'bubble';
