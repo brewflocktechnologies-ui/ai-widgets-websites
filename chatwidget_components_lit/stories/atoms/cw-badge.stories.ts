@@ -1,6 +1,5 @@
 import { html } from 'lit';
 import '../../components/atoms/cw-badge.js';
-import '../../components/atoms/cw-icon.js';
 
 export default {
   title: 'Atoms/Badge',
@@ -10,7 +9,7 @@ export default {
     count: { control: { type: 'number', min: 1, max: 999 } },
     position: {
       control: 'select',
-      options: ['top-right', 'top-left', 'bottom-right', 'bottom-left'],
+      options: ['relative', 'top-right', 'top-left', 'bottom-right', 'bottom-left'],
     },
     offsetX: { control: { type: 'number', min: -30, max: 30 } },
     offsetY: { control: { type: 'number', min: -30, max: 30 } },
@@ -42,11 +41,11 @@ export default {
 export const ConfigurableBadge = {
   args: {
     count: 3,
-    position: 'top-right',
-    offsetX: -6,
-    offsetY: -6,
-    size: 20,
-    fontSize: 11,
+    position: 'relative',
+    offsetX: 0,
+    offsetY: 0,
+    size: 24,
+    fontSize: 12,
     backgroundColor: '#dc2626',
     textColor: '#ffffff',
     borderWidth: 2,
@@ -58,8 +57,7 @@ export const ConfigurableBadge = {
     animation: 'pulse 1.5s infinite',
   },
   render: (args: any) => html`
-    <div style="position: relative; width: 64px; height: 64px; background: #0b5fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
-      <cw-icon .name="${'MessageSquare'}" .size="${28}" .color="${'currentColor'}"></cw-icon>
+    <div style="position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 24px;">
       <cw-badge
         .count="${args.count}"
         .config="${{

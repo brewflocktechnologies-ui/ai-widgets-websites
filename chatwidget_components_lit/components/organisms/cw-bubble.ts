@@ -137,8 +137,22 @@ export class CwBubble extends LitElement {
 
     const widthVal = settings.width || 60;
     const heightVal = settings.height || 60;
+    const pos = settings.position || 'bottom-right';
     const rawBottom = settings.offsetBottom !== undefined ? settings.offsetBottom : 12;
     const rawRight = settings.offsetRight !== undefined ? settings.offsetRight : 16;
+    const rawLeft = settings.offsetLeft !== undefined ? settings.offsetLeft : 16;
+    const rawTop = settings.offsetTop !== undefined ? settings.offsetTop : 12;
+
+    let positionStyle = '';
+    if (pos === 'bottom-left') {
+      positionStyle = `bottom: ${rawBottom}px; left: ${rawLeft}px;`;
+    } else if (pos === 'top-right') {
+      positionStyle = `top: ${rawTop}px; right: ${rawRight}px;`;
+    } else if (pos === 'top-left') {
+      positionStyle = `top: ${rawTop}px; left: ${rawLeft}px;`;
+    } else {
+      positionStyle = `bottom: ${rawBottom}px; right: ${rawRight}px;`;
+    }
 
     const borderRadius = getBorderRadius(settings.borderRadius);
     const bg = getCompositeBackground(settings);
@@ -212,7 +226,7 @@ export class CwBubble extends LitElement {
         role="button"
         tabindex="0"
         aria-label="${this.panelOpen ? 'Close chat' : 'Open chat'}"
-        style="position: ${this.fixed ? 'fixed' : 'absolute'}; width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); bottom: ${rawBottom}px; right: ${rawRight}px; border-radius: ${borderRadius}; background: ${bg}; background-blend-mode: ${settings.backgroundBlendMode || 'normal'}; box-shadow: ${boxShadow}; transform: ${transform}; ${borderStyle} ${glassStyle} ${neonStyle} ${entryAnim}"
+        style="position: ${this.fixed ? 'fixed' : 'absolute'}; width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); ${positionStyle} border-radius: ${borderRadius}; background: ${bg}; background-blend-mode: ${settings.backgroundBlendMode || 'normal'}; box-shadow: ${boxShadow}; transform: ${transform}; ${borderStyle} ${glassStyle} ${neonStyle} ${entryAnim}"
         @mouseenter="${() => (this.hovered = true)}"
         @mouseleave="${() => (this.hovered = false)}"
         @click="${this.handleClick}"

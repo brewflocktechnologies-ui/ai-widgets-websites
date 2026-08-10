@@ -76,8 +76,10 @@ export class CwBadge extends LitElement {
       animCss = animCss.replace(/wiggle/g, 'badgeWiggle');
     }
 
+    const isRelative = b.position === 'relative' || b.position === 'static';
+
     const styleObj: Record<string, string> = {
-      position: 'absolute',
+      position: isRelative && b.position ? b.position : 'absolute',
       backgroundColor: b.backgroundColor || 'var(--cw-error)',
       color: b.textColor || '#ffffff',
       fontSize: `${b.fontSize || 11}px`,
@@ -93,18 +95,20 @@ export class CwBadge extends LitElement {
       animation: animCss,
     };
 
-    if (pos === 'top-left') {
-      styleObj.top = `${offsetY}px`;
-      styleObj.left = `${offsetX}px`;
-    } else if (pos === 'bottom-right') {
-      styleObj.bottom = `${offsetY}px`;
-      styleObj.right = `${offsetX}px`;
-    } else if (pos === 'bottom-left') {
-      styleObj.bottom = `${offsetY}px`;
-      styleObj.left = `${offsetX}px`;
-    } else {
-      styleObj.top = `${offsetY}px`;
-      styleObj.right = `${offsetX}px`;
+    if (!isRelative) {
+      if (pos === 'top-left') {
+        styleObj.top = `${offsetY}px`;
+        styleObj.left = `${offsetX}px`;
+      } else if (pos === 'bottom-right') {
+        styleObj.bottom = `${offsetY}px`;
+        styleObj.right = `${offsetX}px`;
+      } else if (pos === 'bottom-left') {
+        styleObj.bottom = `${offsetY}px`;
+        styleObj.left = `${offsetX}px`;
+      } else {
+        styleObj.top = `${offsetY}px`;
+        styleObj.right = `${offsetX}px`;
+      }
     }
 
     const cssString = Object.entries(styleObj)
