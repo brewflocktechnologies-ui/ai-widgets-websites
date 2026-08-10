@@ -35,8 +35,10 @@ export * from './components/atoms/cw-icon.js';
 export * from './components/atoms/cw-badge.js';
 export * from './components/atoms/cw-typing-dots.js';
 export * from './components/atoms/cw-avatar.js';
+export * from './components/atoms/cw-tooltip.js';
 
 // Molecules
+export * from './components/molecules/cw-button.js';
 export * from './components/molecules/cw-message-bubble.js';
 export * from './components/molecules/cw-composer.js';
 export * from './components/molecules/cw-greet-input.js';

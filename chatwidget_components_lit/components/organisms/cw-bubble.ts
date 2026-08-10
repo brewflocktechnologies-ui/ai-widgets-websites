@@ -13,6 +13,7 @@ import {
 } from '../../utils/style-helpers.js';
 import '../atoms/cw-icon.js';
 import '../atoms/cw-badge.js';
+import '../atoms/cw-tooltip.js';
 
 @customElement('cw-bubble')
 export class CwBubble extends LitElement {
@@ -301,21 +302,20 @@ export class CwBubble extends LitElement {
 
         ${showTooltip
           ? html`
-              <div
-                class="tooltip-box"
-                style="background-color: ${t?.backgroundColor || '#ffffff'}; color: ${t?.textColor || '#374151'}; font-size: ${(t?.fontSize || 14)}px; padding: ${t?.padding || '8px 16px'}; border-radius: ${tBorderRadius}; box-shadow: ${t?.boxShadow || '0 4px 12px rgba(0,0,0,0.1)'}; border: ${(t?.borderWidth || 0)}px solid ${t?.borderColor || 'transparent'}; ${tPosStyle}"
-              >
-                <span>${t?.text || 'Chat with us'}</span>
-                ${t?.arrowEnabled !== false
-                  ? html`
-                      <div
-                        class="tooltip-arrow"
-                        style="width: ${arrowSize}px; height: ${arrowSize}px; background-color: ${t?.backgroundColor || '#ffffff'}; ${arrowPosStyle}"
-                      ></div>
-                    `
-                  : ''
-                }
-              </div>
+              <cw-tooltip
+                position="${t?.position || 'left'}"
+                .text="${t?.text || 'Chat with us'}"
+                .position="${(t?.position || 'left') as any}"
+                .backgroundColor="${t?.backgroundColor || '#ffffff'}"
+                .textColor="${t?.textColor || '#374151'}"
+                .fontSize="${t?.fontSize || 14}"
+                .padding="${t?.padding || '8px 16px'}"
+                .borderRadius="${t?.borderRadius}"
+                .boxShadow="${t?.boxShadow || '0 4px 12px rgba(0,0,0,0.1)'}"
+                .borderWidth="${t?.borderWidth || 0}"
+                .borderColor="${t?.borderColor || 'transparent'}"
+                .arrowEnabled="${t?.arrowEnabled !== false}"
+              ></cw-tooltip>
             `
           : ''
         }
