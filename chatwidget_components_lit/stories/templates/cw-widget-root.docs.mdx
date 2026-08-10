@@ -1,4 +1,4 @@
-import { Meta, Title, Subtitle, Heading, Canvas, Controls, Stories, Source, ArgTypes } from '@storybook/blocks';
+import { Meta, Title, Subtitle, Heading, Canvas, Controls, Stories, Source, ArgTypes } from '@storybook/addon-docs/blocks';
 import * as WidgetRootStories from './cw-widget-root.stories';
 
 <Meta of={WidgetRootStories} />
@@ -89,11 +89,11 @@ window.dispatchEvent(new Event('close-contact-widget'));
 
 <Heading as="h2">Live example</Heading>
 
-<Canvas of={WidgetRootStories.ConfigurableLiveWidget} />
+<Canvas of={WidgetRootStories.FullyConfigurableWidget} />
 
 Use the controls to experiment with the trigger type, welcome/greet behaviour and animations:
 
-<Controls of={WidgetRootStories.ConfigurableLiveWidget} />
+<Controls of={WidgetRootStories.FullyConfigurableWidget} />
 
 <Heading as="h2">Prop reference</Heading>
 
