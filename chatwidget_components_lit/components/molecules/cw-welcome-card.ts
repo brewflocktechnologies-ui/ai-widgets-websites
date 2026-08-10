@@ -187,7 +187,7 @@ export class CwWelcomeCard extends LitElement {
         </div>
 
         <div class="content-wrapper">
-          <button type="button" class="close-btn" style="color: ${headerTextColor}" @click="${this.close}">
+          <button type="button" class="close-btn" aria-label="Close welcome card" style="color: ${headerTextColor}" @click="${this.close}">
             <cw-icon .name="${'Close'}" .size="${16}"></cw-icon>
           </button>
 
@@ -198,7 +198,7 @@ export class CwWelcomeCard extends LitElement {
                     <!-- Top Logo / Icon -->
                     <div style="display: flex; align-items: center; margin-bottom: 20px; flex-shrink: 0; justify-content: ${w.logoAlign || (w.textAlign === 'center' || w.cardAlign === 'center' ? 'center' : 'flex-start')}">
                       ${w.logoUrl
-                        ? html`<img src="${w.logoUrl}" style="height: 36px; object-fit: contain" />`
+                        ? html`<img src="${w.logoUrl}" alt="${w.logoAlt || 'Company Logo'}" style="height: 36px; object-fit: contain" />`
                         : html`
                             <div style="color: ${headerTextColor}; opacity: 1">
                               <cw-icon .name="${'MessageCircle'}" .size="${42}"></cw-icon>
@@ -270,7 +270,7 @@ export class CwWelcomeCard extends LitElement {
                   <div>
                     <div style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 28px">
                       ${w.logoUrl
-                        ? html`<img src="${w.logoUrl}" style="height: 36px; object-fit: contain" />`
+                        ? html`<img src="${w.logoUrl}" alt="${w.logoAlt || 'Company Logo'}" style="height: 36px; object-fit: contain" />`
                         : html`
                             <div style="color: ${headerTextColor}; opacity: 1">
                               <cw-icon .name="${'MessageCircle'}" .size="${42}"></cw-icon>

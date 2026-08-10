@@ -171,6 +171,7 @@ export class CwGreetWindow extends LitElement {
               ? html`
                   <img
                     src="${g.imageUrl}"
+                    alt="${g.imageAlt || 'Greeting image'}"
                     class="${getAnimClass(g.iconAnimation)}"
                     style="display: block; margin: ${g.iconAlign === 'center' ? '0 auto' : '0'}; height: ${(g.imageHeight || 70)}px; width: ${g.imageWidth ? `${g.imageWidth}px` : 'auto'}; object-fit: contain; padding: ${g.imagePadding || '0px'}"
                   />
