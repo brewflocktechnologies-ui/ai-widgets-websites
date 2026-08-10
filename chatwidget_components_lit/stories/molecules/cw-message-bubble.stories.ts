@@ -1,6 +1,5 @@
 import { html } from 'lit';
 import '../../components/molecules/cw-message-bubble.js';
-import { updateStoreConfig } from '../../store/chat-store.js';
 
 export default {
   title: 'Molecules/MessageBubble',
@@ -39,7 +38,7 @@ export const AgentMessage = {
   args:{
     senderType:'AGENT',
     senderName:'Alex',
-    body:"Hello! HowI help you today?",
+    body:"Hello! How can I help you today?",
     isGroupStart:true,
     isGroupEnd:true,
     agentBubbleBg:'#ffffff',
@@ -66,9 +65,6 @@ export const AgentMessage = {
       agentAvatarColor:args.agentAvatarColor,
       agentAvatarUrl:args.agentAvatarUrl,
     };
-    updateStoreConfig({
-      chatWindow:chatWindowConfig
-    });
     return html`
       <div style="width: 350px; padding: 24px; background: #f8fafc; border-radius: 16px;">
         <cw-message-bubble
@@ -110,9 +106,6 @@ export const VisitorMessage = {
       visitorBubblePadding:args.visitorBubblePadding,
       visitorBubbleFontSize:args.visitorBubbleFontSize,
     };
-    updateStoreConfig({
-      chatWindow:chatWindowConfig
-    });
     return html`
       <div style="width: 350px; padding: 24px; background: #f8fafc; border-radius: 16px;">
         <cw-message-bubble
@@ -131,3 +124,4 @@ export const VisitorMessage = {
     `;
   },
 };
+

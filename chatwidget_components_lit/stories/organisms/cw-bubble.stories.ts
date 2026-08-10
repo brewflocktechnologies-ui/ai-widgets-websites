@@ -1,6 +1,5 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-bubble.js';
-import { updateStoreConfig } from '../../store/chat-store.js';
 
 /**
  * The bubble supports many independent, combinable visual features
@@ -85,7 +84,7 @@ const scene = (inner: any) => html`
 export const ConfigurableBubble = {
   args:{
     panelOpen:false,
-    unreadCount:1,
+    unreadCount:44,
     position:'bottom-right',
     width:60,
     height:60,
@@ -100,7 +99,7 @@ export const ConfigurableBubble = {
     glassBlur:16,
     glassOpacity:0.4,
     enableNeon:false,
-    neonColor:'#10b981',
+    neonColor:"#40695b",
     neonIntensity:1.0,
     enableOutlineRing:false,
     outlineRingColor:'#22d3ee',
@@ -167,10 +166,6 @@ render:(args: any) => {
         : undefined,
     };
 
-    // Single source of truth: the same config is written to the shared store,
-    // which is exactly what the template's cw-widget-root reads back.
-    updateStoreConfig({ bubble: config });
-
     return scene(html`
       <cw-bubble
         .fixed="${false}"
@@ -181,6 +176,7 @@ render:(args: any) => {
     `);
   },
 };
+
 
 export const Default = {
   args:{

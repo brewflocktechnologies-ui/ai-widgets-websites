@@ -1,6 +1,5 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-chat-body.js';
-import { updateStoreConfig } from '../../store/chat-store.js';
 
 export default {
   title: 'Organisms/ChatBody',
@@ -36,10 +35,6 @@ export const ActiveConversation = {
         { key: 'm2', senderType: 'VISITOR' as const, body: 'Hi, I need help with integration.', created: new Date().toISOString(), status: 'read' as const },
       ],
     };
-    updateStoreConfig({
-      chatWindow: chatWindowConfig,
-      chat: chatState
-    });
     return html`
       <div style="width: 350px; height: 450px; display: flex; flex-direction: column; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
         <cw-chat-body
@@ -50,3 +45,4 @@ export const ActiveConversation = {
     `;
   },
 };
+

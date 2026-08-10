@@ -1,6 +1,5 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-chat-panel.js';
-import { updateStoreConfig } from '../../store/chat-store.js';
 
 export default {
   title: 'Organisms/ChatPanel',
@@ -45,10 +44,6 @@ export const ConfigurableChatPanel = {
         { key: 'm1', senderType: 'AGENT' as const, senderName: args.agentName, body: 'Welcome! How can we assist you today?', created: new Date().toISOString() },
       ],
     };
-    updateStoreConfig({
-      chatWindow: chatWindowConfig,
-      chat: chatState
-    });
     return html`
       <div style="position: relative; width: 400px; height: 560px;">
         <cw-chat-panel
@@ -61,3 +56,4 @@ export const ConfigurableChatPanel = {
     `;
   },
 };
+

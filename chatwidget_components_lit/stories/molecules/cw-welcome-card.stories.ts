@@ -1,6 +1,5 @@
 import { html } from 'lit';
 import '../../components/molecules/cw-welcome-card.js';
-import { updateStoreConfig } from '../../store/chat-store.js';
 
 /**
  * The welcome card has a few independent visual dimensions (layout mode,
@@ -76,7 +75,7 @@ const frame = (inner: any) => html`
 export const ConfigurableWelcomeCard = {
   args:{
     enabled:true,
-    cardLayout:"normal",
+    cardLayout:"glassy",
     title:"Hi there! 👋 How can we help you today?",
     titleFontSize:'24px',
     description:'Our support heroes are here to assist you.',
@@ -120,11 +119,6 @@ export const ConfigurableWelcomeCard = {
       cardBorderRadius:args.cardBorderRadius,
       cardBlur:args.cardBlur,
     };
-    updateStoreConfig({
-      chatWindow:{
-        welcome:config as any
-      }
-    });
     return frame(html`
       <cw-welcome-card
         .config="${config}"
@@ -133,6 +127,7 @@ export const ConfigurableWelcomeCard = {
     `);
   },
 };
+
 
 export const Default = {
   render: () =>

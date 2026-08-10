@@ -1,6 +1,5 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-chatbar.js';
-import { updateStoreConfig } from '../../store/chat-store.js';
 import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from '../../tokens/chatbar-presets.js';
 
 export default {
@@ -69,7 +68,6 @@ export const BarPreset = {
       offsetRight: 16,
       offsetBottom: 16,
     };
-    updateStoreConfig({ chatbar: config, triggerType: isCard ? 'chatcard' : 'chatbar' });
     return html`
       <div style="position: relative; width: ${isCard ? '280px' : '300px'}; height: ${isCard ? '300px' : '120px'};">
         <cw-chatbar
@@ -117,7 +115,6 @@ export const CardPreset = {
       offsetRight: 16,
       offsetBottom: 16,
     };
-    updateStoreConfig({ chatbar: config, triggerType: 'chatcard' });
     return html`
       <div style="position: relative; width: 280px; height: 300px;">
         <cw-chatbar
@@ -130,3 +127,4 @@ export const CardPreset = {
     `;
   },
 };
+

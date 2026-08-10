@@ -1,6 +1,5 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-greet-window.js';
-import { updateStoreConfig } from '../../store/chat-store.js';
 
 export default {
   title: 'Organisms/GreetWindow',
@@ -82,7 +81,6 @@ export const ConfigurableGreetWindow = {
         buttonIconColor:args.buttonIconColor,
       } : undefined,
     };
-    updateStoreConfig({ greetWindow: config });
     return html`
       <div style="position: relative; width: 380px; height: 440px;">
         <cw-greet-window
@@ -94,3 +92,4 @@ export const ConfigurableGreetWindow = {
     `;
   },
 };
+

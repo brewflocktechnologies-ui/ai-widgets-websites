@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import {
   initStore,
   subscribeAll,
@@ -18,13 +18,73 @@ import '../organisms/cw-chat-panel.js';
 
 /**
  * cw-widget-root
- * The single "smart" container in the atomic hierarchy. It is the ONLY
- * component that talks to the store. It owns state, passes config down to
- * presentational organisms via properties, and handles all `cw:*` events
- * bubbled up from the leaves by dispatching the corresponding store action.
+ * The single "smart" container in the atomic hierarchy. It connects to the store
+ * and also accepts reactive Lit properties for direct customization.
  */
 @customElement('cw-widget-root')
 export class CwWidgetRoot extends LitElement {
+  @property({ type: String }) triggerType?: 'bubble' | 'chatbar' | 'chatcard';
+  @property({ type: Boolean }) enableWelcomeCard?: boolean;
+  @property({ type: Boolean }) enableGreetWindow?: boolean;
+  @property({ type: Boolean }) enableInputCard?: boolean;
+
+  // Individual trigger offsets
+  @property({ type: Number }) bubbleOffsetRight?: number;
+  @property({ type: Number }) bubbleOffsetBottom?: number;
+  @property({ type: Number }) barOffsetRight?: number;
+  @property({ type: Number }) barOffsetBottom?: number;
+  @property({ type: Number }) cardOffsetRight?: number;
+  @property({ type: Number }) cardOffsetBottom?: number;
+
+  // Theme & Layout
+  @property({ type: String }) clientName?: string;
+  @property({ type: String }) agentName?: string;
+  @property({ type: Number }) widgetWidth?: number;
+  @property({ type: Number }) widgetHeight?: number;
+  @property({ type: String }) accentColor?: string;
+
+  // Trigger Customizations
+  @property({ type: String }) bubbleBg?: string;
+  @property({ type: String }) bubbleLucideIcon?: string;
+  @property({ type: String }) bubbleIconColor?: string;
+  @property({ type: String }) chatbarBg?: string;
+  @property({ type: String }) chatbarText?: string;
+  @property({ type: String }) chatcardText?: string;
+
+  // Header & Actions
+  @property({ type: String }) headerBg?: string;
+  @property({ type: String }) headerTextColor?: string;
+  @property({ type: Boolean }) enableVoiceCall?: boolean;
+  @property({ type: Boolean }) enableVideoCall?: boolean;
+  @property({ type: Boolean }) enableCloseChatVisitor?: boolean;
+
+  // Welcome Card
+  @property({ type: String }) welcomeTitle?: string;
+  @property({ type: String }) welcomeDescription?: string;
+  @property({ type: String }) welcomeBgGradient?: string;
+  @property({ type: String }) welcomeButtonText?: string;
+
+  // Proactive Greet Window
+  @property({ type: String }) greetTitle?: string;
+  @property({ type: String }) greetDescription?: string;
+  @property({ type: String }) greetBg?: string;
+  @property({ type: String }) greetLucideIcon?: string;
+  @property({ type: String }) greetInputPlaceholder?: string;
+
+  // Chat Body & Messages
+  @property({ type: String }) bodyBg?: string;
+  @property({ type: String }) visitorBubbleBg?: string;
+  @property({ type: String }) visitorBubbleTextColor?: string;
+  @property({ type: String }) agentBubbleBg?: string;
+  @property({ type: String }) agentBubbleTextColor?: string;
+
+  // Composer / Input
+  @property({ type: String }) inputBg?: string;
+  @property({ type: String }) inputTextColor?: string;
+  @property({ type: String }) sendButtonBgActive?: string;
+  @property({ type: Boolean }) attachmentsEnabled?: boolean;
+  @property({ type: Boolean }) modernUi?: boolean;
+
   @state() panelOpen = false;
   @state() initialized = false;
   /** Increment on every store event so presentational children re-render. */
@@ -232,16 +292,111 @@ export class CwWidgetRoot extends LitElement {
     const fs = featuresStore.get();
     const cs = chatStore.get();
 
+    const activeTrigger = this.triggerType || (cbs.enabled ? (cbs.layout === 'card' ? 'chatcard' : 'chatbar') : 'bubble');
+    const isChatbarTrigger = activeTrigger === 'chatbar' || activeTrigger === 'chatcard';
+
+    const barRight = this.barOffsetRight !== undefined ? this.barOffsetRight : (cbs.barOffsetRight ?? cbs.offsetRight ?? 16);
+    const barBottom = this.barOffsetBottom !== undefined ? this.barOffsetBottom : (cbs.barOffsetBottom ?? cbs.offsetBottom ?? 12);
+    const cardRight = this.cardOffsetRight !== undefined ? this.cardOffsetRight : (cbs.cardOffsetRight ?? cbs.offsetRight ?? 16);
+    const cardBottom = this.cardOffsetBottom !== undefined ? this.cardOffsetBottom : (cbs.cardOffsetBottom ?? cbs.offsetBottom ?? 12);
+
+    const effectiveCbs = {
+      ...cbs,
+      enabled: isChatbarTrigger,
+      layout: activeTrigger === 'chatcard' ? ('card' as const) : ('bar' as const),
+      bgColor: this.chatbarBg || cbs.bgColor,
+      text: this.chatbarText || cbs.text,
+      cardText: this.chatcardText || cbs.cardText,
+      barOffsetRight: barRight,
+      barOffsetBottom: barBottom,
+      cardOffsetRight: cardRight,
+      cardOffsetBottom: cardBottom,
+      offsetRight: activeTrigger === 'chatcard' ? cardRight : barRight,
+      offsetBottom: activeTrigger === 'chatcard' ? cardBottom : barBottom,
+    };
+
+    const effectiveBs = {
+      ...bs,
+      backgroundColor: this.bubbleBg || bs.backgroundColor,
+      lucideIcon: this.bubbleLucideIcon || bs.lucideIcon,
+      iconColor: this.bubbleIconColor || bs.iconColor,
+      offsetRight: this.bubbleOffsetRight !== undefined ? this.bubbleOffsetRight : (bs.offsetRight ?? 16),
+      offsetBottom: this.bubbleOffsetBottom !== undefined ? this.bubbleOffsetBottom : (bs.offsetBottom ?? 12),
+    };
+
+    const activeOffsetRight = activeTrigger === 'bubble'
+      ? effectiveBs.offsetRight
+      : effectiveCbs.offsetRight;
+    const activeOffsetBottom = activeTrigger === 'bubble'
+      ? effectiveBs.offsetBottom
+      : effectiveCbs.offsetBottom;
+
+    const effectiveGws = {
+      ...gws,
+      enabled: this.enableGreetWindow !== undefined ? this.enableGreetWindow : gws.enabled,
+      title: this.greetTitle || gws.title,
+      description: this.greetDescription || gws.description,
+      backgroundColor: this.greetBg || gws.backgroundColor,
+      lucideIcon: this.greetLucideIcon || gws.lucideIcon,
+      inputBox: {
+        ...(gws.inputBox || {}),
+        enabled: this.enableInputCard !== undefined ? this.enableInputCard : gws.inputBox?.enabled ?? true,
+        placeholder: this.greetInputPlaceholder || gws.inputBox?.placeholder,
+      },
+    };
+
+    const effectiveCws = {
+      ...cws,
+      clientName: this.clientName || cws.clientName,
+      agentName: this.agentName || cws.agentName,
+      widgetWidth: this.widgetWidth || cws.widgetWidth,
+      widgetHeight: this.widgetHeight || cws.widgetHeight,
+      accentColor: this.accentColor || cws.accentColor,
+      headerBg: this.headerBg || cws.headerBg,
+      headerTextColor: this.headerTextColor || cws.headerTextColor,
+      bodyBg: this.bodyBg || cws.bodyBg,
+      visitorBubbleBg: this.visitorBubbleBg || cws.visitorBubbleBg,
+      visitorBubbleColor: this.visitorBubbleTextColor || cws.visitorBubbleColor,
+      agentBubbleBg: this.agentBubbleBg || cws.agentBubbleBg,
+      agentBubbleColor: this.agentBubbleTextColor || cws.agentBubbleColor,
+      inputBg: this.inputBg || cws.inputBg,
+      inputTextColor: this.inputTextColor || cws.inputTextColor,
+      sendButtonBgActive: this.sendButtonBgActive || cws.sendButtonBgActive,
+      attachmentsEnabled: this.attachmentsEnabled !== undefined ? this.attachmentsEnabled : cws.attachmentsEnabled,
+      modernUi: this.modernUi !== undefined ? this.modernUi : cws.modernUi,
+      offsetRight: activeOffsetRight,
+      offsetBottom: activeOffsetBottom,
+      welcome: cws.welcome
+        ? {
+            ...cws.welcome,
+            enabled: this.enableWelcomeCard !== undefined ? this.enableWelcomeCard : cws.welcome.enabled ?? true,
+            title: this.welcomeTitle || cws.welcome.title,
+            description: this.welcomeDescription || cws.welcome.description,
+            bgGradient: this.welcomeBgGradient || cws.welcome.bgGradient,
+            buttonText: this.welcomeButtonText || cws.welcome.buttonText,
+          }
+        : undefined,
+    };
+
+    const effectiveFs = {
+      ...fs,
+      voiceCallMaster: this.enableVoiceCall !== undefined ? this.enableVoiceCall : fs.voiceCallMaster,
+      voiceCallAgents: this.enableVoiceCall !== undefined ? this.enableVoiceCall : fs.voiceCallAgents,
+      videoCallMaster: this.enableVideoCall !== undefined ? this.enableVideoCall : fs.videoCallMaster,
+      videoCallAgents: this.enableVideoCall !== undefined ? this.enableVideoCall : fs.videoCallAgents,
+      closeChatVisitor: this.enableCloseChatVisitor !== undefined ? this.enableCloseChatVisitor : fs.closeChatVisitor,
+    };
+
     return html`
       <style>
         ${KEYFRAMES_CSS}
       </style>
 
-      <!-- FLOATING TRIGGER (BUBBLE OR CHATBAR) -->
-      ${cbs.enabled
+      <!-- FLOATING TRIGGER (BUBBLE OR CHATBAR OR CHATCARD) -->
+      ${isChatbarTrigger
         ? html`
             <cw-chatbar
-              .config="${cbs}"
+              .config="${effectiveCbs}"
               .panelOpen="${this.panelOpen}"
               .unreadCount="${cs.unreadCount}"
               .rev="${this.rev}"
@@ -249,7 +404,7 @@ export class CwWidgetRoot extends LitElement {
           `
         : html`
             <cw-bubble
-              .config="${bs}"
+              .config="${effectiveBs}"
               .panelOpen="${this.panelOpen}"
               .unreadCount="${cs.unreadCount}"
               .hasSentMessage="${cs.hasSentMessage}"
@@ -260,23 +415,23 @@ export class CwWidgetRoot extends LitElement {
 
       <!-- FLOATING GREET WINDOW -->
       <cw-greet-window
-        .config="${gws}"
-        .chatbarConfig="${cbs}"
+        .config="${effectiveGws}"
+        .chatbarConfig="${effectiveCbs}"
         .bubbleConfig="${bs}"
         .panelOpen="${this.panelOpen}"
         .hasSentMessage="${cs.hasSentMessage}"
-        .visible="${gws.visible}"
-        .dismissed="${gws.dismissed}"
+        .visible="${effectiveGws.visible}"
+        .dismissed="${effectiveGws.dismissed}"
         .rev="${this.rev}"
       ></cw-greet-window>
 
       <!-- MAIN CHAT PANEL -->
       <cw-chat-panel
-        .chatWindowConfig="${cws}"
+        .chatWindowConfig="${effectiveCws}"
         .chatState="${cs}"
-        .features="${fs}"
-        .chatbarConfig="${cbs}"
-        .bubbleConfig="${bs}"
+        .features="${effectiveFs}"
+        .chatbarConfig="${effectiveCbs}"
+        .bubbleConfig="${effectiveBs}"
         .panelOpen="${this.panelOpen}"
         .rev="${this.rev}"
       ></cw-chat-panel>
