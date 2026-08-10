@@ -99,12 +99,13 @@ export class CwChatHeader extends LitElement {
   }
 
   render() {
-    const currentState = this.state || 'active';
+    const cw = this.config || {};
+    const welcomeEnabled = cw.welcome?.enabled !== false;
+    const currentState = (this.state === 'welcome' && !welcomeEnabled) ? 'active' : (this.state || 'active');
 
     // In welcome mode, header is hidden
     if (currentState === 'welcome') return html``;
 
-    const cw = this.config || {};
     const feats = this.features || {};
     const headerTextColor = cw.headerTextColor || '#ffffff';
 

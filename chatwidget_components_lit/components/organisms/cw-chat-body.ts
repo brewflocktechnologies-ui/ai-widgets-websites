@@ -361,13 +361,14 @@ export class CwChatBody extends LitElement {
 
     if (!cs || !cw) return html``;
 
-    const isWelcome = cs.state === 'welcome';
+    const welcomeEnabled = cw.welcome?.enabled !== false;
+    const isWelcome = cs.state === 'welcome' && welcomeEnabled;
     const isBoot = cs.state === 'boot';
     const isPrechat = cs.state === 'prechat';
     const isOffline = cs.state === 'offline';
     const isOfflineSent = cs.state === 'offline-sent';
     const isQueued = cs.state === 'queued';
-    const isActive = cs.state === 'active';
+    const isActive = cs.state === 'active' || (cs.state === 'welcome' && !welcomeEnabled);
     const isClosed = cs.state === 'closed';
 
     const msgs = cs.messages || [];
