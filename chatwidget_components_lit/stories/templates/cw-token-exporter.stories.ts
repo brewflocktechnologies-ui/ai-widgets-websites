@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import '../../components/templates/cw-widget-root.js';
-import { exportFullStoreConfig, resetStoreConfig } from '../../store/chat-store.js';
+import { exportFullStoreConfig } from '../../store/chat-store.js';
 
 export default {
   title: 'Templates/Token Exporter & Live Widget',
@@ -30,10 +30,6 @@ function downloadTokenFile(jsonString: string) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-}
-
-function handleResetConfig() {
-  resetStoreConfig();
 }
 
 export const StorybookTokenExporter = {

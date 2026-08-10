@@ -21,23 +21,6 @@ declare global {
   }
 }
 
-const TOKEN_SESSION_KEY = 'zotly_active_token_session';
-
-/**
- * Reads the live active Storybook token from sessionStorage (if present).
- */
-export function getActiveStorybookToken(): Record<string, any> | null {
-  try {
-    if (typeof sessionStorage !== 'undefined') {
-      const saved = sessionStorage.getItem(TOKEN_SESSION_KEY);
-      if (saved) {
-        return JSON.parse(saved);
-      }
-    }
-  } catch (_) {}
-  return null;
-}
-
 /**
  * Main Injection function.
  */
@@ -45,15 +28,6 @@ export async function injectWidget(
   tokenOrUrl?: Record<string, any> | string,
   container: HTMLElement = document.body
 ): Promise<HTMLElement> {
-  // If 'storybook'/'active' mode specified, or no token provided, try loading active Storybook token from sessionStorage
-  if (!tokenOrUrl || tokenOrUrl === 'storybook' || tokenOrUrl === 'active') {
-    const activeToken = getActiveStorybookToken();
-    if (activeToken) {
-      injectStoreConfig(activeToken);
-      return mountChatWidget(container);
-    }
-  }
-
   if (typeof tokenOrUrl === 'string' && tokenOrUrl !== 'storybook' && tokenOrUrl !== 'active') {
     try {
       const res = await fetch(tokenOrUrl);

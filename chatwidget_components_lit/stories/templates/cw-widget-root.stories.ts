@@ -590,7 +590,8 @@ export const FullyConfigurableWidget = {
     welcomeButtonBg:"#ffffff",
     welcomeButtonTextColor:"#030303",
     textareaFontSize:11,
-    widgetShadow:false
+    widgetShadow:false,
+    bubbleTooltipText:"Chat with us"
   },
   render:renderWidget,
 };

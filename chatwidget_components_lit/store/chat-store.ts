@@ -485,6 +485,21 @@ export const chatStore = {
         emit('store:chat');
       }
     }, 4000);
+    setTimeout(() => {
+      const curState = getStore().chat;
+      const botMsg: Message = {
+        key: 'bot_' + Date.now(),
+        senderType: 'AGENT',
+        senderName: curState.agentName || 'Sarah',
+        body: 'Our team will contact you soon!',
+        created: new Date().toISOString(),
+      };
+      curState.messages = [...curState.messages, botMsg];
+      if (!curState.panelOpen) {
+        curState.unreadCount = (curState.unreadCount || 0) + 1;
+      }
+      emit('store:chat');
+    }, 5000);
   },
 
   resetChatbarLayout() {
@@ -658,6 +673,21 @@ export const chatStore = {
           emit('store:chat');
         }
       }, 4000);
+      setTimeout(() => {
+        const curState = getStore().chat;
+        const botMsg: Message = {
+          key: 'bot_' + Date.now(),
+          senderType: 'AGENT',
+          senderName: curState.agentName || 'Sarah',
+          body: 'Our team will contact you soon!',
+          created: new Date().toISOString(),
+        };
+        curState.messages = [...curState.messages, botMsg];
+        if (!curState.panelOpen) {
+          curState.unreadCount = (curState.unreadCount || 0) + 1;
+        }
+        emit('store:chat');
+      }, 5000);
     }
   },
 
@@ -901,45 +931,6 @@ export async function initStore(): Promise<void> {
   // Store is fully built: replay any overrides queued by stories/templates.
   storeReady = true;
   applyStoreConfig(lastOverrides as UpdateStoreConfigOverrides);
-  restoreTokenSession();
-}
-
-const TOKEN_SESSION_KEY = 'zotly_active_token_session';
-
-function saveTokenSession() {
-  try {
-    if (typeof sessionStorage !== 'undefined') {
-      const token = exportFullStoreConfig();
-      if (token && Object.keys(token).length > 0) {
-        sessionStorage.setItem(TOKEN_SESSION_KEY, JSON.stringify(token));
-      }
-    }
-  } catch (_) {}
-}
-
-export function restoreTokenSession(): boolean {
-  try {
-    if (typeof sessionStorage !== 'undefined') {
-      const saved = sessionStorage.getItem(TOKEN_SESSION_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed && typeof parsed === 'object') {
-          injectStoreConfig(parsed);
-          return true;
-        }
-      }
-    }
-  } catch (_) {}
-  return false;
-}
-
-export function resetStoreConfig(): void {
-  try {
-    if (typeof sessionStorage !== 'undefined') {
-      sessionStorage.removeItem(TOKEN_SESSION_KEY);
-    }
-  } catch (_) {}
-  initStore();
 }
 
 type UpdateStoreConfigOverrides = {
@@ -973,7 +964,6 @@ export function updateStoreConfig(overrides: UpdateStoreConfigOverrides) {
     lastOverrides = { ...lastOverrides, ...(overrides as Record<string, unknown>) };
     if (storeReady) {
       applyStoreConfig(overrides);
-      saveTokenSession();
     }
   }
 }
