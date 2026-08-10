@@ -8,6 +8,7 @@ import '../molecules/cw-message-bubble.js';
 import '../molecules/cw-composer.js';
 import '../molecules/cw-image-cropper.js';
 import '../atoms/cw-typing-dots.js';
+import '../atoms/cw-icon.js';
 import type { CwComposer } from '../molecules/cw-composer.js';
 
 /**
@@ -419,10 +420,7 @@ export class CwChatBody extends LitElement {
           ? html`
               <div class="prechat">
                 <div class="avatar prechat-avatar offline-avatar">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 8v4M12 16h.01" />
-                    <circle cx="12" cy="12" r="9" />
-                  </svg>
+                  <cw-icon .name="${'AlertCircle'}" .size="${22}"></cw-icon>
                 </div>
                 <h2>We're not around right now</h2>
                 <p class="muted">Our agents are offline. Leave your details and a message — we'll pick it up the moment someone is back.</p>
@@ -469,9 +467,7 @@ export class CwChatBody extends LitElement {
               <div class="queued">
                 <div class="ticket offline-done">
                   <div class="done-check">
-                    <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M4 12.5l5 5L20 6.5" />
-                    </svg>
+                    <cw-icon .name="${'Check'}" .size="${30}"></cw-icon>
                   </div>
                   <h2>Message received</h2>
                   <p class="muted">
@@ -555,18 +551,11 @@ export class CwChatBody extends LitElement {
                 ? html`
                     <div class="attach-pop">
                       <button type="button" class="menu-item" @click="${() => { this.shadowRoot?.querySelector<HTMLInputElement>('#cw-file-input')?.click(); }}">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                          <rect x="3" y="5" width="18" height="14" rx="2" />
-                          <circle cx="8.5" cy="10" r="1.5" />
-                          <path d="M21 15l-4.5-4.5L9 18" />
-                        </svg>
+                        <cw-icon .name="${'Image'}" .size="${16}"></cw-icon>
                         Send an image
                       </button>
                       <button type="button" class="menu-item" @click="${() => this.emit('cw:capture-screenshot')}">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2" />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
+                        <cw-icon .name="${'Camera'}" .size="${16}"></cw-icon>
                         Add screenshot
                       </button>
                     </div>
@@ -579,15 +568,11 @@ export class CwChatBody extends LitElement {
                 ? html`
                     <div class="menu-pop">
                       <button type="button" class="menu-item" @click="${() => this.emit('cw:download-transcript')}">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
-                        </svg>
+                        <cw-icon .name="${'Download'}" .size="${16}"></cw-icon>
                         Download transcript
                       </button>
                       <button type="button" class="menu-item" @click="${() => this.emit('cw:toggle-sounds')}">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M11 5L6 9H3v6h3l5 4V5zM16 9a4 4 0 010 6" />
-                        </svg>
+                        <cw-icon .name="${'Volume2'}" .size="${16}"></cw-icon>
                         Sounds: ${cs.soundsOn ? 'ON' : 'OFF'}
                       </button>
                     </div>

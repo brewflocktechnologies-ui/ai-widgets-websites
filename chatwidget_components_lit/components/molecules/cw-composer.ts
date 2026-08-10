@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { ChatWindowState } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
+import '../atoms/cw-icon.js';
 
 /**
  * cw-composer
@@ -165,9 +166,7 @@ export class CwComposer extends LitElement {
                 style="background: ${attachBg}; color: ${attachColor}"
                 @click="${this.toggleAttach}"
               >
-                <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                  <path d="M8 3.5v9M3.5 8h9" />
-                </svg>
+                <cw-icon .name="${'Plus'}" .size="${16}"></cw-icon>
               </button>
             `
           : ''
@@ -194,12 +193,7 @@ export class CwComposer extends LitElement {
                 style="background: transparent; color: ${emojiColor}; margin-right: 2px"
                 @click="${this.toggleEmoji}"
               >
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="M8.5 14.5a4.5 4.5 0 007 0" />
-                  <circle cx="9" cy="10" r="0.5" fill="currentColor" />
-                  <circle cx="15" cy="10" r="0.5" fill="currentColor" />
-                </svg>
+                <cw-icon .name="${'Smile'}" .size="${20}"></cw-icon>
               </button>
             `
           : ''
@@ -213,17 +207,8 @@ export class CwComposer extends LitElement {
           @click="${this.send}"
         >
           ${cw.sendIconType === 'arrow'
-            ? html`
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="12" y1="19" x2="12" y2="5"></line>
-                  <polyline points="5 12 12 5 19 12"></polyline>
-                </svg>
-              `
-            : html`
-                <svg class="send-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                </svg>
-              `
+            ? html`<cw-icon .name="${'ArrowUp'}" .size="${16}"></cw-icon>`
+            : html`<cw-icon .name="${'SendFilled'}" .size="${18}" class="send-icon"></cw-icon>`
           }
         </button>
       </div>

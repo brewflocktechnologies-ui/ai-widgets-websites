@@ -3,6 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import type { InputBoxConfig } from '../../store/types.js';
 import { EnterLeaveController } from '../../utils/transition.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
+import '../atoms/cw-icon.js';
 
 /**
  * cw-greet-input
@@ -137,9 +138,7 @@ export class CwGreetInput extends LitElement {
             style="background-color: ${btnBg}; color: ${btnIconColor}; border-radius: 50%; width: ${btnSize}px; height: ${btnSize}px; box-shadow: ${ib.buttonBoxShadow || '0 6px 16px rgba(0,0,0,0.12)'}"
             @click="${this.submit}"
           >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="margin-left: 2px; margin-top: 1px">
-              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-            </svg>
+            <cw-icon .name="${'SendFilled'}" .size="${18}" style="margin-left: 2px; margin-top: 1px"></cw-icon>
           </button>
         </div>
       `;
@@ -171,9 +170,7 @@ export class CwGreetInput extends LitElement {
           style="width: 38px; height: 38px; border-radius: 50%; background-color: ${btnColor}; color: ${btnIconColor}"
           @click="${this.submit}"
         >
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="margin-left: 2px; margin-top: 1px">
-            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-          </svg>
+          <cw-icon .name="${'SendFilled'}" .size="${18}" style="margin-left: 2px; margin-top: 1px"></cw-icon>
         </button>
       </div>
     `;

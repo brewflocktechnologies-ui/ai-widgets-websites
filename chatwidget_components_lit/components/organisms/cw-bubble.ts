@@ -243,11 +243,7 @@ export class CwBubble extends LitElement {
           ? html`
               <div class="icon-container">
                 ${this.panelOpen
-                  ? html`
-                      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                      </svg>
-                    `
+                  ? html`<cw-icon .name="${'ChevronDown'}" .size="${26}"></cw-icon>`
                   : html`
                       <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%">
                         ${settings.iconType === 'image' && (settings.iconImageUrl || settings.backgroundImageUrl)

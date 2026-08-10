@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
+import '../atoms/cw-icon.js';
 
 @customElement('cw-forms-preview')
 export class CwFormsPreview extends LitElement {
@@ -195,7 +196,7 @@ export class CwFormsPreview extends LitElement {
             <button type="submit" class="phone-submit-btn">Submit Feedback</button>
 
             <div class="phone-footer-brand">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              <cw-icon .name="${'MessageSquare'}" .size="${14}" .color="${'#2563eb'}"></cw-icon>
               <span>Powered by <strong>REVE Chat</strong></span>
             </div>
           </form>
@@ -228,7 +229,7 @@ export class CwFormsPreview extends LitElement {
             <button type="submit" class="phone-submit-btn">Submit Ticket</button>
 
             <div class="phone-footer-brand">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              <cw-icon .name="${'MessageSquare'}" .size="${14}" .color="${'#2563eb'}"></cw-icon>
               <span>Powered by <strong>REVE Chat</strong></span>
             </div>
           </form>
@@ -259,7 +260,7 @@ export class CwFormsPreview extends LitElement {
               <div class="phone-country-select-btn">
                 <span>us</span>
                 <span>+1</span>
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                <cw-icon .name="${'ChevronDown'}" .size="${12}"></cw-icon>
               </div>
               <input type="tel" placeholder="Enter phone number" />
             </div>
@@ -275,7 +276,7 @@ export class CwFormsPreview extends LitElement {
                 <option value="billing">Billing & Invoices</option>
               </select>
               <div style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748b">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                <cw-icon .name="${'ChevronDown'}" .size="${14}"></cw-icon>
               </div>
             </div>
           </div>
@@ -283,7 +284,7 @@ export class CwFormsPreview extends LitElement {
           <button type="submit" class="phone-submit-btn">Submit</button>
 
           <div class="phone-footer-brand">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <cw-icon .name="${'MessageSquare'}" .size="${14}" .color="${'#2563eb'}"></cw-icon>
             <span>Powered by <strong>REVE Chat</strong></span>
           </div>
         </form>

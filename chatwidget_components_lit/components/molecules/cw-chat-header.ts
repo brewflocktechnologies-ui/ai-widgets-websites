@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import type { ChatWindowState, FeaturesState } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import '../atoms/cw-avatar.js';
+import '../atoms/cw-icon.js';
 
 @customElement('cw-chat-header')
 export class CwChatHeader extends LitElement {
@@ -143,16 +144,8 @@ export class CwChatHeader extends LitElement {
                   @click="${this.toggleExpand}"
                 >
                   ${this.isExpanded
-                    ? html`
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7" />
-                        </svg>
-                      `
-                    : html`
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-                        </svg>
-                      `
+                    ? html`<cw-icon .name="${'Minimize2'}" .size="${16}"></cw-icon>`
+                    : html`<cw-icon .name="${'Maximize2'}" .size="${16}"></cw-icon>`
                   }
                 </button>
               `
@@ -184,9 +177,7 @@ export class CwChatHeader extends LitElement {
                   style="color: ${headerTextColor}; opacity: 0.9"
                   @click="${() => this.emit('cw:voice-call')}"
                 >
-                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                  </svg>
+                  <cw-icon .name="${'Phone'}" .size="${17}"></cw-icon>
                 </button>
               `
             : ''
@@ -202,10 +193,7 @@ export class CwChatHeader extends LitElement {
                   style="color: ${headerTextColor}; opacity: 0.9"
                   @click="${() => this.emit('cw:video-call')}"
                 >
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
-                    <rect x="1" y="5" width="15" height="14" rx="3" ry="3"></rect>
-                  </svg>
+                  <cw-icon .name="${'Video'}" .size="${18}"></cw-icon>
                 </button>
               `
             : ''
@@ -221,9 +209,7 @@ export class CwChatHeader extends LitElement {
                   style="color: ${headerTextColor}; opacity: 0.7"
                   @click="${this.askEndChat}"
                 >
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10" />
-                  </svg>
+                  <cw-icon .name="${'Power'}" .size="${18}"></cw-icon>
                 </button>
               `
             : ''
@@ -238,11 +224,7 @@ export class CwChatHeader extends LitElement {
                   style="color: ${headerTextColor}; opacity: 0.7"
                   @click="${this.toggleMenu}"
                 >
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                    <circle cx="5" cy="12" r="1.8" />
-                    <circle cx="12" cy="12" r="1.8" />
-                    <circle cx="19" cy="12" r="1.8" />
-                  </svg>
+                  <cw-icon .name="${'MoreHorizontal'}" .size="${18}"></cw-icon>
                 </button>
               `
             : ''
@@ -255,9 +237,7 @@ export class CwChatHeader extends LitElement {
             style="color: ${headerTextColor}; opacity: 0.7"
             @click="${this.closePanel}"
           >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
+            <cw-icon .name="${'Close'}" .size="${18}"></cw-icon>
           </button>
         </div>
       </header>

@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import './cw-icon.js';
 
 @customElement('cw-message-tick')
 export class CwMessageTick extends LitElement {
@@ -15,9 +16,6 @@ export class CwMessageTick extends LitElement {
       vertical-align: middle;
       margin-left: 4px;
     }
-    svg {
-      display: block;
-    }
   `;
 
   render() {
@@ -25,9 +23,7 @@ export class CwMessageTick extends LitElement {
       const strokeColor = this.sentColor || 'currentColor';
       const opacity = this.sentColor ? '1' : '0.7';
       return html`
-        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke="${strokeColor}" style="opacity: ${opacity}">
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
+        <cw-icon .name="${'Check'}" .size="${13}" .color="${strokeColor}" style="opacity: ${opacity}"></cw-icon>
       `;
     }
 
@@ -35,18 +31,14 @@ export class CwMessageTick extends LitElement {
       const strokeColor = this.deliveredColor || 'currentColor';
       const opacity = this.deliveredColor ? '1' : '0.7';
       return html`
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke="${strokeColor}" style="opacity: ${opacity}">
-          <path d="M17 6L8.5 14.5L5 11M22 6L13.5 14.5L12.5 13.5"></path>
-        </svg>
+        <cw-icon .name="${'DoubleCheck'}" .size="${14}" .color="${strokeColor}" style="opacity: ${opacity}"></cw-icon>
       `;
     }
 
     if (this.status === 'read') {
       const strokeColor = this.readColor || '#34b7f1';
       return html`
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke="${strokeColor}">
-          <path d="M17 6L8.5 14.5L5 11M22 6L13.5 14.5L12.5 13.5"></path>
-        </svg>
+        <cw-icon .name="${'DoubleCheck'}" .size="${14}" .color="${strokeColor}"></cw-icon>
       `;
     }
 

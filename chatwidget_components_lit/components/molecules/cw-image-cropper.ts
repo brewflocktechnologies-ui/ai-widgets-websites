@@ -372,10 +372,7 @@ export class CwImageCropper extends LitElement {
           <div class="header">
             <h3>${this.titleText}</h3>
             <button class="close-btn" aria-label="Close modal" @click="${this.closeModal}">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
+              <cw-icon .name="${'Close'}" .size="${18}"></cw-icon>
             </button>
           </div>
 
@@ -413,9 +410,7 @@ export class CwImageCropper extends LitElement {
               ${this.showRotate
                 ? html`
                     <button type="button" class="icon-action-btn" title="Rotate 90°" @click="${this.handleRotate}">
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
-                      </svg>
+                      <cw-icon .name="${'RotateCw'}" .size="${16}"></cw-icon>
                     </button>
                   `
                 : ''

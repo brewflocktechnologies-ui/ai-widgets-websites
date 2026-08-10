@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import type { WelcomeConfig } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
+import '../atoms/cw-icon.js';
 
 @customElement('cw-welcome-card')
 export class CwWelcomeCard extends LitElement {
@@ -186,10 +187,7 @@ export class CwWelcomeCard extends LitElement {
 
         <div class="content-wrapper">
           <button type="button" class="close-btn" style="color: ${headerTextColor}" @click="${this.close}">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
+            <cw-icon .name="${'Close'}" .size="${16}"></cw-icon>
           </button>
 
           ${isGlassy
@@ -202,9 +200,7 @@ export class CwWelcomeCard extends LitElement {
                         ? html`<img src="${w.logoUrl}" style="height: 36px; object-fit: contain" />`
                         : html`
                             <div style="color: ${headerTextColor}; opacity: 1">
-                              <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
-                              </svg>
+                              <cw-icon .name="${'MessageCircle'}" .size="${42}"></cw-icon>
                             </div>
                           `
                       }
@@ -244,9 +240,7 @@ export class CwWelcomeCard extends LitElement {
                         @click="${this.start}"
                       >
                         <div style="display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: ${w.buttonIconColor || this.accentColor}">
-                          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                            <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
-                          </svg>
+                          <cw-icon .name="${'ChatLines'}" .size="${24}"></cw-icon>
                         </div>
                         <div style="display: flex; flex-direction: column; min-width: 0">
                           <span style="font-weight: 700; font-size: 15px; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: ${w.buttonTextColor || 'var(--cw-ink)'}">
@@ -276,9 +270,7 @@ export class CwWelcomeCard extends LitElement {
                         ? html`<img src="${w.logoUrl}" style="height: 36px; object-fit: contain" />`
                         : html`
                             <div style="color: ${headerTextColor}; opacity: 1">
-                              <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
-                              </svg>
+                              <cw-icon .name="${'MessageCircle'}" .size="${42}"></cw-icon>
                             </div>
                           `
                       }
@@ -314,9 +306,7 @@ export class CwWelcomeCard extends LitElement {
                       @click="${this.start}"
                     >
                       <div style="display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: ${w.buttonIconColor || this.accentColor}">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                          <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
-                        </svg>
+                        <cw-icon .name="${'ChatLines'}" .size="${24}"></cw-icon>
                       </div>
                       <div style="display: flex; flex-direction: column; min-width: 0">
                         <span style="font-weight: 700; font-size: 15px; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: ${w.buttonTextColor || 'var(--cw-ink)'}">

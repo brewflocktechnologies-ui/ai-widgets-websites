@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../../components/atoms/cw-badge.js';
+import '../../components/atoms/cw-icon.js';
 
 export default {
   title: 'Atoms/Badge',
@@ -58,7 +59,7 @@ export const ConfigurableBadge = {
   },
   render: (args: any) => html`
     <div style="position: relative; width: 64px; height: 64px; background: #0b5fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
-      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      <cw-icon .name="${'MessageSquare'}" .size="${28}" .color="${'currentColor'}"></cw-icon>
       <cw-badge
         .count="${args.count}"
         .config="${{
