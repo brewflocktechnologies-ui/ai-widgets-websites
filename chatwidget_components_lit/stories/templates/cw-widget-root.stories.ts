@@ -591,7 +591,12 @@ export const FullyConfigurableWidget = {
     welcomeButtonTextColor:"#030303",
     textareaFontSize:11,
     widgetShadow:false,
-    bubbleTooltipText:"Chat with us"
+    bubbleTooltipText:"Chat with us",
+    accentColor:"#434b58",
+    visitorBubbleBg:"#141415",
+    agentBubbleBg:"#978f8f",
+    agentBubbleTextColor:"#ffffff",
+    agentAvatarBg:"#205ccc"
   },
   render:renderWidget,
 };

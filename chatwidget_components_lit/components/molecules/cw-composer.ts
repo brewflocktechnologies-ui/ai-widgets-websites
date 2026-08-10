@@ -124,7 +124,9 @@ export class CwComposer extends LitElement {
     const padding = cw.inputPadding || '6px 8px';
     const margin = cw.inputMargin || '12px 16px';
     const bg = cw.inputBg || 'var(--cw-surface)';
-    const borderRadius = cw.inputBorderRadius || '9999px';
+    const borderRadius = typeof cw.inputBorderRadius === 'number'
+      ? `${cw.inputBorderRadius}px`
+      : (cw.inputBorderRadius !== undefined ? cw.inputBorderRadius : '9999px');
 
     const borderColor = isFocused
       ? cw.inputFocusBorderColor || cw.accentColor || 'var(--cw-accent)'

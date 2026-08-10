@@ -141,6 +141,11 @@ export default {
     },
 
     // --- Composer & Footer Controls ---
+    inputBorderRadius: {
+      control: 'text',
+      description: 'Border radius of input bar container (e.g. 9999px for pill curve, 8px for box shape)',
+      table: { category: 'Composer & Footer' },
+    },
     inputPlaceholder: {
       control: 'text',
       description: 'Composer input placeholder text',
@@ -224,6 +229,7 @@ export const ConfigurableChatBody = {
     welcomeButtonSubtext: 'Typically replies in 5 minutes',
 
     // Composer & Footer
+    inputBorderRadius: '9999px',
     inputPlaceholder: 'Write a message...',
     inputBg: '#ffffff',
     inputTextColor: '#1f2937',
@@ -270,6 +276,7 @@ export const ConfigurableChatBody = {
       },
 
       // Composer & Footer
+      inputBorderRadius: args.inputBorderRadius,
       inputPlaceholder: args.inputPlaceholder,
       inputBg: args.inputBg,
       inputTextColor: args.inputTextColor,
