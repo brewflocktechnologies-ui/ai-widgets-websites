@@ -51,7 +51,7 @@ export class CwChatHeader extends LitElement {
         white-space: nowrap;
       }
       .subtitle-text {
-        opacity: 0.8;
+        opacity: 0.95;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

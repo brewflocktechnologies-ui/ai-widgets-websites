@@ -135,6 +135,7 @@ export class CwGreetInput extends LitElement {
 
           <button
             type="button"
+            aria-label="Send message"
             style="background-color: ${btnBg}; color: ${btnIconColor}; border-radius: 50%; width: ${btnSize}px; height: ${btnSize}px; box-shadow: ${ib.buttonBoxShadow || '0 6px 16px rgba(0,0,0,0.12)'}"
             @click="${this.submit}"
           >
@@ -167,6 +168,7 @@ export class CwGreetInput extends LitElement {
 
         <button
           type="button"
+          aria-label="Send message"
           style="width: 38px; height: 38px; border-radius: 50%; background-color: ${btnColor}; color: ${btnIconColor}"
           @click="${this.submit}"
         >

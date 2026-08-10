@@ -597,10 +597,11 @@ export const FullyConfigurableWidget = {
     agentBubbleBg:"#978f8f",
     agentBubbleTextColor:"#ffffff",
     agentAvatarBg:"#205ccc",
-    triggerType:"chatcard",
+    triggerType:"bubble",
     bubbleLucideSize:23,
     chatbarTextSize:20,
-    chatbarIconSize:30
+    chatbarIconSize:30,
+    enableGreetWindow:true
   },
   render:renderWidget,
 };

@@ -61,6 +61,15 @@ export class CwChatBody extends LitElement {
         gap: 4px;
         scroll-behavior: smooth;
       }
+      .messages-area:focus,
+      .prechat:focus {
+        outline: none;
+      }
+      .messages-area:focus-visible,
+      .prechat:focus-visible {
+        outline: 2px solid var(--cw-accent, #0b5fff);
+        outline-offset: -2px;
+      }
       .day-divider {
         text-align: center;
         font-size: 11px;
@@ -398,7 +407,7 @@ export class CwChatBody extends LitElement {
         <!-- PRECHAT FORM -->
         ${isPrechat
           ? html`
-              <div class="prechat">
+              <div class="prechat" tabindex="0" aria-label="Pre-chat form">
                 <div class="avatar prechat-avatar">
                   <span>${(cs.clientName || cw.clientName || 'S').charAt(0)}</span>
                 </div>
@@ -419,7 +428,7 @@ export class CwChatBody extends LitElement {
         <!-- OFFLINE FORM -->
         ${isOffline
           ? html`
-              <div class="prechat">
+              <div class="prechat" tabindex="0" aria-label="Offline support form">
                 <div class="avatar prechat-avatar offline-avatar">
                   <cw-icon .name="${'AlertCircle'}" .size="${22}"></cw-icon>
                 </div>
@@ -497,7 +506,7 @@ export class CwChatBody extends LitElement {
         <!-- ACTIVE CHAT / CLOSED MESSAGES -->
         ${isActive || isClosed
           ? html`
-              <div class="messages-area" role="log" aria-live="polite" aria-relevant="additions" style="background: ${cw.bodyBg || 'var(--cw-bg)'}">
+              <div class="messages-area" tabindex="0" role="log" aria-label="Message history" aria-live="polite" aria-relevant="additions" style="background: ${cw.bodyBg || 'var(--cw-bg)'}">
                 <input
                   type="file"
                   id="cw-file-input"
