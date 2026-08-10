@@ -4,6 +4,7 @@ import type { WelcomeConfig } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import '../atoms/cw-icon.js';
+import '../atoms/cw-avatar.js';
 
 @customElement('cw-welcome-card')
 export class CwWelcomeCard extends LitElement {
@@ -222,11 +223,13 @@ export class CwWelcomeCard extends LitElement {
                         <div class="avatars-row" style="justify-content: ${w.avatarAlign || (w.textAlign === 'center' || w.cardAlign === 'center' ? 'center' : 'flex-start')}">
                           ${(w.avatars || []).map(
                             (avatar: any, idx: number) => html`
-                              <img
-                                class="avatar-img"
-                                src="${this.resolveAvatarUrl(avatar)}"
-                                style="margin-left: ${idx === 0 ? '0' : '-12px'}; border-color: ${w.avatarBorderColor || 'rgba(255,255,255,0.2)'}; z-index: ${10 + idx}"
-                              />
+                              <cw-avatar
+                                .src="${this.resolveAvatarUrl(avatar)}"
+                                .name="${typeof avatar === 'object' && avatar?.name ? avatar.name : 'Agent'}"
+                                .size="${38}"
+                                .showOnline="${false}"
+                                style="margin-left: ${idx === 0 ? '0' : '-12px'}; border: 2px solid ${w.avatarBorderColor || 'rgba(255,255,255,0.2)'}; border-radius: 50%; z-index: ${10 + idx}; box-shadow: 0 4px 6px rgba(0,0,0,0.1)"
+                              ></cw-avatar>
                             `
                           )}
                         </div>
@@ -287,11 +290,13 @@ export class CwWelcomeCard extends LitElement {
                       <div class="avatars-row">
                         ${(w.avatars || []).map(
                           (avatar: any, idx: number) => html`
-                            <img
-                              class="avatar-img"
-                              src="${this.resolveAvatarUrl(avatar)}"
-                              style="margin-left: ${idx === 0 ? '0' : '-12px'}; border-color: ${w.avatarBorderColor || 'rgba(255,255,255,0.2)'}; z-index: ${10 + idx}"
-                            />
+                            <cw-avatar
+                              .src="${this.resolveAvatarUrl(avatar)}"
+                              .name="${typeof avatar === 'object' && avatar?.name ? avatar.name : 'Agent'}"
+                              .size="${38}"
+                              .showOnline="${false}"
+                              style="margin-left: ${idx === 0 ? '0' : '-12px'}; border: 2px solid ${w.avatarBorderColor || 'rgba(255,255,255,0.2)'}; border-radius: 50%; z-index: ${10 + idx}; box-shadow: 0 4px 6px rgba(0,0,0,0.1)"
+                            ></cw-avatar>
                           `
                         )}
                       </div>

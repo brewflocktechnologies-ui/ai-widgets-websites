@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import type { Message, ChatWindowState } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import '../atoms/cw-icon.js';
+import '../atoms/cw-avatar.js';
 
 @customElement('cw-message-bubble')
 export class CwMessageBubble extends LitElement {
@@ -32,6 +33,7 @@ export class CwMessageBubble extends LitElement {
       }
       .bubble-row.from-agent {
         justify-content: flex-start;
+        padding-left: 0;
       }
       .msg-avatar {
         width: 28px;
@@ -135,12 +137,14 @@ export class CwMessageBubble extends LitElement {
       <div class="bubble-row ${isVisitor ? 'from-visitor' : 'from-agent'}">
         ${isAgent && this.isGroupEnd
           ? html`
-              <div class="msg-avatar" style="background-color: ${avatarBg}; color: ${avatarColor}">
-                ${cw.agentAvatarUrl
-                  ? html`<img src="${cw.agentAvatarUrl}" alt="avatar" />`
-                  : html`<span>${avatarInitial}</span>`
-                }
-              </div>
+              <cw-avatar
+                .src="${cw.agentAvatarUrl || ''}"
+                .name="${m.senderName || this.agentName || 'Agent'}"
+                .size="${28}"
+                .bgColor="${avatarBg}"
+                .textColor="${avatarColor}"
+                .showOnline="${false}"
+              ></cw-avatar>
             `
           : isAgent
           ? html`<div class="msg-avatar-placeholder"></div>`

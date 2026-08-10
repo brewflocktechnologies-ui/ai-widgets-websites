@@ -2587,7 +2587,7 @@ button.primary:active {
 .bubble-row.from-agent {
   justify-content: flex-start;
   position: relative;
-  padding-left: 36px;
+  padding-left: 0;
 }
 
 .bubble-row.from-system {
