@@ -64,13 +64,14 @@ export async function fetchClientConfig(clientId: string): Promise<ClientConfigs
   }
 
   const baseUrl = getWidgetBaseUrl();
+  const normalizedBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
   const candidateUrls = [
-    `${baseUrl}public/clients/${clientId}.json`,
-    `${baseUrl}public/clients/default.json`,
-    `./chatwidget_components_lit/public/clients/${clientId}.json`,
-    `./chatwidget_components_lit/public/clients/default.json`,
-    `./public/clients/${clientId}.json`,
-    `./public/clients/default.json`
+    `${normalizedBase}clients/${clientId}.json`,
+    `${normalizedBase}clients/default.json`,
+    `/clients/${clientId}.json`,
+    `/clients/default.json`,
+    `./clients/${clientId}.json`,
+    `./clients/default.json`
   ];
 
   for (const url of candidateUrls) {
