@@ -98,6 +98,7 @@ export class CwWidgetRoot extends LitElement {
   @property({ type: Number }) chatbarTextSize?: number;
   @property({ type: String }) chatbarTextColor?: string;
   @property({ type: String }) chatbarLucideIcon?: string;
+  @property({ type: Number }) chatbarIconSize?: number;
   @property({ type: String }) chatbarIconColor?: string;
 
   // -------------------------------------------------------------------------
@@ -506,6 +507,8 @@ export class CwWidgetRoot extends LitElement {
       textSize: this.chatbarTextSize || cbs.textSize,
       textColor: this.chatbarTextColor || cbs.textColor,
       lucideIcon: this.chatbarLucideIcon || cbs.lucideIcon,
+      iconWidth: this.chatbarIconSize || cbs.iconWidth || preset.iconWidth || 36,
+      iconHeight: this.chatbarIconSize || cbs.iconHeight || preset.iconHeight || 36,
       iconColor: this.chatbarIconColor || cbs.iconColor,
       barOffsetRight: barRight,
       barOffsetBottom: barBottom,

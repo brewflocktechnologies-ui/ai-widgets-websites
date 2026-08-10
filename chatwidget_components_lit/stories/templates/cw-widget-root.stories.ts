@@ -24,7 +24,7 @@ export default {
     bubbleOffsetBottom: { control: { type: 'number', min: 0, max: 100 }, name: 'Bubble Offset Bottom (px)', table: { category: '2. Trigger & Positioning' } },
     barOffsetRight: { control: { type: 'number', min: 0, max: 100 }, name: 'Chat Bar Offset Right (px)', table: { category: '2. Trigger & Positioning' } },
     barOffsetBottom: { control: { type: 'number', min: 0, max: 100 }, name: 'Chat Bar Offset Bottom (px)', table: { category: '2. Trigger & Positioning' } },
-    cardOffsetRight: { control: { type: 'number', min: 0, max: 100 }, name: 'Chat Card Offset Right (px)', table: { category: '2. Trigger & Positioning' } },
+    cardOffsetRight: { control: { type: 'number', min: 0, max: 400 }, name: 'Chat Card Offset Right (px)', table: { category: '2. Trigger & Positioning' } },
     cardOffsetBottom: { control: { type: 'number', min: 0, max: 100 }, name: 'Chat Card Offset Bottom (px)', table: { category: '2. Trigger & Positioning' } },
     bubbleWidth: { control: { type: 'number', min: 40, max: 100 }, name: 'Bubble Width (px)', table: { category: '2. Trigger & Positioning' } },
     bubbleHeight: { control: { type: 'number', min: 40, max: 100 }, name: 'Bubble Height (px)', table: { category: '2. Trigger & Positioning' } },
@@ -78,6 +78,7 @@ export default {
     chatbarTextSize: { control: { type: 'number', min: 10, max: 20 }, name: 'Text Size (px)', table: { category: '3. Chatbar Trigger' } },
     chatbarTextColor: { control: 'color', name: 'Text Color', table: { category: '3. Chatbar Trigger' } },
     chatbarLucideIcon: { control: 'text', name: 'Icon Symbol', table: { category: '3. Chatbar Trigger' } },
+    chatbarIconSize: { control: { type: 'number', min: 14, max: 64 }, name: 'Icon Size (px)', table: { category: '3. Chatbar Trigger' } },
     chatbarIconColor: { control: 'color', name: 'Icon Color', table: { category: '3. Chatbar Trigger' } },
 
     // -------------------------------------------------------------------------
@@ -226,7 +227,7 @@ const DEFAULT_ARGS = {
   bubbleOffsetBottom: 12,
   barOffsetRight: 24,
   barOffsetBottom: 16,
-  cardOffsetRight: 20,
+  cardOffsetRight: 200,
   cardOffsetBottom: 20,
   bubbleWidth: 60,
   bubbleHeight: 60,
@@ -277,11 +278,12 @@ const DEFAULT_ARGS = {
   chatcardText: 'Questions about AI solutions?',
   chatbarTextSize: 14,
   chatbarTextColor: '#ffffff',
-  chatbarLucideIcon: 'MessageCircle',
+  chatbarLucideIcon: 'MessageSquare',
+  chatbarIconSize: 36,
   chatbarIconColor: '#ffffff',
 
   // 4. Proactive Greet Window
-  enableGreetWindow: true,
+  enableGreetWindow: false,
   greetTitle: 'Hi there! 👋 Need help growing your business using AI?',
   greetTitleColor: '#1e293b',
   greetTitleFontSize: 15,
@@ -464,6 +466,7 @@ const renderWidget = (args: any) => html`
       .chatbarTextSize="${args.chatbarTextSize}"
       .chatbarTextColor="${args.chatbarTextColor}"
       .chatbarLucideIcon="${args.chatbarLucideIcon}"
+      .chatbarIconSize="${args.chatbarIconSize}"
       .chatbarIconColor="${args.chatbarIconColor}"
 
       .enableGreetWindow="${args.enableGreetWindow}"
@@ -593,7 +596,11 @@ export const FullyConfigurableWidget = {
     visitorBubbleBg:"#141415",
     agentBubbleBg:"#978f8f",
     agentBubbleTextColor:"#ffffff",
-    agentAvatarBg:"#205ccc"
+    agentAvatarBg:"#205ccc",
+    triggerType:"chatcard",
+    bubbleLucideSize:23,
+    chatbarTextSize:20,
+    chatbarIconSize:30
   },
   render:renderWidget,
 };

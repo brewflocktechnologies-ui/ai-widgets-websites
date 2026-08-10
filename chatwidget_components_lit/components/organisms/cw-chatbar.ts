@@ -159,7 +159,7 @@ export class CwChatbar extends LitElement {
                       `
                     : s.iconType === 'customSvg' && s.customSvg
                     ? html`<cw-icon .customSvg="${s.customSvg}" .size="${s.iconWidth || 36}" .color="${s.iconColor || s.textColor || '#ffffff'}"></cw-icon>`
-                    : html`<cw-icon .name="${s.lucideIcon || 'Sparkles'}" .size="${s.iconWidth || 36}" .color="${s.iconColor || s.textColor || '#ffffff'}"></cw-icon>`
+                    : html`<cw-icon .name="${s.lucideIcon || 'MessageSquare'}" .size="${s.iconWidth || 36}" .color="${s.iconColor || s.textColor || '#ffffff'}"></cw-icon>`
                   }
                 </div>
 
