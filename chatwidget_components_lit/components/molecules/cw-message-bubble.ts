@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { Message, ChatWindowState } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
-import '../atoms/cw-message-tick.js';
+import '../atoms/cw-icon.js';
 
 @customElement('cw-message-bubble')
 export class CwMessageBubble extends LitElement {
@@ -171,9 +171,12 @@ export class CwMessageBubble extends LitElement {
                   ${formattedTime}
                   ${isVisitor
                     ? html`
-                        &nbsp;<cw-message-tick
-                          .status="${m.pending ? 'pending' : (m.status as any) || 'delivered'}"
-                        ></cw-message-tick>
+                        &nbsp;<cw-icon
+                          .name="${m.status === 'read' ? 'DoubleCheck' : m.status === 'sent' || m.pending ? 'Check' : 'DoubleCheck'}"
+                          .size="${m.status === 'sent' || m.pending ? 13 : 14}"
+                          .color="${m.status === 'read' ? '#34b7f1' : 'currentColor'}"
+                          style="opacity: ${m.status === 'read' ? 1 : 0.75}; vertical-align: middle; margin-left: 2px;"
+                        ></cw-icon>
                       `
                     : ''
                   }
