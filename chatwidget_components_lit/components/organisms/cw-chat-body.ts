@@ -318,6 +318,13 @@ export class CwChatBody extends LitElement {
     }
   }
 
+  private openFileSelector() {
+    const input = this.shadowRoot?.querySelector<HTMLInputElement>('#cw-file-input');
+    if (input) {
+      input.click();
+    }
+  }
+
   /** Delegates focus to the composer (used by the panel when the chat opens). */
   focusInput() {
     const composer = this.renderRoot?.querySelector<CwComposer>('cw-composer');
@@ -518,7 +525,11 @@ export class CwChatBody extends LitElement {
 
               <!-- ATTACHMENT POPUP -->
               ${cs.attachOpen
-                ? html`<cw-attach-menu></cw-attach-menu>`
+                ? html`
+                    <cw-attach-menu
+                      @cw:trigger-file-select="${this.openFileSelector}"
+                    ></cw-attach-menu>
+                  `
                 : ''
               }
 

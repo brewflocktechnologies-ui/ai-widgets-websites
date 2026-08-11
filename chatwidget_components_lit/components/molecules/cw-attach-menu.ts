@@ -73,12 +73,7 @@ export class CwAttachMenu extends LitElement {
   }
 
   private onSelectImage() {
-    // Locate hidden file input in host root / shadow root or dispatch trigger
-    const root = this.getRootNode() as ShadowRoot | Document;
-    const input = root?.querySelector<HTMLInputElement>('#cw-file-input');
-    if (input) {
-      input.click();
-    }
+    this.dispatchEvent(new CustomEvent('cw:trigger-file-select', { bubbles: true, composed: true }));
     this.dispatchEvent(new CustomEvent('cw:close-popups', { bubbles: true, composed: true }));
   }
 
