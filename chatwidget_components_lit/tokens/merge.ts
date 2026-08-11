@@ -9,6 +9,14 @@ import {
   type TokenTheme,
   type PartialTokenTheme,
 } from './default-theme.js';
+import type {
+  BubbleState,
+  ChatbarState,
+  GreetWindowState,
+  ChatWindowState,
+  FeaturesState,
+} from '../store/types.js';
+import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from './chatbar-presets.js';
 
 export interface MergeResult {
   theme: TokenTheme;
@@ -160,3 +168,289 @@ export function sanitizeConfig<T>(value: T, name = 'config'): { value: T; warnin
 
 // re-export for convenience
 export { GROUPS };
+
+// ---------------------------------------------------------------------------
+// Pure Config Merge Functions for cw-widget-root
+// ---------------------------------------------------------------------------
+
+export function computeEffectiveChatbarConfig(
+  host: Record<string, any>,
+  cbs: ChatbarState = {} as ChatbarState,
+  activeTrigger: string = 'bubble'
+): ChatbarState {
+  const isChatbarTrigger = activeTrigger === 'chatbar' || activeTrigger === 'chatcard';
+  const barRight = host.barOffsetRight !== undefined ? host.barOffsetRight : (cbs.barOffsetRight ?? cbs.offsetRight ?? 16);
+  const barBottom = host.barOffsetBottom !== undefined ? host.barOffsetBottom : (cbs.barOffsetBottom ?? cbs.offsetBottom ?? 12);
+  const cardRight = host.cardOffsetRight !== undefined ? host.cardOffsetRight : (cbs.cardOffsetRight ?? cbs.offsetRight ?? 16);
+  const cardBottom = host.cardOffsetBottom !== undefined ? host.cardOffsetBottom : (cbs.cardOffsetBottom ?? cbs.offsetBottom ?? 12);
+
+  const isCardLayout = (host.chatbarLayout || (activeTrigger === 'chatcard' ? 'card' : 'bar')) === 'card';
+  const preset = isCardLayout ? CHATBAR_CARD_PRESET : CHATBAR_BAR_PRESET;
+
+  return {
+    ...preset,
+    ...cbs,
+    enabled: isChatbarTrigger,
+    layout: isCardLayout ? 'card' : 'bar',
+    width: (host.chatbarWidth !== undefined && host.chatbarWidth !== CHATBAR_BAR_PRESET.width)
+      ? host.chatbarWidth
+      : preset.width,
+    height: (host.chatbarHeight !== undefined && host.chatbarHeight !== CHATBAR_BAR_PRESET.height)
+      ? host.chatbarHeight
+      : preset.height,
+    bgColor: host.chatbarBg || cbs.bgColor,
+    gradientEnabled: host.chatbarGradientEnabled !== undefined ? host.chatbarGradientEnabled : cbs.gradientEnabled,
+    gradientStops: (host.chatbarGradientStart || host.chatbarGradientEnd)
+      ? [
+          { color: host.chatbarGradientStart || cbs.gradientStops?.[0]?.color || cbs.bgColor, pos: 0 },
+          { color: host.chatbarGradientEnd || cbs.gradientStops?.[1]?.color || cbs.bgColor, pos: 100 },
+        ]
+      : cbs.gradientStops,
+    borderRadius: (host.chatbarBorderRadius !== undefined && host.chatbarBorderRadius !== 20)
+      ? { tl: host.chatbarBorderRadius, tr: host.chatbarBorderRadius, bl: host.chatbarBorderRadius, br: host.chatbarBorderRadius }
+      : preset.borderRadius,
+    padding: isCardLayout ? CHATBAR_CARD_PRESET.padding : (cbs.padding || CHATBAR_BAR_PRESET.padding),
+    gap: isCardLayout ? CHATBAR_CARD_PRESET.gap : (cbs.gap ?? CHATBAR_BAR_PRESET.gap),
+    text: host.chatbarText || cbs.text,
+    cardText: host.chatcardText || cbs.cardText,
+    textSize: host.chatbarTextSize || cbs.textSize,
+    textColor: host.chatbarTextColor || cbs.textColor,
+    lucideIcon: host.chatbarLucideIcon || cbs.lucideIcon,
+    iconWidth: host.chatbarIconSize || cbs.iconWidth || preset.iconWidth || 36,
+    iconHeight: host.chatbarIconSize || cbs.iconHeight || preset.iconHeight || 36,
+    iconColor: host.chatbarIconColor || cbs.iconColor,
+    barOffsetRight: barRight,
+    barOffsetBottom: barBottom,
+    cardOffsetRight: cardRight,
+    cardOffsetBottom: cardBottom,
+    offsetRight: activeTrigger === 'chatcard' ? cardRight : barRight,
+    offsetBottom: activeTrigger === 'chatcard' ? cardBottom : barBottom,
+  } as ChatbarState;
+}
+
+export function computeEffectiveBubbleConfig(
+  host: Record<string, any>,
+  bs: BubbleState = {} as BubbleState
+): BubbleState {
+  return {
+    ...bs,
+    width: host.bubbleWidth || bs.width,
+    height: host.bubbleHeight || bs.height,
+    hideOnOpen: host.bubbleHideOnOpen !== undefined ? host.bubbleHideOnOpen : bs.hideOnOpen,
+    backgroundColor: host.bubbleBg || bs.backgroundColor,
+    gradientType: host.bubbleGradientType || bs.gradientType,
+    gradientAngle: host.bubbleGradientAngle !== undefined ? host.bubbleGradientAngle : bs.gradientAngle,
+    gradientStops: (host.bubbleGradientStart || host.bubbleGradientEnd)
+      ? [
+          { color: host.bubbleGradientStart || bs.gradientStops?.[0]?.color || bs.backgroundColor, pos: 0 },
+          { color: host.bubbleGradientEnd || bs.gradientStops?.[1]?.color || bs.backgroundColor, pos: 100 },
+        ]
+      : bs.gradientStops,
+    border: {
+      ...(bs.border || {}),
+      width: host.bubbleBorderWidth !== undefined ? host.bubbleBorderWidth : bs.border?.width,
+      style: host.bubbleBorderStyle || bs.border?.style || 'solid',
+      color: host.bubbleBorderColor || bs.border?.color,
+    },
+    outlineRing: {
+      ...(bs.outlineRing || {}),
+      enabled: host.bubbleOutlineRingEnabled !== undefined ? host.bubbleOutlineRingEnabled : bs.outlineRing?.enabled,
+      width: host.bubbleOutlineRingWidth !== undefined ? host.bubbleOutlineRingWidth : bs.outlineRing?.width,
+      color: host.bubbleOutlineRingColor || bs.outlineRing?.color,
+    },
+    boxShadowBlur: host.bubbleBoxShadowBlur !== undefined ? host.bubbleBoxShadowBlur : bs.boxShadowBlur,
+    boxShadowOffsetY: host.bubbleBoxShadowOffsetY !== undefined ? host.bubbleBoxShadowOffsetY : bs.boxShadowOffsetY,
+    boxShadowOpacity: host.bubbleBoxShadowOpacity !== undefined ? host.bubbleBoxShadowOpacity : bs.boxShadowOpacity,
+    innerShadow: {
+      ...(bs.innerShadow || {}),
+      enabled: host.bubbleInnerShadowEnabled !== undefined ? host.bubbleInnerShadowEnabled : bs.innerShadow?.enabled,
+    },
+    glass: {
+      ...(bs.glass || {}),
+      enabled: host.bubbleGlassEnabled !== undefined ? host.bubbleGlassEnabled : bs.glass?.enabled,
+      blur: host.bubbleGlassBlur !== undefined ? host.bubbleGlassBlur : bs.glass?.blur,
+    },
+    neon: {
+      ...(bs.neon || {}),
+      enabled: host.bubbleNeonEnabled !== undefined ? host.bubbleNeonEnabled : bs.neon?.enabled,
+      color: host.bubbleNeonColor || bs.neon?.color,
+    },
+    lucideIcon: host.bubbleLucideIcon || bs.lucideIcon,
+    lucideSize: host.bubbleLucideSize || bs.lucideSize,
+    iconColor: host.bubbleIconColor || bs.iconColor,
+    hoverScale: host.bubbleHoverScale !== undefined ? host.bubbleHoverScale : bs.hoverScale,
+    idleAnim: {
+      ...(bs.idleAnim || {}),
+      enabled: host.bubbleIdleAnimEnabled !== undefined ? host.bubbleIdleAnimEnabled : bs.idleAnim?.enabled,
+      type: host.bubbleIdleAnimType || bs.idleAnim?.type,
+    },
+    tooltip: {
+      ...(bs.tooltip || {}),
+      enabled: host.bubbleTooltipEnabled !== undefined ? host.bubbleTooltipEnabled : bs.tooltip?.enabled,
+      text: host.bubbleTooltipText || bs.tooltip?.text,
+      position: host.bubbleTooltipPosition || bs.tooltip?.position,
+      backgroundColor: host.bubbleTooltipBg || bs.tooltip?.backgroundColor,
+      textColor: host.bubbleTooltipTextColor || bs.tooltip?.textColor,
+    },
+    badge: {
+      ...(bs.badge || {}),
+      position: host.bubbleBadgePosition || bs.badge?.position,
+      backgroundColor: host.bubbleBadgeBg || bs.badge?.backgroundColor,
+      textColor: host.bubbleBadgeTextColor || bs.badge?.textColor,
+    },
+    offsetRight: host.bubbleOffsetRight !== undefined ? host.bubbleOffsetRight : (bs.offsetRight ?? 16),
+    offsetBottom: host.bubbleOffsetBottom !== undefined ? host.bubbleOffsetBottom : (bs.offsetBottom ?? 12),
+  } as BubbleState;
+}
+
+export function computeEffectiveGreetWindowConfig(
+  host: Record<string, any>,
+  gws: GreetWindowState = {} as GreetWindowState
+): GreetWindowState {
+  return {
+    ...gws,
+    enabled: host.enableGreetWindow !== undefined ? host.enableGreetWindow : gws.enabled,
+    title: host.greetTitle || gws.title,
+    titleColor: host.greetTitleColor || gws.titleColor,
+    titleFontSize: host.greetTitleFontSize || gws.titleFontSize,
+    description: host.greetDescription || gws.description,
+    descriptionColor: host.greetDescriptionColor || gws.descriptionColor,
+    descriptionFontSize: host.greetDescriptionFontSize || gws.descriptionFontSize,
+    backgroundColor: host.greetBg || gws.backgroundColor,
+    width: host.greetWidth || gws.width,
+    borderRadius: host.greetBorderRadius || gws.borderRadius,
+    spacing: host.greetSpacing !== undefined ? host.greetSpacing : gws.spacing,
+    openingTimeAfterInitialLoadSec: host.greetOpeningDelaySec !== undefined ? host.greetOpeningDelaySec : gws.openingTimeAfterInitialLoadSec,
+    animationOpeningSec: host.greetFadeInSpeedSec !== undefined ? host.greetFadeInSpeedSec : gws.animationOpeningSec,
+    iconType: host.greetIconType || gws.iconType,
+    iconAlign: host.greetIconAlign || gws.iconAlign,
+    lucideIcon: host.greetLucideIcon || gws.lucideIcon,
+    iconSize: host.greetIconSize || gws.iconSize,
+    iconColor: host.greetIconColor || gws.iconColor,
+    iconAnimation: host.greetIconAnimation || gws.iconAnimation,
+    imageUrl: host.greetImageUrl || gws.imageUrl,
+    inputBox: {
+      ...(gws.inputBox || {}),
+      enabled: host.enableInputCard !== undefined ? host.enableInputCard : gws.inputBox?.enabled ?? true,
+      openingTimeAfterInitialLoadSec: host.greetInputOpeningDelaySec !== undefined ? host.greetInputOpeningDelaySec : gws.inputBox?.openingTimeAfterInitialLoadSec,
+      layout: host.greetInputLayout || gws.inputBox?.layout,
+      placeholder: host.greetInputPlaceholder || gws.inputBox?.placeholder,
+      backgroundColor: host.greetInputBg || gws.inputBox?.backgroundColor,
+      textColor: host.greetInputTextColor || gws.inputBox?.textColor,
+      borderRadius: host.greetInputBorderRadius || gws.inputBox?.borderRadius,
+      buttonColor: host.greetInputButtonColor || gws.inputBox?.buttonColor,
+      buttonIconColor: host.greetInputButtonIconColor || gws.inputBox?.buttonIconColor,
+    },
+  } as GreetWindowState;
+}
+
+export function computeEffectiveChatWindowConfig(
+  host: Record<string, any>,
+  cws: ChatWindowState = {} as ChatWindowState,
+  activeOffsetBottom: number = 12
+): ChatWindowState {
+  return {
+    ...cws,
+    clientName: host.clientName || cws.clientName,
+    agentName: host.agentName || cws.agentName,
+    widgetWidth: host.widgetWidth || cws.widgetWidth,
+    widgetHeight: host.widgetHeight || cws.widgetHeight,
+    expandedWidth: host.expandedWidth || cws.expandedWidth,
+    widgetBorderRadius: host.widgetBorderRadius || cws.widgetBorderRadius,
+    accentColor: host.accentColor || cws.accentColor,
+    headerBg: host.headerBg || cws.headerBg,
+    headerTextColor: host.headerTextColor || cws.headerTextColor,
+    headerBorderColor: host.headerBorderColor || cws.headerBorderColor,
+    headerAvatarBg: host.headerAvatarBg || cws.headerAvatarBg,
+    headerAvatarColor: host.headerAvatarColor || cws.headerAvatarColor,
+    activeDot: {
+      ...(cws.activeDot || {}),
+      color: host.activeDotColor || cws.activeDot?.color,
+      animate: host.activeDotAnimate !== undefined ? host.activeDotAnimate : cws.activeDot?.animate,
+    },
+    bodyBg: host.bodyBg || cws.bodyBg,
+    visitorBubbleBg: host.visitorBubbleBg || cws.visitorBubbleBg,
+    visitorBubbleColor: host.visitorBubbleTextColor || cws.visitorBubbleColor,
+    visitorBubbleFontSize: host.visitorBubbleFontSize || cws.visitorBubbleFontSize,
+    visitorBubbleBorderRadius: host.visitorBubbleBorderRadius || cws.visitorBubbleBorderRadius,
+    agentBubbleBg: host.agentBubbleBg || cws.agentBubbleBg,
+    agentBubbleColor: host.agentBubbleTextColor || cws.agentBubbleColor,
+    agentBubbleBorderColor: host.agentBubbleBorderColor || cws.agentBubbleBorderColor,
+    agentBubbleFontSize: host.agentBubbleFontSize || cws.agentBubbleFontSize,
+    agentBubbleBorderRadius: host.agentBubbleBorderRadius || cws.agentBubbleBorderRadius,
+    agentAvatarBg: host.agentAvatarBg || cws.agentAvatarBg,
+    agentAvatarColor: host.agentAvatarColor || cws.agentAvatarColor,
+    agentAvatarUrl: host.agentAvatarUrl || cws.agentAvatarUrl,
+    inputBg: host.inputBg || cws.inputBg,
+    inputTextColor: host.inputTextColor || cws.inputTextColor,
+    inputPlaceholderColor: host.inputPlaceholderColor || cws.inputPlaceholderColor,
+    inputBorderColor: host.inputBorderColor || cws.inputBorderColor,
+    inputFocusBorderColor: host.inputFocusBorderColor || cws.inputFocusBorderColor,
+    inputBorderRadius: host.inputBorderRadius || cws.inputBorderRadius,
+    textareaFontSize: host.textareaFontSize || cws.textareaFontSize,
+    attachButtonBg: host.attachButtonBg || cws.attachButtonBg,
+    attachButtonColor: host.attachButtonColor || cws.attachButtonColor,
+    emojiButtonColor: host.emojiButtonColor || cws.emojiButtonColor,
+    sendIconType: host.sendIconType || cws.sendIconType,
+    sendButtonBgActive: host.sendButtonBgActive || cws.sendButtonBgActive,
+    sendButtonColorActive: host.sendButtonColorActive || cws.sendButtonColorActive,
+    sendButtonBgInactive: host.sendButtonBgInactive || cws.sendButtonBgInactive,
+    sendButtonColorInactive: host.sendButtonColorInactive || cws.sendButtonColorInactive,
+    footerBg: host.footerBg || cws.footerBg,
+    footerTextColor: host.footerTextColor || cws.footerTextColor,
+    poweredByText: host.poweredByText || cws.poweredByText,
+    poweredByLink: host.poweredByLink || cws.poweredByLink,
+    poweredByColor: host.poweredByColor || cws.poweredByColor,
+    modernUi: host.modernUi !== undefined ? host.modernUi : cws.modernUi,
+    typingIndicator: host.typingIndicator !== undefined ? host.typingIndicator : cws.typingIndicator,
+    attachmentsEnabled: host.attachmentsEnabled !== undefined ? host.attachmentsEnabled : cws.attachmentsEnabled,
+    ticksEnabled: host.ticksEnabled !== undefined ? host.ticksEnabled : cws.ticksEnabled,
+    sentTickColor: host.sentTickColor || cws.sentTickColor,
+    readTickColor: host.readTickColor || cws.readTickColor,
+    widgetShadow: host.widgetShadow !== undefined ? host.widgetShadow : cws.widgetShadow,
+    widgetShadowBlur: host.widgetShadowBlur || cws.widgetShadowBlur,
+    widgetShadowColor: host.widgetShadowColor || cws.widgetShadowColor,
+    widgetBorderEnabled: host.widgetBorderEnabled !== undefined ? host.widgetBorderEnabled : cws.widgetBorderEnabled,
+    widgetBorderWidth: host.widgetBorderWidth || cws.widgetBorderWidth,
+    widgetBorderColor: host.widgetBorderColor || cws.widgetBorderColor,
+    endChatConfirmMessage: host.endChatConfirmMessage || cws.endChatConfirmMessage,
+    endChatConfirmLabel: host.endChatConfirmLabel || cws.endChatConfirmLabel,
+    endChatCancelLabel: host.endChatCancelLabel || cws.endChatCancelLabel,
+    modalCardBg: host.modalCardBg || cws.modalCardBg,
+    modalMessageColor: host.modalMessageColor || cws.modalMessageColor,
+    modalBorderRadius: host.modalBorderRadius || cws.modalBorderRadius,
+    endChatConfirmBg: host.endChatConfirmBg || cws.endChatConfirmBg,
+    endChatConfirmTextColor: host.endChatConfirmTextColor || cws.endChatConfirmTextColor,
+    offsetRight: 16,
+    offsetBottom: activeOffsetBottom,
+    welcome: {
+      ...(cws.welcome || {}),
+      enabled: host.enableWelcomeCard !== undefined ? host.enableWelcomeCard : cws.welcome?.enabled ?? true,
+      cardLayout: host.welcomeCardLayout || cws.welcome?.cardLayout,
+      title: host.welcomeTitle || cws.welcome?.title,
+      description: host.welcomeDescription || cws.welcome?.description,
+      bgGradient: host.welcomeBgGradient || cws.welcome?.bgGradient,
+      buttonText: host.welcomeButtonText || cws.welcome?.buttonText,
+      buttonSubtext: host.welcomeButtonSubtext || cws.welcome?.buttonSubtext,
+      buttonBg: host.welcomeButtonBg || cws.welcome?.buttonBg,
+      buttonTextColor: host.welcomeButtonTextColor || cws.welcome?.buttonTextColor,
+      logoUrl: host.welcomeLogoUrl || cws.welcome?.logoUrl,
+      cardBorderRadius: host.welcomeCardBorderRadius || cws.welcome?.cardBorderRadius,
+      cardBlur: host.welcomeCardBlur || cws.welcome?.cardBlur,
+    },
+  } as ChatWindowState;
+}
+
+export function computeEffectiveFeaturesConfig(
+  host: Record<string, any>,
+  fs: FeaturesState = {} as FeaturesState
+): FeaturesState {
+  return {
+    ...fs,
+    voiceCallMaster: host.enableVoiceCall !== undefined ? host.enableVoiceCall : fs.voiceCallMaster,
+    voiceCallAgents: host.enableVoiceCall !== undefined ? host.enableVoiceCall : fs.voiceCallAgents,
+    videoCallMaster: host.enableVideoCall !== undefined ? host.enableVideoCall : fs.videoCallMaster,
+    videoCallAgents: host.enableVideoCall !== undefined ? host.enableVideoCall : fs.videoCallAgents,
+    closeChatVisitor: host.enableCloseChatVisitor !== undefined ? host.enableCloseChatVisitor : fs.closeChatVisitor,
+  } as FeaturesState;
+}

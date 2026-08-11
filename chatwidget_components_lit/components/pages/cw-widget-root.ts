@@ -10,7 +10,13 @@ import {
   chatWindowStore,
   featuresStore,
 } from '../../store/chat-store.js';
-import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from '../../tokens/chatbar-presets.js';
+import {
+  computeEffectiveChatbarConfig,
+  computeEffectiveBubbleConfig,
+  computeEffectiveGreetWindowConfig,
+  computeEffectiveChatWindowConfig,
+  computeEffectiveFeaturesConfig,
+} from '../../tokens/merge.js';
 import '../templates/cw-widget-layout.js';
 
 /**
@@ -455,265 +461,17 @@ export class CwWidgetRoot extends LitElement {
     const cs = chatStore.get();
 
     const activeTrigger = this.activeTriggerOverride || this.triggerType || (cbs.enabled ? (cbs.layout === 'card' ? 'chatcard' : 'chatbar') : 'bubble');
-    const isChatbarTrigger = activeTrigger === 'chatbar' || activeTrigger === 'chatcard';
 
-    const barRight = this.barOffsetRight !== undefined ? this.barOffsetRight : (cbs.barOffsetRight ?? cbs.offsetRight ?? 16);
-    const barBottom = this.barOffsetBottom !== undefined ? this.barOffsetBottom : (cbs.barOffsetBottom ?? cbs.offsetBottom ?? 12);
-    const cardRight = this.cardOffsetRight !== undefined ? this.cardOffsetRight : (cbs.cardOffsetRight ?? cbs.offsetRight ?? 16);
-    const cardBottom = this.cardOffsetBottom !== undefined ? this.cardOffsetBottom : (cbs.cardOffsetBottom ?? cbs.offsetBottom ?? 12);
-
-    const isCardLayout = (this.chatbarLayout || (activeTrigger === 'chatcard' ? 'card' : 'bar')) === 'card';
-    const preset = isCardLayout ? CHATBAR_CARD_PRESET : CHATBAR_BAR_PRESET;
-
-    const effectiveCbs = {
-      ...preset,
-      ...cbs,
-      enabled: isChatbarTrigger,
-      layout: isCardLayout ? 'card' : 'bar',
-      width: (this.chatbarWidth !== undefined && this.chatbarWidth !== CHATBAR_BAR_PRESET.width)
-        ? this.chatbarWidth
-        : preset.width,
-      height: (this.chatbarHeight !== undefined && this.chatbarHeight !== CHATBAR_BAR_PRESET.height)
-        ? this.chatbarHeight
-        : preset.height,
-      bgColor: this.chatbarBg || cbs.bgColor,
-      gradientEnabled: this.chatbarGradientEnabled !== undefined ? this.chatbarGradientEnabled : cbs.gradientEnabled,
-      gradientStops: (this.chatbarGradientStart || this.chatbarGradientEnd)
-        ? [
-            { color: this.chatbarGradientStart || cbs.gradientStops?.[0]?.color || cbs.bgColor, pos: 0 },
-            { color: this.chatbarGradientEnd || cbs.gradientStops?.[1]?.color || cbs.bgColor, pos: 100 },
-          ]
-        : cbs.gradientStops,
-      borderRadius: (this.chatbarBorderRadius !== undefined && this.chatbarBorderRadius !== 20)
-        ? { tl: this.chatbarBorderRadius, tr: this.chatbarBorderRadius, bl: this.chatbarBorderRadius, br: this.chatbarBorderRadius }
-        : preset.borderRadius,
-      padding: isCardLayout ? CHATBAR_CARD_PRESET.padding : (cbs.padding || CHATBAR_BAR_PRESET.padding),
-      gap: isCardLayout ? CHATBAR_CARD_PRESET.gap : (cbs.gap ?? CHATBAR_BAR_PRESET.gap),
-      text: this.chatbarText || cbs.text,
-      cardText: this.chatcardText || cbs.cardText,
-      textSize: this.chatbarTextSize || cbs.textSize,
-      textColor: this.chatbarTextColor || cbs.textColor,
-      lucideIcon: this.chatbarLucideIcon || cbs.lucideIcon,
-      iconWidth: this.chatbarIconSize || cbs.iconWidth || preset.iconWidth || 36,
-      iconHeight: this.chatbarIconSize || cbs.iconHeight || preset.iconHeight || 36,
-      iconColor: this.chatbarIconColor || cbs.iconColor,
-      barOffsetRight: barRight,
-      barOffsetBottom: barBottom,
-      cardOffsetRight: cardRight,
-      cardOffsetBottom: cardBottom,
-      offsetRight: activeTrigger === 'chatcard' ? cardRight : barRight,
-      offsetBottom: activeTrigger === 'chatcard' ? cardBottom : barBottom,
-    };
-
-    const effectiveBs = {
-      ...bs,
-      width: this.bubbleWidth || bs.width,
-      height: this.bubbleHeight || bs.height,
-      hideOnOpen: this.bubbleHideOnOpen !== undefined ? this.bubbleHideOnOpen : bs.hideOnOpen,
-      backgroundColor: this.bubbleBg || bs.backgroundColor,
-      gradientType: this.bubbleGradientType || bs.gradientType,
-      gradientAngle: this.bubbleGradientAngle !== undefined ? this.bubbleGradientAngle : bs.gradientAngle,
-      gradientStops: (this.bubbleGradientStart || this.bubbleGradientEnd)
-        ? [
-            { color: this.bubbleGradientStart || bs.gradientStops?.[0]?.color || bs.backgroundColor, pos: 0 },
-            { color: this.bubbleGradientEnd || bs.gradientStops?.[1]?.color || bs.backgroundColor, pos: 100 },
-          ]
-        : bs.gradientStops,
-      border: {
-        ...(bs.border || {}),
-        width: this.bubbleBorderWidth !== undefined ? this.bubbleBorderWidth : bs.border?.width,
-        style: this.bubbleBorderStyle || bs.border?.style || 'solid',
-        color: this.bubbleBorderColor || bs.border?.color,
-      },
-      outlineRing: {
-        ...(bs.outlineRing || {}),
-        enabled: this.bubbleOutlineRingEnabled !== undefined ? this.bubbleOutlineRingEnabled : bs.outlineRing?.enabled,
-        width: this.bubbleOutlineRingWidth !== undefined ? this.bubbleOutlineRingWidth : bs.outlineRing?.width,
-        color: this.bubbleOutlineRingColor || bs.outlineRing?.color,
-      },
-      boxShadowBlur: this.bubbleBoxShadowBlur !== undefined ? this.bubbleBoxShadowBlur : bs.boxShadowBlur,
-      boxShadowOffsetY: this.bubbleBoxShadowOffsetY !== undefined ? this.bubbleBoxShadowOffsetY : bs.boxShadowOffsetY,
-      boxShadowOpacity: this.bubbleBoxShadowOpacity !== undefined ? this.bubbleBoxShadowOpacity : bs.boxShadowOpacity,
-      innerShadow: {
-        ...(bs.innerShadow || {}),
-        enabled: this.bubbleInnerShadowEnabled !== undefined ? this.bubbleInnerShadowEnabled : bs.innerShadow?.enabled,
-      },
-      glass: {
-        ...(bs.glass || {}),
-        enabled: this.bubbleGlassEnabled !== undefined ? this.bubbleGlassEnabled : bs.glass?.enabled,
-        blur: this.bubbleGlassBlur !== undefined ? this.bubbleGlassBlur : bs.glass?.blur,
-      },
-      neon: {
-        ...(bs.neon || {}),
-        enabled: this.bubbleNeonEnabled !== undefined ? this.bubbleNeonEnabled : bs.neon?.enabled,
-        color: this.bubbleNeonColor || bs.neon?.color,
-      },
-      lucideIcon: this.bubbleLucideIcon || bs.lucideIcon,
-      lucideSize: this.bubbleLucideSize || bs.lucideSize,
-      iconColor: this.bubbleIconColor || bs.iconColor,
-      hoverScale: this.bubbleHoverScale !== undefined ? this.bubbleHoverScale : bs.hoverScale,
-      idleAnim: {
-        ...(bs.idleAnim || {}),
-        enabled: this.bubbleIdleAnimEnabled !== undefined ? this.bubbleIdleAnimEnabled : bs.idleAnim?.enabled,
-        type: this.bubbleIdleAnimType || bs.idleAnim?.type,
-      },
-      tooltip: {
-        ...(bs.tooltip || {}),
-        enabled: this.bubbleTooltipEnabled !== undefined ? this.bubbleTooltipEnabled : bs.tooltip?.enabled,
-        text: this.bubbleTooltipText || bs.tooltip?.text,
-        position: this.bubbleTooltipPosition || bs.tooltip?.position,
-        backgroundColor: this.bubbleTooltipBg || bs.tooltip?.backgroundColor,
-        textColor: this.bubbleTooltipTextColor || bs.tooltip?.textColor,
-      },
-      badge: {
-        ...(bs.badge || {}),
-        position: this.bubbleBadgePosition || bs.badge?.position,
-        backgroundColor: this.bubbleBadgeBg || bs.badge?.backgroundColor,
-        textColor: this.bubbleBadgeTextColor || bs.badge?.textColor,
-      },
-      offsetRight: this.bubbleOffsetRight !== undefined ? this.bubbleOffsetRight : (bs.offsetRight ?? 16),
-      offsetBottom: this.bubbleOffsetBottom !== undefined ? this.bubbleOffsetBottom : (bs.offsetBottom ?? 12),
-    };
+    const effectiveCbs = computeEffectiveChatbarConfig(this, cbs, activeTrigger);
+    const effectiveBs = computeEffectiveBubbleConfig(this, bs);
 
     const activeOffsetBottom = activeTrigger === 'bubble'
       ? effectiveBs.offsetBottom
       : effectiveCbs.offsetBottom;
 
-    const effectiveGws = {
-      ...gws,
-      enabled: this.enableGreetWindow !== undefined ? this.enableGreetWindow : gws.enabled,
-      title: this.greetTitle || gws.title,
-      titleColor: this.greetTitleColor || gws.titleColor,
-      titleFontSize: this.greetTitleFontSize || gws.titleFontSize,
-      description: this.greetDescription || gws.description,
-      descriptionColor: this.greetDescriptionColor || gws.descriptionColor,
-      descriptionFontSize: this.greetDescriptionFontSize || gws.descriptionFontSize,
-      backgroundColor: this.greetBg || gws.backgroundColor,
-      width: this.greetWidth || gws.width,
-      borderRadius: this.greetBorderRadius || gws.borderRadius,
-      spacing: this.greetSpacing !== undefined ? this.greetSpacing : gws.spacing,
-      openingTimeAfterInitialLoadSec: this.greetOpeningDelaySec !== undefined ? this.greetOpeningDelaySec : gws.openingTimeAfterInitialLoadSec,
-      animationOpeningSec: this.greetFadeInSpeedSec !== undefined ? this.greetFadeInSpeedSec : gws.animationOpeningSec,
-      iconType: this.greetIconType || gws.iconType,
-      iconAlign: this.greetIconAlign || gws.iconAlign,
-      lucideIcon: this.greetLucideIcon || gws.lucideIcon,
-      iconSize: this.greetIconSize || gws.iconSize,
-      iconColor: this.greetIconColor || gws.iconColor,
-      iconAnimation: this.greetIconAnimation || gws.iconAnimation,
-      imageUrl: this.greetImageUrl || gws.imageUrl,
-      inputBox: {
-        ...(gws.inputBox || {}),
-        enabled: this.enableInputCard !== undefined ? this.enableInputCard : gws.inputBox?.enabled ?? true,
-        openingTimeAfterInitialLoadSec: this.greetInputOpeningDelaySec !== undefined ? this.greetInputOpeningDelaySec : gws.inputBox?.openingTimeAfterInitialLoadSec,
-        layout: this.greetInputLayout || gws.inputBox?.layout,
-        placeholder: this.greetInputPlaceholder || gws.inputBox?.placeholder,
-        backgroundColor: this.greetInputBg || gws.inputBox?.backgroundColor,
-        textColor: this.greetInputTextColor || gws.inputBox?.textColor,
-        borderRadius: this.greetInputBorderRadius || gws.inputBox?.borderRadius,
-        buttonColor: this.greetInputButtonColor || gws.inputBox?.buttonColor,
-        buttonIconColor: this.greetInputButtonIconColor || gws.inputBox?.buttonIconColor,
-      },
-    };
-
-    const effectiveCws = {
-      ...cws,
-      clientName: this.clientName || cws.clientName,
-      agentName: this.agentName || cws.agentName,
-      widgetWidth: this.widgetWidth || cws.widgetWidth,
-      widgetHeight: this.widgetHeight || cws.widgetHeight,
-      expandedWidth: this.expandedWidth || cws.expandedWidth,
-      widgetBorderRadius: this.widgetBorderRadius || cws.widgetBorderRadius,
-      accentColor: this.accentColor || cws.accentColor,
-      headerBg: this.headerBg || cws.headerBg,
-      headerTextColor: this.headerTextColor || cws.headerTextColor,
-      headerBorderColor: this.headerBorderColor || cws.headerBorderColor,
-      headerAvatarBg: this.headerAvatarBg || cws.headerAvatarBg,
-      headerAvatarColor: this.headerAvatarColor || cws.headerAvatarColor,
-      activeDot: {
-        ...(cws.activeDot || {}),
-        color: this.activeDotColor || cws.activeDot?.color,
-        animate: this.activeDotAnimate !== undefined ? this.activeDotAnimate : cws.activeDot?.animate,
-      },
-      bodyBg: this.bodyBg || cws.bodyBg,
-      visitorBubbleBg: this.visitorBubbleBg || cws.visitorBubbleBg,
-      visitorBubbleColor: this.visitorBubbleTextColor || cws.visitorBubbleColor,
-      visitorBubbleFontSize: this.visitorBubbleFontSize || cws.visitorBubbleFontSize,
-      visitorBubbleBorderRadius: this.visitorBubbleBorderRadius || cws.visitorBubbleBorderRadius,
-      agentBubbleBg: this.agentBubbleBg || cws.agentBubbleBg,
-      agentBubbleColor: this.agentBubbleTextColor || cws.agentBubbleColor,
-      agentBubbleBorderColor: this.agentBubbleBorderColor || cws.agentBubbleBorderColor,
-      agentBubbleFontSize: this.agentBubbleFontSize || cws.agentBubbleFontSize,
-      agentBubbleBorderRadius: this.agentBubbleBorderRadius || cws.agentBubbleBorderRadius,
-      agentAvatarBg: this.agentAvatarBg || cws.agentAvatarBg,
-      agentAvatarColor: this.agentAvatarColor || cws.agentAvatarColor,
-      agentAvatarUrl: this.agentAvatarUrl || cws.agentAvatarUrl,
-      inputBg: this.inputBg || cws.inputBg,
-      inputTextColor: this.inputTextColor || cws.inputTextColor,
-      inputPlaceholderColor: this.inputPlaceholderColor || cws.inputPlaceholderColor,
-      inputBorderColor: this.inputBorderColor || cws.inputBorderColor,
-      inputFocusBorderColor: this.inputFocusBorderColor || cws.inputFocusBorderColor,
-      inputBorderRadius: this.inputBorderRadius || cws.inputBorderRadius,
-      textareaFontSize: this.textareaFontSize || cws.textareaFontSize,
-      attachButtonBg: this.attachButtonBg || cws.attachButtonBg,
-      attachButtonColor: this.attachButtonColor || cws.attachButtonColor,
-      emojiButtonColor: this.emojiButtonColor || cws.emojiButtonColor,
-      sendIconType: this.sendIconType || cws.sendIconType,
-      sendButtonBgActive: this.sendButtonBgActive || cws.sendButtonBgActive,
-      sendButtonColorActive: this.sendButtonColorActive || cws.sendButtonColorActive,
-      sendButtonBgInactive: this.sendButtonBgInactive || cws.sendButtonBgInactive,
-      sendButtonColorInactive: this.sendButtonColorInactive || cws.sendButtonColorInactive,
-      footerBg: this.footerBg || cws.footerBg,
-      footerTextColor: this.footerTextColor || cws.footerTextColor,
-      poweredByText: this.poweredByText || cws.poweredByText,
-      poweredByLink: this.poweredByLink || cws.poweredByLink,
-      poweredByColor: this.poweredByColor || cws.poweredByColor,
-      modernUi: this.modernUi !== undefined ? this.modernUi : cws.modernUi,
-      typingIndicator: this.typingIndicator !== undefined ? this.typingIndicator : cws.typingIndicator,
-      attachmentsEnabled: this.attachmentsEnabled !== undefined ? this.attachmentsEnabled : cws.attachmentsEnabled,
-      ticksEnabled: this.ticksEnabled !== undefined ? this.ticksEnabled : cws.ticksEnabled,
-      sentTickColor: this.sentTickColor || cws.sentTickColor,
-      readTickColor: this.readTickColor || cws.readTickColor,
-      widgetShadow: this.widgetShadow !== undefined ? this.widgetShadow : cws.widgetShadow,
-      widgetShadowBlur: this.widgetShadowBlur || cws.widgetShadowBlur,
-      widgetShadowColor: this.widgetShadowColor || cws.widgetShadowColor,
-      widgetBorderEnabled: this.widgetBorderEnabled !== undefined ? this.widgetBorderEnabled : cws.widgetBorderEnabled,
-      widgetBorderWidth: this.widgetBorderWidth || cws.widgetBorderWidth,
-      widgetBorderColor: this.widgetBorderColor || cws.widgetBorderColor,
-      endChatConfirmMessage: this.endChatConfirmMessage || cws.endChatConfirmMessage,
-      endChatConfirmLabel: this.endChatConfirmLabel || cws.endChatConfirmLabel,
-      endChatCancelLabel: this.endChatCancelLabel || cws.endChatCancelLabel,
-      modalCardBg: this.modalCardBg || cws.modalCardBg,
-      modalMessageColor: this.modalMessageColor || cws.modalMessageColor,
-      modalBorderRadius: this.modalBorderRadius || cws.modalBorderRadius,
-      endChatConfirmBg: this.endChatConfirmBg || cws.endChatConfirmBg,
-      endChatConfirmTextColor: this.endChatConfirmTextColor || cws.endChatConfirmTextColor,
-      offsetRight: 16,
-      offsetBottom: activeOffsetBottom,
-      welcome: {
-        ...(cws.welcome || {}),
-        enabled: this.enableWelcomeCard !== undefined ? this.enableWelcomeCard : cws.welcome?.enabled ?? true,
-        cardLayout: this.welcomeCardLayout || cws.welcome?.cardLayout,
-        title: this.welcomeTitle || cws.welcome?.title,
-        description: this.welcomeDescription || cws.welcome?.description,
-        bgGradient: this.welcomeBgGradient || cws.welcome?.bgGradient,
-        buttonText: this.welcomeButtonText || cws.welcome?.buttonText,
-        buttonSubtext: this.welcomeButtonSubtext || cws.welcome?.buttonSubtext,
-        buttonBg: this.welcomeButtonBg || cws.welcome?.buttonBg,
-        buttonTextColor: this.welcomeButtonTextColor || cws.welcome?.buttonTextColor,
-        logoUrl: this.welcomeLogoUrl || cws.welcome?.logoUrl,
-        cardBorderRadius: this.welcomeCardBorderRadius || cws.welcome?.cardBorderRadius,
-        cardBlur: this.welcomeCardBlur || cws.welcome?.cardBlur,
-      },
-    };
-
-    const effectiveFs = {
-      ...fs,
-      voiceCallMaster: this.enableVoiceCall !== undefined ? this.enableVoiceCall : fs.voiceCallMaster,
-      voiceCallAgents: this.enableVoiceCall !== undefined ? this.enableVoiceCall : fs.voiceCallAgents,
-      videoCallMaster: this.enableVideoCall !== undefined ? this.enableVideoCall : fs.videoCallMaster,
-      videoCallAgents: this.enableVideoCall !== undefined ? this.enableVideoCall : fs.videoCallAgents,
-      closeChatVisitor: this.enableCloseChatVisitor !== undefined ? this.enableCloseChatVisitor : fs.closeChatVisitor,
-    };
+    const effectiveGws = computeEffectiveGreetWindowConfig(this, gws);
+    const effectiveCws = computeEffectiveChatWindowConfig(this, cws, activeOffsetBottom);
+    const effectiveFs = computeEffectiveFeaturesConfig(this, fs);
 
     return html`
       <cw-widget-layout
