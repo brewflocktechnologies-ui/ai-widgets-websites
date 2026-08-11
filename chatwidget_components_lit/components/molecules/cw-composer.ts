@@ -141,8 +141,6 @@ export class CwComposer extends LitElement {
               <cw-button
                 variant="icon"
                 size="xs"
-                .width="${30}"
-                .height="${30}"
                 icon="Plus"
                 .iconSize="${16}"
                 .bg="${attachBg}"
@@ -173,8 +171,6 @@ export class CwComposer extends LitElement {
               <cw-button
                 variant="icon"
                 size="xs"
-                .width="${30}"
-                .height="${30}"
                 icon="Smile"
                 .iconSize="${20}"
                 .color="${emojiColor}"

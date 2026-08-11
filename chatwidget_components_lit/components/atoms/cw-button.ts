@@ -81,7 +81,7 @@ export class CwButton extends LitElement {
       .size-xs {
         font-size: 11px;
         padding: 4px 8px;
-        height: 28px;
+        height: 30px;
       }
       .size-sm {
         font-size: 12px;
@@ -102,8 +102,8 @@ export class CwButton extends LitElement {
       /* Icon variants sizes */
       .variant-icon.size-xs {
         padding: 0;
-        width: 28px;
-        height: 28px;
+        width: 30px;
+        height: 30px;
       }
       .variant-icon.size-sm {
         padding: 0;
