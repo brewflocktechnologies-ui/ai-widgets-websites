@@ -36,6 +36,7 @@ function parseEmojiInput(val: string[] | string | undefined | null): string[] {
  * cw-emoji-picker
  * Pure presentational molecule representing an emoji selection grid popup.
  * Emits `cw:insert-emoji` composed bubbling custom event on selection.
+ * Listens for outside pointer clicks to close popup.
  */
 @customElement('cw-emoji-picker')
 export class CwEmojiPicker extends LitElement {
@@ -46,12 +47,12 @@ export class CwEmojiPicker extends LitElement {
     css`
       :host {
         display: block;
-        position: relative;
+        position: absolute;
+        bottom: 85px;
+        right: 16px;
+        z-index: 60;
       }
       .emoji-row {
-        position: absolute;
-        bottom: 60px;
-        right: 16px;
         background: var(--cw-surface, #ffffff);
         border: 1px solid var(--cw-border, #e5e7eb);
         border-radius: 12px;
@@ -60,7 +61,6 @@ export class CwEmojiPicker extends LitElement {
         grid-template-columns: repeat(6, 1fr);
         gap: 4px;
         padding: 8px;
-        z-index: 60;
         box-sizing: border-box;
       }
       .emoji-btn {
@@ -83,6 +83,25 @@ export class CwEmojiPicker extends LitElement {
       }
     `,
   ];
+
+  private onOutsidePointer = (e: PointerEvent | MouseEvent) => {
+    const path = e.composedPath();
+    if (!path.includes(this)) {
+      this.dispatchEvent(new CustomEvent('cw:close-popups', { bubbles: true, composed: true }));
+    }
+  };
+
+  connectedCallback() {
+    super.connectedCallback();
+    requestAnimationFrame(() => {
+      window.addEventListener('pointerdown', this.onOutsidePointer);
+    });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('pointerdown', this.onOutsidePointer);
+  }
 
   private selectEmoji(emoji: string) {
     this.dispatchEvent(

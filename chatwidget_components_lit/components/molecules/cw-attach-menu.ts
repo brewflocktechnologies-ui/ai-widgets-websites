@@ -16,7 +16,7 @@ export class CwAttachMenu extends LitElement {
       :host {
         display: block;
         position: absolute;
-        bottom: 60px;
+        bottom: 85px;
         left: 16px;
         z-index: 60;
       }

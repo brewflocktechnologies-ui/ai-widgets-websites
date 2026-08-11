@@ -18,6 +18,7 @@ const formatPx = (val: number | string | undefined, fallback: string): string =>
 @customElement('cw-chat-footer')
 export class CwChatFooter extends LitElement {
   @property({ type: Object }) config: Partial<ChatWindowState> = {};
+  @property({ type: Boolean }) modernUi = true;
   @property({ type: String }) poweredByText = '';
   @property({ type: String }) poweredByLink = '';
   @property({ type: String }) poweredByColor = '';
@@ -59,17 +60,18 @@ export class CwChatFooter extends LitElement {
 
   render() {
     const cw = this.config || {};
+    const isModern = this.modernUi !== undefined ? this.modernUi : cw.modernUi !== false;
     const paddingBottom = formatPx(
       this.footerPaddingBottom !== undefined ? this.footerPaddingBottom : cw.footerPaddingBottom,
-      '16px'
+      isModern ? '16px' : '8px'
     );
-    const bg = this.footerBg || cw.footerBg || cw.bodyBg || '#ffffff';
+    const bg = this.footerBg || cw.footerBg || cw.bodyBg || (isModern ? '#ffffff' : '#f9fafb');
     const borderRadius =
       this.widgetBorderRadius !== undefined
         ? this.widgetBorderRadius
         : cw.widgetBorderRadius !== undefined
         ? cw.widgetBorderRadius
-        : 24;
+        : (isModern ? 24 : 0);
     const fontSize = formatPx(
       this.footerFontSize !== undefined ? this.footerFontSize : cw.footerFontSize,
       '11px'
