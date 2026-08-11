@@ -717,6 +717,7 @@ export class CwWidgetRoot extends LitElement {
 
     return html`
       <cw-widget-layout
+        .activeTrigger="${activeTrigger}"
         .bubbleConfig="${effectiveBs}"
         .chatbarConfig="${effectiveCbs}"
         .greetWindowConfig="${effectiveGws}"

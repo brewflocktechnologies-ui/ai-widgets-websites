@@ -16,12 +16,14 @@ import '../organisms/cw-chat-panel.js';
 
 /**
  * cw-widget-layout
- * Pure presentational template component for the chat widget surface.
- * Lays out the floating trigger (bubble/chatbar), greet window, and main chat panel.
- * Receives all configuration and state via props. Contains ZERO store dependencies.
+ * Structural layout template component for the chat widget surface.
+ * Provides named slots (`trigger`, `greet`, `panel`), computes stacking geometry
+ * and offsets for surface elements, and accepts activeTrigger as a prop.
+ * Contains ZERO store dependencies.
  */
 @customElement('cw-widget-layout')
 export class CwWidgetLayout extends LitElement {
+  @property({ type: String }) activeTrigger: 'bubble' | 'chatbar' | 'chatcard' = 'bubble';
   @property({ type: Object }) bubbleConfig?: Partial<BubbleState>;
   @property({ type: Object }) chatbarConfig?: Partial<ChatbarState>;
   @property({ type: Object }) greetWindowConfig?: Partial<GreetWindowState>;
@@ -42,57 +44,127 @@ export class CwWidgetLayout extends LitElement {
     const fs = this.featuresConfig || {};
     const cs = (this.chatState || {}) as ChatState;
 
-    const activeTrigger = cbs.enabled ? (cbs.layout === 'card' ? 'chatcard' : 'chatbar') : 'bubble';
-    const isChatbarTrigger = activeTrigger === 'chatbar' || activeTrigger === 'chatcard';
+    const isChatbarTrigger = this.activeTrigger === 'chatbar' || this.activeTrigger === 'chatcard';
+
+    // -------------------------------------------------------------------------
+    // 1. Calculate Trigger Geometry & Stacking Offsets
+    // -------------------------------------------------------------------------
+    const triggerBottom = Number(
+      isChatbarTrigger
+        ? (cbs.barOffsetBottom ?? cbs.offsetBottom ?? 12)
+        : (bs.offsetBottom ?? 12)
+    ) || 12;
+
+    const triggerRight = Number(
+      isChatbarTrigger
+        ? (this.activeTrigger === 'chatcard'
+            ? (cbs.cardOffsetRight ?? cbs.offsetRight ?? 16)
+            : (cbs.barOffsetRight ?? cbs.offsetRight ?? 16))
+        : (bs.offsetRight ?? 16)
+    ) || 16;
+
+    const triggerHeight = isChatbarTrigger
+      ? (cbs.height || (cbs.layout === 'card' ? 220 : 40))
+      : (bs.height || 60);
+
+    // -------------------------------------------------------------------------
+    // 2. Greet Window Stacking Math
+    // -------------------------------------------------------------------------
+    const greetSpacing = gws.spacing ?? 16;
+    const greetBottomPx = triggerBottom + triggerHeight + greetSpacing;
+    const greetRightPx = triggerRight;
+    const greetMaxHeightPx = `calc(100% - ${(greetBottomPx + 24)}px)`;
+
+    // -------------------------------------------------------------------------
+    // 3. Panel Stacking Math
+    // -------------------------------------------------------------------------
+    const rawPanelBottom = (cws.offsetBottom !== undefined && cws.offsetBottom !== null && (cws.offsetBottom as any) !== '')
+      ? Number(cws.offsetBottom)
+      : triggerBottom;
+
+    const panelDefaultBottom = typeof rawPanelBottom === 'number' && !isNaN(rawPanelBottom) ? rawPanelBottom : triggerBottom;
+
+    let panelBottomPx: number = panelDefaultBottom;
+    if (isChatbarTrigger && !cbs.hideOnOpen) {
+      const gap = cbs.stackGap ?? 12;
+      panelBottomPx = panelDefaultBottom + triggerHeight + gap;
+    } else if (!isChatbarTrigger && bs && !bs.hideOnOpen) {
+      const gap = bs.stackGap ?? 12;
+      panelBottomPx = panelDefaultBottom + triggerHeight + gap;
+    }
+
+    const panelRightPx = (cws.offsetRight !== undefined && cws.offsetRight !== null && (cws.offsetRight as any) !== '')
+      ? Number(cws.offsetRight)
+      : 16;
+
+    const panelMaxHeightPx = `calc(100% - ${(panelBottomPx + 24)}px)`;
 
     return html`
       <style>
         ${KEYFRAMES_CSS}
+        :host {
+          display: block;
+        }
       </style>
 
-      <!-- FLOATING TRIGGER (BUBBLE OR CHATBAR OR CHATCARD) -->
-      ${isChatbarTrigger
-        ? html`
-            <cw-chatbar
-              .config="${cbs}"
-              .panelOpen="${this.panelOpen}"
-              .unreadCount="${this.unreadCount}"
-              .rev="${this.rev}"
-            ></cw-chatbar>
-          `
-        : html`
-            <cw-bubble
-              .config="${bs}"
-              .panelOpen="${this.panelOpen}"
-              .unreadCount="${this.unreadCount}"
-              .hasSentMessage="${this.hasSentMessage}"
-              .rev="${this.rev}"
-            ></cw-bubble>
-          `
-      }
+      <!-- SLOTTED OR DEFAULT TRIGGER -->
+      <slot name="trigger">
+        ${isChatbarTrigger
+          ? html`
+              <cw-chatbar
+                .config="${cbs}"
+                .panelOpen="${this.panelOpen}"
+                .unreadCount="${this.unreadCount}"
+                .rev="${this.rev}"
+              ></cw-chatbar>
+            `
+          : html`
+              <cw-bubble
+                .config="${bs}"
+                .panelOpen="${this.panelOpen}"
+                .unreadCount="${this.unreadCount}"
+                .hasSentMessage="${this.hasSentMessage}"
+                .rev="${this.rev}"
+              ></cw-bubble>
+            `
+        }
+      </slot>
 
-      <!-- FLOATING GREET WINDOW -->
-      <cw-greet-window
-        .config="${gws}"
-        .chatbarConfig="${cbs}"
-        .bubbleConfig="${bs}"
-        .panelOpen="${this.panelOpen}"
-        .hasSentMessage="${this.hasSentMessage}"
-        .visible="${gws.visible}"
-        .dismissed="${gws.dismissed}"
-        .rev="${this.rev}"
-      ></cw-greet-window>
+      <!-- SLOTTED OR DEFAULT GREET WINDOW -->
+      <slot name="greet">
+        <cw-greet-window
+          .config="${gws}"
+          .chatbarConfig="${cbs}"
+          .bubbleConfig="${bs}"
+          .panelOpen="${this.panelOpen}"
+          .hasSentMessage="${this.hasSentMessage}"
+          .visible="${gws.visible}"
+          .dismissed="${gws.dismissed}"
+          .bottomPx="${greetBottomPx}"
+          .rightPx="${greetRightPx}"
+          .maxHeightPx="${greetMaxHeightPx}"
+          .rev="${this.rev}"
+        ></cw-greet-window>
+      </slot>
 
-      <!-- MAIN CHAT PANEL -->
-      <cw-chat-panel
-        .chatWindowConfig="${cws}"
-        .chatState="${cs}"
-        .features="${fs}"
-        .chatbarConfig="${cbs}"
-        .bubbleConfig="${bs}"
-        .panelOpen="${this.panelOpen}"
-        .rev="${this.rev}"
-      ></cw-chat-panel>
+      <!-- SLOTTED OR DEFAULT CHAT PANEL -->
+      <slot name="panel">
+        <cw-chat-panel
+          .chatWindowConfig="${cws}"
+          .chatState="${cs}"
+          .features="${fs}"
+          .chatbarConfig="${cbs}"
+          .bubbleConfig="${bs}"
+          .panelOpen="${this.panelOpen}"
+          .bottomPx="${panelBottomPx}"
+          .rightPx="${panelRightPx}"
+          .maxHeightPx="${panelMaxHeightPx}"
+          .rev="${this.rev}"
+        ></cw-chat-panel>
+      </slot>
+
+      <!-- DEFAULT UNNAMED SLOT -->
+      <slot></slot>
     `;
   }
 }
