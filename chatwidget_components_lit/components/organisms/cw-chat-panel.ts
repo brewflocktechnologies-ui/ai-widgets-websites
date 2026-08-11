@@ -17,6 +17,9 @@ export class CwChatPanel extends LitElement {
   @property({ type: Object }) bubbleConfig?: BubbleState;
   @property({ type: Boolean }) panelOpen = false;
   @property({ type: Number }) rev = 0;
+  @property({ type: Number }) bottomPx?: number;
+  @property({ type: Number }) rightPx?: number;
+  @property({ type: String }) maxHeightPx?: string;
   /** When true (default) the panel is fixed to the viewport; set false to position it inside a container (used by stories). */
   @property({ type: Boolean }) fixed = true;
 
@@ -162,20 +165,24 @@ export class CwChatPanel extends LitElement {
       ? Number(cw.offsetBottom)
       : (cb?.enabled ? (cb.offsetBottom !== undefined ? cb.offsetBottom : 12) : (bb?.offsetBottom !== undefined ? bb.offsetBottom : 12));
 
-    let bottomPx = defaultBottom;
+    let computedBottom = defaultBottom;
     if (cb?.enabled && !cb.hideOnOpen) {
       const h = cb.height || (cb.layout === 'card' ? 220 : 40);
       const gap = cb.stackGap !== undefined ? cb.stackGap : 12;
-      bottomPx = defaultBottom + h + gap;
+      computedBottom = defaultBottom + h + gap;
     } else if (!cb?.enabled && bb && !bb.hideOnOpen) {
       const h = bb.height || 60;
       const gap = bb.stackGap !== undefined ? bb.stackGap : 12;
-      bottomPx = defaultBottom + h + gap;
+      computedBottom = defaultBottom + h + gap;
     }
+
+    const bottomPx = this.bottomPx !== undefined ? this.bottomPx : computedBottom;
 
     const rawRight = (cw.offsetRight !== undefined && cw.offsetRight !== null && (cw.offsetRight as any) !== '')
       ? Number(cw.offsetRight)
       : 16;
+
+    const rightPx = this.rightPx !== undefined ? this.rightPx : rawRight;
 
     const shadow = cw.widgetShadow
       ? `0 8px ${cw.widgetShadowBlur || 30}px ${cw.widgetShadowColor || 'rgba(0,0,0,0.12)'}`
@@ -186,12 +193,12 @@ export class CwChatPanel extends LitElement {
       : 'none';
 
     const borderRadius = `${cw.widgetBorderRadius || 24}px`;
-    const maxHeightPx = `calc(100% - ${(bottomPx + 24)}px)`;
+    const maxHeightPx = this.maxHeightPx || `calc(100% - ${(bottomPx + 24)}px)`;
 
     return html`
       <div
         class="panel-wrapper zotly-widget-panel-wrapper"
-        style="position: ${this.fixed ? 'fixed' : 'absolute'}; width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: ${maxHeightPx}; bottom: ${bottomPx}px; right: ${rawRight}px; opacity: ${isHidden ? '0' : '1'}; transform: ${isHidden ? 'scale(0.5) translateY(32px)' : 'scale(1) translateY(0)'}; transform-origin: bottom right; transition: opacity ${durationSec}s ease, transform ${durationSec}s ease"
+        style="position: ${this.fixed ? 'fixed' : 'absolute'}; width: ${widthVal}px; height: ${heightVal}px; max-width: calc(100% - 24px); max-height: ${maxHeightPx}; bottom: ${bottomPx}px; right: ${rightPx}px; opacity: ${isHidden ? '0' : '1'}; transform: ${isHidden ? 'scale(0.5) translateY(32px)' : 'scale(1) translateY(0)'}; transform-origin: bottom right; transition: opacity ${durationSec}s ease, transform ${durationSec}s ease"
       >
         <div
           class="panel"

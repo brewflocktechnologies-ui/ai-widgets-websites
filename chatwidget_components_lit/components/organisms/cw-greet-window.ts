@@ -18,6 +18,9 @@ export class CwGreetWindow extends LitElement {
   @property({ type: Boolean }) visible = true;
   @property({ type: Boolean }) dismissed = false;
   @property({ type: Number }) rev = 0;
+  @property({ type: Number }) bottomPx?: number;
+  @property({ type: Number }) rightPx?: number;
+  @property({ type: String }) maxHeightPx?: string;
   /** When true (default) the window is fixed to the viewport; set false to position it inside a container (used by stories). */
   @property({ type: Boolean }) fixed = true;
 
@@ -139,20 +142,24 @@ export class CwGreetWindow extends LitElement {
       : bb?.height || 60;
 
     const spacing = g.spacing !== undefined ? g.spacing : 16;
-    const bottomPx = baseBottom + triggerHeight + spacing;
+    const computedBottom = baseBottom + triggerHeight + spacing;
+
+    const bottomPx = this.bottomPx !== undefined ? this.bottomPx : computedBottom;
 
     const rawRight = chatbarEnabled
       ? cb?.offsetRight !== undefined ? parseInt(String(cb.offsetRight)) : 16
       : bb?.offsetRight !== undefined ? parseInt(String(bb.offsetRight)) : 16;
 
+    const rightPx = this.rightPx !== undefined ? this.rightPx : rawRight;
+
     const widthVal = g.width || 320;
     const iconAlign = g.iconAlign === 'left' ? 'flex-start' : g.iconAlign === 'right' ? 'flex-end' : 'center';
-    const maxHeightPx = `calc(100% - ${(bottomPx + 24)}px)`;
+    const maxHeightPx = this.maxHeightPx || `calc(100% - ${(bottomPx + 24)}px)`;
 
     return html`
       <div
         class="greet-wrapper"
-        style="position: ${this.fixed ? 'fixed' : 'absolute'}; bottom: ${bottomPx}px; right: ${rawRight}px; width: ${widthVal}px; max-width: calc(100% - 24px); max-height: ${maxHeightPx}; opacity: ${isHidden ? '0' : '1'}; transform: ${isHidden ? 'translateY(16px)' : 'translateY(0)'}; transition: opacity ${durationSec}s ease, transform ${durationSec}s ease; transition-delay: ${transitionDelay}"
+        style="position: ${this.fixed ? 'fixed' : 'absolute'}; bottom: ${bottomPx}px; right: ${rightPx}px; width: ${widthVal}px; max-width: calc(100% - 24px); max-height: ${maxHeightPx}; opacity: ${isHidden ? '0' : '1'}; transform: ${isHidden ? 'translateY(16px)' : 'translateY(0)'}; transition: opacity ${durationSec}s ease, transform ${durationSec}s ease; transition-delay: ${transitionDelay}"
       >
         <!-- Greet Card -->
         <div
