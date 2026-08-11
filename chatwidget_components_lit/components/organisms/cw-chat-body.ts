@@ -6,6 +6,8 @@ import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import './cw-welcome-card.js';
 import '../molecules/cw-message-bubble.js';
 import '../molecules/cw-composer.js';
+import '../molecules/cw-chat-footer.js';
+import '../molecules/cw-emoji-picker.js';
 import './cw-image-cropper.js';
 import '../atoms/cw-typing-dots.js';
 import '../atoms/cw-icon.js';
@@ -232,50 +234,6 @@ export class CwChatBody extends LitElement {
       }
       .menu-item:hover {
         background: rgba(0,0,0,0.05);
-      }
-      .emoji-row {
-        position: absolute;
-        bottom: 60px;
-        right: 16px;
-        background: var(--cw-surface, #ffffff);
-        border: 1px solid var(--cw-border);
-        border-radius: 12px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        gap: 4px;
-        padding: 8px;
-        z-index: 60;
-      }
-      .emoji-btn {
-        border: none;
-        background: transparent;
-        font-size: 18px;
-        cursor: pointer;
-        padding: 4px;
-        border-radius: 4px;
-      }
-      .emoji-btn:hover {
-        background: rgba(0,0,0,0.05);
-      }
-      .panel-footer {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 8px 16px;
-        background: var(--cw-bg, #ffffff);
-        font-size: 11px;
-        color: var(--cw-muted);
-      }
-      .powered {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-      }
-      .powered a {
-        font-weight: 600;
-        color: inherit;
-        text-decoration: none;
       }
       .closed-note {
         display: flex;
@@ -592,15 +550,7 @@ export class CwChatBody extends LitElement {
 
               <!-- EMOJI PICKER -->
               ${cs.emojiOpen
-                ? html`
-                    <div class="emoji-row">
-                      ${['😀','😂','😊','😍','👍','👎','🙏','🎉','❤️','😢','😮','👌'].map(
-                        (e) => html`
-                          <button type="button" class="emoji-btn" @click="${() => this.emit('cw:insert-emoji', e)}">${e}</button>
-                        `
-                      )}
-                    </div>
-                  `
+                ? html`<cw-emoji-picker></cw-emoji-picker>`
                 : ''
               }
 
@@ -616,22 +566,10 @@ export class CwChatBody extends LitElement {
                       .rev="${this.rev}"
                     ></cw-composer>
 
-                    <div
-                      class="panel-footer"
-                      style="padding-bottom: ${cw.footerPaddingBottom || '16px'}; background: ${cw.footerBg || cw.bodyBg || '#ffffff'}; border-bottom-left-radius: ${(cw.widgetBorderRadius || 24)}px; border-bottom-right-radius: ${(cw.widgetBorderRadius || 24)}px"
-                    >
-                      ${this.flag('widget.modernUi', true)
-                        ? html`
-                            <div class="powered" style="font-size: ${cw.footerFontSize || '11px'}; color: ${cw.footerTextColor || 'var(--cw-muted)'}">
-                              <span>Powered by</span>
-                              <a href="${cw.poweredByLink || '#'}" target="_blank" style="color: ${cw.poweredByColor || 'var(--cw-muted)'}">
-                                ${cw.poweredByText || 'vAInatheya.ai'}
-                              </a>
-                            </div>
-                          `
-                        : ''
-                      }
-                    </div>
+                    <cw-chat-footer
+                      .config="${cw}"
+                      .modernUi="${this.flag('widget.modernUi', true)}"
+                    ></cw-chat-footer>
                   `
                 : ''
               }

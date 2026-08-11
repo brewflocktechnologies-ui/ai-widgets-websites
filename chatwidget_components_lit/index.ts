@@ -43,6 +43,8 @@ export * from './components/molecules/cw-avatar.js';
 export * from './components/molecules/cw-message-bubble.js';
 export * from './components/molecules/cw-composer.js';
 export * from './components/molecules/cw-greet-input.js';
+export * from './components/molecules/cw-chat-footer.js';
+export * from './components/molecules/cw-emoji-picker.js';
 
 // Organisms
 export * from './components/organisms/cw-bubble.js';
