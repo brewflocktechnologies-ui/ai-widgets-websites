@@ -202,41 +202,6 @@ export class CwChatBody extends LitElement {
         color: var(--cw-muted);
         font-size: 12px;
       }
-      .attach-pop, .menu-pop {
-        position: absolute;
-        bottom: 60px;
-        left: 16px;
-        background: var(--cw-surface, #ffffff);
-        border: 1px solid var(--cw-border);
-        border-radius: 12px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-        display: flex;
-        flex-direction: column;
-        padding: 4px;
-        z-index: 60;
-      }
-      .menu-pop {
-        top: 50px;
-        right: 16px;
-        bottom: auto;
-        left: auto;
-      }
-      .menu-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        border: none;
-        background: transparent;
-        color: var(--cw-ink);
-        font-size: 13px;
-        cursor: pointer;
-        border-radius: 8px;
-        text-align: left;
-      }
-      .menu-item:hover {
-        background: rgba(0,0,0,0.05);
-      }
       .closed-note {
         display: flex;
         flex-direction: column;
