@@ -1,8 +1,8 @@
 import { html } from 'lit';
-import '../../components/molecules/cw-button.js';
+import '../../components/atoms/cw-button.js';
 
 export default {
-  title: 'Molecules/Button',
+  title: 'Atoms/Button',
   component: 'cw-button',
   tags: ['autodocs'],
   argTypes: {

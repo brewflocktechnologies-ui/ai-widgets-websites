@@ -1,8 +1,8 @@
 import { html } from 'lit';
-import '../../components/molecules/cw-image-cropper.js';
+import '../../components/organisms/cw-image-cropper.js';
 
 export default {
-  title: 'Molecules/ImageCropper',
+  title: 'Organisms/ImageCropper',
   component: 'cw-image-cropper',
   tags: ['autodocs'],
   argTypes: {
@@ -55,7 +55,6 @@ export const ConfigurableCropperModal = {
         .showRotate="${args.showRotate}"
         .showAspectPills="${args.showAspectPills}"
         .exportSize="${args.exportSize}"
-        @cw:image-cropped="${(e: CustomEvent) => alert(`Image Cropped!\nShape: ${e.detail.cropShape}\nData URL length: ${e.detail.dataUrl.length}`)}"
       ></cw-image-cropper>
     </div>
   `,

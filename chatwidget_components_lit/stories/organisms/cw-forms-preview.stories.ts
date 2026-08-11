@@ -1,8 +1,8 @@
 import { html } from 'lit';
-import '../../components/molecules/cw-forms-preview.js';
+import '../../components/organisms/cw-forms-preview.js';
 
 export default {
-  title: 'Molecules/FormsPreview',
+  title: 'Organisms/FormsPreview',
   component: 'cw-forms-preview',
   tags: ['autodocs'],
   argTypes: {
@@ -60,5 +60,3 @@ export const TicketForm = {
     `;
   },
 };
-
-

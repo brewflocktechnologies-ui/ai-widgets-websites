@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import '../../components/molecules/cw-welcome-card.js';
+import '../../components/organisms/cw-welcome-card.js';
 
 /**
  * The welcome card has a few independent visual dimensions (layout mode,
@@ -9,7 +9,7 @@ import '../../components/molecules/cw-welcome-card.js';
  */
 
 export default {
-  title: 'Molecules/WelcomeCard',
+  title: 'Organisms/WelcomeCard',
   component: 'cw-welcome-card',
   tags: ['autodocs'],
   argTypes: {

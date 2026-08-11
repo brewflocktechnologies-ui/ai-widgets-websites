@@ -34,23 +34,24 @@ import { injectStoreConfig } from './store/chat-store.js';
 export * from './components/atoms/cw-icon.js';
 export * from './components/atoms/cw-badge.js';
 export * from './components/atoms/cw-typing-dots.js';
-export * from './components/molecules/cw-avatar.js';
+export * from './components/atoms/cw-status-dot.js';
 export * from './components/atoms/cw-tooltip.js';
+export * from './components/atoms/cw-button.js';
 
 // Molecules
-export * from './components/molecules/cw-button.js';
+export * from './components/molecules/cw-avatar.js';
 export * from './components/molecules/cw-message-bubble.js';
 export * from './components/molecules/cw-composer.js';
 export * from './components/molecules/cw-greet-input.js';
-export * from './components/molecules/cw-welcome-card.js';
-export * from './components/molecules/cw-forms-preview.js';
-export * from './components/molecules/cw-image-cropper.js';
 
 // Organisms
 export * from './components/organisms/cw-bubble.js';
 export * from './components/organisms/cw-chatbar.js';
 export * from './components/organisms/cw-greet-window.js';
-export * from './components/molecules/cw-chat-header.js';
+export * from './components/organisms/cw-chat-header.js';
+export * from './components/organisms/cw-welcome-card.js';
+export * from './components/organisms/cw-forms-preview.js';
+export * from './components/organisms/cw-image-cropper.js';
 export * from './components/organisms/cw-chat-body.js';
 export * from './components/organisms/cw-chat-panel.js';
 

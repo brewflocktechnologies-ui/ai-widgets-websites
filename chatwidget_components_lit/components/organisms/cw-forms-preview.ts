@@ -162,6 +162,15 @@ export class CwFormsPreview extends LitElement {
     `
   ];
 
+  private handleSubmit(e: Event, formType: string) {
+    e.preventDefault();
+    this.dispatchEvent(new CustomEvent('form-submit', {
+      detail: { type: formType },
+      bubbles: true,
+      composed: true
+    }));
+  }
+
   render() {
     if (this.type === 'postchat') {
       return html`
@@ -169,7 +178,7 @@ export class CwFormsPreview extends LitElement {
           <div class="phone-preview-header">
             Post-chat form preview
           </div>
-          <form class="phone-preview-body" @submit="${(e: Event) => { e.preventDefault(); alert('Feedback submitted!'); }}">
+          <form class="phone-preview-body" @submit="${(e: Event) => this.handleSubmit(e, 'postchat')}">
             <div style="text-align: center; margin-bottom: 4px">
               <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 6px; margin-top: 0">How was your experience?</h4>
               <p style="font-size: 12px; color: #64748b; margin: 0">Rate our customer support team</p>
@@ -197,7 +206,7 @@ export class CwFormsPreview extends LitElement {
 
             <div class="phone-footer-brand">
               <cw-icon .name="${'MessageSquare'}" .size="${14}" .color="${'#2563eb'}"></cw-icon>
-              <span>Powered by <strong>REVE Chat</strong></span>
+              <span>Powered by <strong>Zotly Chat</strong></span>
             </div>
           </form>
         </div>
@@ -210,7 +219,7 @@ export class CwFormsPreview extends LitElement {
           <div class="phone-preview-header">
             Ticket form preview
           </div>
-          <form class="phone-preview-body" @submit="${(e: Event) => { e.preventDefault(); alert('Ticket submitted!'); }}">
+          <form class="phone-preview-body" @submit="${(e: Event) => this.handleSubmit(e, 'ticket')}">
             <div style="margin-bottom: 6px">
               <h4 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0">${this.heading}</h4>
               <p style="font-size: 12px; color: #64748b; margin-top: 2px; margin-bottom: 0">${this.subheading}</p>
@@ -230,7 +239,7 @@ export class CwFormsPreview extends LitElement {
 
             <div class="phone-footer-brand">
               <cw-icon .name="${'MessageSquare'}" .size="${14}" .color="${'#2563eb'}"></cw-icon>
-              <span>Powered by <strong>REVE Chat</strong></span>
+              <span>Powered by <strong>Zotly Chat</strong></span>
             </div>
           </form>
         </div>
@@ -243,7 +252,7 @@ export class CwFormsPreview extends LitElement {
         <div class="phone-preview-header">
           Pre-chat form preview
         </div>
-        <form class="phone-preview-body" @submit="${(e: Event) => { e.preventDefault(); alert('Form submitted successfully!'); }}">
+        <form class="phone-preview-body" @submit="${(e: Event) => this.handleSubmit(e, 'prechat')}">
           <div class="phone-field-group">
             <label class="phone-field-label">Name <span class="required-star">*</span></label>
             <input type="text" class="phone-field-input active-focus" placeholder="Your name" value="Your name" required />
@@ -285,7 +294,7 @@ export class CwFormsPreview extends LitElement {
 
           <div class="phone-footer-brand">
             <cw-icon .name="${'MessageSquare'}" .size="${14}" .color="${'#2563eb'}"></cw-icon>
-            <span>Powered by <strong>REVE Chat</strong></span>
+            <span>Powered by <strong>Zotly Chat</strong></span>
           </div>
         </form>
       </div>

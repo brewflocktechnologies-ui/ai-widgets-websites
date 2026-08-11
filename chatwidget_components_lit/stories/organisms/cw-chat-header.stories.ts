@@ -1,8 +1,8 @@
 import { html } from 'lit';
-import '../../components/molecules/cw-chat-header.js';
+import '../../components/organisms/cw-chat-header.js';
 
 export default {
-  title: 'Molecules/ChatHeader',
+  title: 'Organisms/ChatHeader',
   component: 'cw-chat-header',
   tags: ['autodocs'],
   argTypes: {
@@ -55,4 +55,3 @@ export const ConfigurableHeader = {
     `;
   },
 };
-

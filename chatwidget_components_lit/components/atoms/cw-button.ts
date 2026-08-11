@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
-import '../atoms/cw-icon.js';
+import './cw-icon.js';
 
 @customElement('cw-button')
 export class CwButton extends LitElement {

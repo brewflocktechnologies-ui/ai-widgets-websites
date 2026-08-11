@@ -4,7 +4,7 @@ import type { ChatWindowState, ChatState, FeaturesState, ChatbarState, BubbleSta
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import { EnterLeaveController } from '../../utils/transition.js';
-import '../molecules/cw-chat-header.js';
+import './cw-chat-header.js';
 import './cw-chat-body.js';
 import type { CwChatBody } from './cw-chat-body.js';
 
