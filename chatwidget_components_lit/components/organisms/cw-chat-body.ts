@@ -8,6 +8,8 @@ import '../molecules/cw-message-bubble.js';
 import '../molecules/cw-composer.js';
 import '../molecules/cw-chat-footer.js';
 import '../molecules/cw-emoji-picker.js';
+import '../molecules/cw-attach-menu.js';
+import '../molecules/cw-chat-menu.js';
 import './cw-image-cropper.js';
 import '../atoms/cw-typing-dots.js';
 import '../atoms/cw-icon.js';
@@ -516,35 +518,13 @@ export class CwChatBody extends LitElement {
 
               <!-- ATTACHMENT POPUP -->
               ${cs.attachOpen
-                ? html`
-                    <div class="attach-pop">
-                      <button type="button" class="menu-item" @click="${() => { this.shadowRoot?.querySelector<HTMLInputElement>('#cw-file-input')?.click(); }}">
-                        <cw-icon .name="${'Image'}" .size="${16}"></cw-icon>
-                        Send an image
-                      </button>
-                      <button type="button" class="menu-item" @click="${() => this.emit('cw:capture-screenshot')}">
-                        <cw-icon .name="${'Camera'}" .size="${16}"></cw-icon>
-                        Add screenshot
-                      </button>
-                    </div>
-                  `
+                ? html`<cw-attach-menu></cw-attach-menu>`
                 : ''
               }
 
               <!-- MENU POPUP -->
               ${cs.menuOpen
-                ? html`
-                    <div class="menu-pop">
-                      <button type="button" class="menu-item" @click="${() => this.emit('cw:download-transcript')}">
-                        <cw-icon .name="${'Download'}" .size="${16}"></cw-icon>
-                        Download transcript
-                      </button>
-                      <button type="button" class="menu-item" @click="${() => this.emit('cw:toggle-sounds')}">
-                        <cw-icon .name="${'Volume2'}" .size="${16}"></cw-icon>
-                        Sounds: ${cs.soundsOn ? 'ON' : 'OFF'}
-                      </button>
-                    </div>
-                  `
+                ? html`<cw-chat-menu .soundsOn="${cs.soundsOn}"></cw-chat-menu>`
                 : ''
               }
 

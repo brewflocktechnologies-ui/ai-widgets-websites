@@ -327,6 +327,7 @@ export class CwWidgetRoot extends LitElement {
       ['cw:start-new', () => chatStore.startNew()],
       ['cw:toggle-expand', () => chatStore.toggleExpand()],
       ['cw:open-menu', () => chatStore.toggleMenu()],
+      ['cw:close-popups', () => chatStore.closePopups()],
       ['cw:end-chat', () => chatStore.askEndChat()],
       ['cw:confirm-end', () => chatStore.confirmEnd()],
       ['cw:confirm-cancel', () => chatStore.cancelEndChat()],

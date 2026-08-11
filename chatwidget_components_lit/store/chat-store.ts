@@ -575,8 +575,21 @@ export const chatStore = {
   toggleMenu() {
     const s = getStore().chat;
     s.menuOpen = !s.menuOpen;
+    s.attachOpen = false;
+    s.emojiOpen = false;
     emit('store:chat');
   },
+
+  closePopups() {
+    const s = getStore().chat;
+    if (s.menuOpen || s.attachOpen || s.emojiOpen) {
+      s.menuOpen = false;
+      s.attachOpen = false;
+      s.emojiOpen = false;
+      emit('store:chat');
+    }
+  },
+
 
   toggleAttach() {
     const s = getStore().chat;
