@@ -12,6 +12,7 @@ export * from './tokens/css.js';
 export * from './utils/theme.js';
 export * from './utils/config.js';
 export * from './utils/transition.js';
+export * from './utils/dismiss.js';
 export {
   hexToRgba,
   getBorderRadius,

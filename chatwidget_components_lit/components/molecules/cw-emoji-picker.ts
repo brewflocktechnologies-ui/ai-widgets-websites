@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
+import { DismissController } from '../../utils/dismiss.js';
 
 const DEFAULT_EMOJIS = ['😀', '😂', '😊', '😍', '👍', '👎', '🙏', '🎉', '❤️', '😢', '😮', '👌'];
 
@@ -36,11 +37,13 @@ function parseEmojiInput(val: string[] | string | undefined | null): string[] {
  * cw-emoji-picker
  * Pure presentational molecule representing an emoji selection grid popup.
  * Emits `cw:insert-emoji` composed bubbling custom event on selection.
- * Listens for outside pointer clicks to close popup.
+ * Listens for outside pointer clicks to close popup via DismissController.
  */
 @customElement('cw-emoji-picker')
 export class CwEmojiPicker extends LitElement {
   @property() emojis: string[] | string = DEFAULT_EMOJIS;
+
+  private dismiss = new DismissController(this);
 
   static styles = [
     REDUCED_MOTION_CSS,
@@ -83,25 +86,6 @@ export class CwEmojiPicker extends LitElement {
       }
     `,
   ];
-
-  private onOutsidePointer = (e: PointerEvent | MouseEvent) => {
-    const path = e.composedPath();
-    if (!path.includes(this)) {
-      this.dispatchEvent(new CustomEvent('cw:close-popups', { bubbles: true, composed: true }));
-    }
-  };
-
-  connectedCallback() {
-    super.connectedCallback();
-    requestAnimationFrame(() => {
-      window.addEventListener('pointerdown', this.onOutsidePointer);
-    });
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    window.removeEventListener('pointerdown', this.onOutsidePointer);
-  }
 
   private selectEmoji(emoji: string) {
     this.dispatchEvent(

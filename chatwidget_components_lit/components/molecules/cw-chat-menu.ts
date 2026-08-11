@@ -1,16 +1,19 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
+import { DismissController } from '../../utils/dismiss.js';
 import '../atoms/cw-menu-item.js';
 
 /**
  * cw-chat-menu
  * Pure presentational molecule representing the chat options popup menu.
- * Dispatches events and closes popup on outside click.
+ * Dispatches events and closes popup on outside click via DismissController.
  */
 @customElement('cw-chat-menu')
 export class CwChatMenu extends LitElement {
   @property({ type: Boolean }) soundsOn = true;
+
+  private dismiss = new DismissController(this);
 
   static styles = [
     REDUCED_MOTION_CSS,
@@ -35,25 +38,6 @@ export class CwChatMenu extends LitElement {
       }
     `,
   ];
-
-  private onOutsidePointer = (e: PointerEvent | MouseEvent) => {
-    const path = e.composedPath();
-    if (!path.includes(this)) {
-      this.dispatchEvent(new CustomEvent('cw:close-popups', { bubbles: true, composed: true }));
-    }
-  };
-
-  connectedCallback() {
-    super.connectedCallback();
-    requestAnimationFrame(() => {
-      window.addEventListener('pointerdown', this.onOutsidePointer);
-    });
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    window.removeEventListener('pointerdown', this.onOutsidePointer);
-  }
 
   private onDownloadTranscript() {
     this.dispatchEvent(new CustomEvent('cw:download-transcript', { bubbles: true, composed: true }));

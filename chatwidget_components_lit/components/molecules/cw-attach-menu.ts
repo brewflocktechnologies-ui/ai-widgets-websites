@@ -1,15 +1,18 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
+import { DismissController } from '../../utils/dismiss.js';
 import '../atoms/cw-menu-item.js';
 
 /**
  * cw-attach-menu
  * Pure presentational molecule representing the attachment popup menu.
- * Dispatches events and closes popup on outside click.
+ * Dispatches events and closes popup on outside click via DismissController.
  */
 @customElement('cw-attach-menu')
 export class CwAttachMenu extends LitElement {
+  private dismiss = new DismissController(this);
+
   static styles = [
     REDUCED_MOTION_CSS,
     css`
@@ -33,25 +36,6 @@ export class CwAttachMenu extends LitElement {
       }
     `,
   ];
-
-  private onOutsidePointer = (e: PointerEvent | MouseEvent) => {
-    const path = e.composedPath();
-    if (!path.includes(this)) {
-      this.dispatchEvent(new CustomEvent('cw:close-popups', { bubbles: true, composed: true }));
-    }
-  };
-
-  connectedCallback() {
-    super.connectedCallback();
-    requestAnimationFrame(() => {
-      window.addEventListener('pointerdown', this.onOutsidePointer);
-    });
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    window.removeEventListener('pointerdown', this.onOutsidePointer);
-  }
 
   private onSelectImage() {
     this.dispatchEvent(new CustomEvent('cw:trigger-file-select', { bubbles: true, composed: true }));
