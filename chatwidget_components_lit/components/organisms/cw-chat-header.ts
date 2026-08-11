@@ -4,6 +4,7 @@ import type { ChatWindowState, FeaturesState } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import '../molecules/cw-avatar.js';
 import '../atoms/cw-icon.js';
+import '../atoms/cw-button.js';
 
 @customElement('cw-chat-header')
 export class CwChatHeader extends LitElement {
@@ -58,22 +59,9 @@ export class CwChatHeader extends LitElement {
       }
       .actions-section {
         display: flex;
-        gap: 8px;
+        gap: 4px;
         align-items: center;
         flex-shrink: 0;
-      }
-      .icon-btn {
-        background: transparent;
-        border: none;
-        padding: 4px;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 4px;
-      }
-      .icon-btn:hover {
-        opacity: 1 !important;
       }
     `
   ];
@@ -137,18 +125,15 @@ export class CwChatHeader extends LitElement {
         <div class="left-section">
           ${cw.modernUi !== false
             ? html`
-                <button
-                  type="button"
-                  class="icon-btn"
-                  aria-label="${this.isExpanded ? 'Collapse chat' : 'Expand chat'}"
-                  style="color: ${headerTextColor}; opacity: 0.7"
+                <cw-button
+                  variant="icon"
+                  size="xs"
+                  .icon="${this.isExpanded ? 'Minimize2' : 'Maximize2'}"
+                  .iconSize="${16}"
+                  .color="${headerTextColor}"
+                  .label="${this.isExpanded ? 'Collapse chat' : 'Expand chat'}"
                   @click="${this.toggleExpand}"
-                >
-                  ${this.isExpanded
-                    ? html`<cw-icon .name="${'Minimize2'}" .size="${16}"></cw-icon>`
-                    : html`<cw-icon .name="${'Maximize2'}" .size="${16}"></cw-icon>`
-                  }
-                </button>
+                ></cw-button>
               `
             : ''
           }
@@ -170,76 +155,73 @@ export class CwChatHeader extends LitElement {
         <div class="actions-section">
           ${showVoice
             ? html`
-                <button
-                  type="button"
-                  class="icon-btn"
-                  aria-label="Start voice call"
-                  title="Voice call"
-                  style="color: ${headerTextColor}; opacity: 0.9"
+                <cw-button
+                  variant="icon"
+                  size="xs"
+                  icon="Phone"
+                  .iconSize="${17}"
+                  .color="${headerTextColor}"
+                  label="Start voice call"
                   @click="${() => this.emit('cw:voice-call')}"
-                >
-                  <cw-icon .name="${'Phone'}" .size="${17}"></cw-icon>
-                </button>
+                ></cw-button>
               `
             : ''
           }
 
           ${showVideo
             ? html`
-                <button
-                  type="button"
-                  class="icon-btn"
-                  aria-label="Start video call"
-                  title="Video call"
-                  style="color: ${headerTextColor}; opacity: 0.9"
+                <cw-button
+                  variant="icon"
+                  size="xs"
+                  icon="Video"
+                  .iconSize="${18}"
+                  .color="${headerTextColor}"
+                  label="Start video call"
                   @click="${() => this.emit('cw:video-call')}"
-                >
-                  <cw-icon .name="${'Video'}" .size="${18}"></cw-icon>
-                </button>
+                ></cw-button>
               `
             : ''
           }
 
           ${showCloseSession
             ? html`
-                <button
-                  type="button"
-                  class="icon-btn"
-                  aria-label="End chat session"
-                  title="End chat"
-                  style="color: ${headerTextColor}; opacity: 0.7"
+                <cw-button
+                  variant="icon"
+                  size="xs"
+                  icon="Power"
+                  .iconSize="${18}"
+                  .color="${headerTextColor}"
+                  label="End chat session"
                   @click="${this.askEndChat}"
-                >
-                  <cw-icon .name="${'Power'}" .size="${18}"></cw-icon>
-                </button>
+                ></cw-button>
               `
             : ''
           }
 
           ${cw.modernUi !== false
             ? html`
-                <button
-                  type="button"
-                  class="icon-btn"
-                  aria-label="Chat options"
-                  style="color: ${headerTextColor}; opacity: 0.7"
+                <cw-button
+                  variant="icon"
+                  size="xs"
+                  icon="MoreHorizontal"
+                  .iconSize="${18}"
+                  .color="${headerTextColor}"
+                  label="Chat options"
                   @click="${this.toggleMenu}"
-                >
-                  <cw-icon .name="${'MoreHorizontal'}" .size="${18}"></cw-icon>
-                </button>
+                ></cw-button>
               `
             : ''
           }
 
-          <button
-            type="button"
-            class="icon-btn"
-            aria-label="Minimize chat panel"
-            style="color: ${headerTextColor}; opacity: 0.7"
+          <cw-button
+            variant="icon"
+            size="xs"
+            icon="Close"
+            .iconSize="${18}"
+            .color="${headerTextColor}"
+            label="Minimize chat panel"
             @click="${this.closePanel}"
-          >
-            <cw-icon .name="${'Close'}" .size="${18}"></cw-icon>
-          </button>
+          ></cw-button>
         </div>
       </header>
     `;

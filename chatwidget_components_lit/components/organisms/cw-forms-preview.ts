@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import '../atoms/cw-icon.js';
+import '../atoms/cw-button.js';
 
 @customElement('cw-forms-preview')
 export class CwFormsPreview extends LitElement {
@@ -202,7 +203,15 @@ export class CwFormsPreview extends LitElement {
               <input type="email" class="phone-field-input" placeholder="Your email for follow-up" />
             </div>
 
-            <button type="submit" class="phone-submit-btn">Submit Feedback</button>
+            <cw-button
+              type="submit"
+              variant="primary"
+              size="md"
+              fullWidth
+              label="Submit Feedback"
+              .bg="${this.accentColor || '#1e293b'}"
+              borderRadius="12px"
+            ></cw-button>
 
             <div class="phone-footer-brand">
               <cw-icon .name="${'MessageSquare'}" .size="${14}" .color="${'#2563eb'}"></cw-icon>
@@ -235,7 +244,15 @@ export class CwFormsPreview extends LitElement {
               <textarea class="phone-field-input" rows="3" placeholder="Provide details about your inquiry" required></textarea>
             </div>
 
-            <button type="submit" class="phone-submit-btn">Submit Ticket</button>
+            <cw-button
+              type="submit"
+              variant="primary"
+              size="md"
+              fullWidth
+              label="Submit Ticket"
+              .bg="${this.accentColor || '#1e293b'}"
+              borderRadius="12px"
+            ></cw-button>
 
             <div class="phone-footer-brand">
               <cw-icon .name="${'MessageSquare'}" .size="${14}" .color="${'#2563eb'}"></cw-icon>
@@ -290,7 +307,15 @@ export class CwFormsPreview extends LitElement {
             </div>
           </div>
 
-          <button type="submit" class="phone-submit-btn">Submit</button>
+          <cw-button
+            type="submit"
+            variant="primary"
+            size="md"
+            fullWidth
+            label="Submit"
+            .bg="${this.accentColor || '#1e293b'}"
+            borderRadius="12px"
+          ></cw-button>
 
           <div class="phone-footer-brand">
             <cw-icon .name="${'MessageSquare'}" .size="${14}" .color="${'#2563eb'}"></cw-icon>

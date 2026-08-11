@@ -4,6 +4,7 @@ import type { InputBoxConfig } from '../../store/types.js';
 import { EnterLeaveController } from '../../utils/transition.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import '../atoms/cw-icon.js';
+import '../atoms/cw-button.js';
 
 /**
  * cw-greet-input
@@ -133,14 +134,16 @@ export class CwGreetInput extends LitElement {
             />
           </div>
 
-          <button
-            type="button"
-            aria-label="Send message"
-            style="background-color: ${btnBg}; color: ${btnIconColor}; border-radius: 50%; width: ${btnSize}px; height: ${btnSize}px; box-shadow: ${ib.buttonBoxShadow || '0 6px 16px rgba(0,0,0,0.12)'}"
+          <cw-button
+            variant="icon"
+            size="md"
+            icon="SendFilled"
+            .iconSize="${18}"
+            .bg="${btnBg}"
+            .color="${btnIconColor}"
+            label="Send message"
             @click="${this.submit}"
-          >
-            <cw-icon .name="${'SendFilled'}" .size="${18}" style="margin-left: 2px; margin-top: 1px"></cw-icon>
-          </button>
+          ></cw-button>
         </div>
       `;
     }
@@ -166,14 +169,16 @@ export class CwGreetInput extends LitElement {
           @keydown="${this.handleKeyDown}"
         />
 
-        <button
-          type="button"
-          aria-label="Send message"
-          style="width: 38px; height: 38px; border-radius: 50%; background-color: ${btnColor}; color: ${btnIconColor}"
+        <cw-button
+          variant="icon"
+          size="md"
+          icon="SendFilled"
+          .iconSize="${18}"
+          .bg="${btnColor}"
+          .color="${btnIconColor}"
+          label="Send message"
           @click="${this.submit}"
-        >
-          <cw-icon .name="${'SendFilled'}" .size="${18}" style="margin-left: 2px; margin-top: 1px"></cw-icon>
-        </button>
+        ></cw-button>
       </div>
     `;
   }

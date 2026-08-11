@@ -4,6 +4,7 @@ import type { WelcomeConfig } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import '../atoms/cw-icon.js';
+import '../atoms/cw-button.js';
 import '../molecules/cw-avatar.js';
 
 @customElement('cw-welcome-card')
@@ -304,24 +305,29 @@ export class CwWelcomeCard extends LitElement {
                   </div>
 
                   <div>
-                    <button
-                      type="button"
-                      class="start-btn"
-                      style="background: ${w.buttonBg || '#ffffff'}; color: ${w.buttonTextColor || 'var(--cw-ink)'}; border-radius: ${(w.buttonBorderRadius || 24)}px; padding: ${w.buttonPadding || '18px 24px'}; margin-bottom: 20px"
+                    <cw-button
+                      fullWidth
+                      .bg="${w.buttonBg || '#ffffff'}"
+                      .color="${w.buttonTextColor || 'var(--cw-ink)'}"
+                      .borderRadius="${(w.buttonBorderRadius || 24) + 'px'}"
+                      .padding="${w.buttonPadding || '18px 24px'}"
+                      style="margin-bottom: 20px"
                       @click="${this.start}"
                     >
-                      <div style="display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: ${w.buttonIconColor || this.accentColor}">
-                        <cw-icon .name="${'ChatLines'}" .size="${24}"></cw-icon>
+                      <div style="display: flex; align-items: center; gap: 16px; width: 100%; text-align: left;">
+                        <div style="display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: ${w.buttonIconColor || this.accentColor}">
+                          <cw-icon .name="${'ChatLines'}" .size="${24}"></cw-icon>
+                        </div>
+                        <div style="display: flex; flex-direction: column; min-width: 0">
+                          <span style="font-weight: 700; font-size: 15px; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: ${w.buttonTextColor || 'var(--cw-ink)'}">
+                            ${w.buttonText || 'Start Conversation'}
+                          </span>
+                          <span style="font-size: 12px; font-weight: 500; opacity: 0.6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: ${w.buttonTextColor || 'var(--cw-ink)'}">
+                            ${w.buttonSubtext || 'Typically replies in 5 minutes'}
+                          </span>
+                        </div>
                       </div>
-                      <div style="display: flex; flex-direction: column; min-width: 0">
-                        <span style="font-weight: 700; font-size: 15px; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: ${w.buttonTextColor || 'var(--cw-ink)'}">
-                          ${w.buttonText || 'Start Conversation'}
-                        </span>
-                        <span style="font-size: 12px; font-weight: 500; opacity: 0.6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: ${w.buttonTextColor || 'var(--cw-ink)'}">
-                          ${w.buttonSubtext || 'Typically replies in 5 minutes'}
-                        </span>
-                      </div>
-                    </button>
+                    </cw-button>
 
                     <div class="footer-brand" style="color: ${w.subtextColor || 'rgba(255,255,255,0.9)'}; padding-bottom: ${w.footerPaddingBottom || '0px'}">
                       <span>Powered by</span>&nbsp;

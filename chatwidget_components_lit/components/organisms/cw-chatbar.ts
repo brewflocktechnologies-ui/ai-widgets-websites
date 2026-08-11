@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { ChatbarState } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
+import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import {
   getBorderRadius,
   getChatbarBackground,
@@ -10,6 +11,7 @@ import {
   getChatbarIconHeight
 } from '../../utils/style-helpers.js';
 import '../atoms/cw-icon.js';
+import '../atoms/cw-badge.js';
 
 @customElement('cw-chatbar')
 export class CwChatbar extends LitElement {
@@ -57,42 +59,6 @@ export class CwChatbar extends LitElement {
         justify-content: space-between;
         width: 100%;
         height: 100%;
-      }
-      .badge {
-        position: absolute;
-        top: -8px;
-        right: -8px;
-        background-color: var(--cw-error);
-        color: #ffffff;
-        font-weight: 700;
-        border-radius: 9999px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 20px;
-        height: 20px;
-        font-size: 11px;
-        border: 2px solid #ffffff;
-        z-index: 50;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-      }
-      .bar-badge {
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        background-color: var(--cw-error);
-        color: #ffffff;
-        font-weight: 700;
-        border-radius: 9999px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 18px;
-        height: 18px;
-        font-size: 10px;
-        border: 1.5px solid #ffffff;
-        z-index: 50;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.15);
       }
     `
   ];
@@ -176,7 +142,7 @@ export class CwChatbar extends LitElement {
                 </div>
 
                 ${this.unreadCount > 0
-                  ? html`<span class="badge">${this.unreadCount}</span>`
+                  ? html`<cw-badge .count="${this.unreadCount}" .config="${s.badge}"></cw-badge>`
                   : ''
                 }
               </div>
@@ -217,7 +183,7 @@ export class CwChatbar extends LitElement {
                   }
 
                   ${this.unreadCount > 0
-                    ? html`<span class="bar-badge">${this.unreadCount}</span>`
+                    ? html`<cw-badge .count="${this.unreadCount}" .config="${s.badge}"></cw-badge>`
                     : ''
                   }
                 </div>

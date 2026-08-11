@@ -6,6 +6,7 @@ import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import { EnterLeaveController } from '../../utils/transition.js';
 import './cw-chat-header.js';
 import './cw-chat-body.js';
+import './cw-confirm-dialog.js';
 import type { CwChatBody } from './cw-chat-body.js';
 
 @customElement('cw-chat-panel')
@@ -59,44 +60,10 @@ export class CwChatPanel extends LitElement {
         isolation: isolate;
         transform: translateZ(0);
       }
-      .modal-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(2px);
-        z-index: 100;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 16px;
-      }
-      .modal-card {
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        width: 100%;
-        max-width: 300px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      }
-      .modal-message {
-        margin: 0;
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 1.4;
-      }
       .modal-actions {
         display: flex;
         gap: 8px;
         justify-content: flex-end;
-      }
-      .modal-actions button {
-        padding: 8px 16px;
-        border-radius: 9999px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        border: 1px solid transparent;
       }
     `
   ];
@@ -224,30 +191,12 @@ export class CwChatPanel extends LitElement {
           <!-- CONFIRM MODAL OVERLAY -->
           ${cs.confirmBox
             ? html`
-                <div class="modal-overlay" @click="${(e: Event) => { if (e.target === e.currentTarget) this.emit('cw:confirm-cancel'); }}">
-                  <div class="modal-card" style="background: ${cw.modalCardBg || '#ffffff'}; border-radius: ${(cw.modalBorderRadius || 24)}px">
-                    <p class="modal-message" style="color: ${cw.modalMessageColor || 'var(--cw-ink)'}">${cs.confirmBox.message}</p>
-                    <div class="modal-actions">
-                      <button
-                        type="button"
-                        class="btn-ghost"
-                        style="background: ${cw.endChatCancelBg || 'var(--cw-surface)'}; color: ${cw.endChatCancelTextColor || 'var(--cw-muted)'}; border-color: ${cw.endChatCancelBorderColor || 'var(--cw-border)'}"
-                        @click="${() => this.emit('cw:confirm-cancel')}"
-                      >
-                        ${cs.confirmBox.cancelLabel || 'Cancel'}
-                      </button>
-
-                      <button
-                        type="button"
-                        class="btn-confirm"
-                        style="background: ${cw.endChatConfirmBg || 'var(--cw-grad)'}; color: ${cw.endChatConfirmTextColor || '#ffffff'}"
-                        @click="${() => this.emit('cw:confirm-end')}"
-                      >
-                        ${cs.confirmBox.confirmLabel || 'Confirm'}
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                <cw-confirm-dialog
+                  .config="${cw}"
+                  .message="${cs.confirmBox.message}"
+                  .cancelLabel="${cs.confirmBox.cancelLabel || 'Cancel'}"
+                  .confirmLabel="${cs.confirmBox.confirmLabel || 'Confirm'}"
+                ></cw-confirm-dialog>
               `
             : ''
           }

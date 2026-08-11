@@ -7,6 +7,7 @@ import { getAnimClass } from '../../utils/style-helpers.js';
 import { EnterLeaveController } from '../../utils/transition.js';
 import '../molecules/cw-greet-input.js';
 import '../atoms/cw-icon.js';
+import '../atoms/cw-button.js';
 
 @customElement('cw-greet-window')
 export class CwGreetWindow extends LitElement {
@@ -161,9 +162,18 @@ export class CwGreetWindow extends LitElement {
           @click="${this.handleCardClick}"
         >
           <!-- Floating Close Button outside top right -->
-          <button type="button" class="close-btn" aria-label="Close greet window" @click="${this.handleDismiss}">
-            <cw-icon .name="${'Close'}" .size="${12}"></cw-icon>
-          </button>
+          <div style="position: absolute; top: -30px; right: -8px; z-index: 20;">
+            <cw-button
+              variant="icon"
+              size="xs"
+              icon="Close"
+              .iconSize="${12}"
+              bg="#475569"
+              color="#ffffff"
+              label="Close greet window"
+              @click="${this.handleDismiss}"
+            ></cw-button>
+          </div>
 
           <!-- Icon / Image Area (Lucide icon default on top) -->
           <div style="width: 100%; display: flex; align-items: center; margin-bottom: 16px; justify-content: ${iconAlign}">

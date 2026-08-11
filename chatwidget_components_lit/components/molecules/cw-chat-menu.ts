@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
-import '../atoms/cw-icon.js';
+import '../atoms/cw-menu-item.js';
 
 /**
  * cw-chat-menu
@@ -32,25 +32,6 @@ export class CwChatMenu extends LitElement {
         padding: 4px;
         min-width: 170px;
         box-sizing: border-box;
-      }
-      .menu-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        border: none;
-        background: transparent;
-        color: var(--cw-ink, #18181b);
-        font-size: 13px;
-        cursor: pointer;
-        border-radius: 8px;
-        text-align: left;
-        width: 100%;
-        box-sizing: border-box;
-        transition: background 0.15s ease;
-      }
-      .menu-item:hover {
-        background: rgba(0, 0, 0, 0.05);
       }
     `,
   ];
@@ -86,14 +67,8 @@ export class CwChatMenu extends LitElement {
   render() {
     return html`
       <div class="menu-pop" role="menu" aria-label="Chat options">
-        <button type="button" class="menu-item" @click="${this.onDownloadTranscript}">
-          <cw-icon .name="${'Download'}" .size="${16}"></cw-icon>
-          <span>Download transcript</span>
-        </button>
-        <button type="button" class="menu-item" @click="${this.onToggleSounds}">
-          <cw-icon .name="${'Volume2'}" .size="${16}"></cw-icon>
-          <span>Sounds: ${this.soundsOn ? 'ON' : 'OFF'}</span>
-        </button>
+        <cw-menu-item icon="Download" label="Download transcript" @click="${this.onDownloadTranscript}"></cw-menu-item>
+        <cw-menu-item icon="Volume2" label="Sounds: ${this.soundsOn ? 'ON' : 'OFF'}" @click="${this.onToggleSounds}"></cw-menu-item>
       </div>
     `;
   }

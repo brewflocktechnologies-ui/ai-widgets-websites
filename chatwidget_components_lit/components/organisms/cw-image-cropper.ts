@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import '../atoms/cw-icon.js';
+import '../atoms/cw-button.js';
 
 @customElement('cw-image-cropper')
 export class CwImageCropper extends LitElement {
@@ -371,9 +372,14 @@ export class CwImageCropper extends LitElement {
         <div class="cropper-card">
           <div class="header">
             <h3>${this.titleText}</h3>
-            <button class="close-btn" aria-label="Close modal" @click="${this.closeModal}">
-              <cw-icon .name="${'Close'}" .size="${18}"></cw-icon>
-            </button>
+            <cw-button
+              variant="icon"
+              size="xs"
+              icon="Close"
+              .iconSize="${18}"
+              label="Close modal"
+              @click="${this.closeModal}"
+            ></cw-button>
           </div>
 
           <div
@@ -409,9 +415,14 @@ export class CwImageCropper extends LitElement {
 
               ${this.showRotate
                 ? html`
-                    <button type="button" class="icon-action-btn" title="Rotate 90°" @click="${this.handleRotate}">
-                      <cw-icon .name="${'RotateCw'}" .size="${16}"></cw-icon>
-                    </button>
+                    <cw-button
+                      variant="icon"
+                      size="xs"
+                      icon="RotateCw"
+                      .iconSize="${16}"
+                      label="Rotate 90°"
+                      @click="${this.handleRotate}"
+                    ></cw-button>
                   `
                 : ''
               }
@@ -422,30 +433,27 @@ export class CwImageCropper extends LitElement {
               <div class="control-group">
                 <span>Shape:</span>
                 <div class="btn-pill-group">
-                  <button
-                    type="button"
-                    class="pill-btn"
-                    style="${this.cropShape === 'circle' ? `background: ${this.primaryColor}; color: #fff; border-color: ${this.primaryColor}` : ''}"
+                  <cw-button
+                    size="xs"
+                    .variant="${this.cropShape === 'circle' ? 'primary' : 'outline'}"
+                    .bg="${this.cropShape === 'circle' ? this.primaryColor : ''}"
+                    label="⚪ Circle"
                     @click="${() => { this.cropShape = 'circle'; this.aspectRatio = '1:1'; this.drawCanvas(); }}"
-                  >
-                    ⚪ Circle
-                  </button>
-                  <button
-                    type="button"
-                    class="pill-btn"
-                    style="${this.cropShape === 'square' ? `background: ${this.primaryColor}; color: #fff; border-color: ${this.primaryColor}` : ''}"
+                  ></cw-button>
+                  <cw-button
+                    size="xs"
+                    .variant="${this.cropShape === 'square' ? 'primary' : 'outline'}"
+                    .bg="${this.cropShape === 'square' ? this.primaryColor : ''}"
+                    label="⬜ Square"
                     @click="${() => { this.cropShape = 'square'; this.drawCanvas(); }}"
-                  >
-                    ⬜ Square
-                  </button>
-                  <button
-                    type="button"
-                    class="pill-btn"
-                    style="${this.cropShape === 'rounded' ? `background: ${this.primaryColor}; color: #fff; border-color: ${this.primaryColor}` : ''}"
+                  ></cw-button>
+                  <cw-button
+                    size="xs"
+                    .variant="${this.cropShape === 'rounded' ? 'primary' : 'outline'}"
+                    .bg="${this.cropShape === 'rounded' ? this.primaryColor : ''}"
+                    label="▢ Rounded"
                     @click="${() => { this.cropShape = 'rounded'; this.drawCanvas(); }}"
-                  >
-                    ▢ Rounded
-                  </button>
+                  ></cw-button>
                 </div>
               </div>
             </div>
@@ -457,30 +465,27 @@ export class CwImageCropper extends LitElement {
                     <div class="control-group">
                       <span>Aspect:</span>
                       <div class="btn-pill-group">
-                        <button
-                          type="button"
-                          class="pill-btn"
-                          style="${this.aspectRatio === '1:1' ? `background: ${this.primaryColor}; color: #fff; border-color: ${this.primaryColor}` : ''}"
+                        <cw-button
+                          size="xs"
+                          .variant="${this.aspectRatio === '1:1' ? 'primary' : 'outline'}"
+                          .bg="${this.aspectRatio === '1:1' ? this.primaryColor : ''}"
+                          label="1:1"
                           @click="${() => { this.aspectRatio = '1:1'; this.drawCanvas(); }}"
-                        >
-                          1:1
-                        </button>
-                        <button
-                          type="button"
-                          class="pill-btn"
-                          style="${this.aspectRatio === '4:3' ? `background: ${this.primaryColor}; color: #fff; border-color: ${this.primaryColor}` : ''}"
+                        ></cw-button>
+                        <cw-button
+                          size="xs"
+                          .variant="${this.aspectRatio === '4:3' ? 'primary' : 'outline'}"
+                          .bg="${this.aspectRatio === '4:3' ? this.primaryColor : ''}"
+                          label="4:3"
                           @click="${() => { this.aspectRatio = '4:3'; this.drawCanvas(); }}"
-                        >
-                          4:3
-                        </button>
-                        <button
-                          type="button"
-                          class="pill-btn"
-                          style="${this.aspectRatio === '16:9' ? `background: ${this.primaryColor}; color: #fff; border-color: ${this.primaryColor}` : ''}"
+                        ></cw-button>
+                        <cw-button
+                          size="xs"
+                          .variant="${this.aspectRatio === '16:9' ? 'primary' : 'outline'}"
+                          .bg="${this.aspectRatio === '16:9' ? this.primaryColor : ''}"
+                          label="16:9"
                           @click="${() => { this.aspectRatio = '16:9'; this.drawCanvas(); }}"
-                        >
-                          16:9
-                        </button>
+                        ></cw-button>
                       </div>
                     </div>
                   </div>
@@ -490,17 +495,19 @@ export class CwImageCropper extends LitElement {
           </div>
 
           <div class="footer">
-            <button type="button" class="btn-cancel" @click="${this.closeModal}">
-              ${this.cancelText}
-            </button>
-            <button
-              type="button"
-              class="btn-crop"
-              style="background: ${this.primaryColor}"
+            <cw-button
+              variant="secondary"
+              size="sm"
+              .label="${this.cancelText}"
+              @click="${this.closeModal}"
+            ></cw-button>
+            <cw-button
+              variant="primary"
+              size="sm"
+              .label="${this.applyText}"
+              .bg="${this.primaryColor}"
               @click="${this.handleCrop}"
-            >
-              ${this.applyText}
-            </button>
+            ></cw-button>
           </div>
         </div>
       </div>

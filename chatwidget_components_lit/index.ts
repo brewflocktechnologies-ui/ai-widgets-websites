@@ -37,6 +37,7 @@ export * from './components/atoms/cw-typing-dots.js';
 export * from './components/atoms/cw-status-dot.js';
 export * from './components/atoms/cw-tooltip.js';
 export * from './components/atoms/cw-button.js';
+export * from './components/atoms/cw-menu-item.js';
 
 // Molecules
 export * from './components/molecules/cw-avatar.js';
@@ -59,6 +60,7 @@ export * from './components/organisms/cw-forms-preview.js';
 export * from './components/organisms/cw-image-cropper.js';
 export * from './components/organisms/cw-chat-body.js';
 export * from './components/organisms/cw-chat-panel.js';
+export * from './components/organisms/cw-confirm-dialog.js';
 
 // Templates
 export * from './components/templates/cw-widget-layout.js';

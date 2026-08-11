@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
-import '../atoms/cw-icon.js';
+import '../atoms/cw-menu-item.js';
 
 /**
  * cw-attach-menu
@@ -30,25 +30,6 @@ export class CwAttachMenu extends LitElement {
         padding: 4px;
         min-width: 160px;
         box-sizing: border-box;
-      }
-      .menu-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        border: none;
-        background: transparent;
-        color: var(--cw-ink, #18181b);
-        font-size: 13px;
-        cursor: pointer;
-        border-radius: 8px;
-        text-align: left;
-        width: 100%;
-        box-sizing: border-box;
-        transition: background 0.15s ease;
-      }
-      .menu-item:hover {
-        background: rgba(0, 0, 0, 0.05);
       }
     `,
   ];
@@ -85,14 +66,8 @@ export class CwAttachMenu extends LitElement {
   render() {
     return html`
       <div class="attach-pop" role="menu" aria-label="Attachment options">
-        <button type="button" class="menu-item" @click="${this.onSelectImage}">
-          <cw-icon .name="${'Image'}" .size="${16}"></cw-icon>
-          <span>Send an image</span>
-        </button>
-        <button type="button" class="menu-item" @click="${this.onCaptureScreenshot}">
-          <cw-icon .name="${'Camera'}" .size="${16}"></cw-icon>
-          <span>Add screenshot</span>
-        </button>
+        <cw-menu-item icon="Image" label="Send an image" @click="${this.onSelectImage}"></cw-menu-item>
+        <cw-menu-item icon="Camera" label="Add screenshot" @click="${this.onCaptureScreenshot}"></cw-menu-item>
       </div>
     `;
   }

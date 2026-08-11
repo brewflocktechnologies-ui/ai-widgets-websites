@@ -3,6 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import type { ChatWindowState } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import '../atoms/cw-icon.js';
+import '../atoms/cw-button.js';
 
 /**
  * cw-composer
@@ -159,17 +160,17 @@ export class CwComposer extends LitElement {
       >
         ${this.attachmentsEnabled
           ? html`
-              <button
-                type="button"
-                class="attach-btn"
-                aria-label="Attach"
-                title="Attach"
+              <cw-button
+                variant="icon"
+                size="xs"
+                icon="Plus"
+                .iconSize="${16}"
+                .bg="${attachBg}"
+                .color="${attachColor}"
+                label="Attach"
                 ?disabled="${this.uploading}"
-                style="background: ${attachBg}; color: ${attachColor}"
                 @click="${this.toggleAttach}"
-              >
-                <cw-icon .name="${'Plus'}" .size="${16}"></cw-icon>
-              </button>
+              ></cw-button>
             `
           : ''
         }
@@ -189,30 +190,30 @@ export class CwComposer extends LitElement {
 
         ${this.modernUi
           ? html`
-              <button
-                type="button"
-                aria-label="Emoji"
-                style="background: transparent; color: ${emojiColor}; margin-right: 2px"
+              <cw-button
+                variant="icon"
+                size="xs"
+                icon="Smile"
+                .iconSize="${20}"
+                .color="${emojiColor}"
+                label="Emoji"
                 @click="${this.toggleEmoji}"
-              >
-                <cw-icon .name="${'Smile'}" .size="${20}"></cw-icon>
-              </button>
+              ></cw-button>
             `
           : ''
         }
 
-        <button
-          type="button"
-          aria-label="Send message"
+        <cw-button
+          variant="icon"
+          size="xs"
+          .icon="${cw.sendIconType === 'arrow' ? 'ArrowUp' : 'SendFilled'}"
+          .iconSize="${cw.sendIconType === 'arrow' ? 16 : 18}"
+          .bg="${sendBg}"
+          .color="${sendColor}"
+          label="Send message"
           ?disabled="${!canSend}"
-          style="background: ${sendBg}; color: ${sendColor}"
           @click="${this.send}"
-        >
-          ${cw.sendIconType === 'arrow'
-            ? html`<cw-icon .name="${'ArrowUp'}" .size="${16}"></cw-icon>`
-            : html`<cw-icon .name="${'SendFilled'}" .size="${18}" class="send-icon"></cw-icon>`
-          }
-        </button>
+        ></cw-button>
       </div>
     `;
   }

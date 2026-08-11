@@ -7,7 +7,7 @@ import './cw-icon.js';
 @customElement('cw-button')
 export class CwButton extends LitElement {
   @property({ type: String }) variant: 'primary' | 'secondary' | 'ghost' | 'outline' | 'danger' | 'icon' = 'primary';
-  @property({ type: String }) size: 'sm' | 'md' | 'lg' = 'md';
+  @property({ type: String }) size: 'xs' | 'sm' | 'md' | 'lg' = 'md';
   @property({ type: Boolean }) disabled = false;
   @property({ type: String }) type: 'button' | 'submit' | 'reset' = 'button';
   @property({ type: String }) label = '';
@@ -20,6 +20,8 @@ export class CwButton extends LitElement {
   @property({ type: String }) borderRadius = '9999px';
   @property({ type: Boolean }) fullWidth = false;
   @property({ type: String }) padding = '';
+  @property({ type: Number }) width?: number;
+  @property({ type: Number }) height?: number;
 
   static styles = [
     CORE_STYLES,
@@ -37,7 +39,7 @@ export class CwButton extends LitElement {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 6px;
         font-family: inherit;
         font-weight: 600;
         cursor: pointer;
@@ -60,6 +62,11 @@ export class CwButton extends LitElement {
       }
 
       /* Sizes */
+      .size-xs {
+        font-size: 11px;
+        padding: 4px 8px;
+        height: 28px;
+      }
       .size-sm {
         font-size: 12px;
         padding: 6px 12px;
@@ -77,6 +84,11 @@ export class CwButton extends LitElement {
       }
 
       /* Icon variants sizes */
+      .variant-icon.size-xs {
+        padding: 0;
+        width: 28px;
+        height: 28px;
+      }
       .variant-icon.size-sm {
         padding: 0;
         width: 32px;
@@ -144,12 +156,12 @@ export class CwButton extends LitElement {
       .variant-icon:hover {
         background: rgba(0, 0, 0, 0.06);
       }
-    `
+    `,
   ];
 
   render() {
     const isIconOnly = this.variant === 'icon' || this.iconPosition === 'only' || (!this.label && !!this.icon);
-    const calculatedIconSize = this.iconSize || (this.size === 'sm' ? 14 : this.size === 'lg' ? 20 : 16);
+    const calculatedIconSize = this.iconSize || (this.size === 'xs' ? 12 : this.size === 'sm' ? 14 : this.size === 'lg' ? 20 : 16);
 
     const styleObj: Record<string, string> = {};
     if (this.bg) styleObj.backgroundColor = this.bg;
@@ -158,6 +170,8 @@ export class CwButton extends LitElement {
     if (this.padding) styleObj.padding = this.padding;
     if (this.borderRadius) styleObj.borderRadius = typeof this.borderRadius === 'number' ? `${this.borderRadius}px` : this.borderRadius;
     if (this.fullWidth) styleObj.width = '100%';
+    if (this.width !== undefined) styleObj.width = `${this.width}px`;
+    if (this.height !== undefined) styleObj.height = `${this.height}px`;
 
     const cssString = Object.entries(styleObj)
       .map(([k, v]) => `${k.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${v}`)
