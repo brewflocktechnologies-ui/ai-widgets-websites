@@ -180,10 +180,17 @@ export class CwChatPanel extends LitElement {
           ${cs.confirmBox
             ? html`
                 <cw-confirm-dialog
-                  .config="${cw}"
                   .message="${cs.confirmBox.message}"
                   .cancelLabel="${cs.confirmBox.cancelLabel || 'Cancel'}"
                   .confirmLabel="${cs.confirmBox.confirmLabel || 'Confirm'}"
+                  .modalCardBg="${cw.modalCardBg || '#ffffff'}"
+                  .modalMessageColor="${cw.modalMessageColor || 'var(--cw-ink)'}"
+                  .modalBorderRadius="${cw.modalBorderRadius !== undefined ? cw.modalBorderRadius : 16}"
+                  .cancelBg="${cw.endChatCancelBg || 'var(--cw-surface)'}"
+                  .cancelTextColor="${cw.endChatCancelTextColor || 'var(--cw-muted)'}"
+                  .cancelBorderColor="${cw.endChatCancelBorderColor || 'var(--cw-border)'}"
+                  .confirmBg="${cw.endChatConfirmBg || 'var(--cw-accent)'}"
+                  .confirmTextColor="${cw.endChatConfirmTextColor || '#ffffff'}"
                 ></cw-confirm-dialog>
               `
             : ''

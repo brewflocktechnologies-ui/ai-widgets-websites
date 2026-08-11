@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import type { ChatWindowState } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import '../atoms/cw-icon.js';
 import '../atoms/cw-button.js';
@@ -9,16 +8,36 @@ import '../atoms/cw-button.js';
  * cw-composer
  * Pure presentational molecule. Sends data UP via composed CustomEvents
  * (`cw:draft-change`, `cw:send`, `cw:toggle-attach`, `cw:toggle-emoji`).
- * It never reads or mutates the store.
+ * Takes explicit primitive property inputs instead of a config blob contract.
  */
 @customElement('cw-composer')
 export class CwComposer extends LitElement {
-  @property({ type: Object }) config: Partial<ChatWindowState> = {};
   @property({ type: String }) draft = '';
   @property({ type: Boolean }) attachmentsEnabled = true;
   @property({ type: Boolean }) modernUi = true;
   @property({ type: Boolean }) uploading = false;
   @property({ type: Number }) rev = 0;
+
+  /* Primitive styling properties */
+  @property({ type: String }) inputBg = '';
+  @property({ type: String }) inputTextColor = '';
+  @property({ type: String }) inputPlaceholderColor = '';
+  @property({ type: String }) inputBorderColor = '';
+  @property({ type: String }) inputFocusBorderColor = '';
+  @property({ type: String }) inputFocusShadow = '';
+  @property({ type: String }) inputPadding = '';
+  @property({ type: String }) inputMargin = '';
+  @property() inputBorderRadius?: number | string;
+  @property({ type: String }) textareaFontSize = '';
+  @property({ type: String }) attachButtonBg = '';
+  @property({ type: String }) attachButtonColor = '';
+  @property({ type: String }) emojiButtonColor = '';
+  @property({ type: String }) sendButtonBgActive = '';
+  @property({ type: String }) sendButtonColorActive = '';
+  @property({ type: String }) sendButtonBgInactive = '';
+  @property({ type: String }) sendButtonColorInactive = '';
+  @property({ type: String }) sendIconType = '';
+  @property({ type: String }) accentColor = '';
 
   @state() focused = false;
 
@@ -96,40 +115,39 @@ export class CwComposer extends LitElement {
   }
 
   render() {
-    const cw = this.config;
     const isFocused = this.focused;
     const canSend = !!this.draft.trim();
 
-    const padding = cw.inputPadding || '6px 8px';
-    const margin = cw.inputMargin || '12px 16px';
-    const bg = cw.inputBg || 'var(--cw-surface)';
-    const borderRadius = typeof cw.inputBorderRadius === 'number'
-      ? `${cw.inputBorderRadius}px`
-      : (cw.inputBorderRadius !== undefined ? cw.inputBorderRadius : '9999px');
+    const padding = this.inputPadding || '6px 8px';
+    const margin = this.inputMargin || '12px 16px';
+    const bg = this.inputBg || 'var(--cw-surface)';
+    const borderRadius = typeof this.inputBorderRadius === 'number'
+      ? `${this.inputBorderRadius}px`
+      : (this.inputBorderRadius !== undefined ? this.inputBorderRadius : '9999px');
 
     const borderColor = isFocused
-      ? cw.inputFocusBorderColor || cw.accentColor || 'var(--cw-accent)'
-      : cw.inputBorderColor || 'var(--cw-border)';
+      ? this.inputFocusBorderColor || this.accentColor || 'var(--cw-accent)'
+      : this.inputBorderColor || 'var(--cw-border)';
 
     const boxShadow = isFocused
-      ? cw.inputFocusShadow || '0 0 0 2px rgba(11, 95, 255, 0.1)'
+      ? this.inputFocusShadow || '0 0 0 2px rgba(11, 95, 255, 0.1)'
       : 'none';
 
-    const inputTextColor = cw.inputTextColor || 'var(--cw-ink)';
-    const placeholderColor = cw.inputPlaceholderColor || 'var(--cw-muted)';
-    const textareaFontSize = cw.textareaFontSize || '14px';
+    const inputTextColor = this.inputTextColor || 'var(--cw-ink)';
+    const placeholderColor = this.inputPlaceholderColor || 'var(--cw-muted)';
+    const textareaFontSize = this.textareaFontSize || '14px';
 
-    const attachBg = cw.attachButtonBg || '#ffffff';
-    const attachColor = cw.attachButtonColor || 'var(--cw-muted)';
-    const emojiColor = cw.emojiButtonColor || 'var(--cw-muted)';
+    const attachBg = this.attachButtonBg || '#ffffff';
+    const attachColor = this.attachButtonColor || 'var(--cw-muted)';
+    const emojiColor = this.emojiButtonColor || 'var(--cw-muted)';
 
     const sendBg = !canSend
-      ? cw.sendButtonBgInactive || 'var(--cw-border)'
-      : cw.sendButtonBgActive || cw.accentColor || 'var(--cw-accent)';
+      ? this.sendButtonBgInactive || 'var(--cw-border)'
+      : this.sendButtonBgActive || this.accentColor || 'var(--cw-accent)';
 
     const sendColor = !canSend
-      ? cw.sendButtonColorInactive || 'var(--cw-muted)'
-      : cw.sendButtonColorActive || '#ffffff';
+      ? this.sendButtonColorInactive || 'var(--cw-muted)'
+      : this.sendButtonColorActive || '#ffffff';
 
     return html`
       <div
@@ -184,8 +202,8 @@ export class CwComposer extends LitElement {
         <cw-button
           variant="icon"
           size="xs"
-          .icon="${cw.sendIconType === 'arrow' ? 'ArrowUp' : 'SendFilled'}"
-          .iconSize="${cw.sendIconType === 'arrow' ? 16 : 18}"
+          .icon="${this.sendIconType === 'arrow' ? 'ArrowUp' : 'SendFilled'}"
+          .iconSize="${this.sendIconType === 'arrow' ? 16 : 18}"
           .bg="${sendBg}"
           .color="${sendColor}"
           label="Send message"

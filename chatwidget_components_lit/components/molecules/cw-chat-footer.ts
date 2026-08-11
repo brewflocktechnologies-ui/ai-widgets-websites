@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { ChatWindowState } from '../../store/types.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 
 const formatPx = (val: number | string | undefined, fallback: string): string => {
@@ -14,10 +13,10 @@ const formatPx = (val: number | string | undefined, fallback: string): string =>
 /**
  * cw-chat-footer
  * Pure presentational molecule representing the powered-by widget footer.
+ * Takes explicit primitive property inputs instead of a config blob contract.
  */
 @customElement('cw-chat-footer')
 export class CwChatFooter extends LitElement {
-  @property({ type: Object }) config: Partial<ChatWindowState> = {};
   @property({ type: Boolean }) modernUi = true;
   @property({ type: String }) poweredByText = '';
   @property({ type: String }) poweredByLink = '';
@@ -59,27 +58,15 @@ export class CwChatFooter extends LitElement {
   ];
 
   render() {
-    const cw = this.config || {};
-    const isModern = this.modernUi !== undefined ? this.modernUi : cw.modernUi !== false;
-    const paddingBottom = formatPx(
-      this.footerPaddingBottom !== undefined ? this.footerPaddingBottom : cw.footerPaddingBottom,
-      isModern ? '16px' : '8px'
-    );
-    const bg = this.footerBg || cw.footerBg || cw.bodyBg || (isModern ? '#ffffff' : '#f9fafb');
-    const borderRadius =
-      this.widgetBorderRadius !== undefined
-        ? this.widgetBorderRadius
-        : cw.widgetBorderRadius !== undefined
-        ? cw.widgetBorderRadius
-        : (isModern ? 24 : 0);
-    const fontSize = formatPx(
-      this.footerFontSize !== undefined ? this.footerFontSize : cw.footerFontSize,
-      '11px'
-    );
-    const textColor = this.footerTextColor || cw.footerTextColor || 'var(--cw-muted)';
-    const poweredByLink = this.poweredByLink || cw.poweredByLink || '#';
-    const poweredByColor = this.poweredByColor || cw.poweredByColor || 'var(--cw-muted)';
-    const poweredByText = this.poweredByText || cw.poweredByText || 'vAInatheya.ai';
+    const isModern = this.modernUi;
+    const paddingBottom = formatPx(this.footerPaddingBottom, isModern ? '16px' : '8px');
+    const bg = this.footerBg || (isModern ? '#ffffff' : '#f9fafb');
+    const borderRadius = this.widgetBorderRadius !== undefined ? this.widgetBorderRadius : (isModern ? 24 : 0);
+    const fontSize = formatPx(this.footerFontSize, '11px');
+    const textColor = this.footerTextColor || 'var(--cw-muted)';
+    const poweredByLink = this.poweredByLink || '#';
+    const poweredByColor = this.poweredByColor || 'var(--cw-muted)';
+    const poweredByText = this.poweredByText || 'vAInatheya.ai';
 
     return html`
       <div

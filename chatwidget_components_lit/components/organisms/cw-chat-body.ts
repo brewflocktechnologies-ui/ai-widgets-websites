@@ -514,7 +514,25 @@ export class CwChatBody extends LitElement {
               ${isActive
                 ? html`
                     <cw-composer
-                      .config="${cw}"
+                      .inputBg="${cw.inputBg || ''}"
+                      .inputTextColor="${cw.inputTextColor || ''}"
+                      .inputPlaceholderColor="${cw.inputPlaceholderColor || ''}"
+                      .inputBorderColor="${cw.inputBorderColor || ''}"
+                      .inputFocusBorderColor="${cw.inputFocusBorderColor || ''}"
+                      .inputFocusShadow="${cw.inputFocusShadow || ''}"
+                      .inputPadding="${cw.inputPadding || ''}"
+                      .inputMargin="${cw.inputMargin || ''}"
+                      .inputBorderRadius="${cw.inputBorderRadius}"
+                      .textareaFontSize="${cw.textareaFontSize || ''}"
+                      .attachButtonBg="${cw.attachButtonBg || ''}"
+                      .attachButtonColor="${cw.attachButtonColor || ''}"
+                      .emojiButtonColor="${cw.emojiButtonColor || ''}"
+                      .sendButtonBgActive="${cw.sendButtonBgActive || ''}"
+                      .sendButtonColorActive="${cw.sendButtonColorActive || ''}"
+                      .sendButtonBgInactive="${cw.sendButtonBgInactive || ''}"
+                      .sendButtonColorInactive="${cw.sendButtonColorInactive || ''}"
+                      .sendIconType="${cw.sendIconType || ''}"
+                      .accentColor="${cw.accentColor || ''}"
                       .draft="${cs.draft || ''}"
                       .attachmentsEnabled="${this.flag('attachments.enabled', true)}"
                       .modernUi="${this.flag('widget.modernUi', true)}"
@@ -523,8 +541,15 @@ export class CwChatBody extends LitElement {
                     ></cw-composer>
 
                     <cw-chat-footer
-                      .config="${cw}"
                       .modernUi="${this.flag('widget.modernUi', true)}"
+                      .poweredByText="${cw.poweredByText || ''}"
+                      .poweredByLink="${cw.poweredByLink || ''}"
+                      .poweredByColor="${cw.poweredByColor || ''}"
+                      .footerBg="${cw.footerBg || cw.bodyBg || ''}"
+                      .footerTextColor="${cw.footerTextColor || ''}"
+                      .footerFontSize="${cw.footerFontSize}"
+                      .footerPaddingBottom="${cw.footerPaddingBottom}"
+                      .widgetBorderRadius="${cw.widgetBorderRadius}"
                     ></cw-chat-footer>
                   `
                 : ''

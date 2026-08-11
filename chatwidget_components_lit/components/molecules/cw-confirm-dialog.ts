@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { ChatWindowState } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import '../atoms/cw-button.js';
@@ -9,13 +8,21 @@ import '../atoms/cw-button.js';
  * cw-confirm-dialog
  * Pure presentational organism representing the end-chat confirm modal overlay.
  * Uses <cw-button> for action buttons. Emits `cw:confirm-cancel` and `cw:confirm-end`.
+ * Takes explicit primitive property inputs instead of a config blob contract.
  */
 @customElement('cw-confirm-dialog')
 export class CwConfirmDialog extends LitElement {
-  @property({ type: Object }) config?: Partial<ChatWindowState>;
   @property({ type: String }) message = 'Are you sure you want to end this chat?';
   @property({ type: String }) cancelLabel = 'Cancel';
   @property({ type: String }) confirmLabel = 'Confirm';
+  @property({ type: String }) modalCardBg = '#ffffff';
+  @property({ type: String }) modalMessageColor = 'var(--cw-ink)';
+  @property({ type: Number }) modalBorderRadius = 16;
+  @property({ type: String }) cancelBg = 'var(--cw-surface)';
+  @property({ type: String }) cancelTextColor = 'var(--cw-muted)';
+  @property({ type: String }) cancelBorderColor = 'var(--cw-border)';
+  @property({ type: String }) confirmBg = 'var(--cw-accent)';
+  @property({ type: String }) confirmTextColor = '#ffffff';
 
   static styles = [
     CORE_STYLES,
@@ -68,15 +75,10 @@ export class CwConfirmDialog extends LitElement {
   }
 
   render() {
-    const cw = this.config || {};
-    const cardBg = cw.modalCardBg || '#ffffff';
-    const messageColor = cw.modalMessageColor || 'var(--cw-ink)';
-    const borderRadius = cw.modalBorderRadius !== undefined ? cw.modalBorderRadius : 16;
-
     return html`
       <div class="modal-overlay" role="dialog" aria-modal="true" aria-label="Confirmation">
-        <div class="modal-card" style="background: ${cardBg}; border-radius: ${borderRadius}px">
-          <p class="modal-message" style="color: ${messageColor}">
+        <div class="modal-card" style="background: ${this.modalCardBg}; border-radius: ${this.modalBorderRadius}px">
+          <p class="modal-message" style="color: ${this.modalMessageColor}">
             ${this.message}
           </p>
 
@@ -85,9 +87,9 @@ export class CwConfirmDialog extends LitElement {
               variant="ghost"
               size="sm"
               .label="${this.cancelLabel}"
-              .bg="${cw.endChatCancelBg || 'var(--cw-surface)'}"
-              .color="${cw.endChatCancelTextColor || 'var(--cw-muted)'}"
-              .borderColor="${cw.endChatCancelBorderColor || 'var(--cw-border)'}"
+              .bg="${this.cancelBg}"
+              .color="${this.cancelTextColor}"
+              .borderColor="${this.cancelBorderColor}"
               @click="${this.onCancel}"
             ></cw-button>
 
@@ -95,8 +97,8 @@ export class CwConfirmDialog extends LitElement {
               variant="primary"
               size="sm"
               .label="${this.confirmLabel}"
-              .bg="${cw.endChatConfirmBg || 'var(--cw-accent)'}"
-              .color="${cw.endChatConfirmTextColor || '#ffffff'}"
+              .bg="${this.confirmBg}"
+              .color="${this.confirmTextColor}"
               @click="${this.onConfirm}"
             ></cw-button>
           </div>
