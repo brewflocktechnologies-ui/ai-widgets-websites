@@ -49,6 +49,7 @@ export * from './components/molecules/cw-attach-menu.js';
 export * from './components/molecules/cw-chat-menu.js';
 
 // Organisms
+
 export * from './components/organisms/cw-bubble.js';
 export * from './components/organisms/cw-chatbar.js';
 export * from './components/organisms/cw-greet-window.js';
@@ -60,7 +61,10 @@ export * from './components/organisms/cw-chat-body.js';
 export * from './components/organisms/cw-chat-panel.js';
 
 // Templates
-export * from './components/templates/cw-widget-root.js';
+export * from './components/templates/cw-widget-layout.js';
+
+// Pages
+export * from './components/pages/cw-widget-root.js';
 
 // Auto-mount function helper for script tag usage
 export function mountChatWidget(container: HTMLElement = document.body): HTMLElement {

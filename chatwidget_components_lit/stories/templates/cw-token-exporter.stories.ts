@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import '../../components/templates/cw-widget-root.js';
+import '../../components/pages/cw-widget-root.js';
 import { exportFullStoreConfig } from '../../store/chat-store.js';
 
 export default {

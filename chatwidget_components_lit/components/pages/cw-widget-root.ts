@@ -8,19 +8,16 @@ import {
   chatbarStore,
   greetWindowStore,
   chatWindowStore,
-  featuresStore
+  featuresStore,
 } from '../../store/chat-store.js';
-import { KEYFRAMES_CSS } from '../../tokens/design-tokens.js';
 import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from '../../tokens/chatbar-presets.js';
-import '../organisms/cw-bubble.js';
-import '../organisms/cw-chatbar.js';
-import '../organisms/cw-greet-window.js';
-import '../organisms/cw-chat-panel.js';
+import '../templates/cw-widget-layout.js';
 
 /**
  * cw-widget-root
- * The single "smart" container in the atomic hierarchy. It connects to the store
- * and also accepts reactive Lit properties for direct customization.
+ * Page component representing the live chat widget page container.
+ * Connects to stores, handles property merging, wires event bus listeners,
+ * manages focus traps, and renders the structural `<cw-widget-layout>` template.
  */
 @customElement('cw-widget-root')
 export class CwWidgetRoot extends LitElement {
@@ -233,7 +230,6 @@ export class CwWidgetRoot extends LitElement {
   @state() initialized = false;
   @state() private userHasSentMessage = false;
   @state() private activeTriggerOverride?: 'bubble' | 'chatbar' | 'chatcard';
-  /** Increment on every store event so presentational children re-render. */
   @state() private rev = 0;
 
   private unsubAll?: () => void;
@@ -293,9 +289,6 @@ export class CwWidgetRoot extends LitElement {
     }
   `;
 
-  // -------------------------------------------------------------------------
-  // Event wiring from presentational leaves → store actions
-  // -------------------------------------------------------------------------
   private registerLeafEvents() {
     const handlers = new Map<string, (e: CustomEvent) => void>([
       ['cw:toggle', () => this.handleToggleWidget()],
@@ -366,10 +359,6 @@ export class CwWidgetRoot extends LitElement {
     chatStore.submitOffline();
   }
 
-  // -------------------------------------------------------------------------
-  // Keyboard accessibility (Escape to close + focus trap while open)
-  // -------------------------------------------------------------------------
-
   private handleKeydown(e: KeyboardEvent) {
     if (!this.panelOpen) return;
 
@@ -393,7 +382,6 @@ export class CwWidgetRoot extends LitElement {
       const target = (path[0] as HTMLElement) || null;
 
       if (!path.includes(this)) {
-        // Focus escaped the widget — pull it back to the first control.
         e.preventDefault();
         first.focus();
       } else if (e.shiftKey && target === first) {
@@ -406,7 +394,6 @@ export class CwWidgetRoot extends LitElement {
     }
   }
 
-  /** Collects every native focusable control across nested shadow roots, in DOM order. */
   private collectFocusables(): HTMLElement[] {
     const sel = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
     const out: HTMLElement[] = [];
@@ -420,7 +407,6 @@ export class CwWidgetRoot extends LitElement {
     return out;
   }
 
-  /** Returns keyboard focus to the launcher after the panel closes. */
   private focusLauncher() {
     setTimeout(() => {
       const launcher = this.renderRoot?.querySelector<HTMLElement>('cw-bubble, cw-chatbar');
@@ -589,9 +575,6 @@ export class CwWidgetRoot extends LitElement {
       offsetBottom: this.bubbleOffsetBottom !== undefined ? this.bubbleOffsetBottom : (bs.offsetBottom ?? 12),
     };
 
-    const activeOffsetRight = activeTrigger === 'bubble'
-      ? effectiveBs.offsetRight
-      : effectiveCbs.offsetRight;
     const activeOffsetBottom = activeTrigger === 'bubble'
       ? effectiveBs.offsetBottom
       : effectiveCbs.offsetBottom;
@@ -733,53 +716,18 @@ export class CwWidgetRoot extends LitElement {
     };
 
     return html`
-      <style>
-        ${KEYFRAMES_CSS}
-      </style>
-
-      <!-- FLOATING TRIGGER (BUBBLE OR CHATBAR OR CHATCARD) -->
-      ${isChatbarTrigger
-        ? html`
-            <cw-chatbar
-              .config="${effectiveCbs}"
-              .panelOpen="${this.panelOpen}"
-              .unreadCount="${cs.unreadCount}"
-              .rev="${this.rev}"
-            ></cw-chatbar>
-          `
-        : html`
-            <cw-bubble
-              .config="${effectiveBs}"
-              .panelOpen="${this.panelOpen}"
-              .unreadCount="${cs.unreadCount}"
-              .hasSentMessage="${cs.hasSentMessage}"
-              .rev="${this.rev}"
-            ></cw-bubble>
-          `
-      }
-
-      <!-- FLOATING GREET WINDOW -->
-      <cw-greet-window
-        .config="${effectiveGws}"
-        .chatbarConfig="${effectiveCbs}"
-        .bubbleConfig="${bs}"
-        .panelOpen="${this.panelOpen}"
-        .hasSentMessage="${cs.hasSentMessage}"
-        .visible="${effectiveGws.visible}"
-        .dismissed="${effectiveGws.dismissed}"
-        .rev="${this.rev}"
-      ></cw-greet-window>
-
-      <!-- MAIN CHAT PANEL -->
-      <cw-chat-panel
-        .chatWindowConfig="${effectiveCws}"
-        .chatState="${cs}"
-        .features="${effectiveFs}"
-        .chatbarConfig="${effectiveCbs}"
+      <cw-widget-layout
         .bubbleConfig="${effectiveBs}"
+        .chatbarConfig="${effectiveCbs}"
+        .greetWindowConfig="${effectiveGws}"
+        .chatWindowConfig="${effectiveCws}"
+        .featuresConfig="${effectiveFs}"
+        .chatState="${cs}"
         .panelOpen="${this.panelOpen}"
+        .unreadCount="${cs.unreadCount || 0}"
+        .hasSentMessage="${cs.hasSentMessage || false}"
         .rev="${this.rev}"
-      ></cw-chat-panel>
+      ></cw-widget-layout>
     `;
   }
 }

@@ -7,17 +7,15 @@ import { Meta, Title, Subtitle, Heading } from '@storybook/addon-docs/blocks';
 <Subtitle>An atomic design system for the chat widget, built with Lit web components.</Subtitle>
 
 This Storybook documents the widget's component library, organised using **atomic design**:
-a strict one-way hierarchy from tiny atoms up to the single smart template that wires them together.
+a strict 5-layer hierarchy from tiny atoms up to the live page container.
 
-<Heading as="h2">The hierarchy</Heading>
+<Heading as="h2">The 5-layer hierarchy</Heading>
 
 - **Atoms** — the smallest building blocks (icon, avatar, badge, status ticks…). No business logic.
-- **Molecules** — groups of atoms that form a meaningful UI unit (composer, message bubble, forms…).
-- **Organisms** — sections composed of molecules (chat panel, header, floating trigger…).
-- **Templates** — the full surface layout with the wiring (`cw-widget-root`).
-
-Every leaf is **presentational**: it receives config via properties and pushes user intent up
-through composed `cw:*` custom events. Only the template talks to the store.
+- **Molecules** — groups of atoms that form a meaningful UI unit (composer, message bubble, chat footer, emoji picker, attach menu, chat menu…).
+- **Organisms** — sections composed of molecules (chat panel, header, floating trigger, greet window…).
+- **Templates** — pure layout skeletons (`cw-widget-layout`). Structure only, props in, zero store dependency.
+- **Pages** — the live smart container (`cw-widget-root`). Handles store subscriptions, event bus, config merging, and renders the template.
 
 <Heading as="h2">Atoms</Heading>
 
@@ -36,8 +34,10 @@ through composed `cw:*` custom events. Only the template talks to the store.
 | `cw-message-bubble` | Single chat message (avatar + bubble + time + tick) | [docs](?path=/docs/molecules-messagebubble--docs) |
 | `cw-welcome-card` | Welcome / hero surface | [docs](?path=/docs/molecules-welcomecard--docs) |
 | `cw-greet-input` | Greet window input box | [docs](?path=/docs/molecules-greetinput--docs) |
-| `cw-forms-preview` | Pre-chat / post-chat / ticket form previews | [docs](?path=/docs/molecules-formspreview--docs) |
-| `cw-chat-header` | Chat header (avatar, actions, menu) | [docs](?path=/docs/molecules-chatheader--docs) |
+| `cw-chat-footer` | Powered-by widget footer | [docs](?path=/docs/molecules-chatfooter--docs) |
+| `cw-emoji-picker` | Emoji selection popup grid | [docs](?path=/docs/molecules-emojipicker--docs) |
+| `cw-attach-menu` | Attachment options popup menu | [docs](?path=/docs/molecules-attachmenu--docs) |
+| `cw-chat-menu` | Options popup menu | [docs](?path=/docs/molecules-chatmenu--docs) |
 
 <Heading as="h2">Organisms</Heading>
 
@@ -53,11 +53,17 @@ through composed `cw:*` custom events. Only the template talks to the store.
 
 | Component | Purpose | Docs |
 | --- | --- | --- |
-| `cw-widget-root` | The smart container — store wiring, event bus, layout | [comprehensive docs](?path=/docs/templates-widgetroot--docs) |
+| `cw-widget-layout` | Pure presentational layout skeleton — structure only, zero store dependency | [docs](?path=/docs/templates-widgetlayout--docs) |
+
+<Heading as="h2">Pages</Heading>
+
+| Component | Purpose | Docs |
+| --- | --- | --- |
+| `cw-widget-root` | Live page container — store subscriptions, event bus, config merging | [comprehensive docs](?path=/docs/pages-widgetroot--docs) |
 
 <Heading as="h2">Guiding rules</Heading>
 
-1. **Data flows down** — config is always passed as component properties.
-2. **Events flow up** — leaves never import or mutate the store.
-3. **No `cw:*` side effects in leaves** — everything is delegated to the root.
-4. **One source of truth** — `chatStore` owns all widget state.
+1. **Templates are structural** — `cw-widget-layout` accepts pure props and lays out triggers, greet window, and panel.
+2. **Pages wire live state** — `cw-widget-root` owns store subscriptions, event bus, and config merging.
+3. **Data flows down** — properties are passed down the 5-layer hierarchy.
+4. **Events flow up** — leaves emit composed `cw:*` events up to the root page container.
