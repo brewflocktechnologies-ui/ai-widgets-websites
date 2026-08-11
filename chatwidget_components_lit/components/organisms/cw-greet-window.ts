@@ -132,26 +132,9 @@ export class CwGreetWindow extends LitElement {
     const durationSec = isLeaving ? closingSec : openingSec;
     const transitionDelay = phase === 'enter' ? '150ms' : '0ms';
 
-    const chatbarEnabled = !!cb?.enabled;
+    const bottomPx = this.bottomPx ?? 12;
 
-    const baseBottom = chatbarEnabled
-      ? cb?.offsetBottom !== undefined ? cb.offsetBottom : 12
-      : bb?.offsetBottom !== undefined ? bb.offsetBottom : 12;
-
-    const triggerHeight = chatbarEnabled
-      ? cb?.height || (cb?.layout === 'card' ? 220 : 40)
-      : bb?.height || 60;
-
-    const spacing = g.spacing !== undefined ? g.spacing : 16;
-    const computedBottom = baseBottom + triggerHeight + spacing;
-
-    const bottomPx = this.bottomPx !== undefined ? this.bottomPx : computedBottom;
-
-    const rawRight = chatbarEnabled
-      ? cb?.offsetRight !== undefined ? parseInt(String(cb.offsetRight)) : 16
-      : bb?.offsetRight !== undefined ? parseInt(String(bb.offsetRight)) : 16;
-
-    const rightPx = this.rightPx !== undefined ? this.rightPx : rawRight;
+    const rightPx = this.rightPx ?? 16;
 
     const widthVal = g.width || 320;
     const iconAlign = g.iconAlign === 'left' ? 'flex-start' : g.iconAlign === 'right' ? 'flex-end' : 'center';

@@ -128,28 +128,9 @@ export class CwChatPanel extends LitElement {
 
     const heightVal = cw.widgetHeight || 550;
 
-    const defaultBottom = (cw.offsetBottom !== undefined && cw.offsetBottom !== null && (cw.offsetBottom as any) !== '')
-      ? Number(cw.offsetBottom)
-      : (cb?.enabled ? (cb.offsetBottom !== undefined ? cb.offsetBottom : 12) : (bb?.offsetBottom !== undefined ? bb.offsetBottom : 12));
+    const bottomPx = this.bottomPx ?? 12;
 
-    let computedBottom = defaultBottom;
-    if (cb?.enabled && !cb.hideOnOpen) {
-      const h = cb.height || (cb.layout === 'card' ? 220 : 40);
-      const gap = cb.stackGap !== undefined ? cb.stackGap : 12;
-      computedBottom = defaultBottom + h + gap;
-    } else if (!cb?.enabled && bb && !bb.hideOnOpen) {
-      const h = bb.height || 60;
-      const gap = bb.stackGap !== undefined ? bb.stackGap : 12;
-      computedBottom = defaultBottom + h + gap;
-    }
-
-    const bottomPx = this.bottomPx !== undefined ? this.bottomPx : computedBottom;
-
-    const rawRight = (cw.offsetRight !== undefined && cw.offsetRight !== null && (cw.offsetRight as any) !== '')
-      ? Number(cw.offsetRight)
-      : 16;
-
-    const rightPx = this.rightPx !== undefined ? this.rightPx : rawRight;
+    const rightPx = this.rightPx ?? 16;
 
     const shadow = cw.widgetShadow
       ? `0 8px ${cw.widgetShadowBlur || 30}px ${cw.widgetShadowColor || 'rgba(0,0,0,0.12)'}`
