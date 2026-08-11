@@ -1,13 +1,31 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { BadgeConfig } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 
+/**
+ * cw-badge
+ * Pure presentational atom for unread count indicator.
+ * 100% domain-free with zero store type imports.
+ */
 @customElement('cw-badge')
 export class CwBadge extends LitElement {
   @property({ type: Number }) count = 0;
-  @property({ type: Object }) config: BadgeConfig = {};
+  @property({ type: String }) position?: string;
+  @property({ type: Number }) offsetX?: number;
+  @property({ type: Number }) offsetY?: number;
+  @property({ type: Number }) size?: number;
+  @property({ type: String }) animation?: string;
+  @property({ type: String }) backgroundColor?: string;
+  @property({ type: String }) textColor?: string;
+  @property({ type: Number }) fontSize?: number;
+  @property({ type: Number }) borderWidth?: number;
+  @property({ type: String }) borderColor?: string;
+  @property() borderRadius?: number | string;
+  @property({ type: String }) fontWeight?: string;
+  @property({ type: String }) boxShadow?: string;
+  @property({ type: String }) padding?: string;
+  @property({ type: Object }) config?: Record<string, any>;
 
   static styles = [
     CORE_STYLES,
@@ -49,19 +67,19 @@ export class CwBadge extends LitElement {
         25% { transform: rotate(-10deg); }
         75% { transform: rotate(10deg); }
       }
-    `
+    `,
   ];
 
   render() {
     if (!this.count || this.count <= 0) return html``;
 
     const b = this.config || {};
-    const pos = b.position || 'top-right';
-    const offsetX = b.offsetX !== undefined ? b.offsetX : -6;
-    const offsetY = b.offsetY !== undefined ? b.offsetY : -6;
-    const size = b.size || 20;
+    const pos = this.position || b.position || 'top-right';
+    const offsetX = this.offsetX !== undefined ? this.offsetX : (b.offsetX !== undefined ? b.offsetX : -6);
+    const offsetY = this.offsetY !== undefined ? this.offsetY : (b.offsetY !== undefined ? b.offsetY : -6);
+    const badgeSize = this.size || b.size || 20;
 
-    let animCss = b.animation || 'none';
+    let animCss = this.animation || b.animation || 'none';
     if (animCss === 'pulse') {
       animCss = 'badgePulse 1.5s ease-in-out infinite';
     } else if (animCss === 'bounce') {
@@ -76,21 +94,21 @@ export class CwBadge extends LitElement {
       animCss = animCss.replace(/wiggle/g, 'badgeWiggle');
     }
 
-    const isRelative = b.position === 'relative' || b.position === 'static';
+    const isRelative = pos === 'relative' || pos === 'static';
 
     const styleObj: Record<string, string> = {
-      position: isRelative && b.position ? b.position : 'absolute',
-      backgroundColor: b.backgroundColor || 'var(--cw-error)',
-      color: b.textColor || '#ffffff',
-      fontSize: `${b.fontSize || 11}px`,
+      position: isRelative ? pos : 'absolute',
+      backgroundColor: this.backgroundColor || b.backgroundColor || 'var(--cw-error)',
+      color: this.textColor || b.textColor || '#ffffff',
+      fontSize: `${this.fontSize || b.fontSize || 11}px`,
       lineHeight: '1',
-      minWidth: `${size}px`,
-      height: `${size}px`,
-      border: `${b.borderWidth !== undefined ? b.borderWidth : 2}px solid ${b.borderColor || '#ffffff'}`,
-      borderRadius: b.borderRadius !== undefined ? (typeof b.borderRadius === 'number' ? `${b.borderRadius}px` : b.borderRadius) : '9999px',
-      fontWeight: b.fontWeight || '700',
-      boxShadow: b.boxShadow || '0 1px 3px rgba(0,0,0,0.15)',
-      padding: b.padding !== undefined ? b.padding : '0 4px',
+      minWidth: `${badgeSize}px`,
+      height: `${badgeSize}px`,
+      border: `${this.borderWidth !== undefined ? this.borderWidth : (b.borderWidth !== undefined ? b.borderWidth : 2)}px solid ${this.borderColor || b.borderColor || '#ffffff'}`,
+      borderRadius: (this.borderRadius !== undefined ? (typeof this.borderRadius === 'number' ? `${this.borderRadius}px` : this.borderRadius) : (b.borderRadius !== undefined ? (typeof b.borderRadius === 'number' ? `${b.borderRadius}px` : b.borderRadius) : '9999px')),
+      fontWeight: this.fontWeight || b.fontWeight || '700',
+      boxShadow: this.boxShadow || b.boxShadow || '0 1px 3px rgba(0,0,0,0.15)',
+      padding: this.padding !== undefined ? this.padding : (b.padding !== undefined ? b.padding : '0 4px'),
       zIndex: '50',
       animation: animCss,
     };

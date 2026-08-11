@@ -11,8 +11,8 @@ a strict 5-layer hierarchy from tiny atoms up to the live page container.
 
 <Heading as="h2">The 5-layer hierarchy</Heading>
 
-- **Atoms** — the smallest building blocks (icon, avatar, badge, status ticks…). No business logic.
-- **Molecules** — groups of atoms that form a meaningful UI unit (composer, message bubble, chat footer, emoji picker, attach menu, chat menu…).
+- **Atoms** — the smallest building blocks (icon, badge, status dot, typing dots…). No business logic.
+- **Molecules** — groups of atoms that form a meaningful UI unit (avatar, composer, message bubble, chat footer, emoji picker, attach menu, chat menu…).
 - **Organisms** — sections composed of molecules (chat panel, header, floating trigger, greet window…).
 - **Templates** — pure layout skeletons (`cw-widget-layout`). Structure only, props in, zero store dependency.
 - **Pages** — the live smart container (`cw-widget-root`). Handles store subscriptions, event bus, config merging, and renders the template.
@@ -22,7 +22,7 @@ a strict 5-layer hierarchy from tiny atoms up to the live page container.
 | Component | Purpose | Docs |
 | --- | --- | --- |
 | `cw-icon` | Central SVG icon registry | [docs](?path=/docs/atoms-icon--docs) |
-| `cw-avatar` | Avatar with initials / image + status dot | [docs](?path=/docs/atoms-avatar--docs) |
+| `cw-status-dot` | Status indicator dot (online/offline) | [docs](?path=/docs/atoms-statusdot--docs) |
 | `cw-badge` | Unread count pill with animations | [docs](?path=/docs/atoms-badge--docs) |
 | `cw-typing-dots` | Typing indicator dots | [docs](?path=/docs/atoms-typingdots--docs) |
 
@@ -30,6 +30,7 @@ a strict 5-layer hierarchy from tiny atoms up to the live page container.
 
 | Component | Purpose | Docs |
 | --- | --- | --- |
+| `cw-avatar` | Avatar with initials / image + status dot | [docs](?path=/docs/molecules-avatar--docs) |
 | `cw-composer` | Attach + input + emoji + send | [docs](?path=/docs/molecules-composer--docs) |
 | `cw-message-bubble` | Single chat message (avatar + bubble + time + tick) | [docs](?path=/docs/molecules-messagebubble--docs) |
 | `cw-welcome-card` | Welcome / hero surface | [docs](?path=/docs/molecules-welcomecard--docs) |

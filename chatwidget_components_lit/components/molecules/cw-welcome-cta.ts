@@ -72,6 +72,7 @@ export class CwWelcomeCta extends LitElement {
       <cw-button
         fullWidth
         elevatable
+        .ariaLabel="${`${w.buttonText || 'Start Conversation'}. ${w.buttonSubtext || 'Typically replies in 5 minutes'}`}"
         .bg="${w.buttonBg || '#ffffff'}"
         .color="${w.buttonTextColor || 'var(--cw-ink)'}"
         .borderRadius="${(w.buttonBorderRadius || 24) + 'px'}"

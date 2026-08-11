@@ -186,17 +186,16 @@ export class CwWelcomeCard extends LitElement {
                   </div>
                 `
               : html`
-                  <div>
+                  <div style="flex: 1">
                     <cw-welcome-hero .config="${w}" .headerTextColor="${headerTextColor}"></cw-welcome-hero>
                   </div>
-                  <div>
-                    <cw-welcome-cta .config="${w}" .accentColor="${this.accentColor}" style="display: block; margin-bottom: 20px"></cw-welcome-cta>
-                    ${this.renderFooter(w)}
+                  <div style="margin-bottom: 12px">
+                    <cw-welcome-cta .config="${w}" .accentColor="${this.accentColor}"></cw-welcome-cta>
                   </div>
                 `
             }
 
-            ${isGlassy ? this.renderFooter(w) : ''}
+            ${this.renderFooter(w)}
           </div>
         </div>
       </div>

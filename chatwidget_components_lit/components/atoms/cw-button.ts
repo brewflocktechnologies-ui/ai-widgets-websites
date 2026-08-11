@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import './cw-icon.js';
@@ -11,6 +12,7 @@ export class CwButton extends LitElement {
   @property({ type: Boolean }) disabled = false;
   @property({ type: String }) type: 'button' | 'submit' | 'reset' = 'button';
   @property({ type: String }) label = '';
+  @property({ type: String }) override ariaLabel: string | null = null;
   @property({ type: String }) icon = '';
   @property({ type: String }) iconPosition: 'left' | 'right' | 'only' = 'left';
   @property({ type: Number }) iconSize?: number;
@@ -200,7 +202,7 @@ export class CwButton extends LitElement {
         class="btn variant-${this.variant} size-${this.size} ${this.elevatable ? 'elevatable' : ''} ${this.scalable ? 'scalable' : ''}"
         style="${cssString}"
         ?disabled="${this.disabled}"
-        aria-label="${this.label || this.icon || 'button'}"
+        aria-label="${ifDefined(this.ariaLabel || this.label || (isIconOnly ? this.icon || 'button' : undefined))}"
       >
         ${this.icon && (this.iconPosition === 'left' || isIconOnly)
         ? html`<cw-icon .name="${this.icon}" .size="${calculatedIconSize}"></cw-icon>`
