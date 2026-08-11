@@ -88,7 +88,7 @@ export class CwChatFooter extends LitElement {
       >
         <div class="powered" style="font-size: ${fontSize}; color: ${textColor}">
           <span>Powered by</span>
-          <a href="${poweredByLink}" target="_blank" style="color: ${poweredByColor}">
+          <a href="${poweredByLink}" target="_blank" rel="noopener noreferrer" style="color: ${poweredByColor}">
             ${poweredByText}
           </a>
         </div>

@@ -19,6 +19,8 @@ export class CwButton extends LitElement {
   @property({ type: String }) borderColor = '';
   @property({ type: String }) borderRadius = '9999px';
   @property({ type: Boolean }) fullWidth = false;
+  @property({ type: Boolean }) elevatable = false;
+  @property({ type: Boolean }) scalable = false;
   @property({ type: String }) padding = '';
   @property({ type: Number }) width?: number;
   @property({ type: Number }) height?: number;
@@ -50,6 +52,20 @@ export class CwButton extends LitElement {
         transition: all 0.2s ease;
         outline: none;
         user-select: none;
+      }
+      .btn.elevatable {
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background-color 0.2s;
+      }
+      .btn.elevatable:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      .btn.scalable {
+        transition: transform 0.2s ease, background-color 0.2s ease, filter 0.2s ease;
+      }
+      .btn.scalable:hover {
+        transform: scale(1.05);
       }
       .btn:focus-visible {
         outline: 2px solid var(--cw-accent, #0b5fff);
@@ -172,6 +188,7 @@ export class CwButton extends LitElement {
     if (this.fullWidth) styleObj.width = '100%';
     if (this.width !== undefined) styleObj.width = `${this.width}px`;
     if (this.height !== undefined) styleObj.height = `${this.height}px`;
+    else if (this.padding) styleObj.height = 'auto';
 
     const cssString = Object.entries(styleObj)
       .map(([k, v]) => `${k.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${v}`)
@@ -180,23 +197,23 @@ export class CwButton extends LitElement {
     return html`
       <button
         type="${this.type}"
-        class="btn variant-${this.variant} size-${this.size}"
+        class="btn variant-${this.variant} size-${this.size} ${this.elevatable ? 'elevatable' : ''} ${this.scalable ? 'scalable' : ''}"
         style="${cssString}"
         ?disabled="${this.disabled}"
         aria-label="${this.label || this.icon || 'button'}"
       >
         ${this.icon && (this.iconPosition === 'left' || isIconOnly)
-          ? html`<cw-icon .name="${this.icon}" .size="${calculatedIconSize}"></cw-icon>`
-          : ''
-        }
+        ? html`<cw-icon .name="${this.icon}" .size="${calculatedIconSize}"></cw-icon>`
+        : ''
+      }
 
         ${!isIconOnly && this.label ? html`<span>${this.label}</span>` : ''}
         <slot></slot>
 
         ${this.icon && this.iconPosition === 'right' && !isIconOnly
-          ? html`<cw-icon .name="${this.icon}" .size="${calculatedIconSize}"></cw-icon>`
-          : ''
-        }
+        ? html`<cw-icon .name="${this.icon}" .size="${calculatedIconSize}"></cw-icon>`
+        : ''
+      }
       </button>
     `;
   }
