@@ -34,7 +34,7 @@ import { injectStoreConfig } from './store/chat-store.js';
 export * from './components/atoms/cw-icon.js';
 export * from './components/atoms/cw-badge.js';
 export * from './components/atoms/cw-typing-dots.js';
-export * from './components/atoms/cw-avatar.js';
+export * from './components/molecules/cw-avatar.js';
 export * from './components/atoms/cw-tooltip.js';
 
 // Molecules

@@ -4,7 +4,7 @@ import type { WelcomeConfig } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import '../atoms/cw-icon.js';
-import '../atoms/cw-avatar.js';
+import './cw-avatar.js';
 
 @customElement('cw-welcome-card')
 export class CwWelcomeCard extends LitElement {

@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { ChatWindowState, FeaturesState } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
-import '../atoms/cw-avatar.js';
+import './cw-avatar.js';
 import '../atoms/cw-icon.js';
 
 @customElement('cw-chat-header')

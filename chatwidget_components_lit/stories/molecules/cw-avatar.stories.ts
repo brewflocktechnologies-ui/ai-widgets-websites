@@ -1,8 +1,8 @@
 import { html } from 'lit';
-import '../../components/atoms/cw-avatar.js';
+import '../../components/molecules/cw-avatar.js';
 
 export default {
-  title: 'Atoms/Avatar',
+  title: 'Molecules/Avatar',
   component: 'cw-avatar',
   tags: ['autodocs'],
   argTypes: {

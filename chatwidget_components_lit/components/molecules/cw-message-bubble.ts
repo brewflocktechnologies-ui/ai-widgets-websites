@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import type { Message, ChatWindowState } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import '../atoms/cw-icon.js';
-import '../atoms/cw-avatar.js';
+import './cw-avatar.js';
 
 @customElement('cw-message-bubble')
 export class CwMessageBubble extends LitElement {
