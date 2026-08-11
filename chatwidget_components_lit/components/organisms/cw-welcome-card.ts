@@ -3,10 +3,15 @@ import { customElement, property } from 'lit/decorators.js';
 import type { WelcomeConfig } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
-import '../atoms/cw-icon.js';
 import '../atoms/cw-button.js';
-import '../molecules/cw-avatar.js';
+import '../molecules/cw-welcome-hero.js';
+import '../molecules/cw-welcome-cta.js';
 
+/**
+ * cw-welcome-card
+ * Organism representing the full welcome card screen.
+ * Delegates hero text/avatar rendering to <cw-welcome-hero> and CTA button to <cw-welcome-cta>.
+ */
 @customElement('cw-welcome-card')
 export class CwWelcomeCard extends LitElement {
   @property({ type: Object }) config?: WelcomeConfig;
@@ -93,78 +98,11 @@ export class CwWelcomeCard extends LitElement {
         justify-content: space-between;
         width: 100%;
       }
-      .logo-container {
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
-        margin-bottom: 20px;
-      }
-      .logo-img {
-        height: 36px;
-        object-fit: contain;
-      }
-      .text-block {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-      .welcome-title {
-        font-weight: 800;
-        line-height: 1.15;
-        letter-spacing: -0.02em;
-        margin: 0;
-      }
-      .welcome-desc {
-        line-height: 1.5;
-        font-weight: 400;
-        margin: 0;
-      }
-      .avatars-row {
-        display: flex;
-        align-items: center;
-        gap: 0;
-        margin-top: 16px;
-        width: 100%;
-      }
       .glassy-container {
         display: flex;
         flex-direction: column;
         gap: 24px;
         justify-content: space-between;
-      }
-      .btn-inner {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        width: 100%;
-        text-align: left;
-      }
-      .btn-icon-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-      .btn-text-col {
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
-      }
-      .btn-text-main {
-        font-weight: 700;
-        font-size: 15px;
-        letter-spacing: -0.01em;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .btn-text-sub {
-        font-size: 12px;
-        font-weight: 500;
-        opacity: 0.6;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
       }
       .footer-brand {
         display: flex;
@@ -182,25 +120,8 @@ export class CwWelcomeCard extends LitElement {
         color: inherit;
         text-decoration: none;
       }
-    `
+    `,
   ];
-
-  private resolveAvatarUrl(avatar: any): string {
-    if (typeof avatar === 'string' && avatar.trim() && !avatar.startsWith('[object')) {
-      return avatar;
-    }
-    if (avatar && typeof avatar === 'object') {
-      const url = avatar.url || avatar.src || avatar.avatar || avatar.imageUrl || '';
-      if (url && typeof url === 'string') return url;
-    }
-    return '';
-  }
-
-  private start() {
-    this.dispatchEvent(
-      new CustomEvent('cw:start-chat', { bubbles: true, composed: true })
-    );
-  }
 
   private close() {
     this.dispatchEvent(
@@ -225,7 +146,7 @@ export class CwWelcomeCard extends LitElement {
   render() {
     const w = this.config || {};
     const headerTextColor = w.headerTextColor || '#ffffff';
-    const bgGradient = w.bgGradient || 'linear-gradient(135deg, var(--cw-accent), #22d3ee)';
+    const bgGradient = w.bgGradient || 'gradient(135deg, var(--cw-accent), #22d3ee)';
     const padding = w.padding || '24px 20px 12px 20px';
     const isGlassy = w.cardLayout === 'glassy';
 
@@ -250,151 +171,33 @@ export class CwWelcomeCard extends LitElement {
             @click="${this.close}"
           ></cw-button>
 
-          ${isGlassy
-            ? html`
-                <div class="layout-col">
+          <div class="layout-col">
+            ${isGlassy
+              ? html`
                   <div style="display: flex; flex-direction: column; height: 100%; margin-bottom: 12px; justify-content: ${w.cardAlign === 'center' || w.cardPosition === 'center' ? 'center' : 'space-between'}">
-                    <!-- Top Logo / Icon -->
-                    <div class="logo-container" style="justify-content: ${w.logoAlign || (w.textAlign === 'center' || w.cardAlign === 'center' ? 'center' : 'flex-start')}">
-                      ${w.logoUrl
-                        ? html`<img src="${w.logoUrl}" alt="${w.logoAlt || 'Company Logo'}" class="logo-img" />`
-                        : html`
-                            <div style="color: ${headerTextColor}">
-                              <cw-icon .name="${'MessageCircle'}" .size="${42}"></cw-icon>
-                            </div>
-                          `
-                      }
-                    </div>
-
-                    <!-- Glassy Container -->
+                    <cw-welcome-hero .config="${w}" .headerTextColor="${headerTextColor}" isGlassy logoOnly></cw-welcome-hero>
                     <div
                       class="glassy-container"
                       style="background: ${w.cardBg || 'rgba(255, 255, 255, 0.12)'}; border: ${w.cardBorder || '1px solid rgba(255, 255, 255, 0.22)'}; border-radius: ${(w.cardBorderRadius || 24)}px; padding: ${w.cardPadding || '32px 24px'}; backdrop-filter: blur(${(w.cardBlur || 16)}px); -webkit-backdrop-filter: blur(${(w.cardBlur || 16)}px); box-shadow: ${w.cardShadow || '0 12px 40px 0 rgba(0, 0, 0, 0.15)'}; flex: ${w.cardFlex || '1'}; width: ${w.cardWidth || '100%'}; min-height: ${w.cardMinHeight || 'auto'}"
                     >
-                      <div class="text-block" style="text-align: ${w.textAlign || (w.cardAlign === 'center' ? 'center' : 'left')}; align-items: ${w.textAlign === 'center' || w.cardAlign === 'center' ? 'center' : 'flex-start'}">
-                        <h2 class="welcome-title" style="font-size: ${w.titleFontSize || '28px'}; color: ${headerTextColor}">
-                          ${w.title || 'Hi there! 👋 How can we help you today?'}
-                        </h2>
-                        <p class="welcome-desc" style="font-size: ${w.descriptionFontSize || '16px'}; color: ${w.subtextColor || 'rgba(255,255,255,0.9)'}">
-                          ${w.description || 'Our support heroes are here to assist you.'}
-                        </p>
-
-                        <!-- Overlapping Avatars -->
-                        <div class="avatars-row" style="justify-content: ${w.avatarAlign || (w.textAlign === 'center' || w.cardAlign === 'center' ? 'center' : 'flex-start')}">
-                          ${(w.avatars || []).map(
-                            (avatar: any, idx: number) => html`
-                              <cw-avatar
-                                .src="${this.resolveAvatarUrl(avatar)}"
-                                .name="${typeof avatar === 'object' && avatar?.name ? avatar.name : 'Agent'}"
-                                .size="${38}"
-                                .showOnline="${false}"
-                                style="margin-left: ${idx === 0 ? '0' : '-12px'}; border: 2px solid ${w.avatarBorderColor || 'rgba(255,255,255,0.2)'}; border-radius: 50%; z-index: ${10 + idx}; box-shadow: 0 4px 6px rgba(0,0,0,0.1)"
-                              ></cw-avatar>
-                            `
-                          )}
-                        </div>
-                      </div>
-
-                      <!-- Button inside Glassy Card -->
-                      <cw-button
-                        fullWidth
-                        elevatable
-                        .bg="${w.buttonBg || '#ffffff'}"
-                        .color="${w.buttonTextColor || 'var(--cw-ink)'}"
-                        .borderRadius="${(w.buttonBorderRadius || 24) + 'px'}"
-                        .padding="${w.buttonPadding || '18px 24px'}"
-                        @click="${this.start}"
-                      >
-                        <div class="btn-inner">
-                          <div class="btn-icon-wrapper" style="color: ${w.buttonIconColor || this.accentColor}">
-                            <cw-icon .name="${'ChatLines'}" .size="${24}"></cw-icon>
-                          </div>
-                          <div class="btn-text-col">
-                            <span class="btn-text-main" style="color: ${w.buttonTextColor || 'var(--cw-ink)'}">
-                              ${w.buttonText || 'Start Conversation'}
-                            </span>
-                            <span class="btn-text-sub" style="color: ${w.buttonTextColor || 'var(--cw-ink)'}">
-                              ${w.buttonSubtext || 'Typically replies in 5 minutes'}
-                            </span>
-                          </div>
-                        </div>
-                      </cw-button>
+                      <cw-welcome-hero .config="${w}" .headerTextColor="${headerTextColor}" isGlassy hideLogo></cw-welcome-hero>
+                      <cw-welcome-cta .config="${w}" .accentColor="${this.accentColor}"></cw-welcome-cta>
                     </div>
                   </div>
-
-                  ${this.renderFooter(w)}
-                </div>
-              `
-            : html`
-                <!-- Normal Layout -->
-                <div class="layout-col">
+                `
+              : html`
                   <div>
-                    <div class="logo-container" style="justify-content: flex-start; margin-bottom: 28px">
-                      ${w.logoUrl
-                        ? html`<img src="${w.logoUrl}" alt="${w.logoAlt || 'Company Logo'}" class="logo-img" />`
-                        : html`
-                            <div style="color: ${headerTextColor}">
-                              <cw-icon .name="${'MessageCircle'}" .size="${42}"></cw-icon>
-                            </div>
-                          `
-                      }
-                    </div>
-
-                    <div class="text-block" style="margin-bottom: 24px; text-align: left">
-                      <h2 class="welcome-title" style="font-size: ${w.titleFontSize || '28px'}">
-                        ${w.title || 'Hi there! 👋 How can we help you today?'}
-                      </h2>
-                      <p class="welcome-desc" style="font-size: ${w.descriptionFontSize || '16px'}; color: ${w.subtextColor || 'rgba(255,255,255,0.9)'}">
-                        ${w.description || 'Our support heroes are here to assist you.'}
-                      </p>
-
-                      <div class="avatars-row">
-                        ${(w.avatars || []).map(
-                          (avatar: any, idx: number) => html`
-                            <cw-avatar
-                              .src="${this.resolveAvatarUrl(avatar)}"
-                              .name="${typeof avatar === 'object' && avatar?.name ? avatar.name : 'Agent'}"
-                              .size="${38}"
-                              .showOnline="${false}"
-                              style="margin-left: ${idx === 0 ? '0' : '-12px'}; border: 2px solid ${w.avatarBorderColor || 'rgba(255,255,255,0.2)'}; border-radius: 50%; z-index: ${10 + idx}; box-shadow: 0 4px 6px rgba(0,0,0,0.1)"
-                            ></cw-avatar>
-                          `
-                        )}
-                      </div>
-                    </div>
+                    <cw-welcome-hero .config="${w}" .headerTextColor="${headerTextColor}"></cw-welcome-hero>
                   </div>
-
                   <div>
-                    <cw-button
-                      fullWidth
-                      elevatable
-                      .bg="${w.buttonBg || '#ffffff'}"
-                      .color="${w.buttonTextColor || 'var(--cw-ink)'}"
-                      .borderRadius="${(w.buttonBorderRadius || 24) + 'px'}"
-                      .padding="${w.buttonPadding || '18px 24px'}"
-                      style="margin-bottom: 20px"
-                      @click="${this.start}"
-                    >
-                      <div class="btn-inner">
-                        <div class="btn-icon-wrapper" style="color: ${w.buttonIconColor || this.accentColor}">
-                          <cw-icon .name="${'ChatLines'}" .size="${24}"></cw-icon>
-                        </div>
-                        <div class="btn-text-col">
-                          <span class="btn-text-main" style="color: ${w.buttonTextColor || 'var(--cw-ink)'}">
-                            ${w.buttonText || 'Start Conversation'}
-                          </span>
-                          <span class="btn-text-sub" style="color: ${w.buttonTextColor || 'var(--cw-ink)'}">
-                            ${w.buttonSubtext || 'Typically replies in 5 minutes'}
-                          </span>
-                        </div>
-                      </div>
-                    </cw-button>
-
+                    <cw-welcome-cta .config="${w}" .accentColor="${this.accentColor}" style="display: block; margin-bottom: 20px"></cw-welcome-cta>
                     ${this.renderFooter(w)}
                   </div>
-                </div>
-              `
-          }
+                `
+            }
+
+            ${isGlassy ? this.renderFooter(w) : ''}
+          </div>
         </div>
       </div>
     `;
