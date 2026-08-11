@@ -6,7 +6,7 @@ import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import { EnterLeaveController } from '../../utils/transition.js';
 import './cw-chat-header.js';
 import './cw-chat-body.js';
-import './cw-confirm-dialog.js';
+import '../molecules/cw-confirm-dialog.js';
 import type { CwChatBody } from './cw-chat-body.js';
 
 @customElement('cw-chat-panel')

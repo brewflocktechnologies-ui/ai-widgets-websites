@@ -48,6 +48,8 @@ export * from './components/molecules/cw-chat-footer.js';
 export * from './components/molecules/cw-emoji-picker.js';
 export * from './components/molecules/cw-attach-menu.js';
 export * from './components/molecules/cw-chat-menu.js';
+export * from './components/molecules/cw-confirm-dialog.js';
+
 
 // Organisms
 
@@ -60,7 +62,6 @@ export * from './components/organisms/cw-forms-preview.js';
 export * from './components/organisms/cw-image-cropper.js';
 export * from './components/organisms/cw-chat-body.js';
 export * from './components/organisms/cw-chat-panel.js';
-export * from './components/organisms/cw-confirm-dialog.js';
 
 // Templates
 export * from './components/templates/cw-widget-layout.js';

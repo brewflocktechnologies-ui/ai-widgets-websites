@@ -53,28 +53,6 @@ export class CwComposer extends LitElement {
       textarea::placeholder {
         color: var(--placeholder-color, var(--cw-muted)) !important;
       }
-      button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border: none;
-        padding: 0;
-        margin: 0;
-        line-height: 0;
-        box-sizing: border-box;
-        cursor: pointer;
-        flex-shrink: 0;
-      }
-      button:disabled {
-        cursor: default;
-      }
-      .send-icon {
-        margin-left: 2px;
-        margin-top: 1px;
-      }
     `
   ];
 
@@ -163,6 +141,8 @@ export class CwComposer extends LitElement {
               <cw-button
                 variant="icon"
                 size="xs"
+                .width="${30}"
+                .height="${30}"
                 icon="Plus"
                 .iconSize="${16}"
                 .bg="${attachBg}"
@@ -193,6 +173,8 @@ export class CwComposer extends LitElement {
               <cw-button
                 variant="icon"
                 size="xs"
+                .width="${30}"
+                .height="${30}"
                 icon="Smile"
                 .iconSize="${20}"
                 .color="${emojiColor}"
