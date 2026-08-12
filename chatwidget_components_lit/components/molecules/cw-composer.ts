@@ -96,9 +96,31 @@ export class CwComposer extends LitElement {
     }
   }
 
+  protected updated(changedProperties: Map<string, unknown>) {
+    super.updated(changedProperties);
+    if (changedProperties.has('draft')) {
+      const textarea = this.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea');
+      if (textarea && textarea.value !== (this.draft || '')) {
+        textarea.value = this.draft || '';
+        if (!this.draft) {
+          textarea.style.height = '32px';
+        }
+      }
+    }
+  }
+
   private send() {
-    if (!this.draft.trim()) return;
-    this.emit('cw:send', this.draft.trim());
+    const text = this.draft.trim();
+    if (!text) return;
+    this.draft = '';
+    const textarea = this.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea');
+    if (textarea) {
+      textarea.value = '';
+      textarea.style.height = '32px';
+    }
+    this.emit('cw:draft-change', '');
+    this.emit('cw:send', text);
+    this.requestUpdate();
   }
 
   private toggleAttach() {

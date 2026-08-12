@@ -308,9 +308,9 @@ export class CwWidgetRoot extends LitElement {
         this.handleGreetSubmit((e.detail as string) || '');
       }],
       ['cw:draft-change', (e) => { chatStore.get().draft = e.detail; }],
-      ['cw:send', () => {
+      ['cw:send', (e) => {
         this.userHasSentMessage = true;
-        chatStore.send();
+        chatStore.send(e.detail as string);
       }],
       ['cw:toggle-attach', () => chatStore.toggleAttach()],
       ['cw:toggle-emoji', () => chatStore.toggleEmoji()],

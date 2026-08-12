@@ -436,10 +436,10 @@ export const chatStore = {
     return s.flags[key] !== undefined ? s.flags[key] : defaultValue;
   },
 
-  send() {
+  send(textOverride?: string) {
     const s = getStore().chat;
-    if (!s.draft?.trim()) return;
-    const text = s.draft.trim();
+    const text = (textOverride || s.draft || '').trim();
+    if (!text) return;
     const msgObj: Message = {
       key: 'msg_' + Date.now(),
       senderType: 'VISITOR',
