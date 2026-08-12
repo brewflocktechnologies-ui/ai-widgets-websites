@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   build: {
-    copyPublicDir: false,
+    copyPublicDir: true,
     lib: {
       entry: './index.ts',
       name: 'ChatWidgetLit',
