@@ -38,6 +38,16 @@ export class CwChatHeader extends LitElement {
         gap: 10px;
         min-width: 0;
       }
+      .expand-btn {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+      }
+      @media (max-width: 480px) {
+        .expand-btn {
+          display: none !important;
+        }
+      }
       .info-col {
         display: flex;
         flex-direction: column;
@@ -125,15 +135,17 @@ export class CwChatHeader extends LitElement {
         <div class="left-section">
           ${cw.modernUi !== false
             ? html`
-                <cw-button
-                  variant="icon"
-                  size="xs"
-                  .icon="${this.isExpanded ? 'Minimize2' : 'Maximize2'}"
-                  .iconSize="${16}"
-                  .color="${headerTextColor}"
-                  .label="${this.isExpanded ? 'Collapse chat' : 'Expand chat'}"
-                  @click="${this.toggleExpand}"
-                ></cw-button>
+                <div class="expand-btn">
+                  <cw-button
+                    variant="icon"
+                    size="xs"
+                    .icon="${this.isExpanded ? 'Minimize2' : 'Maximize2'}"
+                    .iconSize="${16}"
+                    .color="${headerTextColor}"
+                    .label="${this.isExpanded ? 'Collapse chat' : 'Expand chat'}"
+                    @click="${this.toggleExpand}"
+                  ></cw-button>
+                </div>
               `
             : ''
           }
