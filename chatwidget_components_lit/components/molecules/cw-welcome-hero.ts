@@ -36,25 +36,50 @@ export class CwWelcomeHero extends LitElement {
       .text-block {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
       }
       .welcome-title {
         font-weight: 800;
-        line-height: 1.15;
+        line-height: 1.2;
         letter-spacing: -0.02em;
         margin: 0;
+        font-size: var(--cw-welcome-title-size, clamp(18px, 4vw, 24px));
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
       .welcome-desc {
-        line-height: 1.5;
+        line-height: 1.4;
         font-weight: 400;
         margin: 0;
+        font-size: var(--cw-welcome-desc-size, clamp(13px, 3vw, 15px));
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
       .avatars-row {
         display: flex;
         align-items: center;
         gap: 0;
-        margin-top: 16px;
+        margin-top: 10px;
         width: 100%;
+      }
+      @media (max-height: 580px) {
+        .welcome-title {
+          font-size: clamp(16px, 4vw, 20px) !important;
+          -webkit-line-clamp: 2 !important;
+        }
+        .welcome-desc {
+          font-size: 13px !important;
+        }
+        .logo-container {
+          margin-bottom: 8px !important;
+        }
+        .avatars-row {
+          margin-top: 6px !important;
+        }
       }
     `,
   ];
@@ -122,10 +147,10 @@ export class CwWelcomeHero extends LitElement {
         class="text-block"
         style="text-align: ${textAlign}; align-items: ${textAlign === 'center' ? 'center' : 'flex-start'}; margin-bottom: ${this.isGlassy ? '0' : '24px'}"
       >
-        <h2 class="welcome-title" style="font-size: ${w.titleFontSize || '28px'}; color: ${this.headerTextColor}">
+        <h2 class="welcome-title" style="${w.titleFontSize ? `--cw-welcome-title-size: ${typeof w.titleFontSize === 'number' ? `${w.titleFontSize}px` : w.titleFontSize};` : ''} color: ${this.headerTextColor}">
           ${w.title || 'Hi there! 👋 How can we help you today?'}
         </h2>
-        <p class="welcome-desc" style="font-size: ${w.descriptionFontSize || '16px'}; color: ${w.subtextColor || 'rgba(255,255,255,0.9)'}">
+        <p class="welcome-desc" style="${w.descriptionFontSize ? `--cw-welcome-desc-size: ${typeof w.descriptionFontSize === 'number' ? `${w.descriptionFontSize}px` : w.descriptionFontSize};` : ''} color: ${w.subtextColor || 'rgba(255,255,255,0.9)'}">
           ${w.description || 'Our support heroes are here to assist you.'}
         </p>
 
@@ -136,9 +161,9 @@ export class CwWelcomeHero extends LitElement {
               <cw-avatar
                 .src="${this.resolveAvatarUrl(avatar)}"
                 .name="${typeof avatar === 'object' && avatar?.name ? avatar.name : 'Agent'}"
-                .size="${38}"
+                .size="${34}"
                 .showOnline="${false}"
-                style="margin-left: ${idx === 0 ? '0' : '-12px'}; border: 2px solid ${w.avatarBorderColor || 'rgba(255,255,255,0.2)'}; border-radius: 50%; z-index: ${10 + idx}; box-shadow: 0 4px 6px rgba(0,0,0,0.1)"
+                style="margin-left: ${idx === 0 ? '0' : '-10px'}; border: 2px solid ${w.avatarBorderColor || 'rgba(255,255,255,0.2)'}; border-radius: 50%; z-index: ${10 + idx}; box-shadow: 0 4px 6px rgba(0,0,0,0.1)"
               ></cw-avatar>
             `
           )}

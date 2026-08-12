@@ -317,7 +317,7 @@ export class CwChatBody extends LitElement {
     return html`
       <div
         class="panel-body"
-        style="background: ${isWelcome ? cw.welcome?.bgGradient || 'linear-gradient(135deg, var(--cw-accent), #22d3ee)' : cw.bodyBg || 'var(--cw-bg)'}; padding: ${isWelcome ? '0px' : ''}"
+        style="background: ${isWelcome ? cw.welcome?.bgGradient || 'linear-gradient(135deg, var(--cw-accent), #22d3ee)' : cw.bodyBg || 'var(--cw-bg)'}; padding: ${isWelcome ? '0px' : ''}; ${isWelcome ? 'height: 100%; max-height: 100%; overflow: hidden;' : ''}"
       >
         <!-- WELCOME SCREEN -->
         ${isWelcome

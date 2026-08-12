@@ -25,7 +25,7 @@ export class CwWelcomeCta extends LitElement {
       .btn-inner {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 12px;
         width: 100%;
         text-align: left;
       }
@@ -56,6 +56,14 @@ export class CwWelcomeCta extends LitElement {
         text-overflow: ellipsis;
         white-space: nowrap;
       }
+      @media (max-height: 580px) {
+        .btn-text-main {
+          font-size: 14px !important;
+        }
+        .btn-text-sub {
+          font-size: 11px !important;
+        }
+      }
     `,
   ];
 
@@ -76,7 +84,7 @@ export class CwWelcomeCta extends LitElement {
         .bg="${w.buttonBg || '#ffffff'}"
         .color="${w.buttonTextColor || 'var(--cw-ink)'}"
         .borderRadius="${(w.buttonBorderRadius || 24) + 'px'}"
-        .padding="${w.buttonPadding || '18px 24px'}"
+        .padding="${w.buttonPadding || 'clamp(12px, 2vh, 16px) clamp(16px, 3vw, 24px)'}"
         @click="${this.start}"
       >
         <div class="btn-inner">

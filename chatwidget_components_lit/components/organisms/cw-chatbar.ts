@@ -42,6 +42,12 @@ export class CwChatbar extends LitElement {
         max-width: calc(100% - 24px);
         max-height: calc(100% - 24px);
       }
+      @media (max-width: 480px) {
+        .chatbar-wrapper {
+          max-width: calc(100% - 24px) !important;
+          right: 12px !important;
+        }
+      }
       .card-layout {
         display: flex;
         flex-direction: column;

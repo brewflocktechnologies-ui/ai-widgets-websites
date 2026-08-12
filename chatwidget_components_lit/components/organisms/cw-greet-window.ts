@@ -51,6 +51,20 @@ export class CwGreetWindow extends LitElement {
         padding-top: 14px;
         padding-right: 8px;
       }
+      @media (max-width: 480px) {
+        .greet-wrapper {
+          width: calc(100% - 24px) !important;
+          max-width: calc(100% - 24px) !important;
+          right: 12px !important;
+          left: 12px !important;
+          margin: 0 auto;
+        }
+      }
+      @media (max-height: 680px) {
+        .greet-wrapper {
+          max-height: calc(100% - 80px) !important;
+        }
+      }
       .close-btn {
         position: absolute;
         top: -30px;

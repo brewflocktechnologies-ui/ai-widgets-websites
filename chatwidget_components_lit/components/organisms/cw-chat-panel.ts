@@ -50,6 +50,30 @@ export class CwChatPanel extends LitElement {
         transition: all 0.3s ease;
         max-width: calc(100% - 24px);
       }
+      @media (max-width: 480px) {
+        .panel-wrapper {
+          position: fixed !important;
+          top: 0 !important;
+          bottom: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          height: 100dvh !important;
+          max-width: 100vw !important;
+          max-height: 100vh !important;
+          max-height: 100dvh !important;
+          margin: 0 !important;
+          border-radius: 0 !important;
+          box-shadow: none !important;
+        }
+        .panel {
+          border-radius: 0 !important;
+          border: none !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+      }
       .panel {
         display: flex;
         flex-direction: column;

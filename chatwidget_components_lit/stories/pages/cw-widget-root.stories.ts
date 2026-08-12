@@ -17,7 +17,7 @@ const DEFAULT_ARGS = {
   bubbleOffsetBottom: 12,
   barOffsetRight: 24,
   barOffsetBottom: 16,
-  cardOffsetRight: 200,
+  cardOffsetRight: 20,
   cardOffsetBottom: 20,
   bubbleWidth: 60,
   bubbleHeight: 60,
@@ -192,6 +192,7 @@ const DEFAULT_ARGS = {
 export default {
   title: 'Pages/WidgetRoot',
   component: 'cw-widget-root',
+  parameters: { layout: 'fullscreen' },
   args: DEFAULT_ARGS,
   argTypes: {
     // 1. Widget & Layout
@@ -383,7 +384,7 @@ export default {
 };
 
 const renderWidget = (args: any) => html`
-  <div style="position: relative; height: 680px; width: 440px;">
+  <div style="position: relative; width: 100%; height: 100vh; max-height: 100vh; overflow: hidden; box-sizing: border-box;">
     <cw-widget-root
       .clientName="${args.clientName}"
       .agentName="${args.agentName}"

@@ -83,6 +83,8 @@ export class CwWelcomeCard extends LitElement {
         display: flex;
         flex-direction: column;
         height: 100%;
+        max-height: 100%;
+        overflow: hidden;
         justify-content: space-between;
       }
       .close-btn-wrapper {
@@ -95,14 +97,27 @@ export class CwWelcomeCard extends LitElement {
         display: flex;
         flex-direction: column;
         height: 100%;
+        max-height: 100%;
+        overflow: hidden;
         justify-content: space-between;
         width: 100%;
       }
       .glassy-container {
         display: flex;
         flex-direction: column;
-        gap: 24px;
+        gap: clamp(10px, 2.5vh, 24px);
         justify-content: space-between;
+        padding: clamp(14px, 2.5vh, 32px) clamp(14px, 3vw, 24px);
+        box-sizing: border-box;
+      }
+      @media (max-height: 580px) {
+        .welcome-container {
+          padding: 16px 14px 8px 14px !important;
+        }
+        .glassy-container {
+          padding: 14px 16px !important;
+          gap: 10px !important;
+        }
       }
       .footer-brand {
         display: flex;
@@ -178,7 +193,7 @@ export class CwWelcomeCard extends LitElement {
                     <cw-welcome-hero .config="${w}" .headerTextColor="${headerTextColor}" isGlassy logoOnly></cw-welcome-hero>
                     <div
                       class="glassy-container"
-                      style="background: ${w.cardBg || 'rgba(255, 255, 255, 0.12)'}; border: ${w.cardBorder || '1px solid rgba(255, 255, 255, 0.22)'}; border-radius: ${(w.cardBorderRadius || 24)}px; padding: ${w.cardPadding || '32px 24px'}; backdrop-filter: blur(${(w.cardBlur || 16)}px); -webkit-backdrop-filter: blur(${(w.cardBlur || 16)}px); box-shadow: ${w.cardShadow || '0 12px 40px 0 rgba(0, 0, 0, 0.15)'}; flex: ${w.cardFlex || '1'}; width: ${w.cardWidth || '100%'}; min-height: ${w.cardMinHeight || 'auto'}"
+                      style="background: ${w.cardBg || 'rgba(255, 255, 255, 0.12)'}; border: ${w.cardBorder || '1px solid rgba(255, 255, 255, 0.22)'}; border-radius: ${(w.cardBorderRadius || 24)}px; ${w.cardPadding ? `padding: ${w.cardPadding};` : ''} backdrop-filter: blur(${(w.cardBlur || 16)}px); -webkit-backdrop-filter: blur(${(w.cardBlur || 16)}px); box-shadow: ${w.cardShadow || '0 12px 40px 0 rgba(0, 0, 0, 0.15)'}; flex: 1; width: 100%; min-height: 0;"
                     >
                       <cw-welcome-hero .config="${w}" .headerTextColor="${headerTextColor}" isGlassy hideLogo></cw-welcome-hero>
                       <cw-welcome-cta .config="${w}" .accentColor="${this.accentColor}"></cw-welcome-cta>
