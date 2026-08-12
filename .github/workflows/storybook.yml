@@ -69,16 +69,6 @@ jobs:
           cp -r dist/* storybook-static/dist/
 
       # ----------------------------------------
-      # Add client configurations
-      # ----------------------------------------
-      - name: Add client configurations
-        run: |
-          if [ -d clients ]; then
-            mkdir -p storybook-static/clients
-            cp -r clients/* storybook-static/clients/
-          fi
-
-      # ----------------------------------------
       # Upload complete Pages artifact
       # ----------------------------------------
       - name: Upload Storybook
