@@ -1,40 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chat Widget Tester</title>
+
+  <style>
+    :root {
+      --primary-color: #ff0000;
+      --secondary-color: #dc2626;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      padding: 24px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
 </head>
 
 <body>
 
   <h1>Lit Component Client Tester</h1>
 
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: 'var(--primary-color, #ff0000)',
+            secondary: 'var(--secondary-color, #dc2626)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Your widget -->
   <script
     src="./dist/chat-widget.js"
     data-client-id="amber">
   </script>
 
-  <script>
-    document
-      .getElementById('dark-mode-button')
-      .addEventListener('click', () => {
-        document.documentElement.classList.toggle('dark');
-      });
-
-    document
-      .getElementById('widget-button')
-      .addEventListener('click', () => {
-        window.dispatchEvent(
-          new CustomEvent('toggle-contact-widget')
-        );
-      });
-  </script>
-
 </body>
+
 </html>

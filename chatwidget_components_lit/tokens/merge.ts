@@ -17,6 +17,7 @@ import type {
   FeaturesState,
 } from '../store/types.js';
 import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from './chatbar-presets.js';
+import { getParentTheme } from '../utils/theme.js';
 
 export interface MergeResult {
   theme: TokenTheme;
@@ -178,6 +179,9 @@ export function computeEffectiveChatbarConfig(
   cbs: ChatbarState = {} as ChatbarState,
   activeTrigger: string = 'bubble'
 ): ChatbarState {
+  const useTheme = host.useWebsiteTheme !== undefined ? host.useWebsiteTheme : (cbs.useWebsiteTheme ?? true);
+  const pTheme = useTheme ? getParentTheme() : null;
+
   const isChatbarTrigger = activeTrigger === 'chatbar' || activeTrigger === 'chatcard';
   const barRight = host.barOffsetRight !== undefined ? host.barOffsetRight : (cbs.barOffsetRight ?? cbs.offsetRight ?? 16);
   const barBottom = host.barOffsetBottom !== undefined ? host.barOffsetBottom : (cbs.barOffsetBottom ?? cbs.offsetBottom ?? 12);
@@ -187,9 +191,12 @@ export function computeEffectiveChatbarConfig(
   const isCardLayout = (host.chatbarLayout || (activeTrigger === 'chatcard' ? 'card' : 'bar')) === 'card';
   const preset = isCardLayout ? CHATBAR_CARD_PRESET : CHATBAR_BAR_PRESET;
 
+  const effectiveBg = host.chatbarBg || (pTheme ? pTheme.primary : cbs.bgColor);
+
   return {
     ...preset,
     ...cbs,
+    useWebsiteTheme: useTheme,
     enabled: isChatbarTrigger,
     layout: isCardLayout ? 'card' : 'bar',
     width: (host.chatbarWidth !== undefined && host.chatbarWidth !== CHATBAR_BAR_PRESET.width)
@@ -198,12 +205,12 @@ export function computeEffectiveChatbarConfig(
     height: (host.chatbarHeight !== undefined && host.chatbarHeight !== CHATBAR_BAR_PRESET.height)
       ? host.chatbarHeight
       : preset.height,
-    bgColor: host.chatbarBg || cbs.bgColor,
+    bgColor: effectiveBg,
     gradientEnabled: host.chatbarGradientEnabled !== undefined ? host.chatbarGradientEnabled : cbs.gradientEnabled,
     gradientStops: (host.chatbarGradientStart || host.chatbarGradientEnd)
       ? [
-          { color: host.chatbarGradientStart || cbs.gradientStops?.[0]?.color || cbs.bgColor, pos: 0 },
-          { color: host.chatbarGradientEnd || cbs.gradientStops?.[1]?.color || cbs.bgColor, pos: 100 },
+          { color: host.chatbarGradientStart || cbs.gradientStops?.[0]?.color || effectiveBg, pos: 0 },
+          { color: host.chatbarGradientEnd || cbs.gradientStops?.[1]?.color || effectiveBg, pos: 100 },
         ]
       : cbs.gradientStops,
     borderRadius: (host.chatbarBorderRadius !== undefined && host.chatbarBorderRadius !== 20)
@@ -232,31 +239,39 @@ export function computeEffectiveBubbleConfig(
   host: Record<string, any>,
   bs: BubbleState = {} as BubbleState
 ): BubbleState {
+  const useTheme = host.useWebsiteTheme !== undefined ? host.useWebsiteTheme : (bs.useWebsiteTheme ?? true);
+  const pTheme = useTheme ? getParentTheme() : null;
+
+  const effectiveBg = host.bubbleBg || (pTheme ? pTheme.primary : bs.backgroundColor);
+  const effectiveRingColor = host.bubbleOutlineRingColor || (pTheme ? pTheme.secondary : bs.outlineRing?.color);
+  const effectiveBorderColor = host.bubbleBorderColor || (pTheme ? pTheme.primary : bs.border?.color);
+
   return {
     ...bs,
+    useWebsiteTheme: useTheme,
     width: host.bubbleWidth || bs.width,
     height: host.bubbleHeight || bs.height,
     hideOnOpen: host.bubbleHideOnOpen !== undefined ? host.bubbleHideOnOpen : bs.hideOnOpen,
-    backgroundColor: host.bubbleBg || bs.backgroundColor,
+    backgroundColor: effectiveBg,
     gradientType: host.bubbleGradientType || bs.gradientType,
     gradientAngle: host.bubbleGradientAngle !== undefined ? host.bubbleGradientAngle : bs.gradientAngle,
     gradientStops: (host.bubbleGradientStart || host.bubbleGradientEnd)
       ? [
-          { color: host.bubbleGradientStart || bs.gradientStops?.[0]?.color || bs.backgroundColor, pos: 0 },
-          { color: host.bubbleGradientEnd || bs.gradientStops?.[1]?.color || bs.backgroundColor, pos: 100 },
+          { color: host.bubbleGradientStart || bs.gradientStops?.[0]?.color || effectiveBg, pos: 0 },
+          { color: host.bubbleGradientEnd || bs.gradientStops?.[1]?.color || effectiveBg, pos: 100 },
         ]
       : bs.gradientStops,
     border: {
       ...(bs.border || {}),
       width: host.bubbleBorderWidth !== undefined ? host.bubbleBorderWidth : bs.border?.width,
       style: host.bubbleBorderStyle || bs.border?.style || 'solid',
-      color: host.bubbleBorderColor || bs.border?.color,
+      color: effectiveBorderColor,
     },
     outlineRing: {
       ...(bs.outlineRing || {}),
       enabled: host.bubbleOutlineRingEnabled !== undefined ? host.bubbleOutlineRingEnabled : bs.outlineRing?.enabled,
       width: host.bubbleOutlineRingWidth !== undefined ? host.bubbleOutlineRingWidth : bs.outlineRing?.width,
-      color: host.bubbleOutlineRingColor || bs.outlineRing?.color,
+      color: effectiveRingColor,
     },
     boxShadowBlur: host.bubbleBoxShadowBlur !== undefined ? host.bubbleBoxShadowBlur : bs.boxShadowBlur,
     boxShadowOffsetY: host.bubbleBoxShadowOffsetY !== undefined ? host.bubbleBoxShadowOffsetY : bs.boxShadowOffsetY,
@@ -307,8 +322,16 @@ export function computeEffectiveGreetWindowConfig(
   host: Record<string, any>,
   gws: GreetWindowState = {} as GreetWindowState
 ): GreetWindowState {
+  const useTheme = host.useWebsiteTheme !== undefined ? host.useWebsiteTheme : (gws.useWebsiteTheme ?? true);
+  const pTheme = useTheme ? getParentTheme() : null;
+
+  const effectiveIconColor = host.greetIconColor || (pTheme ? pTheme.primary : gws.iconColor);
+  const effectiveBtnColor = host.greetInputButtonColor || (pTheme ? pTheme.primary : gws.inputBox?.buttonColor);
+  const effectiveBtnIconColor = host.greetInputButtonIconColor || (pTheme ? pTheme.primary : gws.inputBox?.buttonIconColor);
+
   return {
     ...gws,
+    useWebsiteTheme: useTheme,
     enabled: host.enableGreetWindow !== undefined ? host.enableGreetWindow : gws.enabled,
     title: host.greetTitle || gws.title,
     titleColor: host.greetTitleColor || gws.titleColor,
@@ -326,7 +349,7 @@ export function computeEffectiveGreetWindowConfig(
     iconAlign: host.greetIconAlign || gws.iconAlign,
     lucideIcon: host.greetLucideIcon || gws.lucideIcon,
     iconSize: host.greetIconSize || gws.iconSize,
-    iconColor: host.greetIconColor || gws.iconColor,
+    iconColor: effectiveIconColor,
     iconAnimation: host.greetIconAnimation || gws.iconAnimation,
     imageUrl: host.greetImageUrl || gws.imageUrl,
     inputBox: {
@@ -338,8 +361,8 @@ export function computeEffectiveGreetWindowConfig(
       backgroundColor: host.greetInputBg || gws.inputBox?.backgroundColor,
       textColor: host.greetInputTextColor || gws.inputBox?.textColor,
       borderRadius: host.greetInputBorderRadius || gws.inputBox?.borderRadius,
-      buttonColor: host.greetInputButtonColor || gws.inputBox?.buttonColor,
-      buttonIconColor: host.greetInputButtonIconColor || gws.inputBox?.buttonIconColor,
+      buttonColor: effectiveBtnColor,
+      buttonIconColor: effectiveBtnIconColor,
     },
   } as GreetWindowState;
 }
@@ -349,16 +372,33 @@ export function computeEffectiveChatWindowConfig(
   cws: ChatWindowState = {} as ChatWindowState,
   activeOffsetBottom: number = 12
 ): ChatWindowState {
+  const useTheme = host.useWebsiteTheme !== undefined ? host.useWebsiteTheme : (cws.useWebsiteTheme ?? true);
+  const pTheme = useTheme ? getParentTheme() : null;
+
+  const effectiveAccent = host.accentColor || (pTheme ? pTheme.primary : cws.accentColor);
+  const effectiveVisitorBg = host.visitorBubbleBg || (pTheme ? pTheme.primary : cws.visitorBubbleBg);
+  const effectiveHeaderBg = host.headerBg || (pTheme ? pTheme.primary : cws.headerBg);
+  const effectiveAgentAvatarBg = host.agentAvatarBg || (pTheme ? pTheme.primary : cws.agentAvatarBg);
+  const effectiveInputFocusBorder = host.inputFocusBorderColor || (pTheme ? pTheme.primary : cws.inputFocusBorderColor);
+  const effectiveSendBtnActive = host.sendButtonBgActive || (pTheme ? pTheme.primary : cws.sendButtonBgActive);
+  const effectivePoweredByColor = host.poweredByColor || (pTheme ? pTheme.primary : cws.poweredByColor);
+  const effectiveEndChatConfirmBg = host.endChatConfirmBg || (pTheme ? pTheme.primary : cws.endChatConfirmBg);
+
+  const sec = pTheme ? (pTheme.secondary && pTheme.secondary !== pTheme.primary ? pTheme.secondary : pTheme.primary) : '#22d3ee';
+  const effectiveBgGradient = host.welcomeBgGradient || (pTheme ? `linear-gradient(135deg, ${pTheme.primary}, ${sec})` : cws.welcome?.bgGradient);
+  const effectiveWelcomeButtonIconColor = pTheme ? pTheme.primary : cws.welcome?.buttonIconColor;
+
   return {
     ...cws,
+    useWebsiteTheme: useTheme,
     clientName: host.clientName || cws.clientName,
     agentName: host.agentName || cws.agentName,
     widgetWidth: host.widgetWidth || cws.widgetWidth,
     widgetHeight: host.widgetHeight || cws.widgetHeight,
     expandedWidth: host.expandedWidth || cws.expandedWidth,
     widgetBorderRadius: host.widgetBorderRadius || cws.widgetBorderRadius,
-    accentColor: host.accentColor || cws.accentColor,
-    headerBg: host.headerBg || cws.headerBg,
+    accentColor: effectiveAccent,
+    headerBg: effectiveHeaderBg,
     headerTextColor: host.headerTextColor || cws.headerTextColor,
     headerBorderColor: host.headerBorderColor || cws.headerBorderColor,
     headerAvatarBg: host.headerAvatarBg || cws.headerAvatarBg,
@@ -369,7 +409,7 @@ export function computeEffectiveChatWindowConfig(
       animate: host.activeDotAnimate !== undefined ? host.activeDotAnimate : cws.activeDot?.animate,
     },
     bodyBg: host.bodyBg || cws.bodyBg,
-    visitorBubbleBg: host.visitorBubbleBg || cws.visitorBubbleBg,
+    visitorBubbleBg: effectiveVisitorBg,
     visitorBubbleColor: host.visitorBubbleTextColor || cws.visitorBubbleColor,
     visitorBubbleFontSize: host.visitorBubbleFontSize || cws.visitorBubbleFontSize,
     visitorBubbleBorderRadius: host.visitorBubbleBorderRadius || cws.visitorBubbleBorderRadius,
@@ -378,21 +418,21 @@ export function computeEffectiveChatWindowConfig(
     agentBubbleBorderColor: host.agentBubbleBorderColor || cws.agentBubbleBorderColor,
     agentBubbleFontSize: host.agentBubbleFontSize || cws.agentBubbleFontSize,
     agentBubbleBorderRadius: host.agentBubbleBorderRadius || cws.agentBubbleBorderRadius,
-    agentAvatarBg: host.agentAvatarBg || cws.agentAvatarBg,
+    agentAvatarBg: effectiveAgentAvatarBg,
     agentAvatarColor: host.agentAvatarColor || cws.agentAvatarColor,
     agentAvatarUrl: host.agentAvatarUrl || cws.agentAvatarUrl,
     inputBg: host.inputBg || cws.inputBg,
     inputTextColor: host.inputTextColor || cws.inputTextColor,
     inputPlaceholderColor: host.inputPlaceholderColor || cws.inputPlaceholderColor,
     inputBorderColor: host.inputBorderColor || cws.inputBorderColor,
-    inputFocusBorderColor: host.inputFocusBorderColor || cws.inputFocusBorderColor,
+    inputFocusBorderColor: effectiveInputFocusBorder,
     inputBorderRadius: host.inputBorderRadius || cws.inputBorderRadius,
     textareaFontSize: host.textareaFontSize || cws.textareaFontSize,
     attachButtonBg: host.attachButtonBg || cws.attachButtonBg,
     attachButtonColor: host.attachButtonColor || cws.attachButtonColor,
     emojiButtonColor: host.emojiButtonColor || cws.emojiButtonColor,
     sendIconType: host.sendIconType || cws.sendIconType,
-    sendButtonBgActive: host.sendButtonBgActive || cws.sendButtonBgActive,
+    sendButtonBgActive: effectiveSendBtnActive,
     sendButtonColorActive: host.sendButtonColorActive || cws.sendButtonColorActive,
     sendButtonBgInactive: host.sendButtonBgInactive || cws.sendButtonBgInactive,
     sendButtonColorInactive: host.sendButtonColorInactive || cws.sendButtonColorInactive,
@@ -400,7 +440,7 @@ export function computeEffectiveChatWindowConfig(
     footerTextColor: host.footerTextColor || cws.footerTextColor,
     poweredByText: host.poweredByText || cws.poweredByText,
     poweredByLink: host.poweredByLink || cws.poweredByLink,
-    poweredByColor: host.poweredByColor || cws.poweredByColor,
+    poweredByColor: effectivePoweredByColor,
     modernUi: host.modernUi !== undefined ? host.modernUi : cws.modernUi,
     typingIndicator: host.typingIndicator !== undefined ? host.typingIndicator : cws.typingIndicator,
     attachmentsEnabled: host.attachmentsEnabled !== undefined ? host.attachmentsEnabled : cws.attachmentsEnabled,
@@ -419,7 +459,7 @@ export function computeEffectiveChatWindowConfig(
     modalCardBg: host.modalCardBg || cws.modalCardBg,
     modalMessageColor: host.modalMessageColor || cws.modalMessageColor,
     modalBorderRadius: host.modalBorderRadius || cws.modalBorderRadius,
-    endChatConfirmBg: host.endChatConfirmBg || cws.endChatConfirmBg,
+    endChatConfirmBg: effectiveEndChatConfirmBg,
     endChatConfirmTextColor: host.endChatConfirmTextColor || cws.endChatConfirmTextColor,
     offsetRight: 16,
     offsetBottom: activeOffsetBottom,
@@ -429,11 +469,12 @@ export function computeEffectiveChatWindowConfig(
       cardLayout: host.welcomeCardLayout || cws.welcome?.cardLayout,
       title: host.welcomeTitle || cws.welcome?.title,
       description: host.welcomeDescription || cws.welcome?.description,
-      bgGradient: host.welcomeBgGradient || cws.welcome?.bgGradient,
+      bgGradient: effectiveBgGradient,
       buttonText: host.welcomeButtonText || cws.welcome?.buttonText,
       buttonSubtext: host.welcomeButtonSubtext || cws.welcome?.buttonSubtext,
       buttonBg: host.welcomeButtonBg || cws.welcome?.buttonBg,
       buttonTextColor: host.welcomeButtonTextColor || cws.welcome?.buttonTextColor,
+      buttonIconColor: effectiveWelcomeButtonIconColor,
       logoUrl: host.welcomeLogoUrl || cws.welcome?.logoUrl,
       cardBorderRadius: host.welcomeCardBorderRadius || cws.welcome?.cardBorderRadius,
       cardBlur: host.welcomeCardBlur || cws.welcome?.cardBlur,

@@ -23,6 +23,7 @@ export function getParentTheme(): { primary: string; secondary: string } {
     document.querySelector<HTMLScriptElement>('script[data-client-id]') ||
     document.querySelector<HTMLScriptElement>('script[src*="index.es.js"]') ||
     document.querySelector<HTMLScriptElement>('script[src*="index.js"]') ||
+    document.querySelector<HTMLScriptElement>('script[src*="chat-widget.js"]') ||
     document.querySelector<HTMLScriptElement>('script[src*="widget.js"]');
   const dataAccent = scriptTag ? scriptTag.getAttribute('data-accent') : null;
 

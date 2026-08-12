@@ -37,6 +37,7 @@ export class CwWidgetRoot extends LitElement {
   @property({ type: Number }) expandedWidth?: number;
   @property({ type: Number }) widgetBorderRadius?: number;
   @property({ type: String }) accentColor?: string;
+  @property({ type: Boolean }) useWebsiteTheme?: boolean;
 
   // -------------------------------------------------------------------------
   // 2. Trigger & Positioning (Bubble)

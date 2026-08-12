@@ -812,7 +812,11 @@ export async function initStore(): Promise<void> {
 
     // Apply chatbar config
     if (chatbarConfig && Object.keys(chatbarConfig).length > 0) {
-      Object.assign(store.chatbar, chatbarConfig);
+      const cbc = chatbarConfig as Partial<ChatbarState>;
+      if (cbc.useWebsiteTheme) {
+        cbc.bgColor = theme.primary;
+      }
+      Object.assign(store.chatbar, cbc);
       const cb = store.chatbar;
       if (cb.layout === 'card') {
         if (cb.cardOffsetRight !== undefined && cb.cardOffsetRight !== null) cb.offsetRight = cb.cardOffsetRight;

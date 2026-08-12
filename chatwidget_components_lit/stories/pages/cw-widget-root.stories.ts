@@ -10,6 +10,7 @@ const DEFAULT_ARGS = {
   expandedWidth: 550,
   widgetBorderRadius: 28,
   accentColor: '#0b5fff',
+  useWebsiteTheme: true,
 
   // 2. Trigger & Positioning
   triggerType: 'bubble',
@@ -203,6 +204,7 @@ export default {
     expandedWidth: { control: { type: 'number', min: 450, max: 800 }, name: 'Expanded Width (px)', table: { category: '1. Widget & Layout' } },
     widgetBorderRadius: { control: { type: 'number', min: 0, max: 40 }, name: 'Widget Border Radius (px)', table: { category: '1. Widget & Layout' } },
     accentColor: { control: 'color', name: 'Accent Color', table: { category: '1. Widget & Layout' } },
+    useWebsiteTheme: { control: 'boolean', name: 'Use Website Theme Colors', table: { category: '1. Widget & Layout' } },
 
     // 2. Trigger Controls & Positioning (Bubble)
     triggerType: { control: 'select', options: ['bubble', 'chatbar', 'chatcard'], name: 'Trigger Type', table: { category: '2. Trigger & Positioning' } },
@@ -393,6 +395,7 @@ const renderWidget = (args: any) => html`
       .expandedWidth="${args.expandedWidth}"
       .widgetBorderRadius="${args.widgetBorderRadius}"
       .accentColor="${args.accentColor}"
+      .useWebsiteTheme="${args.useWebsiteTheme}"
 
       .triggerType="${args.triggerType}"
       .bubbleOffsetRight="${args.bubbleOffsetRight}"
