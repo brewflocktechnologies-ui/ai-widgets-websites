@@ -93,4 +93,15 @@ export function mountChatWidgetWithToken(
   return mountChatWidget(container);
 }
 
+if (typeof window !== 'undefined') {
+  const mount = () => {
+    mountChatWidget();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', mount);
+  } else {
+    mount();
+  }
+}
 
