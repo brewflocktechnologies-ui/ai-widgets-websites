@@ -57,8 +57,20 @@ function minifyCssLiterals(): Plugin {
 
 export default defineConfig({
   plugins: [minifyCssLiterals()],
+  esbuild: {
+    target: 'es2022',
+    minifyIdentifiers: true,
+    minifySyntax: true,
+    minifyWhitespace: true,
+    legalComments: 'none',
+    drop: ['console', 'debugger'],
+  },
   build: {
+    target: 'es2022',
+    minify: 'esbuild',
+    cssMinify: true,
     copyPublicDir: true,
+    reportCompressedSize: true,
     lib: {
       entry: './index.ts',
       name: 'ChatWidgetLit',
@@ -70,6 +82,10 @@ export default defineConfig({
       external: [],
       output: {
         inlineDynamicImports: true,
+        compact: true,
+        generatedCode: {
+          constBindings: true,
+        },
       },
     },
   },
