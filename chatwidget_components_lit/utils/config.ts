@@ -10,6 +10,7 @@ export interface ClientConfigs {
   chatConfig: Record<string, unknown>;
   chatbarConfig: Record<string, unknown>;
   greetWindowConfig: Record<string, unknown>;
+  featuresConfig: Record<string, unknown>;
 }
 
 /**
@@ -56,6 +57,7 @@ export async function fetchClientConfig(clientId: string): Promise<ClientConfigs
           chatConfig: data.chatWindow || data.chat || {},
           chatbarConfig: data.chatbar || {},
           greetWindowConfig: data.greetWindow || {},
+          featuresConfig: data.features || {},
         };
       } catch (err) {
         console.warn('Failed to parse temporary preview configuration:', err);
@@ -87,6 +89,7 @@ export async function fetchClientConfig(clientId: string): Promise<ClientConfigs
             chatConfig: data.chatWindow || data.chat || {},
             chatbarConfig: data.chatbar || {},
             greetWindowConfig: data.greetWindow || {},
+            featuresConfig: data.features || {},
           };
         }
       }
@@ -95,5 +98,5 @@ export async function fetchClientConfig(clientId: string): Promise<ClientConfigs
     }
   }
 
-  return { bubbleConfig: {}, chatConfig: {}, chatbarConfig: {}, greetWindowConfig: {} };
+  return { bubbleConfig: {}, chatConfig: {}, chatbarConfig: {}, greetWindowConfig: {}, featuresConfig: {} };
 }

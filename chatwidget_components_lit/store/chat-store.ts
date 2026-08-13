@@ -304,6 +304,8 @@ function buildDefaultFeatures(): FeaturesState {
     closeChatVisitor: true,
     averageQueueTime: 1,
     chatAcceptanceTime: 5,
+    prechatEnabled: false,
+    postchatEnabled: false,
   };
 }
 
@@ -817,11 +819,12 @@ export async function initStore(): Promise<void> {
     const rawConfig = await fetchClientConfig(clientId);
 
     // Untrusted remote config: strip CSS-injection payloads before merging.
-    let { bubbleConfig, chatConfig, chatbarConfig, greetWindowConfig } = rawConfig;
+    let { bubbleConfig, chatConfig, chatbarConfig, greetWindowConfig, featuresConfig } = rawConfig;
     bubbleConfig = sanitizeConfig(bubbleConfig).value;
     greetWindowConfig = sanitizeConfig(greetWindowConfig).value;
     chatbarConfig = sanitizeConfig(chatbarConfig).value;
     chatConfig = sanitizeConfig(chatConfig).value;
+    featuresConfig = sanitizeConfig(featuresConfig).value;
 
     // Apply bubble config
     if (bubbleConfig && Object.keys(bubbleConfig).length > 0) {
@@ -956,6 +959,12 @@ export async function initStore(): Promise<void> {
         store.chat.state = 'welcome';
       }
       emit('store:chat');
+    }
+
+    // Apply features config
+    if (featuresConfig && Object.keys(featuresConfig).length > 0) {
+      Object.assign(store.features, featuresConfig as Partial<FeaturesState>);
+      emit('store:features');
     }
   } catch (err) {
     console.warn('initStore fetchClientConfig warning:', err);
