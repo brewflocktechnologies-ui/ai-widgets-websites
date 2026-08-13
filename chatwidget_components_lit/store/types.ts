@@ -28,7 +28,7 @@ export interface ConfirmBoxConfig {
 }
 
 export interface ChatState {
-  state: 'welcome' | 'boot' | 'prechat' | 'offline' | 'offline-sent' | 'queued' | 'active' | 'closed';
+  state: 'welcome' | 'boot' | 'prechat' | 'offline' | 'offline-sent' | 'queued' | 'active' | 'postchat' | 'closed';
   isExpanded: boolean;
   panelOpen: boolean;
   unreadCount: number;
@@ -112,6 +112,8 @@ export interface ChatWindowState {
   modernUi?: boolean;
   typingIndicator?: boolean;
   attachmentsEnabled?: boolean;
+  prechatEnabled?: boolean;
+  postchatEnabled?: boolean;
   ticksEnabled?: boolean;
   sentTickColor?: string;
   deliveredTickColor?: string;

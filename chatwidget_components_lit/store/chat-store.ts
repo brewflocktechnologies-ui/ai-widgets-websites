@@ -530,9 +530,11 @@ export const chatStore = {
     emit('store:chat');
   },
 
-  confirmEnd() {
+  confirmEnd(overridePostchatEnabled?: boolean) {
     const s = getStore().chat;
-    s.state = 'closed';
+    const fs = getStore().features;
+    const isPostchatEnabled = overridePostchatEnabled !== undefined ? overridePostchatEnabled : (fs.postchatEnabled ?? false);
+    s.state = isPostchatEnabled ? 'postchat' : 'closed';
     s.confirmBox = null;
     emit('store:chat');
   },
@@ -552,9 +554,12 @@ export const chatStore = {
     emit('store:chat');
   },
 
-  startFromWelcome() {
+  startFromWelcome(overridePrechatEnabled?: boolean) {
     const s = getStore().chat;
-    s.state = 'active';
+    const fs = getStore().features;
+    const isPrechatEnabled = overridePrechatEnabled !== undefined ? overridePrechatEnabled : (fs.prechatEnabled ?? false);
+    s.panelOpen = true;
+    s.state = isPrechatEnabled ? 'prechat' : 'active';
     emit('store:chat');
   },
 
@@ -642,6 +647,45 @@ export const chatStore = {
   dismissConsent() {
     getStore().chat.consentDismissed = true;
     emit('store:chat');
+  },
+
+  submitPrechat(values: Record<string, string>) {
+    const s = getStore().chat;
+    if (values.name) s.offlineName = values.name;
+    if (values.email) s.offlineEmail = values.email;
+    s.panelOpen = true;
+    s.hasSentMessage = true;
+    s.state = 'active';
+    emit('store:chat');
+  },
+
+  submitPostchat(_values: Record<string, string>) {
+    const s = getStore().chat;
+    const cws = getStore().chatWindow;
+    s.panelOpen = false;
+    s.isExpanded = false;
+    s.menuOpen = false;
+    s.attachOpen = false;
+    s.emojiOpen = false;
+    s.confirmBox = null;
+    const welcomeEnabled = cws?.welcome?.enabled !== false;
+    s.state = welcomeEnabled ? 'welcome' : 'active';
+    emit('store:chat');
+    window.dispatchEvent(new CustomEvent('close-contact-widget'));
+  },
+
+  submitOfflinePayload(values: Record<string, string>) {
+    const s = getStore().chat;
+    if (values.name) s.offlineName = values.name;
+    if (values.email) s.offlineEmail = values.email;
+    if (values.message) s.offlineMessage = values.message;
+    s.offlineSending = true;
+    emit('store:chat');
+    setTimeout(() => {
+      s.offlineSending = false;
+      s.state = 'offline-sent';
+      emit('store:chat');
+    }, 800);
   },
 
   submitOffline() {

@@ -4,6 +4,7 @@ import type { ChatState, ChatWindowState, Message } from '../../store/types.js';
 import { CORE_STYLES } from '../../tokens/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import './cw-welcome-card.js';
+import './cw-chat-form.js';
 import '../molecules/cw-message-bubble.js';
 import '../molecules/cw-composer.js';
 import '../molecules/cw-chat-footer.js';
@@ -13,6 +14,7 @@ import '../molecules/cw-chat-menu.js';
 import './cw-image-cropper.js';
 import '../atoms/cw-typing-dots.js';
 import '../atoms/cw-icon.js';
+import { PRECHAT_SCHEMA, OFFLINE_SCHEMA, POSTCHAT_SCHEMA } from '../../tokens/form-schemas.js';
 import type { CwComposer } from '../molecules/cw-composer.js';
 
 /**
@@ -310,6 +312,7 @@ export class CwChatBody extends LitElement {
     const isOfflineSent = cs.state === 'offline-sent';
     const isQueued = cs.state === 'queued';
     const isActive = cs.state === 'active' || (cs.state === 'welcome' && !welcomeEnabled);
+    const isPostchat = cs.state === 'postchat';
     const isClosed = cs.state === 'closed';
 
     const msgs = cs.messages || [];
@@ -339,20 +342,11 @@ export class CwChatBody extends LitElement {
         <!-- PRECHAT FORM -->
         ${isPrechat
           ? html`
-              <div class="prechat" tabindex="0" aria-label="Pre-chat form">
-                <div class="avatar prechat-avatar">
-                  <span>${(cs.clientName || cw.clientName || 'S').charAt(0)}</span>
-                </div>
-                <h2>Hi there 👋</h2>
-                <p class="muted">Tell us who you are and we'll connect you with an agent right away.</p>
-                <form @submit="${(e: Event) => { e.preventDefault(); this.emit('cw:start-chat'); }}">
-                  <label>Name</label>
-                  <input required maxlength="120" placeholder="Your name" />
-                  <label>Email</label>
-                  <input type="email" required maxlength="160" placeholder="you@example.com" />
-                  <button type="submit" class="primary">Start chat</button>
-                </form>
-              </div>
+              <cw-chat-form
+                .schema="${PRECHAT_SCHEMA}"
+                .values="${{ name: cs.offlineName || '', email: cs.offlineEmail || '' }}"
+                @cw:form-submit="${(e: CustomEvent) => this.emit('cw:submit-prechat', e.detail.values)}"
+              ></cw-chat-form>
             `
           : ''
         }
@@ -360,45 +354,23 @@ export class CwChatBody extends LitElement {
         <!-- OFFLINE FORM -->
         ${isOffline
           ? html`
-              <div class="prechat" tabindex="0" aria-label="Offline support form">
-                <div class="avatar prechat-avatar offline-avatar">
-                  <cw-icon .name="${'AlertCircle'}" .size="${22}"></cw-icon>
-                </div>
-                <h2>We're not around right now</h2>
-                <p class="muted">Our agents are offline. Leave your details and a message — we'll pick it up the moment someone is back.</p>
-                <form @submit="${(e: Event) => { e.preventDefault(); this.emit('cw:submit-offline', { name: this.offlineName, email: this.offlineEmail, message: this.offlineMessage }); }}">
-                  <label>Name</label>
-                  <input
-                    required
-                    maxlength="120"
-                    placeholder="Your name"
-                    .value="${this.offlineName}"
-                    @input="${(e: Event) => (this.offlineName = (e.target as HTMLInputElement).value)}"
-                  />
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    required
-                    maxlength="160"
-                    placeholder="you@example.com"
-                    .value="${this.offlineEmail}"
-                    @input="${(e: Event) => (this.offlineEmail = (e.target as HTMLInputElement).value)}"
-                  />
-                  <label>Message</label>
-                  <textarea
-                    rows="3"
-                    class="offline-msg"
-                    required
-                    maxlength="4000"
-                    placeholder="How can we help?"
-                    .value="${this.offlineMessage}"
-                    @input="${(e: Event) => (this.offlineMessage = (e.target as HTMLTextAreaElement).value)}"
-                  ></textarea>
-                  <button type="submit" class="primary" ?disabled="${cs.offlineSending}">
-                    ${cs.offlineSending ? 'Sending…' : 'Leave message'}
-                  </button>
-                </form>
-              </div>
+              <cw-chat-form
+                .schema="${OFFLINE_SCHEMA}"
+                .values="${{ name: cs.offlineName || '', email: cs.offlineEmail || '', message: cs.offlineMessage || '' }}"
+                .submitting="${cs.offlineSending}"
+                @cw:form-submit="${(e: CustomEvent) => this.emit('cw:submit-offline', e.detail.values)}"
+              ></cw-chat-form>
+            `
+          : ''
+        }
+
+        <!-- POSTCHAT FORM -->
+        ${isPostchat
+          ? html`
+              <cw-chat-form
+                .schema="${POSTCHAT_SCHEMA}"
+                @cw:form-submit="${(e: CustomEvent) => this.emit('cw:submit-postchat', e.detail.values)}"
+              ></cw-chat-form>
             `
           : ''
         }

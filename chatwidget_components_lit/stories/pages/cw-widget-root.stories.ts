@@ -129,6 +129,8 @@ const DEFAULT_ARGS = {
   enableVoiceCall: false,
   enableVideoCall: false,
   enableCloseChatVisitor: true,
+  prechatEnabled: false,
+  postchatEnabled: false,
 
   // 7. Messages & Bubbles
   bodyBg: '#f4f4f5',
@@ -325,6 +327,8 @@ export default {
     enableVoiceCall: { control: 'boolean', name: 'Enable Voice Call Action', table: { category: '7. Header & Features' } },
     enableVideoCall: { control: 'boolean', name: 'Enable Video Call Action', table: { category: '7. Header & Features' } },
     enableCloseChatVisitor: { control: 'boolean', name: 'Enable Close Action', table: { category: '7. Header & Features' } },
+    prechatEnabled: { control: 'boolean', name: 'Enable Pre-Chat Form (Turn ON to require pre-chat details)', table: { category: '7. Header & Features' } },
+    postchatEnabled: { control: 'boolean', name: 'Enable Post-Chat Feedback (Turn ON to request rating on end)', table: { category: '7. Header & Features' } },
 
     // 8. Messages & Bubbles
     bodyBg: { control: 'color', name: 'Chat Body Background', table: { category: '8. Messages & Bubbles' } },
@@ -511,6 +515,8 @@ const renderWidget = (args: any) => html`
       .enableVoiceCall="${args.enableVoiceCall}"
       .enableVideoCall="${args.enableVideoCall}"
       .enableCloseChatVisitor="${args.enableCloseChatVisitor}"
+      .prechatEnabled="${args.prechatEnabled}"
+      .postchatEnabled="${args.postchatEnabled}"
 
       .bodyBg="${args.bodyBg}"
       .visitorBubbleBg="${args.visitorBubbleBg}"

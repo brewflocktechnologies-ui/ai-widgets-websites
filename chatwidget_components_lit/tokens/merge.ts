@@ -501,5 +501,7 @@ export function computeEffectiveFeaturesConfig(
     videoCallMaster: videoCall,
     videoCallAgents: videoCall,
     closeChatVisitor: host.enableCloseChatVisitor !== undefined ? host.enableCloseChatVisitor : fs.closeChatVisitor,
+    prechatEnabled: host.prechatEnabled !== undefined ? host.prechatEnabled : fs.prechatEnabled,
+    postchatEnabled: host.postchatEnabled !== undefined ? host.postchatEnabled : fs.postchatEnabled,
   } as FeaturesState;
 }

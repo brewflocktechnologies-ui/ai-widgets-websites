@@ -167,6 +167,8 @@ export class CwWidgetRoot extends LitElement {
   @property({ type: Boolean }) enableVoiceCall?: boolean;
   @property({ type: Boolean }) enableVideoCall?: boolean;
   @property({ type: Boolean }) enableCloseChatVisitor?: boolean;
+  @property({ type: Boolean }) prechatEnabled?: boolean;
+  @property({ type: Boolean }) postchatEnabled?: boolean;
 
   // -------------------------------------------------------------------------
   // 7. Messages & Bubbles
@@ -287,6 +289,37 @@ export class CwWidgetRoot extends LitElement {
       this.activeTriggerOverride = undefined;
       this.userHasSentMessage = false;
     }
+    if (changedProperties.has('prechatEnabled') || changedProperties.has('postchatEnabled')) {
+      const fs = featuresStore.get();
+      if (this.prechatEnabled !== undefined) fs.prechatEnabled = this.prechatEnabled;
+      if (this.postchatEnabled !== undefined) fs.postchatEnabled = this.postchatEnabled;
+
+      // Reset the chat session so the toggle takes effect immediately on the very next open
+      const cs = chatStore.get();
+      const cws = chatWindowStore.get();
+      const welcomeEnabled = cws?.welcome?.enabled !== false;
+      const wasOpen = this.panelOpen;
+
+      // Close and reset state
+      cs.panelOpen = false;
+      cs.menuOpen = false;
+      cs.attachOpen = false;
+      cs.emojiOpen = false;
+      cs.confirmBox = null;
+      cs.state = welcomeEnabled ? 'welcome' : 'active';
+      this.panelOpen = false;
+
+      // If panel was open when user toggled, reopen immediately showing the new flow
+      if (wasOpen) {
+        requestAnimationFrame(() => {
+          const isPrechat = featuresStore.get().prechatEnabled;
+          cs.state = isPrechat ? 'prechat' : (welcomeEnabled ? 'welcome' : 'active');
+          cs.panelOpen = true;
+          this.panelOpen = true;
+          this.requestUpdate();
+        });
+      }
+    }
   }
 
   static styles = css`
@@ -300,7 +333,12 @@ export class CwWidgetRoot extends LitElement {
     const handlers = new Map<string, (e: CustomEvent) => void>([
       ['cw:toggle', () => this.handleToggleWidget()],
       ['cw:close-panel', () => this.handleCloseWidget()],
-      ['cw:start-chat', () => chatStore.startFromWelcome()],
+      ['cw:start-chat', () => {
+        this.panelOpen = true;
+        chatStore.get().panelOpen = true;
+        chatStore.startFromWelcome(this.prechatEnabled);
+        this.requestUpdate();
+      }],
       ['cw:greet-dismiss', () => chatStore.dismissGreetWindow()],
       ['cw:greet-input', (e) => { chatStore.get().draft = e.detail; }],
       ['cw:greet-submit', (e) => {
@@ -322,14 +360,31 @@ export class CwWidgetRoot extends LitElement {
       ['cw:insert-emoji', (e) => chatStore.insertEmoji(e.detail as string)],
       ['cw:submit-offline', (e) => {
         this.userHasSentMessage = true;
-        this.handleSubmitOffline(e.detail);
+        if (e.detail) {
+          chatStore.submitOfflinePayload(e.detail);
+        } else {
+          this.handleSubmitOffline();
+        }
+      }],
+      ['cw:submit-prechat', (e) => {
+        this.userHasSentMessage = true;
+        this.panelOpen = true;
+        chatStore.get().panelOpen = true;
+        chatStore.submitPrechat(e.detail || {});
+        this.requestUpdate();
+      }],
+      ['cw:submit-postchat', (e) => {
+        this.panelOpen = false;
+        chatStore.get().panelOpen = false;
+        chatStore.submitPostchat(e.detail || {});
+        this.requestUpdate();
       }],
       ['cw:start-new', () => chatStore.startNew()],
       ['cw:toggle-expand', () => chatStore.toggleExpand()],
       ['cw:open-menu', () => chatStore.toggleMenu()],
       ['cw:close-popups', () => chatStore.closePopups()],
       ['cw:end-chat', () => chatStore.askEndChat()],
-      ['cw:confirm-end', () => chatStore.confirmEnd()],
+      ['cw:confirm-end', () => chatStore.confirmEnd(this.postchatEnabled)],
       ['cw:confirm-cancel', () => chatStore.cancelEndChat()],
     ]);
 

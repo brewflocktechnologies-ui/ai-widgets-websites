@@ -42,6 +42,7 @@ export * from './components/atoms/cw-menu-item.js';
 
 // Molecules
 export * from './components/molecules/cw-avatar.js';
+export * from './components/molecules/cw-form-field.js';
 export * from './components/molecules/cw-message-bubble.js';
 export * from './components/molecules/cw-composer.js';
 export * from './components/molecules/cw-greet-input.js';
@@ -51,6 +52,8 @@ export * from './components/molecules/cw-attach-menu.js';
 export * from './components/molecules/cw-chat-menu.js';
 export * from './components/molecules/cw-confirm-dialog.js';
 
+// Tokens & Schemas
+export * from './tokens/form-schemas.js';
 
 // Organisms
 
@@ -59,7 +62,7 @@ export * from './components/organisms/cw-chatbar.js';
 export * from './components/organisms/cw-greet-window.js';
 export * from './components/organisms/cw-chat-header.js';
 export * from './components/organisms/cw-welcome-card.js';
-export * from './components/organisms/cw-forms-preview.js';
+export * from './components/organisms/cw-chat-form.js';
 export * from './components/organisms/cw-image-cropper.js';
 export * from './components/organisms/cw-chat-body.js';
 export * from './components/organisms/cw-chat-panel.js';
