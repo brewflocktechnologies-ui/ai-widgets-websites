@@ -191,7 +191,7 @@ export function computeEffectiveChatbarConfig(
   const isCardLayout = (host.chatbarLayout || (activeTrigger === 'chatcard' ? 'card' : 'bar')) === 'card';
   const preset = isCardLayout ? CHATBAR_CARD_PRESET : CHATBAR_BAR_PRESET;
 
-  const effectiveBg = host.chatbarBg || (pTheme ? pTheme.primary : cbs.bgColor);
+  const effectiveBg = host.chatbarBg || host.accentColor || (pTheme ? pTheme.primary : cbs.bgColor);
 
   return {
     ...preset,
@@ -242,9 +242,9 @@ export function computeEffectiveBubbleConfig(
   const useTheme = host.useWebsiteTheme !== undefined ? host.useWebsiteTheme : (bs.useWebsiteTheme ?? true);
   const pTheme = useTheme ? getParentTheme() : null;
 
-  const effectiveBg = host.bubbleBg || (pTheme ? pTheme.primary : bs.backgroundColor);
+  const effectiveBg = host.bubbleBg || host.accentColor || (pTheme ? pTheme.primary : bs.backgroundColor);
   const effectiveRingColor = host.bubbleOutlineRingColor || (pTheme ? pTheme.secondary : bs.outlineRing?.color);
-  const effectiveBorderColor = host.bubbleBorderColor || (pTheme ? pTheme.primary : bs.border?.color);
+  const effectiveBorderColor = host.bubbleBorderColor || host.accentColor || (pTheme ? pTheme.primary : bs.border?.color);
 
   return {
     ...bs,
@@ -325,8 +325,8 @@ export function computeEffectiveGreetWindowConfig(
   const useTheme = host.useWebsiteTheme !== undefined ? host.useWebsiteTheme : (gws.useWebsiteTheme ?? true);
   const pTheme = useTheme ? getParentTheme() : null;
 
-  const effectiveIconColor = host.greetIconColor || (pTheme ? pTheme.primary : gws.iconColor);
-  const effectiveBtnColor = host.greetInputButtonColor || (pTheme ? pTheme.primary : gws.inputBox?.buttonColor);
+  const effectiveIconColor = host.greetIconColor || host.accentColor || (pTheme ? pTheme.primary : gws.iconColor);
+  const effectiveBtnColor = host.greetInputButtonColor || host.accentColor || (pTheme ? pTheme.primary : gws.inputBox?.buttonColor);
   const effectiveBtnIconColor = host.greetInputButtonIconColor || (pTheme ? pTheme.primary : gws.inputBox?.buttonIconColor);
 
   return {
@@ -372,21 +372,25 @@ export function computeEffectiveChatWindowConfig(
   cws: ChatWindowState = {} as ChatWindowState,
   activeOffsetBottom: number = 12
 ): ChatWindowState {
-  const useTheme = host.useWebsiteTheme !== undefined ? host.useWebsiteTheme : (cws.useWebsiteTheme ?? true);
+  const useTheme = host.useWebsiteTheme !== undefined ? host.useWebsiteTheme : (cws.useWebsiteTheme ?? false);
   const pTheme = useTheme ? getParentTheme() : null;
 
-  const effectiveAccent = host.accentColor || (pTheme ? pTheme.primary : cws.accentColor);
-  const effectiveVisitorBg = host.visitorBubbleBg || (pTheme ? pTheme.primary : cws.visitorBubbleBg);
-  const effectiveHeaderBg = host.headerBg || (pTheme ? pTheme.primary : cws.headerBg);
-  const effectiveAgentAvatarBg = host.agentAvatarBg || (pTheme ? pTheme.primary : cws.agentAvatarBg);
-  const effectiveInputFocusBorder = host.inputFocusBorderColor || (pTheme ? pTheme.primary : cws.inputFocusBorderColor);
-  const effectiveSendBtnActive = host.sendButtonBgActive || (pTheme ? pTheme.primary : cws.sendButtonBgActive);
-  const effectivePoweredByColor = host.poweredByColor || (pTheme ? pTheme.primary : cws.poweredByColor);
-  const effectiveEndChatConfirmBg = host.endChatConfirmBg || (pTheme ? pTheme.primary : cws.endChatConfirmBg);
+  const effectiveAccent = host.accentColor || (useTheme && pTheme ? pTheme.primary : (cws.accentColor || '#0b5fff'));
 
-  const sec = pTheme ? (pTheme.secondary && pTheme.secondary !== pTheme.primary ? pTheme.secondary : pTheme.primary) : '#22d3ee';
-  const effectiveBgGradient = host.welcomeBgGradient || (pTheme ? `linear-gradient(135deg, ${pTheme.primary}, ${sec})` : cws.welcome?.bgGradient);
-  const effectiveWelcomeButtonIconColor = pTheme ? pTheme.primary : cws.welcome?.buttonIconColor;
+  // When host.accentColor is provided (e.g. via controls or prop), it drives dependent primary surfaces unless host explicitly sets a custom sub-property
+  const primaryColor = host.accentColor || (useTheme && pTheme ? pTheme.primary : null);
+
+  const effectiveVisitorBg = host.visitorBubbleBg || primaryColor || (useTheme && pTheme ? pTheme.primary : cws.visitorBubbleBg) || effectiveAccent;
+  const effectiveHeaderBg = host.headerBg || primaryColor || (useTheme && pTheme ? pTheme.primary : cws.headerBg) || effectiveAccent;
+  const effectiveAgentAvatarBg = host.agentAvatarBg || primaryColor || (useTheme && pTheme ? pTheme.primary : cws.agentAvatarBg) || effectiveAccent;
+  const effectiveInputFocusBorder = host.inputFocusBorderColor || primaryColor || (useTheme && pTheme ? pTheme.primary : cws.inputFocusBorderColor) || effectiveAccent;
+  const effectiveSendBtnActive = host.sendButtonBgActive || primaryColor || (useTheme && pTheme ? pTheme.primary : cws.sendButtonBgActive) || effectiveAccent;
+  const effectivePoweredByColor = host.poweredByColor || primaryColor || (useTheme && pTheme ? pTheme.primary : cws.poweredByColor) || effectiveAccent;
+  const effectiveEndChatConfirmBg = host.endChatConfirmBg || primaryColor || (useTheme && pTheme ? pTheme.primary : cws.endChatConfirmBg) || effectiveAccent;
+
+  const sec = useTheme && pTheme?.secondary ? pTheme.secondary : effectiveAccent;
+  const effectiveBgGradient = host.welcomeBgGradient || (primaryColor ? `linear-gradient(135deg, ${primaryColor}, ${sec})` : (useTheme && pTheme ? `linear-gradient(135deg, ${pTheme.primary}, ${sec})` : cws.welcome?.bgGradient));
+  const effectiveWelcomeButtonIconColor = host.welcomeButtonIconColor || primaryColor || (useTheme && pTheme ? pTheme.primary : cws.welcome?.buttonIconColor) || effectiveAccent;
 
   return {
     ...cws,
