@@ -6,7 +6,7 @@ initStore().catch(() => {});
 
 const preview: Preview = {
   parameters: {
-    layout: 'fullscreen',
+    layout: 'centered',
     controls: {
       matchers: {
         color: /(background|color)$/i,
