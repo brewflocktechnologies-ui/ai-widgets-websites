@@ -3,8 +3,11 @@
  * Maps all --cw-* CSS custom properties used in the Alpine widget.
  */
 
-import { GLOBAL_STYLES } from './global-styles.js';
-export { GLOBAL_STYLES };
+// NOTE: GLOBAL_STYLES (tokens/global-styles.ts, ~76 KB) is intentionally NOT
+// re-exported here. Components style themselves from CORE_STYLES
+// (tokens/core-styles.ts), which is the slimmed subset. Re-exporting the full
+// blob from the package entry pinned it as a public export, so Rollup could not
+// tree-shake it and every visitor downloaded the unused dashboard CSS.
 
 // ---------------------------------------------------------------------------
 // CSS Variable Name Constants
