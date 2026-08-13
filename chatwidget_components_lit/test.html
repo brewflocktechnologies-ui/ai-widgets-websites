@@ -7,10 +7,10 @@
   <title>Chat Widget Tester</title>
 
   <style>
-    :root {
-      --primary-color: #ff0000;
-      --secondary-color: #dc2626;
-    }
+:root {
+  --primary-color: #1086EE;   /* Bright blue */
+  --secondary-color: #0B4F8A; /* Deep blue */
+}
 
     body {
       font-family: Arial, sans-serif;
@@ -41,25 +41,6 @@
 <body>
 
   <h1>Lit Component Client Tester</h1>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Outfit', 'sans-serif'],
-          },
-          colors: {
-            primary: 'var(--primary-color, #ff0000)',
-            secondary: 'var(--secondary-color, #dc2626)'
-          }
-        }
-      }
-    }
-  </script>
 
   <!-- Your widget -->
   <script
