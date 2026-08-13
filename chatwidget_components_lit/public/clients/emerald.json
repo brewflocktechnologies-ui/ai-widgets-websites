@@ -11,7 +11,9 @@
     "disableVisitorCamera": false,
         "closeChatVisitor": true,
     "averageQueueTime": 1,
-    "chatAcceptanceTime": 5
+    "chatAcceptanceTime": 5,
+    "prechatEnabled": false,
+    "postchatEnabled": false
   },
 
   "messages": [

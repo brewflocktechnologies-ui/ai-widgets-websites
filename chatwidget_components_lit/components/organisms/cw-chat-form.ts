@@ -15,6 +15,7 @@ export class CwChatForm extends LitElement {
 
   @state() private localValues: Record<string, string> = {};
   @state() private localErrors: Record<string, string> = {};
+  private lastSyncedValues = '';
 
   static styles = [
     CORE_STYLES,
@@ -66,7 +67,11 @@ export class CwChatForm extends LitElement {
   protected willUpdate(changedProperties: Map<string, unknown>) {
     super.willUpdate(changedProperties);
     if (changedProperties.has('values') && this.values) {
-      this.localValues = { ...this.values };
+      const incoming = JSON.stringify(this.values);
+      if (incoming !== this.lastSyncedValues) {
+        this.lastSyncedValues = incoming;
+        this.localValues = { ...this.values };
+      }
     }
     if (changedProperties.has('errors') && this.errors) {
       this.localErrors = { ...this.errors };

@@ -53,6 +53,7 @@ export interface ChatState {
   offlineMessage?: string;
   offlineSending?: boolean;
   hasSentMessage?: boolean;
+  lastFeedback?: Record<string, string>;
   flags: Record<string, boolean>;
   messages: Message[];
   [key: string]: any;

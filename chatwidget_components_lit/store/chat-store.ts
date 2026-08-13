@@ -381,6 +381,7 @@ function buildDefaultChat(chatConfig?: Record<string, any>): ChatState {
     offlineMessage: '',
     offlineSending: false,
     hasSentMessage: false,
+    lastFeedback: undefined,
     flags: {},
     messages: [
       {
@@ -661,9 +662,10 @@ export const chatStore = {
     emit('store:chat');
   },
 
-  submitPostchat(_values: Record<string, string>) {
+  submitPostchat(values: Record<string, string>) {
     const s = getStore().chat;
     const cws = getStore().chatWindow;
+    s.lastFeedback = { ...(values || {}) };
     s.panelOpen = false;
     s.isExpanded = false;
     s.menuOpen = false;
@@ -673,6 +675,7 @@ export const chatStore = {
     const welcomeEnabled = cws?.welcome?.enabled !== false;
     s.state = welcomeEnabled ? 'welcome' : 'active';
     emit('store:chat');
+    window.dispatchEvent(new CustomEvent('postchat-feedback', { detail: s.lastFeedback }));
     window.dispatchEvent(new CustomEvent('close-contact-widget'));
   },
 

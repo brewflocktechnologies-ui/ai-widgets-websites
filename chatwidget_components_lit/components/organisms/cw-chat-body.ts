@@ -67,12 +67,10 @@ export class CwChatBody extends LitElement {
         gap: 4px;
         scroll-behavior: smooth;
       }
-      .messages-area:focus,
-      .prechat:focus {
+      .messages-area:focus {
         outline: none;
       }
-      .messages-area:focus-visible,
-      .prechat:focus-visible {
+      .messages-area:focus-visible {
         outline: 2px solid var(--cw-accent, #0b5fff);
         outline-offset: -2px;
       }
@@ -100,53 +98,10 @@ export class CwChatBody extends LitElement {
         border-radius: 50%;
         animation: zotly-spin 1s linear infinite;
       }
-      .prechat {
-        padding: 24px 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        overflow-y: auto;
-      }
-      .prechat h2 {
-        margin: 0;
-        font-size: 20px;
-        font-weight: 700;
-      }
-      .prechat p.muted {
+      .muted {
         margin: 0;
         font-size: 13px;
         color: var(--cw-muted);
-      }
-      .prechat form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-      .prechat label {
-        font-size: 12px;
-        font-weight: 600;
-        color: var(--cw-ink);
-      }
-      .prechat input, .prechat textarea {
-        padding: 10px 12px;
-        border-radius: 8px;
-        border: 1px solid var(--cw-border);
-        background: var(--cw-surface);
-        color: var(--cw-ink);
-        font-family: inherit;
-        font-size: 14px;
-        outline: none;
-      }
-      .prechat button.primary {
-        padding: 12px;
-        border-radius: 9999px;
-        border: none;
-        background: var(--cw-accent);
-        color: #ffffff;
-        font-weight: 700;
-        font-size: 14px;
-        cursor: pointer;
-        margin-top: 6px;
       }
       .queued {
         display: flex;
