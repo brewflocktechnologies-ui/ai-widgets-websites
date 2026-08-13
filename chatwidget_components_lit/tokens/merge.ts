@@ -490,12 +490,16 @@ export function computeEffectiveFeaturesConfig(
   host: Record<string, any>,
   fs: FeaturesState = {} as FeaturesState
 ): FeaturesState {
+  const voiceCall = host.enableVoiceCall !== undefined ? host.enableVoiceCall : (fs.voiceCallEnabled ?? fs.voiceCallMaster);
+  const videoCall = host.enableVideoCall !== undefined ? host.enableVideoCall : (fs.videoCallEnabled ?? fs.videoCallMaster);
   return {
     ...fs,
-    voiceCallMaster: host.enableVoiceCall !== undefined ? host.enableVoiceCall : fs.voiceCallMaster,
-    voiceCallAgents: host.enableVoiceCall !== undefined ? host.enableVoiceCall : fs.voiceCallAgents,
-    videoCallMaster: host.enableVideoCall !== undefined ? host.enableVideoCall : fs.videoCallMaster,
-    videoCallAgents: host.enableVideoCall !== undefined ? host.enableVideoCall : fs.videoCallAgents,
+    voiceCallEnabled: voiceCall,
+    voiceCallMaster: voiceCall,
+    voiceCallAgents: voiceCall,
+    videoCallEnabled: videoCall,
+    videoCallMaster: videoCall,
+    videoCallAgents: videoCall,
     closeChatVisitor: host.enableCloseChatVisitor !== undefined ? host.enableCloseChatVisitor : fs.closeChatVisitor,
   } as FeaturesState;
 }

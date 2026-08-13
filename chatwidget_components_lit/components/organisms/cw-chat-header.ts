@@ -107,16 +107,8 @@ export class CwChatHeader extends LitElement {
     const feats = this.features || {};
     const headerTextColor = cw.headerTextColor || '#ffffff';
 
-    const voiceReady = !!feats.voiceCallEnabled || !!cw.features?.voiceCallEnabled;
-    const videoReady = !!feats.videoCallEnabled || !!cw.features?.videoCallEnabled;
-
-    const showVoice = voiceReady &&
-      (feats.voiceCallMaster || cw.features?.voiceCallMaster) &&
-      ((feats.voiceCallAgents || cw.features?.voiceCallAgents) || (feats.voiceCallVisitors || cw.features?.voiceCallVisitors));
-
-    const showVideo = videoReady &&
-      (feats.videoCallMaster || cw.features?.videoCallMaster) &&
-      ((feats.videoCallAgents || cw.features?.videoCallAgents) || (feats.videoCallVisitors || cw.features?.videoCallVisitors));
+    const showVoice = !!(feats.voiceCallEnabled ?? feats.voiceCallMaster ?? cw.features?.voiceCallEnabled ?? cw.features?.voiceCallMaster);
+    const showVideo = !!(feats.videoCallEnabled ?? feats.videoCallMaster ?? cw.features?.videoCallEnabled ?? cw.features?.videoCallMaster);
 
     const showCloseSession = feats.closeChatVisitor || cw.features?.closeChatVisitor;
 

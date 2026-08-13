@@ -464,11 +464,11 @@ export class CwChatBody extends LitElement {
                   `;
                 })}
 
-                ${cs.typingName && this.flag('chat.typingIndicator', true)
+                ${cs.typingName && (cw.typingIndicator !== false)
                   ? html`
                       <div class="bubble-row from-agent g-start g-end" style="margin-top: 4px">
                         <div class="bubble typing-bubble">
-                          <span class="sr-only">${cs.typingName}</span>
+                          <span class="sr-only">${cs.typingName} is typing</span>
                           <span class="typing-dots"><cw-typing-dots></cw-typing-dots></span>
                         </div>
                       </div>
@@ -534,14 +534,14 @@ export class CwChatBody extends LitElement {
                       .sendIconType="${cw.sendIconType || ''}"
                       .accentColor="${cw.accentColor || ''}"
                       .draft="${cs.draft || ''}"
-                      .attachmentsEnabled="${this.flag('attachments.enabled', true)}"
-                      .modernUi="${this.flag('widget.modernUi', true)}"
+                      .attachmentsEnabled="${cw.attachmentsEnabled !== false && this.flag('attachments.enabled', true)}"
+                      .modernUi="${cw.modernUi !== false && this.flag('widget.modernUi', true)}"
                       .uploading="${cs.uploading}"
                       .rev="${this.rev}"
                     ></cw-composer>
 
                     <cw-chat-footer
-                      .modernUi="${this.flag('widget.modernUi', true)}"
+                      .modernUi="${cw.modernUi !== false && this.flag('widget.modernUi', true)}"
                       .poweredByText="${cw.poweredByText || ''}"
                       .poweredByLink="${cw.poweredByLink || ''}"
                       .poweredByColor="${cw.poweredByColor || ''}"

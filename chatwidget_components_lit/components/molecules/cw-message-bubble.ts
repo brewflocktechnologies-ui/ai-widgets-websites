@@ -133,6 +133,10 @@ export class CwMessageBubble extends LitElement {
 
     const avatarInitial = (m.senderName || this.agentName || 'A').charAt(0).toUpperCase();
 
+    const showTicks = cw.ticksEnabled !== false;
+    const sentTickColor = cw.sentTickColor || 'currentColor';
+    const readTickColor = cw.readTickColor || '#34b7f1';
+
     return html`
       <div class="bubble-row ${isVisitor ? 'from-visitor' : 'from-agent'}">
         ${isAgent && this.isGroupEnd
@@ -173,12 +177,12 @@ export class CwMessageBubble extends LitElement {
             ? html`
                 <span class="bubble-time">
                   ${formattedTime}
-                  ${isVisitor
+                  ${isVisitor && showTicks
                     ? html`
                         &nbsp;<cw-icon
                           .name="${m.status === 'read' ? 'DoubleCheck' : m.status === 'sent' || m.pending ? 'Check' : 'DoubleCheck'}"
                           .size="${m.status === 'sent' || m.pending ? 13 : 14}"
-                          .color="${m.status === 'read' ? '#34b7f1' : 'currentColor'}"
+                          .color="${m.status === 'read' ? readTickColor : sentTickColor}"
                           style="opacity: ${m.status === 'read' ? 1 : 0.75}; vertical-align: middle; margin-left: 2px;"
                         ></cw-icon>
                       `

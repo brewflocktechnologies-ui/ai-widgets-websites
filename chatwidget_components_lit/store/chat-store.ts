@@ -475,18 +475,21 @@ export const chatStore = {
         );
         emit('store:chat');
       }
-    }, 2000);
-    setTimeout(() => {
-      const idx = s.messages.findIndex((m) => m.key === msgObj.key);
-      if (idx !== -1) {
-        s.messages = s.messages.map((m, i) =>
-          i === idx ? { ...m, status: 'read' } : m
-        );
-        emit('store:chat');
-      }
-    }, 4000);
+    }, 1500);
     setTimeout(() => {
       const curState = getStore().chat;
+      curState.typingName = curState.agentName || 'Sarah';
+      const idx = curState.messages.findIndex((m) => m.key === msgObj.key);
+      if (idx !== -1) {
+        curState.messages = curState.messages.map((m, i) =>
+          i === idx ? { ...m, status: 'read' } : m
+        );
+      }
+      emit('store:chat');
+    }, 2800);
+    setTimeout(() => {
+      const curState = getStore().chat;
+      curState.typingName = '';
       const botMsg: Message = {
         key: 'bot_' + Date.now(),
         senderType: 'AGENT',
@@ -499,7 +502,7 @@ export const chatStore = {
         curState.unreadCount = (curState.unreadCount || 0) + 1;
       }
       emit('store:chat');
-    }, 5000);
+    }, 4500);
   },
 
   resetChatbarLayout() {
