@@ -30,36 +30,40 @@ export class CwChatForm extends LitElement {
         display: flex;
         flex-direction: column;
         height: 100%;
-        padding: 24px 20px;
+        padding: 28px 24px 24px 24px;
         box-sizing: border-box;
         overflow-y: auto;
-        background: var(--cw-bg, #f6f7fa);
+        background: var(--cw-bg, #f8fafc);
+        scroll-behavior: smooth;
       }
       .form-header {
-        margin-bottom: 20px;
+        margin-bottom: 24px;
         text-align: left;
       }
       .form-title {
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 700;
-        color: var(--cw-ink, #101828);
-        line-height: 1.25;
+        color: var(--cw-ink, #0f172a);
+        line-height: 1.3;
+        letter-spacing: -0.02em;
         margin: 0 0 6px 0;
       }
       .form-subtitle {
-        font-size: 13px;
-        color: var(--cw-muted, #667085);
-        line-height: 1.45;
+        font-size: 13.5px;
+        color: var(--cw-muted, #64748b);
+        line-height: 1.5;
         margin: 0;
       }
       .form-fields {
         flex: 1 1 auto;
         display: flex;
         flex-direction: column;
+        gap: 22px;
       }
       .form-actions {
         margin-top: auto;
-        padding-top: 16px;
+        padding-top: 20px;
+        border-top: 1px solid color-mix(in srgb, var(--cw-border, #e2e8f0) 60%, transparent);
       }
     `
   ];
