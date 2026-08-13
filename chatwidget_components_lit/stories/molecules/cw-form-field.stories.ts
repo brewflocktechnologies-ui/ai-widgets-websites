@@ -1,116 +1,147 @@
 import { html } from 'lit';
 import '../../components/molecules/cw-form-field.js';
+import type { FormField } from '../../tokens/form-schemas.js';
+
+const renderFormField = (args: any) => {
+  const effectiveField: FormField = {
+    name: args.name || 'sampleField',
+    label: args.label || 'Field Label',
+    type: (args.fieldType || 'text') as any,
+    required: args.required ?? true,
+    placeholder: args.placeholder || 'Enter value...',
+    options: args.fieldType === 'select' ? [
+      { value: 'sales', label: 'Sales & Inquiries' },
+      { value: 'support', label: 'Technical Support' },
+      { value: 'billing', label: 'Billing & Accounting' },
+    ] : undefined,
+  };
+
+  return html`
+    <div style="max-width: 360px; padding: 24px; background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+      <cw-form-field
+        .field="${effectiveField}"
+        .value="${args.value || ''}"
+        .error="${args.error || ''}"
+        ?disabled="${args.disabled}"
+      ></cw-form-field>
+    </div>
+  `;
+};
 
 export default {
   title: 'Molecules/FormField',
   component: 'cw-form-field',
   tags: ['autodocs'],
   argTypes: {
-    disabled: { control: 'boolean' },
-    value: { control: 'text' },
-    error: { control: 'text' },
+    field: { control: false },
+    label: {
+      control: 'text',
+      name: 'Field Label',
+      table: { category: '1. Field Config' },
+    },
+    fieldType: {
+      control: 'select',
+      options: ['text', 'email', 'textarea', 'select'],
+      name: 'Field Type',
+      table: { category: '1. Field Config' },
+    },
+    placeholder: {
+      control: 'text',
+      name: 'Placeholder',
+      table: { category: '1. Field Config' },
+    },
+    required: {
+      control: 'boolean',
+      name: 'Required (*)',
+      table: { category: '1. Field Config' },
+    },
+    value: {
+      control: 'text',
+      name: 'Current Value',
+      table: { category: '2. State' },
+    },
+    error: {
+      control: 'text',
+      name: 'Error Message',
+      table: { category: '2. State' },
+    },
+    disabled: {
+      control: 'boolean',
+      name: 'Disabled State',
+      table: { category: '2. State' },
+    },
   },
+  render: renderFormField,
 };
-
-const renderField = (args: any) => html`
-  <div style="max-width: 360px; padding: 24px; background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; margin: 0 auto;">
-    <cw-form-field
-      .field="${args.field}"
-      .value="${args.value || ''}"
-      .error="${args.error || ''}"
-      ?disabled="${args.disabled}"
-    ></cw-form-field>
-  </div>
-`;
 
 export const TextField = {
   args: {
-    field: {
-      name: 'fullName',
-      label: 'Full Name',
-      type: 'text',
-      required: true,
-      placeholder: 'John Doe',
-    },
+    label: 'Full Name',
+    fieldType: 'text',
+    required: true,
+    placeholder: 'John Doe',
     value: '',
+    error: '',
+    disabled: false,
   },
-  render: renderField,
 };
 
 export const EmailField = {
   args: {
-    field: {
-      name: 'email',
-      label: 'Email Address',
-      type: 'email',
-      required: true,
-      placeholder: 'john@example.com',
-    },
+    label: 'Email Address',
+    fieldType: 'email',
+    required: true,
+    placeholder: 'john@example.com',
     value: 'john@example.com',
+    error: '',
+    disabled: false,
   },
-  render: renderField,
 };
 
 export const TextareaField = {
   args: {
-    field: {
-      name: 'message',
-      label: 'Message',
-      type: 'textarea',
-      required: true,
-      placeholder: 'Write your message here...',
-      rows: 4,
-    },
+    label: 'Message',
+    fieldType: 'textarea',
+    required: true,
+    placeholder: 'Write your message here...',
     value: '',
+    error: '',
+    disabled: false,
   },
-  render: renderField,
 };
 
 export const SelectField = {
   args: {
-    field: {
-      name: 'department',
-      label: 'Department',
-      type: 'select',
-      required: true,
-      placeholder: 'Select a department',
-      options: [
-        { value: 'sales', label: 'Sales & Inquiries' },
-        { value: 'support', label: 'Technical Support' },
-        { value: 'billing', label: 'Billing & Accounting' },
-      ],
-    },
+    label: 'Department',
+    fieldType: 'select',
+    required: true,
+    placeholder: 'Select a department',
     value: '',
+    error: '',
+    disabled: false,
   },
-  render: renderField,
 };
 
 export const WithValidationError = {
   args: {
-    field: {
-      name: 'email',
-      label: 'Work Email',
-      type: 'email',
-      required: true,
-      placeholder: 'you@company.com',
-    },
+    label: 'Work Email',
+    fieldType: 'email',
+    required: true,
+    placeholder: 'you@company.com',
     value: 'invalid-email',
     error: 'Please enter a valid email address',
+    disabled: false,
   },
-  render: renderField,
 };
 
 export const DisabledField = {
   args: {
-    field: {
-      name: 'username',
-      label: 'Username',
-      type: 'text',
-      required: false,
-      placeholder: 'Read-only field',
-    },
+    label: 'Username',
+    fieldType: 'text',
+    required: false,
+    placeholder: 'Read-only field',
     value: 'john_doe_99',
+    error: '',
     disabled: true,
   },
-  render: renderField,
 };
