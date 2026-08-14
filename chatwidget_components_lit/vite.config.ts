@@ -54,17 +54,9 @@ function minifyCssLiterals(): Plugin {
     },
   };
 }
-import compression from 'vite-plugin-compression';
-
 export default defineConfig({
   plugins: [
     minifyCssLiterals(),
-    compression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-      deleteOriginFile: false, // keep the original .js
-      threshold: 1024,         // only compress files >1KB
-    }),
   ],
 
   esbuild: {
