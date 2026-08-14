@@ -577,56 +577,17 @@ const renderWidget = (args: any) => html`
   </div>
 `;
 
-export const LiveWidgetPage = {
+export const Default = {
   args:{
     ...DEFAULT_ARGS,
-    bubbleTooltipEnabled:true,
     enableGreetWindow:true,
-    welcomeButtonBg:"#ffffff",
-    welcomeButtonTextColor:"#000000",
-    widgetShadow:false,
-    widgetWidth:335,
-    widgetHeight:510,
-    accentColor:"#e92424",
-    useWebsiteTheme:false,
-    bubbleOffsetRight:24,
-    barOffsetBottom:15,
-    cardOffsetRight:70,
-    cardOffsetBottom:3,
-    greetTitleColor:"#c17272",
-    greetDescriptionColor:"#1f74e9",
-    greetWidth:334,
-    greetBorderRadius:20,
-    greetIconType:"customSvg",
     enableInputCard:true,
-    enableWelcomeCard:false,
-    ticksEnabled:false,
-    greetOpeningDelaySec:3,
-    greetInputOpeningDelaySec:8
+    greetOpeningDelaySec:2.0,
+    greetInputOpeningDelaySec:4.0,
+    bubbleTooltipEnabled:true,
+    welcomeButtonTextColor:"#000000",
+    widgetShadow:false
   },
   render:renderWidget,
 };
 
-export const FullyConfigurableWidget = {
-  args:{
-    ...DEFAULT_ARGS,
-    bubbleTooltipEnabled:true,
-    enableCloseChatVisitor:true,
-    welcomeButtonBg:'#ffffff',
-    welcomeButtonTextColor:'#030303',
-    textareaFontSize:11,
-    widgetShadow:false,
-    bubbleTooltipText:'Chat with us',
-    accentColor:'#434b58',
-    visitorBubbleBg:'#141415',
-    agentBubbleBg:'#978f8f',
-    agentBubbleTextColor:'#ffffff',
-    agentAvatarBg:'#205ccc',
-    triggerType:'bubble',
-    bubbleLucideSize:23,
-    chatbarTextSize:20,
-    chatbarIconSize:30,
-    enableGreetWindow:true,
-  },
-  render:renderWidget,
-};
