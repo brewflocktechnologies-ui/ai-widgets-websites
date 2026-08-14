@@ -54,9 +54,19 @@ function minifyCssLiterals(): Plugin {
     },
   };
 }
+import compression from 'vite-plugin-compression';
 
 export default defineConfig({
-  plugins: [minifyCssLiterals()],
+  plugins: [
+    minifyCssLiterals(),
+    compression({
+      algorithm: 'brotliCompress',
+      ext: '.br',
+      deleteOriginFile: false, // keep the original .js
+      threshold: 1024,         // only compress files >1KB
+    }),
+  ],
+
   esbuild: {
     target: 'es2022',
     minifyIdentifiers: true,
@@ -65,12 +75,14 @@ export default defineConfig({
     legalComments: 'none',
     drop: ['console', 'debugger'],
   },
+
   build: {
     target: 'es2022',
     minify: 'esbuild',
     cssMinify: true,
-    copyPublicDir: true,
     reportCompressedSize: true,
+    copyPublicDir: true,
+
     lib: {
       entry: './index.ts',
       name: 'ChatWidgetLit',
@@ -79,13 +91,9 @@ export default defineConfig({
     },
 
     rollupOptions: {
-      external: [],
       output: {
         inlineDynamicImports: true,
         compact: true,
-        generatedCode: {
-          constBindings: true,
-        },
       },
     },
   },

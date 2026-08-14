@@ -27,6 +27,7 @@
     "chromatic": "^18.1.0",
     "storybook": "^10.5.7",
     "typescript": "^5.3.3",
-    "vite": "^5.1.4"
+    "vite": "^5.1.4",
+    "vite-plugin-compression": "^0.5.1"
   }
 }
