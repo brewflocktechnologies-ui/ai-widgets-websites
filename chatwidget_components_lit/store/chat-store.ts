@@ -973,41 +973,63 @@ export async function initStore(): Promise<void> {
     console.warn('initStore fetchClientConfig warning:', err);
   }
 
-  // Set up greet window visibility timers
-  const gw = store.greetWindow;
-  if (gw && gw.enabled) {
-    gw.visible = false;
-    if (gw.inputBox) gw.inputBox = { ...gw.inputBox, visible: false };
-    emit('store:greetWindow');
-
-    const greetDelay = parseFloat(String(gw.openingTimeAfterInitialLoadSec ?? 2));
-    setTimeout(() => {
-      const curGw = store!.greetWindow;
-      if (curGw && !curGw.dismissed && !store!.chat.hasSentMessage) {
-        store!.greetWindow = { ...curGw, visible: true };
-        emit('store:greetWindow');
-      }
-    }, greetDelay * 1000);
-
-    if (gw.inputBox && gw.inputBox.enabled) {
-      const inputDelay = parseFloat(String(gw.inputBox.openingTimeAfterInitialLoadSec ?? 4));
-      setTimeout(() => {
-        const curGw = store!.greetWindow;
-        if (curGw && !curGw.dismissed && !store!.chat.hasSentMessage && curGw.inputBox) {
-          store!.greetWindow = {
-            ...curGw,
-            inputBox: { ...curGw.inputBox, visible: true }
-          };
-          emit('store:greetWindow');
-        }
-      }, inputDelay * 1000);
-    }
-  }
-
   // Store is fully built: replay any overrides queued by stories/templates.
   storeReady = true;
   applyStoreConfig(lastOverrides as UpdateStoreConfigOverrides);
+
+  // Set up greet window visibility timers AFTER config overrides are applied
+  setupGreetTimers();
 }
+
+/* ────────── Greet-window visibility timers ────────── */
+let _greetTimer: ReturnType<typeof setTimeout> | null = null;
+let _inputTimer: ReturnType<typeof setTimeout> | null = null;
+
+/**
+ * (Re-)schedules the greet-window and reply-bar visibility timers
+ * based on the current store values. Clears any previously pending timers
+ * so it is safe to call repeatedly (e.g. after Storybook control changes).
+ */
+export function setupGreetTimers() {
+  // Clear any pending timers
+  if (_greetTimer) { clearTimeout(_greetTimer); _greetTimer = null; }
+  if (_inputTimer) { clearTimeout(_inputTimer); _inputTimer = null; }
+
+  const currentStore = getStore();
+  const gw = currentStore?.greetWindow;
+  if (!gw || !gw.enabled) return;
+
+  // Reset visibility so the timers can reveal them
+  gw.visible = false;
+  if (gw.inputBox) gw.inputBox = { ...gw.inputBox, visible: false };
+  emit('store:greetWindow');
+
+  const greetDelay = parseFloat(String(gw.openingTimeAfterInitialLoadSec ?? 2));
+  _greetTimer = setTimeout(() => {
+    const s = getStore();
+    const curGw = s?.greetWindow;
+    if (curGw && !curGw.dismissed && !s.chat.hasSentMessage) {
+      s.greetWindow = { ...curGw, visible: true };
+      emit('store:greetWindow');
+    }
+  }, greetDelay * 1000);
+
+  if (gw.inputBox && gw.inputBox.enabled) {
+    const inputDelay = parseFloat(String(gw.inputBox.openingTimeAfterInitialLoadSec ?? 4));
+    _inputTimer = setTimeout(() => {
+      const s = getStore();
+      const curGw = s?.greetWindow;
+      if (curGw && !curGw.dismissed && !s.chat.hasSentMessage && curGw.inputBox) {
+        s.greetWindow = {
+          ...curGw,
+          inputBox: { ...curGw.inputBox, visible: true },
+        };
+        emit('store:greetWindow');
+      }
+    }, inputDelay * 1000);
+  }
+}
+
 
 type UpdateStoreConfigOverrides = {
   enableWelcomeCard?: boolean;
@@ -1151,6 +1173,25 @@ function applyStoreConfig(overrides: UpdateStoreConfigOverrides) {
   emit('store:greetWindow');
   emit('store:chatWindow');
   emit('store:chat');
+
+  // Re-schedule greet timers if any delay/enablement override was touched
+  const greetTimerKeys: (keyof UpdateStoreConfigOverrides)[] = [
+    'enableGreetWindow', 'enableInputCard',
+    'greetDelaySec', 'inputBoxDelaySec',
+  ];
+  const greetWindowOverride = overrides.greetWindow;
+  const touchedGreetTimers = greetTimerKeys.some(k => overrides[k] !== undefined) ||
+    (greetWindowOverride && (
+      greetWindowOverride.openingTimeAfterInitialLoadSec !== undefined ||
+      greetWindowOverride.enabled !== undefined ||
+      (greetWindowOverride.inputBox && (
+        greetWindowOverride.inputBox.openingTimeAfterInitialLoadSec !== undefined ||
+        greetWindowOverride.inputBox.enabled !== undefined
+      ))
+    ));
+  if (touchedGreetTimers) {
+    setupGreetTimers();
+  }
 }
 
 /**

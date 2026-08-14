@@ -9,6 +9,7 @@ import {
   greetWindowStore,
   chatWindowStore,
   featuresStore,
+  setupGreetTimers,
 } from '../../store/chat-store.js';
 import {
   computeEffectiveChatbarConfig,
@@ -288,6 +289,20 @@ export class CwWidgetRoot extends LitElement {
     if (changedProperties.has('triggerType')) {
       this.activeTriggerOverride = undefined;
       this.userHasSentMessage = false;
+    }
+    // Push greet delay / enablement changes into the store and re-schedule timers
+    const greetDelayProps = ['greetOpeningDelaySec', 'greetInputOpeningDelaySec', 'enableGreetWindow', 'enableInputCard'] as const;
+    if (greetDelayProps.some(p => changedProperties.has(p))) {
+      const gw = greetWindowStore.get();
+      if (gw) {
+        if (this.enableGreetWindow !== undefined) gw.enabled = this.enableGreetWindow;
+        if (this.greetOpeningDelaySec !== undefined) gw.openingTimeAfterInitialLoadSec = this.greetOpeningDelaySec;
+        if (gw.inputBox) {
+          if (this.enableInputCard !== undefined) gw.inputBox.enabled = this.enableInputCard;
+          if (this.greetInputOpeningDelaySec !== undefined) gw.inputBox.openingTimeAfterInitialLoadSec = this.greetInputOpeningDelaySec;
+        }
+        setupGreetTimers();
+      }
     }
     if (changedProperties.has('prechatEnabled') || changedProperties.has('postchatEnabled')) {
       const fs = featuresStore.get();

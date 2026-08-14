@@ -581,7 +581,7 @@ export const LiveWidgetPage = {
   args:{
     ...DEFAULT_ARGS,
     bubbleTooltipEnabled:true,
-    enableGreetWindow:false,
+    enableGreetWindow:true,
     welcomeButtonBg:"#ffffff",
     welcomeButtonTextColor:"#000000",
     widgetShadow:false,
@@ -598,9 +598,11 @@ export const LiveWidgetPage = {
     greetWidth:334,
     greetBorderRadius:20,
     greetIconType:"customSvg",
-    enableInputCard:false,
+    enableInputCard:true,
     enableWelcomeCard:false,
-    ticksEnabled:false
+    ticksEnabled:false,
+    greetOpeningDelaySec:3,
+    greetInputOpeningDelaySec:8
   },
   render:renderWidget,
 };
