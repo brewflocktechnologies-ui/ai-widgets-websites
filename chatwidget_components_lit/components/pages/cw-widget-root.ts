@@ -521,6 +521,74 @@ export class CwWidgetRoot extends LitElement {
     this.requestUpdate();
   }
 
+  /**
+   * Diagnostic inspector method. Automatically discovers all computed --cw-* CSS custom
+   * properties, resolved effective configurations, active trigger mode, and host styles.
+   */
+  getDebugInfo() {
+    const styles = typeof getComputedStyle !== 'undefined' ? getComputedStyle(this) : ({} as CSSStyleDeclaration);
+    const cssVars: Record<string, string> = {};
+
+    if (styles && typeof styles.length === 'number') {
+      for (let i = 0; i < styles.length; i++) {
+        const prop = styles[i];
+        if (prop.startsWith('--cw-')) {
+          cssVars[prop] = styles.getPropertyValue(prop).trim();
+        }
+      }
+    }
+
+    const KnownTokens = [
+      '--cw-accent', '--cw-accent-deep', '--cw-accent-soft', '--cw-accent-tint',
+      '--cw-surface', '--cw-bg', '--cw-ink', '--cw-muted', '--cw-border', '--cw-grad',
+      '--cw-success', '--cw-warning', '--cw-error', '--cw-focus-ring', '--cw-font-family',
+      '--cw-font-size-xs', '--cw-font-size-sm', '--cw-font-size-md', '--cw-font-size-lg',
+      '--cw-font-size-xl', '--cw-font-size-2xl', '--cw-space-xs', '--cw-space-sm',
+      '--cw-space-md', '--cw-space-lg', '--cw-radius-sm', '--cw-radius-md',
+      '--cw-radius-lg', '--cw-radius-full'
+    ];
+    for (const token of KnownTokens) {
+      const val = styles?.getPropertyValue ? styles.getPropertyValue(token).trim() : '';
+      if (val) cssVars[token] = val;
+    }
+
+    const bs = bubbleStore.get();
+    const cbs = chatbarStore.get();
+    const gws = greetWindowStore.get();
+    const cws = chatWindowStore.get();
+    const fs = featuresStore.get();
+    const cs = chatStore.get();
+
+    const activeTrigger = this.activeTriggerOverride || this.triggerType || (cbs?.enabled ? (cbs.layout === 'card' ? 'chatcard' : 'chatbar') : 'bubble');
+    const effectiveCbs = computeEffectiveChatbarConfig(this, cbs, activeTrigger);
+    const effectiveBs = computeEffectiveBubbleConfig(this, bs);
+    const activeOffsetBottom = activeTrigger === 'bubble' ? effectiveBs.offsetBottom : effectiveCbs.offsetBottom;
+    const effectiveGws = computeEffectiveGreetWindowConfig(this, gws);
+    const effectiveCws = computeEffectiveChatWindowConfig(this, cws, activeOffsetBottom);
+    const effectiveFs = computeEffectiveFeaturesConfig(this, fs);
+
+    return {
+      activeTrigger,
+      panelOpen: this.panelOpen,
+      userHasSentMessage: this.userHasSentMessage,
+      effectiveConfigs: {
+        bubble: effectiveBs,
+        chatbar: effectiveCbs,
+        greetWindow: effectiveGws,
+        chatWindow: effectiveCws,
+        features: effectiveFs,
+        chatState: cs,
+      },
+      cssVariables: cssVars,
+      host: {
+        width: styles?.width || '',
+        height: styles?.height || '',
+        position: styles?.position || '',
+        display: styles?.display || '',
+      },
+    };
+  }
+
   render() {
     if (!this.initialized) return html``;
 
