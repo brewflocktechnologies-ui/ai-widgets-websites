@@ -77,7 +77,7 @@ export class CwChatBody extends LitElement {
       .day-divider {
         text-align: center;
         font-size: 11px;
-        color: var(--cw-muted);
+        color: var(--cw-muted, #667085);
         margin: 12px 0 8px 0;
         position: relative;
       }
@@ -88,7 +88,7 @@ export class CwChatBody extends LitElement {
         justify-content: center;
         height: 100%;
         gap: 12px;
-        color: var(--cw-muted);
+        color: var(--cw-muted, #667085);
       }
       .spinner {
         width: 24px;
@@ -101,7 +101,7 @@ export class CwChatBody extends LitElement {
       .muted {
         margin: 0;
         font-size: 13px;
-        color: var(--cw-muted);
+        color: var(--cw-muted, #667085);
       }
       .queued {
         display: flex;
@@ -120,7 +120,7 @@ export class CwChatBody extends LitElement {
       .ticket-number {
         font-size: 48px;
         font-weight: 800;
-        color: var(--cw-accent);
+        color: var(--cw-accent, #0b5fff);
       }
       .ticket-label {
         font-size: 14px;
@@ -133,21 +133,21 @@ export class CwChatBody extends LitElement {
         height: 48px;
         border-radius: 50%;
         background: rgba(34, 197, 94, 0.1);
-        color: var(--cw-success);
+        color: var(--cw-success, #10b981);
         display: flex;
         align-items: center;
         justify-content: center;
       }
       .consent {
         padding: 8px 16px;
-        background: var(--cw-surface);
-        border-top: 1px solid var(--cw-border);
+        background: var(--cw-surface, #ffffff);
+        border-top: 1px solid var(--cw-border, #e9ecf1);
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 8px;
         font-size: 11px;
-        color: var(--cw-muted);
+        color: var(--cw-muted, #667085);
       }
       .consent p {
         margin: 0;
@@ -156,7 +156,7 @@ export class CwChatBody extends LitElement {
         border: none;
         background: transparent;
         cursor: pointer;
-        color: var(--cw-muted);
+        color: var(--cw-muted, #667085);
         font-size: 12px;
       }
       .closed-note {
@@ -176,7 +176,7 @@ export class CwChatBody extends LitElement {
         padding: 10px 20px;
         border-radius: 9999px;
         border: none;
-        background: var(--cw-accent);
+        background: var(--cw-accent, #0b5fff);
         color: #ffffff;
         font-weight: 700;
         cursor: pointer;
@@ -275,7 +275,7 @@ export class CwChatBody extends LitElement {
     return html`
       <div
         class="panel-body"
-        style="background: ${isWelcome ? cw.welcome?.bgGradient || 'linear-gradient(135deg, var(--cw-accent), #22d3ee)' : cw.bodyBg || 'var(--cw-bg)'}; padding: ${isWelcome ? '0px' : ''}; ${isWelcome ? 'height: 100%; max-height: 100%; overflow: hidden;' : ''}"
+        style="background: ${isWelcome ? cw.welcome?.bgGradient || 'linear-gradient(135deg, var(--cw-accent, #0b5fff), #22d3ee)' : cw.bodyBg || 'var(--cw-bg, #f6f7fa)'}; padding: ${isWelcome ? '0px' : ''}; ${isWelcome ? 'height: 100%; max-height: 100%; overflow: hidden;' : ''}"
       >
         <!-- WELCOME SCREEN -->
         ${isWelcome
@@ -365,7 +365,7 @@ export class CwChatBody extends LitElement {
         <!-- ACTIVE CHAT / CLOSED MESSAGES -->
         ${isActive || isClosed
           ? html`
-              <div class="messages-area" tabindex="0" role="log" aria-label="Message history" aria-live="polite" aria-relevant="additions" style="background: ${cw.bodyBg || 'var(--cw-bg)'}">
+              <div class="messages-area" tabindex="0" role="log" aria-label="Message history" aria-live="polite" aria-relevant="additions" style="background: ${cw.bodyBg || 'var(--cw-bg, #f6f7fa)'}">
                 <input
                   type="file"
                   id="cw-file-input"

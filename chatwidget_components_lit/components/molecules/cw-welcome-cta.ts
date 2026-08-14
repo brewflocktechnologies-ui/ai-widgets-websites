@@ -13,7 +13,7 @@ import '../atoms/cw-button.js';
 @customElement('cw-welcome-cta')
 export class CwWelcomeCta extends LitElement {
   @property({ type: Object }) config?: WelcomeConfig;
-  @property({ type: String }) accentColor = 'var(--cw-accent)';
+  @property({ type: String }) accentColor = 'var(--cw-accent, #0b5fff)';
 
   static styles = [
     REDUCED_MOTION_CSS,
@@ -82,7 +82,7 @@ export class CwWelcomeCta extends LitElement {
         elevatable
         .ariaLabel="${`${w.buttonText || 'Start Conversation'}. ${w.buttonSubtext || 'Typically replies in 5 minutes'}`}"
         .bg="${w.buttonBg || '#ffffff'}"
-        .color="${w.buttonTextColor || 'var(--cw-ink)'}"
+        .color="${w.buttonTextColor || 'var(--cw-ink, #101828)'}"
         .borderRadius="${(w.buttonBorderRadius || 24) + 'px'}"
         .padding="${w.buttonPadding || 'clamp(12px, 2vh, 16px) clamp(16px, 3vw, 24px)'}"
         @click="${this.start}"
@@ -92,10 +92,10 @@ export class CwWelcomeCta extends LitElement {
             <cw-icon .name="${'ChatLines'}" .size="${24}"></cw-icon>
           </div>
           <div class="btn-text-col">
-            <span class="btn-text-main" style="color: ${w.buttonTextColor || 'var(--cw-ink)'}">
+            <span class="btn-text-main" style="color: ${w.buttonTextColor || 'var(--cw-ink, #101828)'}">
               ${w.buttonText || 'Start Conversation'}
             </span>
-            <span class="btn-text-sub" style="color: ${w.buttonTextColor || 'var(--cw-ink)'}">
+            <span class="btn-text-sub" style="color: ${w.buttonTextColor || 'var(--cw-ink, #101828)'}">
               ${w.buttonSubtext || 'Typically replies in 5 minutes'}
             </span>
           </div>

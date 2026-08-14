@@ -15,7 +15,7 @@ import '../molecules/cw-welcome-cta.js';
 @customElement('cw-welcome-card')
 export class CwWelcomeCard extends LitElement {
   @property({ type: Object }) config?: WelcomeConfig;
-  @property({ type: String }) accentColor = 'var(--cw-accent)';
+  @property({ type: String }) accentColor = 'var(--cw-accent, #0b5fff)';
 
   static styles = [
     CORE_STYLES,
@@ -161,7 +161,7 @@ export class CwWelcomeCard extends LitElement {
   render() {
     const w = this.config || {};
     const headerTextColor = w.headerTextColor || '#ffffff';
-    const bgGradient = w.bgGradient || 'gradient(135deg, var(--cw-accent), #22d3ee)';
+    const bgGradient = w.bgGradient || 'gradient(135deg, var(--cw-accent, #0b5fff), #22d3ee)';
     const padding = w.padding || '24px 20px 12px 20px';
     const isGlassy = w.cardLayout === 'glassy';
 

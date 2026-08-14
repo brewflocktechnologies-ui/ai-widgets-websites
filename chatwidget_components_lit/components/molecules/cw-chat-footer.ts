@@ -41,7 +41,7 @@ export class CwChatFooter extends LitElement {
         padding: 8px 16px;
         background: var(--cw-bg, #ffffff);
         font-size: 11px;
-        color: var(--cw-muted);
+        color: var(--cw-muted, #667085);
         box-sizing: border-box;
       }
       .powered {
@@ -63,9 +63,9 @@ export class CwChatFooter extends LitElement {
     const bg = this.footerBg || (isModern ? '#ffffff' : '#f9fafb');
     const borderRadius = this.widgetBorderRadius !== undefined ? this.widgetBorderRadius : (isModern ? 24 : 0);
     const fontSize = formatPx(this.footerFontSize, '11px');
-    const textColor = this.footerTextColor || 'var(--cw-muted)';
+    const textColor = this.footerTextColor || 'var(--cw-muted, #667085)';
     const poweredByLink = this.poweredByLink || '#';
-    const poweredByColor = this.poweredByColor || 'var(--cw-muted)';
+    const poweredByColor = this.poweredByColor || 'var(--cw-muted, #667085)';
     const poweredByText = this.poweredByText || 'vAInatheya.ai';
 
     return html`

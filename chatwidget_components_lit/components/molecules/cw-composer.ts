@@ -70,7 +70,7 @@ export class CwComposer extends LitElement {
         box-sizing: border-box;
       }
       textarea::placeholder {
-        color: var(--placeholder-color, var(--cw-muted)) !important;
+        color: var(--placeholder-color, var(--cw-muted, #667085)) !important;
       }
     `
   ];
@@ -142,33 +142,33 @@ export class CwComposer extends LitElement {
 
     const padding = this.inputPadding || '6px 8px';
     const margin = this.inputMargin || '12px 16px';
-    const bg = this.inputBg || 'var(--cw-surface)';
+    const bg = this.inputBg || 'var(--cw-surface, #ffffff)';
     const borderRadius = typeof this.inputBorderRadius === 'number'
       ? `${this.inputBorderRadius}px`
       : (this.inputBorderRadius !== undefined ? this.inputBorderRadius : '9999px');
 
     const borderColor = isFocused
-      ? this.inputFocusBorderColor || this.accentColor || 'var(--cw-accent)'
-      : this.inputBorderColor || 'var(--cw-border)';
+      ? this.inputFocusBorderColor || this.accentColor || 'var(--cw-accent, #0b5fff)'
+      : this.inputBorderColor || 'var(--cw-border, #e9ecf1)';
 
     const boxShadow = isFocused
       ? this.inputFocusShadow || '0 0 0 2px rgba(11, 95, 255, 0.1)'
       : 'none';
 
-    const inputTextColor = this.inputTextColor || 'var(--cw-ink)';
-    const placeholderColor = this.inputPlaceholderColor || 'var(--cw-muted)';
+    const inputTextColor = this.inputTextColor || 'var(--cw-ink, #101828)';
+    const placeholderColor = this.inputPlaceholderColor || 'var(--cw-muted, #667085)';
     const textareaFontSize = this.textareaFontSize || '14px';
 
     const attachBg = this.attachButtonBg || '#ffffff';
-    const attachColor = this.attachButtonColor || 'var(--cw-muted)';
-    const emojiColor = this.emojiButtonColor || 'var(--cw-muted)';
+    const attachColor = this.attachButtonColor || 'var(--cw-muted, #667085)';
+    const emojiColor = this.emojiButtonColor || 'var(--cw-muted, #667085)';
 
     const sendBg = !canSend
-      ? this.sendButtonBgInactive || 'var(--cw-border)'
-      : this.sendButtonBgActive || this.accentColor || 'var(--cw-accent)';
+      ? this.sendButtonBgInactive || 'var(--cw-border, #e9ecf1)'
+      : this.sendButtonBgActive || this.accentColor || 'var(--cw-accent, #0b5fff)';
 
     const sendColor = !canSend
-      ? this.sendButtonColorInactive || 'var(--cw-muted)'
+      ? this.sendButtonColorInactive || 'var(--cw-muted, #667085)'
       : this.sendButtonColorActive || '#ffffff';
 
     return html`

@@ -161,7 +161,7 @@ export class CwChatPanel extends LitElement {
       : 'none';
 
     const border = cw.widgetBorderEnabled
-      ? `${cw.widgetBorderWidth || 1}px solid ${cw.widgetBorderColor || 'var(--cw-border)'}`
+      ? `${cw.widgetBorderWidth || 1}px solid ${cw.widgetBorderColor || 'var(--cw-border, #e9ecf1)'}`
       : 'none';
 
     const borderRadius = `${cw.widgetBorderRadius || 24}px`;
@@ -178,7 +178,7 @@ export class CwChatPanel extends LitElement {
           aria-modal="${this.panelOpen ? 'true' : 'false'}"
           aria-label="Chat window"
           tabindex="-1"
-          style="box-shadow: ${shadow}; border: ${border}; border-radius: ${borderRadius}; background: ${cw.bodyBg || 'var(--cw-bg)'}; --cw-accent: ${cw.accentColor || '#0b5fff'}"
+          style="box-shadow: ${shadow}; border: ${border}; border-radius: ${borderRadius}; background: ${cw.bodyBg || 'var(--cw-bg, #f6f7fa)'}; --cw-accent: ${cw.accentColor || '#0b5fff'}"
         >
           <!-- HEADER -->
           <cw-chat-header
@@ -208,12 +208,12 @@ export class CwChatPanel extends LitElement {
                   .cancelLabel="${cs.confirmBox.cancelLabel || 'Cancel'}"
                   .confirmLabel="${cs.confirmBox.confirmLabel || 'Confirm'}"
                   .modalCardBg="${cw.modalCardBg || '#ffffff'}"
-                  .modalMessageColor="${cw.modalMessageColor || 'var(--cw-ink)'}"
+                  .modalMessageColor="${cw.modalMessageColor || 'var(--cw-ink, #101828)'}"
                   .modalBorderRadius="${cw.modalBorderRadius !== undefined ? cw.modalBorderRadius : 16}"
-                  .cancelBg="${cw.endChatCancelBg || 'var(--cw-surface)'}"
-                  .cancelTextColor="${cw.endChatCancelTextColor || 'var(--cw-muted)'}"
-                  .cancelBorderColor="${cw.endChatCancelBorderColor || 'var(--cw-border)'}"
-                  .confirmBg="${cw.endChatConfirmBg || 'var(--cw-accent)'}"
+                  .cancelBg="${cw.endChatCancelBg || 'var(--cw-surface, #ffffff)'}"
+                  .cancelTextColor="${cw.endChatCancelTextColor || 'var(--cw-muted, #667085)'}"
+                  .cancelBorderColor="${cw.endChatCancelBorderColor || 'var(--cw-border, #e9ecf1)'}"
+                  .confirmBg="${cw.endChatConfirmBg || 'var(--cw-accent, #0b5fff)'}"
                   .confirmTextColor="${cw.endChatConfirmTextColor || '#ffffff'}"
                 ></cw-confirm-dialog>
               `

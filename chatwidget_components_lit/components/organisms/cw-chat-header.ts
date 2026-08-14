@@ -122,7 +122,7 @@ export class CwChatHeader extends LitElement {
     return html`
       <header
         class="panel-header"
-        style="background: ${cw.headerBg || 'var(--cw-grad)'}; color: ${headerTextColor}; padding: ${cw.headerPadding || '14px 16px'}; border-bottom: ${cw.headerBorderColor ? `1px solid ${cw.headerBorderColor}` : '1px solid rgba(0,0,0,0.08)'}"
+        style="background: ${cw.headerBg || 'var(--cw-grad, linear-gradient(135deg, var(--cw-accent, #0b5fff), color-mix(in srgb, var(--cw-accent, #0b5fff) 74%, #101828)))'}; color: ${headerTextColor}; padding: ${cw.headerPadding || '14px 16px'}; border-bottom: ${cw.headerBorderColor ? `1px solid ${cw.headerBorderColor}` : '1px solid rgba(0,0,0,0.08)'}"
       >
         <div class="left-section">
           ${cw.modernUi !== false

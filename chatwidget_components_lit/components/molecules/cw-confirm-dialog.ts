@@ -16,12 +16,12 @@ export class CwConfirmDialog extends LitElement {
   @property({ type: String }) cancelLabel = 'Cancel';
   @property({ type: String }) confirmLabel = 'Confirm';
   @property({ type: String }) modalCardBg = '#ffffff';
-  @property({ type: String }) modalMessageColor = 'var(--cw-ink)';
+  @property({ type: String }) modalMessageColor = 'var(--cw-ink, #101828)';
   @property({ type: Number }) modalBorderRadius = 16;
-  @property({ type: String }) cancelBg = 'var(--cw-surface)';
-  @property({ type: String }) cancelTextColor = 'var(--cw-muted)';
-  @property({ type: String }) cancelBorderColor = 'var(--cw-border)';
-  @property({ type: String }) confirmBg = 'var(--cw-accent)';
+  @property({ type: String }) cancelBg = 'var(--cw-surface, #ffffff)';
+  @property({ type: String }) cancelTextColor = 'var(--cw-muted, #667085)';
+  @property({ type: String }) cancelBorderColor = 'var(--cw-border, #e9ecf1)';
+  @property({ type: String }) confirmBg = 'var(--cw-accent, #0b5fff)';
   @property({ type: String }) confirmTextColor = '#ffffff';
 
   static styles = [
