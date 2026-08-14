@@ -587,7 +587,7 @@ export const Default = {
     bubbleTooltipEnabled:true,
     welcomeButtonTextColor:"#000000",
     widgetShadow:false,
-    triggerType:"chatcard",
+    triggerType:"bubble",
     cardOffsetRight:179
   },
   render:renderWidget,
