@@ -586,7 +586,9 @@ export const Default = {
     greetInputOpeningDelaySec:4.0,
     bubbleTooltipEnabled:true,
     welcomeButtonTextColor:"#000000",
-    widgetShadow:false
+    widgetShadow:false,
+    triggerType:"chatcard",
+    cardOffsetRight:179
   },
   render:renderWidget,
 };
