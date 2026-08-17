@@ -633,9 +633,45 @@ export const chatStore = {
   },
 
   downloadTranscript() {
-    getStore().chat.menuOpen = false;
+    const s = getStore().chat;
+    s.menuOpen = false;
     emit('store:chat');
-    alert('Downloading transcript...');
+
+    // Build a plain-text transcript from the current message list.
+    const lines: string[] = [
+      `Chat Transcript — ${s.clientName || 'Support'}`,
+      `Agent: ${s.agentName || 'Agent'}`,
+      `Downloaded: ${new Date().toLocaleString()}`,
+      '─'.repeat(48),
+      '',
+    ];
+
+    for (const msg of s.messages || []) {
+      const sender = msg.senderType === 'VISITOR' ? 'You' : (msg.senderName || s.agentName || 'Agent');
+      const time = msg.created
+        ? new Date(msg.created).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        : '';
+      if (msg.attachment) {
+        lines.push(`[${time}] ${sender}: [Image attachment]`);
+      } else if (msg.body) {
+        lines.push(`[${time}] ${sender}: ${msg.body}`);
+      }
+    }
+
+    const text = lines.join('\n');
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `chat-transcript-${Date.now()}.txt`;
+    anchor.style.display = 'none';
+    document.body.appendChild(anchor);
+    anchor.click();
+    // Revoke the object URL after the browser has had time to initiate the download.
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+      document.body.removeChild(anchor);
+    }, 100);
   },
 
   toggleSounds() {
@@ -756,7 +792,13 @@ export const chatStore = {
   captureScreenshot() {
     getStore().chat.attachOpen = false;
     emit('store:chat');
-    alert('Screenshot captured!');
+    // Screenshot capture requires access to the full page DOM outside the
+    // widget's shadow root. Dispatch a window-level event so the host page
+    // (or an integration layer using html2canvas / puppeteer) can handle it.
+    window.dispatchEvent(new CustomEvent('cw:capture-screenshot-request', {
+      detail: { timestamp: new Date().toISOString() },
+      bubbles: false,
+    }));
   },
 
   dividerBefore(index: number): boolean {

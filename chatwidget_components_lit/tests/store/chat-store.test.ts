@@ -17,7 +17,6 @@ import {
 
 describe('chat-store', () => {
   beforeEach(async () => {
-    window.alert = vi.fn();
     globalThis.fetch = vi.fn().mockRejectedValue(new Error('No fetch in test'));
     await initStore();
   });
@@ -367,11 +366,25 @@ describe('chat-store', () => {
     });
 
     it('handles captureScreenshot and downloadTranscript and toggleSounds and dismissConsent', () => {
+      // captureScreenshot: verify window event is dispatched (no alert)
+      const screenshotEvents: Event[] = [];
+      const screenshotHandler = (e: Event) => screenshotEvents.push(e);
+      window.addEventListener('cw:capture-screenshot-request', screenshotHandler);
       chatStore.captureScreenshot();
-      expect(window.alert).toHaveBeenCalledWith('Screenshot captured!');
+      window.removeEventListener('cw:capture-screenshot-request', screenshotHandler);
+      expect(screenshotEvents).toHaveLength(1);
 
+      // downloadTranscript: verify Blob URL is created (no alert)
+      const createSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
+      vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+      const origCreate = document.createElement.bind(document);
+      vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+        const el = origCreate(tag);
+        if (tag === 'a') vi.spyOn(el as HTMLAnchorElement, 'click').mockImplementation(() => {});
+        return el;
+      });
       chatStore.downloadTranscript();
-      expect(window.alert).toHaveBeenCalledWith('Downloading transcript...');
+      expect(createSpy).toHaveBeenCalledWith(expect.any(Blob));
 
       const initialSounds = chatStore.get().soundsOn;
       chatStore.toggleSounds();
@@ -655,6 +668,149 @@ describe('chat-store', () => {
       expect(chatWindowStore.get().visitorBubbleFontSize).toBe('16px');
 
       document.documentElement.classList.remove('dark');
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // downloadTranscript — real Blob-based file download (no alert)
+  // ---------------------------------------------------------------------------
+  describe('chatStore.downloadTranscript', () => {
+    it('closes the menu and emits store:chat', () => {
+      const s = chatStore.get();
+      s.menuOpen = true;
+      const listener = vi.fn();
+      const unsub = subscribe('store:chat', listener);
+      chatStore.downloadTranscript();
+      expect(s.menuOpen).toBe(false);
+      expect(listener).toHaveBeenCalled();
+      unsub();
+    });
+
+    it('creates a Blob URL and triggers an anchor download click', () => {
+      // Install fake timers BEFORE calling downloadTranscript so the
+      // internal setTimeout(100ms) is captured and can be flushed.
+      vi.useFakeTimers();
+
+      const mockUrl = 'blob:mock-url';
+      const createSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue(mockUrl);
+      const revokeSpy = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+      const clickSpy = vi.fn();
+      const originalCreate = document.createElement.bind(document);
+      vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+        const el = originalCreate(tag);
+        if (tag === 'a') {
+          vi.spyOn(el as HTMLAnchorElement, 'click').mockImplementation(clickSpy);
+        }
+        return el;
+      });
+
+      chatStore.downloadTranscript();
+
+      expect(createSpy).toHaveBeenCalledWith(expect.any(Blob));
+      expect(clickSpy).toHaveBeenCalled();
+
+      // Flush the 100ms revoke timer
+      vi.runAllTimers();
+      expect(revokeSpy).toHaveBeenCalledWith(mockUrl);
+
+      vi.useRealTimers();
+    });
+
+    it('includes message bodies in the downloaded transcript text', () => {
+      const s = chatStore.get();
+      s.messages = [
+        { key: 'm1', senderType: 'AGENT', senderName: 'Sarah', body: 'Hello there', created: new Date().toISOString() },
+        { key: 'm2', senderType: 'VISITOR', body: 'Hi, I need help', created: new Date().toISOString() },
+      ];
+
+      let capturedBlob: Blob | undefined;
+      vi.spyOn(URL, 'createObjectURL').mockImplementation((b) => {
+        capturedBlob = b as Blob;
+        return 'blob:mock';
+      });
+      vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+      const originalCreate = document.createElement.bind(document);
+      vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+        const el = originalCreate(tag);
+        if (tag === 'a') vi.spyOn(el as HTMLAnchorElement, 'click').mockImplementation(() => {});
+        return el;
+      });
+
+      chatStore.downloadTranscript();
+
+      expect(capturedBlob).toBeDefined();
+      // Read the Blob text to confirm messages are included
+      return capturedBlob!.text().then((text) => {
+        expect(text).toContain('Hello there');
+        expect(text).toContain('Hi, I need help');
+        expect(text).toContain('You');
+        expect(text).toContain('Sarah');
+      });
+    });
+
+    it('labels attachment messages correctly in the transcript', () => {
+      const s = chatStore.get();
+      s.messages = [
+        { key: 'img1', senderType: 'VISITOR', body: '', attachment: true, created: new Date().toISOString() },
+      ];
+
+      let capturedBlob: Blob | undefined;
+      vi.spyOn(URL, 'createObjectURL').mockImplementation((b) => { capturedBlob = b as Blob; return 'blob:mock'; });
+      vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+      const originalCreate = document.createElement.bind(document);
+      vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+        const el = originalCreate(tag);
+        if (tag === 'a') vi.spyOn(el as HTMLAnchorElement, 'click').mockImplementation(() => {});
+        return el;
+      });
+
+      chatStore.downloadTranscript();
+
+      return capturedBlob!.text().then((text) => {
+        expect(text).toContain('[Image attachment]');
+      });
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // captureScreenshot — dispatches window event, no alert
+  // ---------------------------------------------------------------------------
+  describe('chatStore.captureScreenshot', () => {
+    it('closes the attach panel and emits store:chat', () => {
+      const s = chatStore.get();
+      s.attachOpen = true;
+      const listener = vi.fn();
+      const unsub = subscribe('store:chat', listener);
+      chatStore.captureScreenshot();
+      expect(s.attachOpen).toBe(false);
+      expect(listener).toHaveBeenCalled();
+      unsub();
+    });
+
+    it('dispatches a cw:capture-screenshot-request window event with a timestamp', () => {
+      const received: CustomEvent[] = [];
+      const handler = (e: Event) => received.push(e as CustomEvent);
+      window.addEventListener('cw:capture-screenshot-request', handler);
+
+      chatStore.captureScreenshot();
+
+      window.removeEventListener('cw:capture-screenshot-request', handler);
+      expect(received).toHaveLength(1);
+      expect(received[0].detail).toHaveProperty('timestamp');
+      expect(typeof received[0].detail.timestamp).toBe('string');
+    });
+
+    it('does not call alert() — dispatches window event instead', () => {
+      // Happy-DOM does not expose window.alert, so we confirm behaviour by
+      // verifying the window event is dispatched (which only happens in the
+      // new non-alert implementation).
+      const received: Event[] = [];
+      const handler = (e: Event) => received.push(e);
+      window.addEventListener('cw:capture-screenshot-request', handler);
+      chatStore.captureScreenshot();
+      window.removeEventListener('cw:capture-screenshot-request', handler);
+      expect(received).toHaveLength(1);
     });
   });
 });
