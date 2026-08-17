@@ -47,9 +47,6 @@ function emit(event: string) {
   emitter.dispatchEvent(new CustomEvent(event));
 }
 
-function getDefaultTheme() {
-  return getParentTheme();
-}
 
 function buildDefaultBubble(theme: { primary: string; secondary: string }): BubbleState {
   return {
@@ -798,6 +795,7 @@ export const chatStore = {
 // ---------------------------------------------------------------------------
 
 export async function initStore(): Promise<void> {
+  lastOverrides = {};
   const theme = getParentTheme();
   const clientId = getClientId();
 
