@@ -38,6 +38,16 @@ describe('CwIcon Atom Component', () => {
     expect(customDiv?.innerHTML).toContain('custom-test');
   });
 
+  it('should sanitize malicious custom inline SVG string rendering', async () => {
+    element.customSvg = '<svg onload="alert(1)"><script>alert(2)</script><circle cx="12" cy="12" r="10" onclick="alert(3)"></circle></svg>';
+    await element.updateComplete;
+
+    const customDiv = element.shadowRoot?.querySelector('.custom-svg');
+    expect(customDiv?.innerHTML).not.toContain('<script');
+    expect(customDiv?.innerHTML).not.toContain('onload');
+    expect(customDiv?.innerHTML).not.toContain('onclick');
+  });
+
   it('renders all icon switch cases', async () => {
     const names = [
       'Star', 'Heart', 'Smile', 'Sparkles', 'MessageSquare', 'Send', 'SendFilled',

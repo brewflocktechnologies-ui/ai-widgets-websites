@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { sanitizeSvg } from '../../utils/sanitize-svg.js';
 
 @customElement('cw-icon')
 export class CwIcon extends LitElement {
@@ -29,7 +30,10 @@ export class CwIcon extends LitElement {
 
   render() {
     if (this.customSvg) {
-      return html`<div class="custom-svg" style="width: ${this.size}px; height: ${this.size}px; color: ${this.color}" .innerHTML=${this.customSvg}></div>`;
+      const cleanSvg = sanitizeSvg(this.customSvg);
+      if (cleanSvg) {
+        return html`<div class="custom-svg" style="width: ${this.size}px; height: ${this.size}px; color: ${this.color}" .innerHTML=${cleanSvg}></div>`;
+      }
     }
 
     const s = this.size;
