@@ -5,7 +5,9 @@
 
 export * from './tokens/design-tokens.js';
 export * from './styles/core-styles.js';
-export * from './styles/global-styles.js';
+// NOTE: styles/global-styles.ts (~76 KB, unused dashboard CSS) is intentionally
+// NOT re-exported here. Re-exporting it from the package entry pins it as a
+// public export, so Rollup can't tree-shake it and every visitor downloads it.
 export * from './tokens/accessibility.js';
 export * from './tokens/default-theme.js';
 export * from './tokens/merge.js';
