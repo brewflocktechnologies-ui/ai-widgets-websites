@@ -4,11 +4,15 @@
  */
 
 export * from './tokens/design-tokens.js';
-export * from './tokens/core-styles.js';
+export * from './styles/core-styles.js';
+export * from './styles/global-styles.js';
 export * from './tokens/accessibility.js';
 export * from './tokens/default-theme.js';
 export * from './tokens/merge.js';
 export * from './tokens/css.js';
+export * from './config/chatbar-presets.js';
+export * from './config/form-schemas.js';
+export * from './config/widget-config.js';
 export * from './utils/theme.js';
 export * from './utils/config.js';
 export * from './utils/transition.js';
@@ -51,9 +55,6 @@ export * from './components/molecules/cw-emoji-picker.js';
 export * from './components/molecules/cw-attach-menu.js';
 export * from './components/molecules/cw-chat-menu.js';
 export * from './components/molecules/cw-confirm-dialog.js';
-
-// Tokens & Schemas
-export * from './tokens/form-schemas.js';
 
 // Organisms
 

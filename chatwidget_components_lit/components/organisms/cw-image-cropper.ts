@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
-import { CORE_STYLES } from '../../tokens/core-styles.js';
+import { CORE_STYLES } from '../../styles/core-styles.js';
 import '../atoms/cw-icon.js';
 import '../atoms/cw-button.js';
 

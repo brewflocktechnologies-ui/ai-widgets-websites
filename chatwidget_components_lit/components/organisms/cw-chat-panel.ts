@@ -1,7 +1,7 @@
 import { LitElement, html, css, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { ChatWindowState, ChatState, FeaturesState, ChatbarState, BubbleState } from '../../store/types.js';
-import { CORE_STYLES } from '../../tokens/core-styles.js';
+import { CORE_STYLES } from '../../styles/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import { EnterLeaveController } from '../../utils/transition.js';
 import './cw-chat-header.js';

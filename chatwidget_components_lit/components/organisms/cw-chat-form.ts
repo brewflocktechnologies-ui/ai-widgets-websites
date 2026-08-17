@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { CORE_STYLES } from '../../tokens/core-styles.js';
-import type { FormSchema } from '../../tokens/form-schemas.js';
+import { CORE_STYLES } from '../../styles/core-styles.js';
+import type { FormSchema } from '../../config/form-schemas.js';
 import '../molecules/cw-form-field.js';
 import '../atoms/cw-button.js';
 

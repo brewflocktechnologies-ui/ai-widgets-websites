@@ -6,7 +6,7 @@ import {
   POSTCHAT_SCHEMA,
   TICKET_SCHEMA,
   type FormSchema,
-} from '../../tokens/form-schemas.js';
+} from '../../config/form-schemas.js';
 
 const panelFrame = (story: any) => html`
   <div style="width: 360px; height: 560px; border-radius: 24px; overflow: hidden; box-shadow: 0 12px 36px rgba(0,0,0,.15); background: var(--cw-bg, #f8fafc); display: flex; flex-direction: column; margin: 20px auto;">

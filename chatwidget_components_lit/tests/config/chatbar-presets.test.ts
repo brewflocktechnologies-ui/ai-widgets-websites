@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from '../../tokens/chatbar-presets.js';
+import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from '../../config/chatbar-presets.js';
 
 describe('tokens/chatbar-presets.ts', () => {
   it('should define valid CHATBAR_BAR_PRESET configuration', () => {

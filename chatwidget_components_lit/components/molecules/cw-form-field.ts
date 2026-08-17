@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { CORE_STYLES } from '../../tokens/core-styles.js';
-import type { FormField } from '../../tokens/form-schemas.js';
+import { CORE_STYLES } from '../../styles/core-styles.js';
+import type { FormField } from '../../config/form-schemas.js';
 
 @customElement('cw-form-field')
 export class CwFormField extends LitElement {

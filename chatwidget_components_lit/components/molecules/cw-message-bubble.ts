@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { Message, ChatWindowState } from '../../store/types.js';
-import { CORE_STYLES } from '../../tokens/core-styles.js';
+import { CORE_STYLES } from '../../styles/core-styles.js';
 import '../atoms/cw-icon.js';
 import './cw-avatar.js';
 

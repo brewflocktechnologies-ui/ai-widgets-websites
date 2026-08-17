@@ -1,5 +1,5 @@
 import { unsafeCSS } from 'lit';
-import { ensureTokenCss } from './css.js';
+import { ensureTokenCss } from '../tokens/css.js';
 
 /**
  * Core shared stylesheet for the chat widget.

@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { ChatState, ChatWindowState, Message } from '../../store/types.js';
-import { CORE_STYLES } from '../../tokens/core-styles.js';
+import { CORE_STYLES } from '../../styles/core-styles.js';
 import { REDUCED_MOTION_CSS } from '../../tokens/accessibility.js';
 import './cw-welcome-card.js';
 import './cw-chat-form.js';
@@ -14,7 +14,7 @@ import '../molecules/cw-chat-menu.js';
 import './cw-image-cropper.js';
 import '../atoms/cw-typing-dots.js';
 import '../atoms/cw-icon.js';
-import { PRECHAT_SCHEMA, OFFLINE_SCHEMA, POSTCHAT_SCHEMA } from '../../tokens/form-schemas.js';
+import { PRECHAT_SCHEMA, OFFLINE_SCHEMA, POSTCHAT_SCHEMA } from '../../config/form-schemas.js';
 import type { CwComposer } from '../molecules/cw-composer.js';
 
 /**

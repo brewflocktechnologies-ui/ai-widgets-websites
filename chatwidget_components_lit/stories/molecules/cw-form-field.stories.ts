@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import '../../components/molecules/cw-form-field.js';
-import type { FormField } from '../../tokens/form-schemas.js';
+import type { FormField } from '../../config/form-schemas.js';
 
 const renderFormField = (args: any) => {
   const effectiveField: FormField = {

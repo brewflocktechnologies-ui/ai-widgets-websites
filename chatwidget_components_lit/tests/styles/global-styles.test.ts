@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { GLOBAL_STYLES } from '../../tokens/global-styles.js';
+import { GLOBAL_STYLES } from '../../styles/global-styles.js';
 
 describe('global-styles token', () => {
   it('exports GLOBAL_STYLES CSSResult object', () => {

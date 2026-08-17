@@ -5,7 +5,7 @@ import {
 } from '../utils/theme.js';
 import { getClientId, fetchClientConfig } from '../utils/config.js';
 import { sanitizeConfig } from '../tokens/merge.js';
-import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from '../tokens/chatbar-presets.js';
+import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from '../config/chatbar-presets.js';
 
 // Types live in ./types.js (pure, side-effect-free) so presentational
 // components can depend on them without coupling to the store singleton.

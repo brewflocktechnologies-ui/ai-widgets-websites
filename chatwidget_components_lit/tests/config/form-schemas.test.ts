@@ -4,7 +4,7 @@ import {
   OFFLINE_SCHEMA,
   POSTCHAT_SCHEMA,
   TICKET_SCHEMA,
-} from '../../tokens/form-schemas.js';
+} from '../../config/form-schemas.js';
 
 describe('tokens/form-schemas.ts', () => {
   it('should define valid PRECHAT_SCHEMA', () => {

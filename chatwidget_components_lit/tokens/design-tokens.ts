@@ -47,87 +47,17 @@ export const CW_WARNING = '--cw-warning';
 export const CW_ERROR = '--cw-error';
 export const CW_FOCUS_RING = '--cw-focus-ring';
 
-// ---------------------------------------------------------------------------
-// Token Default Values (light mode)
-// NOTE: values are reconciled with tokens/global-styles.ts (@layer properties),
-// which is the runtime source used by `var(--cw-*)` in the components.
-// ---------------------------------------------------------------------------
-export const LIGHT_TOKENS: Record<string, string> = {
-  [CW_BG]: '#f6f7fa',
-  [CW_SURFACE]: '#ffffff',
-  [CW_BORDER]: '#e9ecf1',
-  [CW_INK]: '#101828',
-  [CW_MUTED]: '#667085',
-  [CW_GRAD]: 'linear-gradient(135deg, var(--cw-accent), var(--cw-accent-deep))',
-  [CW_ACCENT]: '#0b5fff',
-  [CW_ACCENT_TINT]: 'color-mix(in srgb, var(--cw-accent) 14%, #ffffff)',
-  [CW_ACCENT_DEEP]: 'color-mix(in srgb, var(--cw-accent) 74%, #101828)',
-  [CW_ACCENT_SOFT]: 'color-mix(in srgb, var(--cw-accent) 8%, #ffffff)',
-
-  // Expanded Semantic Tokens (Light)
-  [CW_FONT_FAMILY]: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  [CW_FONT_SIZE_XS]: '0.75rem',
-  [CW_FONT_SIZE_SM]: '0.875rem',
-  [CW_FONT_SIZE_MD]: '1rem',
-  [CW_FONT_SIZE_LG]: '1.125rem',
-  [CW_FONT_SIZE_XL]: '1.5rem',
-  [CW_FONT_SIZE_2XL]: '1.875rem',
-
-  [CW_SPACE_XS]: '0.25rem',
-  [CW_SPACE_SM]: '0.5rem',
-  [CW_SPACE_MD]: '1rem',
-  [CW_SPACE_LG]: '1.5rem',
-
-  [CW_RADIUS_SM]: '0.375rem',
-  [CW_RADIUS_MD]: '0.5rem',
-  [CW_RADIUS_LG]: '1rem',
-  [CW_RADIUS_FULL]: '9999px',
-
-  [CW_SUCCESS]: '#10b981',
-  [CW_WARNING]: '#f59e0b',
-  [CW_ERROR]: '#f43f5e',
-  [CW_FOCUS_RING]: '#0b5fff',
-};
+import { DEFAULT_TOKEN_THEME } from './default-theme.js';
+import { themeToCssVars, themeToDarkVars } from './css.js';
 
 // ---------------------------------------------------------------------------
-// Token Default Values (dark mode)
-// NOTE: reconciled with tokens/global-styles.ts (`.dark` overrides).
+// Token Default Values (Derived from DEFAULT_TOKEN_THEME in default-theme.ts)
 // ---------------------------------------------------------------------------
+export const LIGHT_TOKENS: Record<string, string> = themeToCssVars(DEFAULT_TOKEN_THEME);
+
 export const DARK_TOKENS: Record<string, string> = {
-  [CW_BG]: '#0f172a',
-  [CW_SURFACE]: '#1e293b',
-  [CW_BORDER]: '#334155',
-  [CW_INK]: '#f8fafc',
-  [CW_MUTED]: '#94a3b8',
-  [CW_GRAD]: 'linear-gradient(135deg, var(--cw-accent), var(--cw-accent-deep))',
-  [CW_ACCENT]: '#0b5fff',
-  [CW_ACCENT_TINT]: 'rgba(11,95,255,0.15)',
-  [CW_ACCENT_DEEP]: '#3b82f6',
-  [CW_ACCENT_SOFT]: 'rgba(11,95,255,0.08)',
-
-  // Expanded Semantic Tokens (Dark)
-  [CW_FONT_FAMILY]: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  [CW_FONT_SIZE_XS]: '0.75rem',
-  [CW_FONT_SIZE_SM]: '0.875rem',
-  [CW_FONT_SIZE_MD]: '1rem',
-  [CW_FONT_SIZE_LG]: '1.125rem',
-  [CW_FONT_SIZE_XL]: '1.5rem',
-  [CW_FONT_SIZE_2XL]: '1.875rem',
-
-  [CW_SPACE_XS]: '0.25rem',
-  [CW_SPACE_SM]: '0.5rem',
-  [CW_SPACE_MD]: '1rem',
-  [CW_SPACE_LG]: '1.5rem',
-
-  [CW_RADIUS_SM]: '0.375rem',
-  [CW_RADIUS_MD]: '0.5rem',
-  [CW_RADIUS_LG]: '1rem',
-  [CW_RADIUS_FULL]: '9999px',
-
-  [CW_SUCCESS]: '#34d399',
-  [CW_WARNING]: '#fbbf24',
-  [CW_ERROR]: '#f87171',
-  [CW_FOCUS_RING]: '#60a5fa',
+  ...LIGHT_TOKENS,
+  ...themeToDarkVars(DEFAULT_TOKEN_THEME),
 };
 
 // ---------------------------------------------------------------------------

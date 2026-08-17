@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-chatbar.js';
-import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from '../../tokens/chatbar-presets.js';
+import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from '../../config/chatbar-presets.js';
 
 export default {
   title: 'Organisms/Chatbar',
