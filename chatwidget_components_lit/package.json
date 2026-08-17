@@ -11,6 +11,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -26,6 +27,7 @@
     "@storybook/addon-themes": "^10.5.7",
     "@storybook/web-components-vite": "^10.5.7",
     "@types/node": "^20.11.0",
+    "@vitest/coverage-v8": "^4.1.10",
     "chromatic": "^18.1.0",
     "happy-dom": "^20.11.2",
     "storybook": "^10.5.7",
