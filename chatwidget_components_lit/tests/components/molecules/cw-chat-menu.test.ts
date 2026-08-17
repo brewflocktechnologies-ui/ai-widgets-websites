@@ -37,4 +37,17 @@ describe('CwChatMenu Molecule Component', () => {
 
     expect(spy).toHaveBeenCalled();
   });
+
+  it('should dispatch cw:toggle-sounds event on sound item click', async () => {
+    element.soundsOn = false;
+    await element.updateComplete;
+
+    const spy = vi.fn();
+    element.addEventListener('cw:toggle-sounds', spy);
+
+    const soundItem = element.shadowRoot?.querySelector('cw-menu-item[icon="Volume2"]') as HTMLElement;
+    soundItem?.click();
+
+    expect(spy).toHaveBeenCalled();
+  });
 });

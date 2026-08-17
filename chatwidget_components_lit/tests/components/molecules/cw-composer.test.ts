@@ -31,6 +31,19 @@ describe('CwComposer Molecule Component', () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it('handles updated draft property reset and height adjustment', async () => {
+    element.draft = 'Old draft';
+    await element.updateComplete;
+
+    const textarea = element.shadowRoot?.querySelector('textarea') as HTMLTextAreaElement;
+    textarea.value = 'Different text';
+
+    element.draft = '';
+    await element.updateComplete;
+
+    expect(textarea.value).toBe('');
+  });
+
   it('should dispatch cw:send event when send button is clicked', async () => {
     element.draft = 'Testing message';
     const spy = vi.fn();
@@ -43,5 +56,42 @@ describe('CwComposer Molecule Component', () => {
     sendBtn?.click();
 
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('handles toggleAttach, toggleEmoji, focusInput, and keyboard Enter key send', async () => {
+    const attachSpy = vi.fn();
+    const emojiSpy = vi.fn();
+    const sendSpy = vi.fn();
+
+    element.addEventListener('cw:toggle-attach', attachSpy);
+    element.addEventListener('cw:toggle-emoji', emojiSpy);
+    element.addEventListener('cw:send', sendSpy);
+    element.inputBorderRadius = 16;
+    element.sendIconType = 'arrow';
+    element.draft = 'Enter test';
+
+    await element.updateComplete;
+
+    const buttons = element.shadowRoot?.querySelectorAll('cw-button');
+    buttons?.[0]?.click(); // Attach
+    expect(attachSpy).toHaveBeenCalled();
+
+    buttons?.[1]?.click(); // Emoji
+    expect(emojiSpy).toHaveBeenCalled();
+
+    element.focusInput();
+
+    const textarea = element.shadowRoot?.querySelector('textarea') as HTMLTextAreaElement;
+    textarea.dispatchEvent(new Event('focus'));
+    await element.updateComplete;
+
+    textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true }));
+    expect(sendSpy).not.toHaveBeenCalled();
+
+    textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', shiftKey: false }));
+    expect(sendSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: 'Enter test' }));
+
+    textarea.dispatchEvent(new Event('blur'));
+    await element.updateComplete;
   });
 });

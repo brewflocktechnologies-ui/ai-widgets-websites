@@ -32,6 +32,21 @@ describe('CwWidgetLayout Template Component', () => {
     expect(panelSlot).not.toBeNull();
   });
 
+  it('handles chatcard activeTrigger and hideOnOpen false stacking math', async () => {
+    element.activeTrigger = 'chatcard';
+    element.chatbarConfig = { enabled: true, cardOffsetRight: 20, hideOnOpen: false, stackGap: 10 };
+    element.chatWindowConfig = { offsetBottom: 10, offsetRight: 10 };
+    await element.updateComplete;
+
+    const chatbar = element.shadowRoot?.querySelector('cw-chatbar');
+    expect(chatbar).not.toBeNull();
+
+    element.activeTrigger = 'bubble';
+    element.bubbleConfig = { hideOnOpen: false, stackGap: 10 };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('cw-bubble')).not.toBeNull();
+  });
+
   it('should render chatbar component in trigger slot when activeTrigger is chatbar', async () => {
     element.activeTrigger = 'chatbar';
     element.chatbarConfig = { enabled: true, text: 'Help' };

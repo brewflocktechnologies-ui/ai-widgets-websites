@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import '../../../components/atoms/cw-button.js';
 import { CwButton } from '../../../components/atoms/cw-button.js';
 
@@ -38,12 +38,39 @@ describe('CwButton Atom Component', () => {
     expect(btn?.hasAttribute('disabled')).toBe(true);
   });
 
-  it('should render icon when icon property is set', async () => {
+  it('should render icon when icon property is set and right icon position', async () => {
     element.icon = 'Send';
     element.label = 'Submit';
+    element.iconPosition = 'right';
+    element.ariaLabel = 'Submit Form';
+    element.variant = 'danger';
+    element.size = 'xs';
+    element.width = 120;
+    element.height = 36;
+    element.padding = '8px';
     await element.updateComplete;
 
     const icon = element.shadowRoot?.querySelector('cw-icon');
     expect(icon).not.toBeNull();
+
+    const btn = element.shadowRoot?.querySelector('button');
+    expect(btn?.getAttribute('aria-label')).toBe('Submit Form');
+  });
+
+  it('renders all variants and size combinations', async () => {
+    const variants: CwButton['variant'][] = ['secondary', 'ghost', 'outline', 'icon'];
+    const sizes: CwButton['size'][] = ['xs', 'sm', 'md', 'lg'];
+
+    for (const v of variants) {
+      for (const s of sizes) {
+        element.variant = v;
+        element.size = s;
+        element.icon = 'Send';
+        element.label = '';
+        await element.updateComplete;
+        const btn = element.shadowRoot?.querySelector('button');
+        expect(btn).not.toBeNull();
+      }
+    }
   });
 });

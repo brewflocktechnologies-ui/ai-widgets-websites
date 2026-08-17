@@ -35,16 +35,48 @@ describe('CwChatForm Organism Component', () => {
     expect(fields?.length).toBe(2);
   });
 
-  it('should validate required fields on submit and dispatch cw:form-submit when valid', async () => {
+  it('handles empty schema, submitting state, and disabled state', async () => {
+    element.schema = undefined as any;
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.form-wrapper')).toBeNull();
+
+    element.schema = { id: 'test', title: 'Test', submitLabel: 'Submit', fields: [] };
+    element.submitting = true;
+    await element.updateComplete;
+
+    const btn = element.shadowRoot?.querySelector('cw-button');
+    expect(btn?.label).toBe('Submitting…');
+
+    const spy = vi.fn();
+    element.addEventListener('cw:form-submit', spy);
+    (element as any).handleSubmit();
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('should validate required fields and email format on submit', async () => {
     const spy = vi.fn();
     element.addEventListener('cw:form-submit', spy);
 
+    // Click submit with empty values (fails validation)
+    const submitBtn = element.shadowRoot?.querySelector('cw-button') as HTMLElement;
+    submitBtn?.click();
+    expect(spy).not.toHaveBeenCalled();
+
+    // Field change with invalid email
+    const field = element.shadowRoot?.querySelector('cw-form-field') as HTMLElement;
+    field.dispatchEvent(new CustomEvent('cw:field-change', { detail: { name: 'email', value: 'invalid-email' } }));
+    await element.updateComplete;
+
+    submitBtn?.click();
+    expect(spy).not.toHaveBeenCalled();
+
+    // Valid values
     element.values = { name: 'John Doe', email: 'john@example.com' };
     await element.updateComplete;
 
-    const submitBtn = element.shadowRoot?.querySelector('cw-button') as HTMLElement;
     submitBtn?.click();
-
-    expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({ detail: { formId: 'prechat', values: { name: 'John Doe', email: 'john@example.com' } } })
+    );
   });
 });

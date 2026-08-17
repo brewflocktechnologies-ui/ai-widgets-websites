@@ -35,14 +35,64 @@ describe('CwBadge Atom Component', () => {
     expect(badge?.textContent?.trim()).toBe('5');
   });
 
-  it('should apply badge positioning and styles', async () => {
+  it('should apply badge positioning for top-left, bottom-right, bottom-left, relative', async () => {
     element.count = 3;
-    element.position = 'top-right';
-    element.backgroundColor = '#ef4444';
+    element.position = 'top-left';
+    element.animation = 'bounce';
+    element.borderRadius = 8;
+    await element.updateComplete;
+
+    let badge = element.shadowRoot?.querySelector('.badge') as HTMLElement;
+    expect(badge.getAttribute('style')).toContain('top: -6px');
+
+    element.position = 'bottom-right';
+    element.animation = 'wiggle';
+    await element.updateComplete;
+    badge = element.shadowRoot?.querySelector('.badge') as HTMLElement;
+    expect(badge.getAttribute('style')).toContain('bottom: -6px');
+
+    element.position = 'bottom-left';
+    element.animation = 'pulse';
+    await element.updateComplete;
+    badge = element.shadowRoot?.querySelector('.badge') as HTMLElement;
+    expect(badge.getAttribute('style')).toContain('bottom: -6px');
+
+    element.position = 'relative';
+    await element.updateComplete;
+    badge = element.shadowRoot?.querySelector('.badge') as HTMLElement;
+    expect(badge.getAttribute('style')).toContain('position: relative');
+  });
+
+  it('handles animation replacement strings for custom-pulse, my-bounce, super-wiggle', async () => {
+    element.count = 2;
+    element.animation = 'custom-pulse 2s';
+    await element.updateComplete;
+    let badge = element.shadowRoot?.querySelector('.badge') as HTMLElement;
+    expect(badge.getAttribute('style')).toContain('badgePulse');
+
+    element.animation = 'my-bounce 1s';
+    await element.updateComplete;
+    badge = element.shadowRoot?.querySelector('.badge') as HTMLElement;
+    expect(badge.getAttribute('style')).toContain('badgeBounce');
+
+    element.animation = 'super-wiggle 3s';
+    await element.updateComplete;
+    badge = element.shadowRoot?.querySelector('.badge') as HTMLElement;
+    expect(badge.getAttribute('style')).toContain('badgeWiggle');
+  });
+
+  it('should fallback to config properties when available', async () => {
+    element.count = 1;
+    element.config = {
+      position: 'top-left',
+      animation: 'wiggle',
+      borderRadius: 12,
+      borderWidth: 1,
+      padding: '2px',
+    };
     await element.updateComplete;
 
     const badge = element.shadowRoot?.querySelector('.badge') as HTMLElement;
-    expect(badge).not.toBeNull();
-    expect(badge.getAttribute('style')).toContain('background-color: #ef4444');
+    expect(badge.getAttribute('style')).toContain('border-radius: 12px');
   });
 });

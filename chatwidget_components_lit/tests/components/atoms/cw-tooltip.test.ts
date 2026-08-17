@@ -17,25 +17,45 @@ describe('CwTooltip Atom Component', () => {
     expect(element.tagName.toLowerCase()).toBe('cw-tooltip');
   });
 
-  it('should render tooltip text and arrow when visible', async () => {
+  it('should render tooltip text and arrow for positions left, right, top, bottom with border', async () => {
     element.text = 'Need help?';
     element.visible = true;
-    element.position = 'right';
-    await element.updateComplete;
+    element.borderWidth = 1;
+    element.borderColor = '#000000';
 
-    const box = element.shadowRoot?.querySelector('.tooltip-box');
-    expect(box).not.toBeNull();
-    expect(box?.textContent?.trim()).toContain('Need help?');
+    const positions = ['left', 'right', 'top', 'bottom'] as const;
+    for (const pos of positions) {
+      element.position = pos;
+      await element.updateComplete;
 
-    const arrow = element.shadowRoot?.querySelector('.tooltip-arrow');
-    expect(arrow).not.toBeNull();
+      const box = element.shadowRoot?.querySelector('.tooltip-box');
+      expect(box).not.toBeNull();
+      expect(box?.textContent?.trim()).toContain('Need help?');
+
+      const arrow = element.shadowRoot?.querySelector('.tooltip-arrow');
+      expect(arrow).not.toBeNull();
+    }
   });
 
-  it('should hide tooltip when visible is false', async () => {
-    element.visible = false;
+  it('handles arrowEnabled false and zero border width', async () => {
+    element.text = 'Tip';
+    element.visible = true;
+    element.arrowEnabled = false;
+    element.borderWidth = 0;
     await element.updateComplete;
 
-    const box = element.shadowRoot?.querySelector('.tooltip-box');
-    expect(box).toBeNull();
+    const arrow = element.shadowRoot?.querySelector('.tooltip-arrow');
+    expect(arrow).toBeNull();
+  });
+
+  it('should hide tooltip when visible is false or text is empty', async () => {
+    element.visible = false;
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.tooltip-box')).toBeNull();
+
+    element.visible = true;
+    element.text = '';
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.tooltip-box')).toBeNull();
   });
 });

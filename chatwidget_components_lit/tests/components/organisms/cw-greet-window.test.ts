@@ -57,15 +57,34 @@ describe('CwGreetWindow Organism Component', () => {
     expect(title?.textContent?.trim()).toContain('Hi there!');
   });
 
-  it('should dispatch cw:greet-dismiss on close button click', async () => {
+  it('should dispatch cw:greet-dismiss on close button click and cw:toggle on card click', async () => {
     element.visible = true;
-    const spy = vi.fn();
-    element.addEventListener('cw:greet-dismiss', spy);
+    const dismissSpy = vi.fn();
+    const toggleSpy = vi.fn();
+
+    element.addEventListener('cw:greet-dismiss', dismissSpy);
+    element.addEventListener('cw:toggle', toggleSpy);
     await element.updateComplete;
 
     const closeBtn = element.shadowRoot?.querySelector('cw-button[label="Close greet window"]') as HTMLElement;
     closeBtn?.click();
+    expect(dismissSpy).toHaveBeenCalled();
 
-    expect(spy).toHaveBeenCalled();
+    const card = element.shadowRoot?.querySelector('.greet-card') as HTMLElement;
+    card?.click();
+    expect(toggleSpy).toHaveBeenCalled();
+  });
+
+  it('renders image URL and input box when configured', async () => {
+    element.config = {
+      ...element.config!,
+      imageUrl: 'http://example.com/greet.png',
+      inputBox: { enabled: true, placeholder: 'Reply here' },
+    };
+    element.visible = true;
+    await element.updateComplete;
+
+    expect(element.shadowRoot?.querySelector('img')).not.toBeNull();
+    expect(element.shadowRoot?.querySelector('cw-greet-input')).not.toBeNull();
   });
 });

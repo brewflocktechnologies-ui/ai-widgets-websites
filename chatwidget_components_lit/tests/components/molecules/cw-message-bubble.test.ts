@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import '../../../components/molecules/cw-message-bubble.js';
 import { CwMessageBubble } from '../../../components/molecules/cw-message-bubble.js';
 
@@ -45,5 +45,24 @@ describe('CwMessageBubble Molecule Component', () => {
     const span = element.shadowRoot?.querySelector('.bubble span');
     expect(span).not.toBeNull();
     expect(span?.textContent?.trim()).toBe('Hi! How can I help?');
+  });
+
+  it('should render image attachment and handle click to open full image', async () => {
+    const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+
+    element.message = {
+      key: '3',
+      senderType: 'VISITOR',
+      attachment: true,
+      localUrl: 'blob:http://localhost/test-image.png',
+      pending: false,
+    };
+    await element.updateComplete;
+
+    const img = element.shadowRoot?.querySelector('.bubble-img') as HTMLImageElement;
+    expect(img).not.toBeNull();
+    img.click();
+
+    expect(openSpy).toHaveBeenCalledWith('blob:http://localhost/test-image.png', '_blank');
   });
 });

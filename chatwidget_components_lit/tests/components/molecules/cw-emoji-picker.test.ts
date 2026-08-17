@@ -33,4 +33,46 @@ describe('CwEmojiPicker Molecule Component', () => {
     expect(spy).toHaveBeenCalled();
     expect(spy.mock.calls[0][0].detail).toBeDefined();
   });
+
+  it('parses emoji inputs in different formats (comma, space, grapheme, array)', async () => {
+    element.emojis = '😀, 😂, 😊';
+    await element.updateComplete;
+    let btns = element.shadowRoot?.querySelectorAll('.emoji-btn');
+    expect(btns?.length).toBe(3);
+
+    element.emojis = '👍 👎 🙏';
+    await element.updateComplete;
+    btns = element.shadowRoot?.querySelectorAll('.emoji-btn');
+    expect(btns?.length).toBe(3);
+
+    element.emojis = '🎉❤️';
+    await element.updateComplete;
+    btns = element.shadowRoot?.querySelectorAll('.emoji-btn');
+    expect(btns?.length).toBe(2);
+
+    element.emojis = ['🔥', '✨'];
+    await element.updateComplete;
+    btns = element.shadowRoot?.querySelectorAll('.emoji-btn');
+    expect(btns?.length).toBe(2);
+
+    element.emojis = '' as any;
+    await element.updateComplete;
+    btns = element.shadowRoot?.querySelectorAll('.emoji-btn');
+    expect(btns?.length).toBeGreaterThan(5);
+  });
+
+  it('handles Intl.Segmenter exception fallback', async () => {
+    const origSegmenter = Intl.Segmenter;
+    (Intl as any).Segmenter = function () {
+      throw new Error('Not supported');
+    };
+
+    element.emojis = 'ABC';
+    await element.updateComplete;
+
+    const btns = element.shadowRoot?.querySelectorAll('.emoji-btn');
+    expect(btns?.length).toBe(3);
+
+    (Intl as any).Segmenter = origSegmenter;
+  });
 });

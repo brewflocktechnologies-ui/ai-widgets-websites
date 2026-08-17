@@ -27,20 +27,56 @@ describe('CwGreetInput Molecule Component', () => {
     expect(input?.placeholder).toBe('Type a message...');
   });
 
-  it('should dispatch cw:greet-submit on submit button click or enter key', async () => {
+  it('should dispatch cw:greet-input on input and cw:greet-submit on enter key', async () => {
     element.visible = true;
-    element.config = { enabled: true, placeholder: 'Type a message...' };
-    const spy = vi.fn();
-    element.addEventListener('cw:greet-submit', spy);
+    element.config = { enabled: true, placeholder: 'Type a message...', animationOpeningSec: 0.5 };
+    const inputSpy = vi.fn();
+    const submitSpy = vi.fn();
+    element.addEventListener('cw:greet-input', inputSpy);
+    element.addEventListener('cw:greet-submit', submitSpy);
     await element.updateComplete;
 
     const input = element.shadowRoot?.querySelector('input') as HTMLInputElement;
     if (input) {
       input.value = 'Hello!';
       input.dispatchEvent(new Event('input'));
-      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
-    }
+      expect(inputSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: 'Hello!' }));
 
-    expect(spy).toHaveBeenCalled();
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      expect(submitSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: 'Hello!' }));
+    }
+  });
+
+  it('renders separated layout and handles button click', async () => {
+    element.visible = true;
+    element.config = {
+      enabled: true,
+      layout: 'separated',
+      buttonBgColor: '#00ff00',
+      buttonIconColor: '#00ff00',
+      borderRadius: 16,
+    };
+    const submitSpy = vi.fn();
+    element.addEventListener('cw:greet-submit', submitSpy);
+    await element.updateComplete;
+
+    const btn = element.shadowRoot?.querySelector('cw-button');
+    expect(btn).not.toBeNull();
+    btn?.click();
+    expect(submitSpy).toHaveBeenCalled();
+  });
+
+  it('renders joined layout with matching button color and icon color', async () => {
+    element.visible = true;
+    element.config = {
+      enabled: true,
+      layout: 'joined',
+      buttonColor: '#ff0000',
+      buttonIconColor: '#FF0000',
+    };
+    await element.updateComplete;
+
+    const btn = element.shadowRoot?.querySelector('cw-button');
+    expect(btn).not.toBeNull();
   });
 });

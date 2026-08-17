@@ -37,4 +37,22 @@ describe('CwIcon Atom Component', () => {
     expect(customDiv).not.toBeNull();
     expect(customDiv?.innerHTML).toContain('custom-test');
   });
+
+  it('renders all icon switch cases', async () => {
+    const names = [
+      'Star', 'Heart', 'Smile', 'Sparkles', 'MessageSquare', 'Send', 'SendFilled',
+      'PaperPlane', 'ArrowUp', 'HelpCircle', 'Gift', 'Bell', 'Info', 'AlertCircle',
+      'Minimize2', 'Contract', 'Maximize2', 'Expand', 'Phone', 'Video', 'Power',
+      'MoreHorizontal', 'Close', 'X', 'Plus', 'ChevronDown', 'RotateCw', 'Rotate',
+      'ChatLines', 'Check', 'DoubleCheck', 'Image', 'Camera', 'Crop', 'Download',
+      'Volume2', 'MessageCircle', 'UnknownDefault'
+    ];
+
+    for (const name of names) {
+      element.name = name;
+      await element.updateComplete;
+      const svg = element.shadowRoot?.querySelector('svg');
+      expect(svg).not.toBeNull();
+    }
+  });
 });

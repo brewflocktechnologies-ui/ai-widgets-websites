@@ -25,6 +25,20 @@ describe('CwAvatar Molecule Component', () => {
     expect(span?.textContent?.trim()).toBe('S');
   });
 
+  it('handles fallback name, bgColor, textColor and activeDot customization', async () => {
+    element.name = '' as any;
+    element.bgColor = '#123456';
+    element.textColor = '#654321';
+    element.activeDot = { size: 10, color: '#ff0000', animate: false, borderWidth: 1, borderColor: '#000000' };
+    await element.updateComplete;
+
+    const span = element.shadowRoot?.querySelector('.avatar-box span');
+    expect(span?.textContent?.trim()).toBe('S');
+
+    const box = element.shadowRoot?.querySelector('.avatar-box') as HTMLElement;
+    expect(box.getAttribute('style')).toContain('#123456');
+  });
+
   it('should render image element when src or imageUrl is provided', async () => {
     element.name = 'Sarah';
     element.imageUrl = 'https://example.com/avatar.jpg';

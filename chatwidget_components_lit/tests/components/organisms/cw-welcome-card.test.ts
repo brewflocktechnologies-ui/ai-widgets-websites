@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import '../../../components/organisms/cw-welcome-card.js';
 import { CwWelcomeCard } from '../../../components/organisms/cw-welcome-card.js';
 
@@ -13,6 +13,7 @@ describe('CwWelcomeCard Organism Component', () => {
       title: 'Welcome 👋',
       description: 'How can we help today?',
       buttonText: 'Start Conversation',
+      footerPaddingBottom: 10,
     };
     document.body.appendChild(element);
     await element.updateComplete;
@@ -29,5 +30,29 @@ describe('CwWelcomeCard Organism Component', () => {
 
     const cta = element.shadowRoot?.querySelector('cw-welcome-cta');
     expect(cta).not.toBeNull();
+
+    const footer = element.shadowRoot?.querySelector('.footer-brand') as HTMLElement;
+    expect(footer?.style.paddingBottom).toBe('10px');
+  });
+
+  it('dispatches cw:close-panel on close button click', async () => {
+    const spy = vi.fn();
+    element.addEventListener('cw:close-panel', spy);
+
+    const closeBtn = element.shadowRoot?.querySelector('.close-btn-wrapper') as HTMLElement;
+    closeBtn?.click();
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('renders glassy card layout', async () => {
+    element.config = {
+      ...element.config!,
+      cardLayout: 'glassy',
+      cardAlign: 'center',
+    };
+    await element.updateComplete;
+
+    expect(element.shadowRoot?.querySelector('.glassy-container')).not.toBeNull();
   });
 });

@@ -32,4 +32,14 @@ describe('CwAttachMenu Molecule Component', () => {
 
     expect(spy).toHaveBeenCalled();
   });
+
+  it('should dispatch cw:capture-screenshot event on screenshot menu item click', () => {
+    const spy = vi.fn();
+    element.addEventListener('cw:capture-screenshot', spy);
+
+    const screenshotItem = element.shadowRoot?.querySelector('cw-menu-item[label="Add screenshot"]') as HTMLElement;
+    screenshotItem?.click();
+
+    expect(spy).toHaveBeenCalled();
+  });
 });

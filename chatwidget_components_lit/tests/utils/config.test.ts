@@ -5,6 +5,7 @@ describe('utils/config.ts', () => {
   beforeEach(() => {
     delete (window as any).ZOTLY_CLIENT_ID;
     document.body.innerHTML = '';
+    localStorage.clear();
   });
 
   afterEach(() => {
@@ -24,8 +25,47 @@ describe('utils/config.ts', () => {
     expect(getClientId()).toBe('client_script_456');
   });
 
+  it('should read client_id or clientId from query param of script tag src', () => {
+    const script = document.createElement('script');
+    script.type = 'text/plain';
+    script.setAttribute('src', 'http://localhost/index.js?client_id=client_param_789');
+    document.body.appendChild(script);
+
+    expect(getClientId()).toBe('client_param_789');
+
+    document.body.innerHTML = '';
+    const script2 = document.createElement('script');
+    script2.type = 'text/plain';
+    script2.setAttribute('src', 'http://localhost/widget.js?clientId=client_param_abc');
+    document.body.appendChild(script2);
+
+    expect(getClientId()).toBe('client_param_abc');
+  });
+
   it('should fall back to default if no client ID is found', () => {
     expect(getClientId()).toBe('default');
+  });
+
+  it('should read from localStorage when test=true is in URL search', async () => {
+    delete (window as any).location;
+    (window as any).location = new URL('http://localhost/?test=true');
+
+    const tempConfig = {
+      accentColor: '#123456',
+      bubble: { width: 50 },
+      chatWindow: { clientName: 'Test Client' },
+    };
+    localStorage.setItem('zotly_temp_preview_config', JSON.stringify(tempConfig));
+
+    const res = await fetchClientConfig('default');
+    expect(res.accentColor).toBe('#123456');
+    expect(res.bubbleConfig).toEqual({ width: 50 });
+
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    localStorage.setItem('zotly_temp_preview_config', 'invalid json');
+    const resErr = await fetchClientConfig('default');
+    expect(resErr).toBeDefined();
+    warnSpy.mockRestore();
   });
 
   it('should return client configs from server on successful fetch', async () => {
@@ -46,5 +86,12 @@ describe('utils/config.ts', () => {
     expect(configs.bubbleConfig).toEqual({ width: 60 });
     expect(configs.chatConfig).toEqual({ accentColor: '#0b5fff' });
     expect(configs.chatbarConfig).toEqual({ text: 'Help' });
+  });
+
+  it('should return empty configs if all fetches fail', async () => {
+    globalThis.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
+    const configs = await fetchClientConfig('nonexistent');
+    expect(configs.bubbleConfig).toEqual({});
+    expect(configs.chatConfig).toEqual({});
   });
 });

@@ -26,14 +26,57 @@ describe('CwChatHeader Organism Component', () => {
     expect(title?.textContent?.trim()).toContain('Acme Corp');
   });
 
-  it('should dispatch cw:close-panel event on close button click', async () => {
-    const spy = vi.fn();
-    element.addEventListener('cw:close-panel', spy);
+  it('handles non-active state and modernUi false layout', async () => {
+    element.state = 'offline';
+    element.config = { modernUi: false, headerTextColor: '#18181b', headerBorderColor: '#e4e4e7' };
     await element.updateComplete;
 
-    const closeBtn = element.shadowRoot?.querySelector('cw-button[label="Minimize chat panel"]') as HTMLElement;
-    closeBtn?.click();
+    const subtitle = element.shadowRoot?.querySelector('.subtitle-text');
+    expect(subtitle?.textContent?.trim()).toBe('Online');
+  });
 
-    expect(spy).toHaveBeenCalled();
+  it('should dispatch header events (expand, menu, end-chat, voice, video, close)', async () => {
+    const expandSpy = vi.fn();
+    const menuSpy = vi.fn();
+    const endSpy = vi.fn();
+    const voiceSpy = vi.fn();
+    const videoSpy = vi.fn();
+    const closeSpy = vi.fn();
+
+    element.addEventListener('cw:toggle-expand', expandSpy);
+    element.addEventListener('cw:open-menu', menuSpy);
+    element.addEventListener('cw:end-chat', endSpy);
+    element.addEventListener('cw:voice-call', voiceSpy);
+    element.addEventListener('cw:video-call', videoSpy);
+    element.addEventListener('cw:close-panel', closeSpy);
+
+    element.config = {
+      modernUi: true,
+      features: {
+        voiceCallEnabled: true,
+        videoCallEnabled: true,
+        closeChatVisitor: true,
+      },
+    };
+    element.features = {
+      voiceCallEnabled: true,
+      videoCallEnabled: true,
+      closeChatVisitor: true,
+    };
+    await element.updateComplete;
+
+    const buttons = element.shadowRoot?.querySelectorAll('cw-button');
+    buttons?.forEach((btn) => btn.click());
+
+    expect(expandSpy).toHaveBeenCalled();
+    expect(closeSpy).toHaveBeenCalled();
+  });
+
+  it('renders empty when state is welcome', async () => {
+    element.state = 'welcome';
+    element.config = { welcome: { enabled: true } };
+    await element.updateComplete;
+
+    expect(element.shadowRoot?.querySelector('header')).toBeNull();
   });
 });

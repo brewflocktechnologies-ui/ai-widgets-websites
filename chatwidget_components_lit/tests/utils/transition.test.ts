@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { EnterLeaveController } from '../../utils/transition.js';
 import { LitElement } from 'lit';
 
@@ -7,6 +7,7 @@ class TestTransitionElement extends LitElement {
     enterMs: () => 100,
     leaveMs: () => 100,
   });
+  defaultController = new EnterLeaveController(this);
 }
 customElements.define('test-transition-element', TestTransitionElement);
 
@@ -27,6 +28,13 @@ describe('utils/transition.ts', () => {
   it('should initialize phase to none and render to false', () => {
     expect(element.controller.phase).toBe('none');
     expect(element.controller.render).toBe(false);
+    expect(element.defaultController.enterMs()).toBe(300);
+    expect(element.defaultController.leaveMs()).toBe(200);
+  });
+
+  it('should return immediately when setTarget called with same value', () => {
+    element.controller.setTarget(false);
+    expect(element.controller.phase).toBe('none');
   });
 
   it('should transition to enter and then open when target set to true', async () => {
@@ -34,7 +42,6 @@ describe('utils/transition.ts', () => {
     expect(element.controller.phase).toBe('enter');
     expect(element.controller.render).toBe(true);
 
-    // Wait for 2 rAF cycles
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
     expect(element.controller.phase).toBe('open');
@@ -48,10 +55,20 @@ describe('utils/transition.ts', () => {
     expect(element.controller.phase).toBe('leave');
     expect(element.controller.render).toBe(true);
 
-    // Wait for leave timeout
     await new Promise((resolve) => setTimeout(resolve, 150));
 
     expect(element.controller.phase).toBe('none');
     expect(element.controller.render).toBe(false);
+  });
+
+  it('handles rapid toggle canceling active raf/timeout and hostDisconnected', async () => {
+    element.controller.setTarget(true);
+    element.controller.setTarget(false);
+    element.controller.setTarget(true);
+
+    element.controller.hostConnected();
+    element.controller.hostDisconnected();
+
+    expect(element.controller.render).toBe(true);
   });
 });

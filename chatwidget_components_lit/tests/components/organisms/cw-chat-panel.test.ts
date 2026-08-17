@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import '../../../components/organisms/cw-chat-panel.js';
 import { CwChatPanel } from '../../../components/organisms/cw-chat-panel.js';
 
@@ -33,9 +33,15 @@ describe('CwChatPanel Organism Component', () => {
       accentColor: '#0b5fff',
       widgetWidth: 380,
       widgetHeight: 600,
+      animationOpeningSec: 0.01,
+      animationClosingSec: 0.01,
     };
     document.body.appendChild(element);
     await element.updateComplete;
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('should instantiate and mount cw-chat-panel element', () => {
@@ -44,13 +50,31 @@ describe('CwChatPanel Organism Component', () => {
   });
 
   it('should render header and body when panelOpen is true', async () => {
+    vi.useFakeTimers();
     element.panelOpen = true;
     await element.updateComplete;
+    vi.advanceTimersByTime(100);
 
     const header = element.shadowRoot?.querySelector('cw-chat-header');
     expect(header).not.toBeNull();
 
     const body = element.shadowRoot?.querySelector('cw-chat-body');
     expect(body).not.toBeNull();
+  });
+
+  it('renders confirm dialog overlay and reconnecting banner', async () => {
+    element.panelOpen = true;
+    element.chatState = {
+      ...element.chatState!,
+      reconnecting: true,
+      confirmBox: { message: 'End chat?' },
+    };
+    await element.updateComplete;
+
+    const confirmDialog = element.shadowRoot?.querySelector('cw-confirm-dialog');
+    expect(confirmDialog).not.toBeNull();
+
+    const reconnecting = element.shadowRoot?.querySelector('.reconnecting');
+    expect(reconnecting).not.toBeNull();
   });
 });

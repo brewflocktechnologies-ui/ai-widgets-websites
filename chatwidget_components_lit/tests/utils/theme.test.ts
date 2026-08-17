@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { getParentTheme, getWidgetBaseUrl, isHostDark, observeDarkMode } from '../../utils/theme.js';
 
 describe('utils/theme.ts', () => {
@@ -11,6 +11,18 @@ describe('utils/theme.ts', () => {
     const theme = getParentTheme();
     expect(theme.primary).toBe('#0b5fff');
     expect(theme.secondary).toBe('#0b5fff');
+  });
+
+  it('should read --primary-color and --secondary-color from CSS variables', () => {
+    document.documentElement.style.setProperty('--primary-color', '#ff0000');
+    document.documentElement.style.setProperty('--secondary-color', '#00ff00');
+
+    const theme = getParentTheme();
+    expect(theme.primary).toBe('#ff0000');
+    expect(theme.secondary).toBe('#00ff00');
+
+    document.documentElement.style.removeProperty('--primary-color');
+    document.documentElement.style.removeProperty('--secondary-color');
   });
 
   it('should read data-accent attribute from script tag if available', () => {
@@ -35,10 +47,30 @@ describe('utils/theme.ts', () => {
 
     document.documentElement.classList.add('dark');
 
-    // Wait for MutationObserver callback execution
     await new Promise((resolve) => setTimeout(resolve, 50));
 
     expect(spy).toHaveBeenCalledWith(true);
     unsubscribe();
+  });
+
+  it('returns widget base url depending on script tag src or pathname', () => {
+    const script = document.createElement('script');
+    script.type = 'text/plain';
+    script.setAttribute('src', 'http://localhost/dist/index.js');
+    document.body.appendChild(script);
+
+    const url = getWidgetBaseUrl();
+    expect(url).toContain('http://localhost/');
+
+    script.setAttribute('src', 'http://localhost/index.js');
+    const url2 = getWidgetBaseUrl();
+    expect(url2).toBe('http://localhost/');
+
+    script.remove();
+
+    delete (window as any).location;
+    (window as any).location = new URL('http://localhost/chatwidget_components_lit/index.html');
+    const baseLit = getWidgetBaseUrl();
+    expect(baseLit).toBe('./');
   });
 });

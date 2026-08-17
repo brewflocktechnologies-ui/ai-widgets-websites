@@ -22,10 +22,11 @@ describe('CwWelcomeHero Molecule Component', () => {
       title: 'Hi there! 👋 How can we help?',
       description: 'Our support team is online.',
       avatars: [
-        { name: 'Sarah', bg: '#059669', color: '#ffffff' },
-        { name: 'Alex', bg: '#0284c7', color: '#ffffff' },
+        'http://example.com/avatar1.png',
+        { url: 'http://example.com/avatar2.png', name: 'Alex' },
       ],
     };
+    element.isGlassy = true;
     await element.updateComplete;
 
     const title = element.shadowRoot?.querySelector('.welcome-title');
@@ -36,5 +37,14 @@ describe('CwWelcomeHero Molecule Component', () => {
 
     const avatars = element.shadowRoot?.querySelectorAll('cw-avatar');
     expect(avatars?.length).toBe(2);
+  });
+
+  it('renders logoOnly layout', async () => {
+    element.logoOnly = true;
+    element.config = { logoUrl: 'http://example.com/logo.png', logoAlt: 'Logo' };
+    await element.updateComplete;
+
+    const img = element.shadowRoot?.querySelector('.logo-img');
+    expect(img).not.toBeNull();
   });
 });
