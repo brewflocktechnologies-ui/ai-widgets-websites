@@ -53,6 +53,7 @@ describe('CwMessageBubble Molecule Component', () => {
     element.message = {
       key: '3',
       senderType: 'VISITOR',
+      body: '',
       attachment: true,
       localUrl: 'blob:http://localhost/test-image.png',
       pending: false,

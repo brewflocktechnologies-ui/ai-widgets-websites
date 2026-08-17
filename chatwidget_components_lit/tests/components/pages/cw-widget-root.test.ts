@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import '../../../components/pages/cw-widget-root.js';
 import { CwWidgetRoot } from '../../../components/pages/cw-widget-root.js';
-import { chatbarStore } from '../../../store/chat-store.js';
+import { chatbarStore, chatStore } from '../../../store/chat-store.js';
 
 describe('CwWidgetRoot Page Component', () => {
   let element: CwWidgetRoot;
@@ -35,7 +35,7 @@ describe('CwWidgetRoot Page Component', () => {
     chatbarStore.get().enabled = true;
     chatbarStore.get().layout = 'card';
     element.triggerType = 'chatcard';
-    element.userHasSentMessage = true;
+    chatStore.get().messages = [{ key: 't', senderType: 'VISITOR', body: 'Hi' }];
     element.panelOpen = true;
     await element.updateComplete;
 

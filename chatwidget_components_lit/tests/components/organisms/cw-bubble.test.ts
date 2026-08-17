@@ -63,10 +63,10 @@ describe('CwBubble Organism Component', () => {
   it('renders glass, neon, border, and idleAnim features', async () => {
     element.config = {
       ...element.config!,
-      glass: { enabled: true },
-      neon: { enabled: true },
+      glass: { enabled: true, blur: 10, bgOpacity: 0.8 },
+      neon: { enabled: true, color: '#00ffff', intensity: 0.8 },
       border: { width: 2, color: '#ff0000', style: 'solid' },
-      idleAnim: { enabled: true, type: 'float' },
+      idleAnim: { enabled: true, type: 'float', amplitude: 4, duration: 2 },
     };
     await element.updateComplete;
 
@@ -139,7 +139,20 @@ describe('CwBubble Organism Component', () => {
     for (const pos of positions) {
       element.config = {
         ...element.config!,
-        tooltip: { enabled: true, text: 'Tooltip text', position: pos, borderWidth: 1, borderColor: '#000' },
+        tooltip: {
+          enabled: true,
+          text: 'Tooltip text',
+          position: pos,
+          borderWidth: 1,
+          borderColor: '#000',
+          backgroundColor: '#0f172a',
+          textColor: '#ffffff',
+          fontSize: 12,
+          borderRadius: 8,
+          padding: '6px 10px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+          arrowEnabled: true,
+        },
       };
       element.panelOpen = false;
       element.hasSentMessage = false;

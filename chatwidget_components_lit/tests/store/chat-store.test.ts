@@ -191,9 +191,9 @@ describe('chat-store', () => {
 
     expect(chatStore.dayLabel()).toBe('Today');
 
-    const msg = { created: new Date().toISOString(), key: '1', senderType: 'VISITOR' as const };
+    const msg = { created: new Date().toISOString(), key: '1', senderType: 'VISITOR' as const, body: 'hi' };
     expect(chatStore.timeLabel(msg)).toBeDefined();
-    expect(chatStore.timeLabel({ key: '2', senderType: 'AGENT' })).toBeDefined();
+    expect(chatStore.timeLabel({ key: '2', senderType: 'AGENT', body: '' })).toBeDefined();
 
     chatStore.get().messages = [
       { key: 'm1', senderType: 'VISITOR', body: 'hi' },
@@ -206,9 +206,9 @@ describe('chat-store', () => {
 
     expect(chatStore.groupEnd(0)).toBe(false);
 
-    expect(chatStore.attachmentUrl({ key: '1', senderType: 'VISITOR', localUrl: 'blob:123' })).toBe('blob:123');
-    expect(chatStore.attachmentUrl({ key: '1', senderType: 'VISITOR', url: 'http://img' })).toBe('http://img');
-    expect(chatStore.attachmentUrl({ key: '1', senderType: 'VISITOR' })).toBe('');
+    expect(chatStore.attachmentUrl({ key: '1', senderType: 'VISITOR', body: '', localUrl: 'blob:123' })).toBe('blob:123');
+    expect(chatStore.attachmentUrl({ key: '1', senderType: 'VISITOR', body: '', url: 'http://img' })).toBe('http://img');
+    expect(chatStore.attachmentUrl({ key: '1', senderType: 'VISITOR', body: '' })).toBe('');
   });
 
   it('handles updateStoreConfig with all override options', () => {

@@ -22,7 +22,7 @@ describe('CwWelcomeHero Molecule Component', () => {
       title: 'Hi there! 👋 How can we help?',
       description: 'Our support team is online.',
       avatars: [
-        'http://example.com/avatar1.png',
+        { url: 'http://example.com/avatar1.png', name: 'Agent' },
         { url: 'http://example.com/avatar2.png', name: 'Alex' },
       ],
     };

@@ -13,7 +13,7 @@ describe('CwWelcomeCard Organism Component', () => {
       title: 'Welcome 👋',
       description: 'How can we help today?',
       buttonText: 'Start Conversation',
-      footerPaddingBottom: 10,
+      footerPaddingBottom: '10px',
     };
     document.body.appendChild(element);
     await element.updateComplete;

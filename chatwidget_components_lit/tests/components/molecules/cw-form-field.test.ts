@@ -39,7 +39,7 @@ describe('CwFormField Molecule Component', () => {
   });
 
   it('should render textarea without label or placeholder', async () => {
-    element.field = { name: 'notes', type: 'textarea' };
+    element.field = { name: 'notes', label: '', type: 'textarea' };
     await element.updateComplete;
 
     const label = element.shadowRoot?.querySelector('label');

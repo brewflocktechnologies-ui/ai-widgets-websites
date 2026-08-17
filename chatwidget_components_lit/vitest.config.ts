@@ -20,6 +20,12 @@ export default defineConfig({
         'tests/setup.ts',
         'store/types.ts',
       ],
+      thresholds: {
+        lines: 85,
+        statements: 85,
+        functions: 85,
+        branches: 75,
+      },
     },
   },
 });
