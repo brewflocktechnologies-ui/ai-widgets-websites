@@ -368,6 +368,10 @@ export class CwWidgetRoot extends LitElement {
       ['cw:toggle-attach', () => chatStore.toggleAttach()],
       ['cw:toggle-emoji', () => chatStore.toggleEmoji()],
       ['cw:attach-files', (e) => this.handleAttachFiles(e.detail as HTMLInputElement)],
+      ['cw:send-cropped-image', (e) => {
+        this.userHasSentMessage = true;
+        chatStore.sendCroppedImage(e.detail as string);
+      }],
       ['cw:capture-screenshot', () => chatStore.captureScreenshot()],
       ['cw:dismiss-consent', () => chatStore.dismissConsent()],
       ['cw:download-transcript', () => chatStore.downloadTranscript()],

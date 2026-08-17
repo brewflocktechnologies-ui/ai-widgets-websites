@@ -501,7 +501,9 @@ export class CwChatBody extends LitElement {
           .imageSrc="${this.pendingImageSrc}"
           @cw:image-cropped="${(e: CustomEvent) => {
             this.cropperOpen = false;
-            this.emit('cw:send', `[Cropped Image: ${e.detail.dataUrl.slice(0, 40)}...]`);
+            // Emit the full data URL as a dedicated event so the page layer
+            // can store it as a real image attachment (not a truncated string).
+            this.emit('cw:send-cropped-image', e.detail.dataUrl as string);
           }}"
           @cw:close="${() => (this.cropperOpen = false)}"
         ></cw-image-cropper>

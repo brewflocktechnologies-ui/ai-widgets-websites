@@ -395,6 +395,92 @@ describe('chat-store', () => {
     });
   });
 
+  describe('chatStore.sendCroppedImage', () => {
+    it('does nothing when dataUrl is empty or not a data: URI', () => {
+      const s = chatStore.get();
+      const before = s.messages.length;
+      chatStore.sendCroppedImage('');
+      chatStore.sendCroppedImage('https://example.com/image.png');
+      expect(s.messages.length).toBe(before);
+    });
+
+    it('adds a proper attachment message with the full data URL as localUrl', () => {
+      const dataUrl = 'data:image/png;base64,iVBORw0KGgo=';
+      const s = chatStore.get();
+      const before = s.messages.length;
+
+      chatStore.sendCroppedImage(dataUrl);
+
+      expect(s.messages.length).toBe(before + 1);
+      const msg = s.messages[s.messages.length - 1];
+      expect(msg.senderType).toBe('VISITOR');
+      expect(msg.attachment).toBe(true);
+      expect(msg.localUrl).toBe(dataUrl);
+      expect(msg.body).toBe('');
+      expect(msg.status).toBe('sent');
+      expect(msg.key).toMatch(/^img_cropped_/);
+    });
+
+    it('marks hasSentMessage and closes attach panel', () => {
+      const s = chatStore.get();
+      s.attachOpen = true;
+      s.hasSentMessage = false;
+
+      chatStore.sendCroppedImage('data:image/png;base64,abc');
+
+      expect(s.hasSentMessage).toBe(true);
+      expect(s.attachOpen).toBe(false);
+    });
+
+    it('emits store:chat immediately', () => {
+      const listener = vi.fn();
+      const unsub = subscribe('store:chat', listener);
+      chatStore.sendCroppedImage('data:image/png;base64,abc');
+      expect(listener).toHaveBeenCalled();
+      unsub();
+    });
+
+    it('runs delivered → read → bot reply async sequence', () => {
+      vi.useFakeTimers();
+      const dataUrl = 'data:image/png;base64,iVBORw0KGgo=';
+      const s = chatStore.get();
+      s.panelOpen = false;
+      s.unreadCount = 0;
+
+      chatStore.sendCroppedImage(dataUrl);
+
+      const msg = s.messages[s.messages.length - 1];
+      expect(msg.status).toBe('sent');
+
+      vi.advanceTimersByTime(2000);
+      expect(s.messages.find((m) => m.key === msg.key)?.status).toBe('delivered');
+
+      vi.advanceTimersByTime(2000);
+      expect(s.messages.find((m) => m.key === msg.key)?.status).toBe('read');
+
+      vi.advanceTimersByTime(1000);
+      const lastMsg = s.messages[s.messages.length - 1];
+      expect(lastMsg.senderType).toBe('AGENT');
+      expect(lastMsg.body).toContain('image');
+      expect(s.unreadCount).toBe(1);
+
+      vi.useRealTimers();
+    });
+
+    it('does not increment unreadCount when panel is open', () => {
+      vi.useFakeTimers();
+      const s = chatStore.get();
+      s.panelOpen = true;
+      s.unreadCount = 0;
+
+      chatStore.sendCroppedImage('data:image/png;base64,abc');
+      vi.advanceTimersByTime(5000);
+
+      expect(s.unreadCount).toBe(0);
+      vi.useRealTimers();
+    });
+  });
+
   describe('message helpers: groupStart and groupEnd', () => {
     it('evaluates groupStart and groupEnd across list boundaries and sender transitions', () => {
       const cs = chatStore.get();

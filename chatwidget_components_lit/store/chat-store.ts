@@ -789,6 +789,60 @@ export const chatStore = {
     }
   },
 
+  /**
+   * Adds a cropped image (base64 data URL from cw-image-cropper) as a
+   * proper attachment message. Uses the data URL directly as `localUrl` so
+   * the bubble renders the real image instead of a stub string.
+   */
+  sendCroppedImage(dataUrl: string) {
+    if (!dataUrl || !dataUrl.startsWith('data:')) return;
+    const s = getStore().chat;
+    const msgObj: Message = {
+      key: 'img_cropped_' + Date.now(),
+      senderType: 'VISITOR',
+      localUrl: dataUrl,
+      attachment: true,
+      body: '',
+      created: new Date().toISOString(),
+      status: 'sent',
+    };
+    s.messages = [...s.messages, msgObj];
+    s.attachOpen = false;
+    s.hasSentMessage = true;
+    emit('store:chat');
+    chatStore.resetChatbarLayout();
+    // Simulate delivery → read → bot reply (same cadence as uploadImage)
+    setTimeout(() => {
+      const idx = s.messages.findIndex((m) => m.key === msgObj.key);
+      if (idx !== -1) {
+        s.messages = s.messages.map((m, i) => (i === idx ? { ...m, status: 'delivered' } : m));
+        emit('store:chat');
+      }
+    }, 2000);
+    setTimeout(() => {
+      const idx = s.messages.findIndex((m) => m.key === msgObj.key);
+      if (idx !== -1) {
+        s.messages = s.messages.map((m, i) => (i === idx ? { ...m, status: 'read' } : m));
+        emit('store:chat');
+      }
+    }, 4000);
+    setTimeout(() => {
+      const curState = getStore().chat;
+      const botMsg: Message = {
+        key: 'bot_' + Date.now(),
+        senderType: 'AGENT',
+        senderName: curState.agentName || 'Sarah',
+        body: 'Got your image! Our team will review it shortly.',
+        created: new Date().toISOString(),
+      };
+      curState.messages = [...curState.messages, botMsg];
+      if (!curState.panelOpen) {
+        curState.unreadCount = (curState.unreadCount || 0) + 1;
+      }
+      emit('store:chat');
+    }, 5000);
+  },
+
   captureScreenshot() {
     getStore().chat.attachOpen = false;
     emit('store:chat');

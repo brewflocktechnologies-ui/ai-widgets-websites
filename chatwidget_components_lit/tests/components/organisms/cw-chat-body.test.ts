@@ -120,16 +120,21 @@ describe('CwChatBody Organism Component', () => {
   });
 
   it('handles image cropper events and file selection', async () => {
-    const sendSpy = vi.fn();
-    element.addEventListener('cw:send', sendSpy);
+    const cropSpy = vi.fn();
+    // The component now emits cw:send-cropped-image (not cw:send) with the
+    // full base64 data URL so the store can add a real image attachment.
+    element.addEventListener('cw:send-cropped-image', cropSpy);
 
     const cropper = element.shadowRoot?.querySelector('cw-image-cropper');
     expect(cropper).not.toBeNull();
 
+    const dataUrl = 'data:image/png;base64,123';
     cropper?.dispatchEvent(
-      new CustomEvent('cw:image-cropped', { detail: { dataUrl: 'data:image/png;base64,123' } })
+      new CustomEvent('cw:image-cropped', { detail: { dataUrl }, bubbles: true, composed: true })
     );
-    expect(sendSpy).toHaveBeenCalled();
+    expect(cropSpy).toHaveBeenCalled();
+    // Verify the full data URL is passed — NOT a truncated placeholder string
+    expect(cropSpy.mock.calls[0][0].detail).toBe(dataUrl);
 
     cropper?.dispatchEvent(new CustomEvent('cw:close'));
 
