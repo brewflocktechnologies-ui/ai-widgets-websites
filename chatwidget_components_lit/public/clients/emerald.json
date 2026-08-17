@@ -1,6 +1,7 @@
 {
   "clientId": "emerald",
   "clientName": "EcoSphere Emerald",
+  "accentColor": "#059669",
       "features": {
     "voiceCallMaster": false,
     "voiceCallAgents": false,
@@ -229,8 +230,7 @@
     "animationClosingSec": 0.2,
     "clientName": "EcoSphere Support",
     "agentName": "Sarah (Eco)",
-    "accentColor": "#059669",
-    
+
     "//_dimensions": "Dimensions of the chat widget window",
 
     "widgetWidth": 400,

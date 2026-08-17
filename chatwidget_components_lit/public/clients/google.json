@@ -1,6 +1,7 @@
 {
   "clientId": "google",
   "clientName": "Google Cloud Support",
+  "accentColor": "#4285F4",
       "features": {
     "voiceCallMaster": false,
     "voiceCallAgents": false,
@@ -224,7 +225,6 @@
     
     "clientName": "Google Cloud Support",
     "agentName": "Sarah",
-    "accentColor": "#4285F4",
     "widgetWidth": 400,
     "widgetHeight": 950,
     "expandedWidth": 550,

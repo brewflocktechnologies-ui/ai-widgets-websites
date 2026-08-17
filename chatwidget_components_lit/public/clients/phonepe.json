@@ -1,6 +1,7 @@
 {
   "clientId": "phonepe",
   "clientName": "PhonePe Business Support",
+  "accentColor": "#5f259f",
       "features": {
     "voiceCallMaster": false,
     "voiceCallAgents": false,
@@ -222,7 +223,6 @@
     "animationClosingSec": 0.2,
     "clientName": "PhonePe Support",
     "agentName": "Sarah",
-    "accentColor": "#5f259f",
     "widgetWidth": 400,
     "widgetHeight": 950,
     "expandedWidth": 550,

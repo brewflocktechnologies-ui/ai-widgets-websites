@@ -822,7 +822,7 @@ export async function initStore(): Promise<void> {
     const rawConfig = await fetchClientConfig(clientId);
 
     // Untrusted remote config: strip CSS-injection payloads before merging.
-    let { bubbleConfig, chatConfig, chatbarConfig, greetWindowConfig, featuresConfig } = rawConfig;
+    let { accentColor: rootAccentColor, bubbleConfig, chatConfig, chatbarConfig, greetWindowConfig, featuresConfig } = rawConfig;
     bubbleConfig = sanitizeConfig(bubbleConfig).value;
     greetWindowConfig = sanitizeConfig(greetWindowConfig).value;
     chatbarConfig = sanitizeConfig(chatbarConfig).value;
@@ -836,6 +836,9 @@ export async function initStore(): Promise<void> {
         bc.backgroundColor = theme.primary;
         bc.gradientType = 'none';
         if (bc.outlineRing) bc.outlineRing.color = theme.secondary;
+      } else if (rootAccentColor && !bc.backgroundColor) {
+        bc.backgroundColor = rootAccentColor;
+        if (bc.outlineRing && !bc.outlineRing.color) bc.outlineRing.color = rootAccentColor;
       }
       Object.assign(store.bubble, bc);
       if (bc.position) store.greetWindow.position = bc.position;
@@ -858,6 +861,15 @@ export async function initStore(): Promise<void> {
             gwc.inputBox.buttonColor = theme.primary;
           }
         }
+      } else if (rootAccentColor) {
+        if (!gwc.iconColor) gwc.iconColor = rootAccentColor;
+        if (gwc.inputBox) {
+          if (gwc.inputBox.layout === 'separated') {
+            if (!gwc.inputBox.buttonIconColor) gwc.inputBox.buttonIconColor = rootAccentColor;
+          } else if (!gwc.inputBox.buttonColor) {
+            gwc.inputBox.buttonColor = rootAccentColor;
+          }
+        }
       }
       Object.assign(store.greetWindow, gwc);
       emit('store:greetWindow');
@@ -868,6 +880,8 @@ export async function initStore(): Promise<void> {
       const cbc = chatbarConfig as Partial<ChatbarState>;
       if (cbc.useWebsiteTheme) {
         cbc.bgColor = theme.primary;
+      } else if (rootAccentColor && !cbc.bgColor) {
+        cbc.bgColor = rootAccentColor;
       }
       Object.assign(store.chatbar, cbc);
       const cb = store.chatbar;
@@ -928,6 +942,19 @@ export async function initStore(): Promise<void> {
             active.endChatCancelTextColor = 'var(--cw-muted)';
             active.endChatCancelBorderColor = 'var(--cw-border)';
           }
+        } else if (rootAccentColor) {
+          // No per-section override and no website-theme detection: fall back
+          // to the shared root-level accentColor instead of the hardcoded
+          // default, without clobbering any color the JSON set explicitly.
+          if (!active.accentColor) active.accentColor = rootAccentColor;
+          if (!active.visitorBubbleBg) active.visitorBubbleBg = rootAccentColor;
+          if (!active.headerBg) active.headerBg = rootAccentColor;
+          if (!active.agentAvatarBg) active.agentAvatarBg = rootAccentColor;
+          if (!active.inputFocusBorderColor) active.inputFocusBorderColor = rootAccentColor;
+          if (!active.inputFocusShadow) active.inputFocusShadow = `0 0 0 2px ${rootAccentColor}26`;
+          if (!active.sendButtonBgActive) active.sendButtonBgActive = rootAccentColor;
+          if (!active.poweredByColor) active.poweredByColor = rootAccentColor;
+          if (!active.endChatConfirmBg) active.endChatConfirmBg = rootAccentColor;
         }
 
         const welcomeObj = active.welcome || store!.chatWindow.welcome;
@@ -937,6 +964,10 @@ export async function initStore(): Promise<void> {
             const sec = theme.secondary && theme.secondary !== theme.primary ? theme.secondary : theme.primary;
             welcomeObj.bgGradient = `linear-gradient(135deg, ${theme.primary}, ${sec})`;
             welcomeObj.buttonIconColor = theme.primary;
+            active.welcome = welcomeObj;
+          } else if (rootAccentColor && !welcomeObj.bgGradient) {
+            welcomeObj.bgGradient = `linear-gradient(135deg, ${rootAccentColor}, ${rootAccentColor})`;
+            if (!welcomeObj.buttonIconColor) welcomeObj.buttonIconColor = rootAccentColor;
             active.welcome = welcomeObj;
           }
         }

@@ -6,11 +6,24 @@
 import { getWidgetBaseUrl } from './theme.js';
 
 export interface ClientConfigs {
+  /** Shared widget-wide accent color. Root-level in the client JSON; falls
+   *  back to the legacy `chatWindow.accentColor` placement for configs that
+   *  haven't been migrated yet. */
+  accentColor?: string;
   bubbleConfig: Record<string, unknown>;
   chatConfig: Record<string, unknown>;
   chatbarConfig: Record<string, unknown>;
   greetWindowConfig: Record<string, unknown>;
   featuresConfig: Record<string, unknown>;
+}
+
+/**
+ * Resolves the shared accent color, preferring the root-level `accentColor`
+ * key and falling back to the legacy nested `chatWindow.accentColor` (or
+ * `chat.accentColor`) placement for backward compatibility.
+ */
+function resolveAccentColor(data: any): string | undefined {
+  return data.accentColor || data.chatWindow?.accentColor || data.chat?.accentColor || undefined;
 }
 
 /**
@@ -53,6 +66,7 @@ export async function fetchClientConfig(clientId: string): Promise<ClientConfigs
       try {
         const data = JSON.parse(temp);
         return {
+          accentColor: resolveAccentColor(data),
           bubbleConfig: data.bubble || {},
           chatConfig: data.chatWindow || data.chat || {},
           chatbarConfig: data.chatbar || {},
@@ -85,6 +99,7 @@ export async function fetchClientConfig(clientId: string): Promise<ClientConfigs
         const data = await res.json();
         if (data && typeof data === 'object') {
           return {
+            accentColor: resolveAccentColor(data),
             bubbleConfig: data.bubble || {},
             chatConfig: data.chatWindow || data.chat || {},
             chatbarConfig: data.chatbar || {},
@@ -98,5 +113,5 @@ export async function fetchClientConfig(clientId: string): Promise<ClientConfigs
     }
   }
 
-  return { bubbleConfig: {}, chatConfig: {}, chatbarConfig: {}, greetWindowConfig: {}, featuresConfig: {} };
+  return { accentColor: undefined, bubbleConfig: {}, chatConfig: {}, chatbarConfig: {}, greetWindowConfig: {}, featuresConfig: {} };
 }
