@@ -18,4 +18,11 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
+
+  webServer: {
+    command: 'npx vite --port 5173',
+    url: 'http://localhost:5173/e2e-tester.html',
+    reuseExistingServer: true,
+    timeout: 30 * 1000,
+  },
 });
