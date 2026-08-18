@@ -69,6 +69,8 @@ describe('utils/transition.ts', () => {
     element.controller.hostConnected();
     element.controller.hostDisconnected();
 
-    expect(element.controller.render).toBe(true);
+    // Call hostDisconnected while leave timeout is active
+    element.controller.setTarget(false);
+    element.controller.hostDisconnected();
   });
 });

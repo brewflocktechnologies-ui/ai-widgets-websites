@@ -72,5 +72,17 @@ describe('utils/theme.ts', () => {
     (window as any).location = new URL('http://localhost/chatwidget_components_lit/index.html');
     const baseLit = getWidgetBaseUrl();
     expect(baseLit).toBe('./');
+
+    (window as any).location = new URL('http://localhost/other_page.html');
+    const baseOther = getWidgetBaseUrl();
+    expect(baseOther).toBe('./chatwidget_components_lit/');
+  });
+
+  it('handles getComputedStyle undefined in getParentTheme', () => {
+    const orig = window.getComputedStyle;
+    (window as any).getComputedStyle = undefined;
+    const res = getParentTheme();
+    expect(res.primary).toBe('#0b5fff');
+    window.getComputedStyle = orig;
   });
 });

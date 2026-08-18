@@ -96,4 +96,31 @@ describe('utils/dismiss.ts', () => {
 
     outsideDiv.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true }));
   });
+
+  it('handles enabled boolean, inside clicks, default eventName, and multiple hostConnected calls', async () => {
+    class DefaultEventElement extends LitElement {
+      controller = new DismissController(this, { enabled: false });
+    }
+    customElements.define('default-event-element', DefaultEventElement);
+
+    const defaultEl = new DefaultEventElement();
+    document.body.appendChild(defaultEl);
+    await defaultEl.updateComplete;
+
+    // Test inside click (path includes host)
+    const listener = vi.fn();
+    defaultEl.addEventListener('cw:close-popups', listener);
+
+    defaultEl.controller.hostConnected();
+    await new Promise((r) => requestAnimationFrame(r));
+    // Calling hostConnected again while already listening
+    defaultEl.controller.hostConnected();
+    await new Promise((r) => requestAnimationFrame(r));
+
+    // Dispatch click INSIDE host
+    defaultEl.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true }));
+    expect(listener).not.toHaveBeenCalled();
+
+    defaultEl.controller.hostDisconnected();
+  });
 });

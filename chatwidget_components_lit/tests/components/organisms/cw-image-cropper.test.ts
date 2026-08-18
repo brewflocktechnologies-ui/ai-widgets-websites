@@ -159,5 +159,19 @@ describe('CwImageCropper Organism Component', () => {
     const headerCloseBtn = element.shadowRoot?.querySelector('.header cw-button') as HTMLElement;
     headerCloseBtn?.click();
     expect(closeSpy).toHaveBeenCalledTimes(2);
+
+    // Null canvas context & handleCrop / drawCanvas without canvas or imageObj
+    (element as any).imageObj = null;
+    (element as any).drawCanvas();
+    (element as any).handleCrop();
+
+    const canvas = element.shadowRoot?.querySelector('#crop-canvas') as HTMLCanvasElement;
+    if (canvas) {
+      const spyContext = vi.spyOn(canvas, 'getContext').mockReturnValue(null as any);
+      (element as any).imageObj = new Image();
+      (element as any).drawCanvas();
+      (element as any).handleCrop();
+      spyContext.mockRestore();
+    }
   });
 });

@@ -13,6 +13,7 @@ import {
   updateStoreConfig,
   exportFullStoreConfig,
   injectStoreConfig,
+  _resetStoreForTest,
 } from '../../store/chat-store.js';
 
 describe('chat-store', () => {
@@ -25,6 +26,12 @@ describe('chat-store', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+  });
+
+  it('lazily initializes store when getStore is invoked prior to initStore', () => {
+    _resetStoreForTest();
+    expect(chatStore.get()).toBeDefined();
+    expect(bubbleStore.get()).toBeDefined();
   });
 
   it('provides store accessors and initial states', () => {
@@ -930,6 +937,117 @@ describe('chat-store', () => {
       chatStore.captureScreenshot();
       window.removeEventListener('cw:capture-screenshot-request', handler);
       expect(received).toHaveLength(1);
+    });
+  });
+
+  describe('additional branch coverage for chatStore', () => {
+    it('executes downloadTranscript revokeObjectURL timer', () => {
+      vi.useFakeTimers();
+      const originalCreate = document.createElement.bind(document);
+      vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+        const el = originalCreate(tag);
+        if (tag === 'a') vi.spyOn(el as HTMLAnchorElement, 'click').mockImplementation(() => {});
+        return el;
+      });
+
+      chatStore.downloadTranscript();
+      vi.advanceTimersByTime(150);
+      vi.useRealTimers();
+    });
+
+    it('handles sendCroppedImage timers and delivered/read/reply status when panelOpen is false', () => {
+      vi.useFakeTimers();
+      const s = chatStore.get();
+      s.panelOpen = false;
+      s.messages = [];
+
+      chatStore.sendCroppedImage('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==');
+      expect(s.hasSentMessage).toBe(true);
+
+      vi.advanceTimersByTime(5500);
+      expect(s.messages.some(m => m.senderType === 'AGENT')).toBe(true);
+      expect(s.unreadCount).toBeGreaterThan(0);
+      vi.useRealTimers();
+    });
+
+    it('handles dividerBefore for index > 0', () => {
+      expect(chatStore.dividerBefore(0)).toBe(true);
+      expect(chatStore.dividerBefore(1)).toBe(false);
+    });
+
+    it('handles cancelEndChat and dismissGreetWindow', () => {
+      chatStore.cancelEndChat();
+      expect(chatStore.get().confirmBox).toBeNull();
+      chatStore.dismissGreetWindow();
+      expect(greetWindowStore.get().dismissed).toBe(true);
+    });
+
+    it('handles initStore with useWebsiteTheme in dark mode, separated and inline inputBox layouts, and cc.dark overrides', async () => {
+      document.documentElement.classList.add('dark');
+
+      // Test 1: layout = 'separated'
+      let mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          greetWindowConfig: {
+            useWebsiteTheme: true,
+            inputBox: { layout: 'separated' },
+          },
+          chatConfig: {
+            useWebsiteTheme: true,
+            dark: { headerBg: '#121212' },
+          },
+        }),
+      });
+      window.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
+      await initStore();
+
+      // Test 2: layout = 'inline'
+      mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          greetWindowConfig: {
+            useWebsiteTheme: true,
+            inputBox: { layout: 'inline' },
+          },
+          chatConfig: {
+            useWebsiteTheme: true,
+            dark: { headerBg: '#121212' },
+          },
+        }),
+      });
+      window.fetch = mockFetch;
+      await initStore();
+      document.documentElement.classList.remove('dark');
+    });
+
+    it('handles processRemoteConfig with rootAccentColor and separated or inline inputBox layout', async () => {
+      let mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          accentColor: '#123456',
+          greetWindowConfig: {
+            inputBox: { layout: 'separated' },
+          },
+        }),
+      });
+      window.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
+      await initStore();
+
+      mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          accentColor: '#123456',
+          greetWindowConfig: {
+            inputBox: { layout: 'inline' },
+          },
+        }),
+      });
+      window.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
+      await initStore();
     });
   });
 });

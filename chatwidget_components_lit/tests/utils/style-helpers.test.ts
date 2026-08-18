@@ -6,6 +6,7 @@ import {
   getBoxShadow,
   getInnerShadow,
   getCompositeBackground,
+  getBubbleBackground,
   getChatbarBackground,
   getChatbarFontSize,
   getChatbarIconWidth,
@@ -125,5 +126,7 @@ describe('utils/style-helpers.ts', () => {
     expect(getAnimClass(undefined)).toBe('');
 
     expect(typeof formatTime(undefined)).toBe('string');
+    expect(getCompositeBackground({ gradientType: 'linear', gradientStops: [] } as any)).toBe('#0b5fff');
+    expect(getChatbarBackground({ gradientEnabled: true } as any)).toBe('#007bff');
   });
 });

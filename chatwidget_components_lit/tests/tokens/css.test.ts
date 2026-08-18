@@ -54,8 +54,15 @@ describe('tokens/css.ts', () => {
   });
 
   it('handles null or invalid document in ensureTokenCss', async () => {
-    const { ensureTokenCss } = await import('../../tokens/css.js');
+    const { ensureTokenCss, themeToDarkVars, themeToCss } = await import('../../tokens/css.js');
     const { DEFAULT_TOKEN_THEME } = await import('../../tokens/default-theme.js');
-    ensureTokenCss(DEFAULT_TOKEN_THEME, {} as any);
+
+    expect(themeToDarkVars({ ...DEFAULT_TOKEN_THEME, dark: {} as any })).toEqual({});
+    expect(themeToCss({ ...DEFAULT_TOKEN_THEME, dark: undefined } as any)).not.toContain('.dark {');
+
+    vi.resetModules();
+    const mod = await import('../../tokens/css.js');
+    mod.ensureTokenCss(DEFAULT_TOKEN_THEME, { head: null, getElementById: () => null } as any);
+    mod.ensureTokenCss(DEFAULT_TOKEN_THEME);
   });
 });

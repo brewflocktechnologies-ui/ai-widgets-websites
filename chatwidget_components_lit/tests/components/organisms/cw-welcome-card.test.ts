@@ -45,14 +45,39 @@ describe('CwWelcomeCard Organism Component', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('renders glassy card layout', async () => {
+  it('renders glassy card layout with cardPosition, cardPadding, and numeric footerPaddingBottom', async () => {
+    // 1. glassy cardLayout with cardPosition center and cardPadding
     element.config = {
-      ...element.config!,
+      enabled: true,
       cardLayout: 'glassy',
-      cardAlign: 'center',
+      cardPosition: 'center',
+      cardPadding: '20px',
+      footerPaddingBottom: 15,
+      poweredByLink: 'http://example.com',
+      poweredByText: 'MyBrand',
+      subtextColor: '#ffffff',
     };
     await element.updateComplete;
 
+    const glassy = element.shadowRoot?.querySelector('.glassy-container') as HTMLElement;
+    expect(glassy).not.toBeNull();
+    expect(glassy.style.padding).toBe('20px');
+
+    const footer = element.shadowRoot?.querySelector('.footer-brand') as HTMLElement;
+    expect(footer.style.paddingBottom).toBe('15px');
+
+    // 2. glassy cardLayout with neither cardAlign nor cardPosition = center
+    element.config = {
+      cardLayout: 'glassy',
+      cardAlign: 'left' as any,
+      footerPaddingBottom: undefined,
+    };
+    await element.updateComplete;
     expect(element.shadowRoot?.querySelector('.glassy-container')).not.toBeNull();
+
+    // 3. config = undefined
+    element.config = undefined as any;
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.welcome-container')).not.toBeNull();
   });
 });

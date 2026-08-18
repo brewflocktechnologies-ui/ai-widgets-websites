@@ -1366,4 +1366,8 @@ export function injectStoreConfig(token: Record<string, any>): void {
   updateStoreConfig(overrides);
 }
 
+export function _resetStoreForTest(): void {
+  store = null;
+}
+
 

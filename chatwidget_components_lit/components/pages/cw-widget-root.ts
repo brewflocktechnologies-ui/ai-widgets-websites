@@ -433,6 +433,7 @@ export class CwWidgetRoot extends LitElement {
 
   private handleSubmitOffline(d?: { name?: string; email?: string; message?: string }) {
     const s = chatStore.get();
+    if (!s) return;
     if (!d) return chatStore.submitOffline();
     if (d.name !== undefined) s.offlineName = d.name;
     if (d.email !== undefined) s.offlineEmail = d.email;
@@ -626,8 +627,8 @@ export class CwWidgetRoot extends LitElement {
         .featuresConfig="${effectiveFs}"
         .chatState="${cs}"
         .panelOpen="${this.panelOpen}"
-        .unreadCount="${cs.unreadCount || 0}"
-        .hasSentMessage="${cs.hasSentMessage || false}"
+        .unreadCount="${cs?.unreadCount || 0}"
+        .hasSentMessage="${cs?.hasSentMessage || false}"
         .rev="${this.rev}"
       ></cw-widget-layout>
     `;

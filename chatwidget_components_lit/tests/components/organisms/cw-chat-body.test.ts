@@ -190,4 +190,135 @@ describe('CwChatBody Organism Component', () => {
     consentX?.click();
     expect(consentSpy).toHaveBeenCalled();
   });
+
+  it('handles boot state, typing indicator, menuOpen, emojiOpen, offlineName, empty props, and rev scroll update', async () => {
+    // 1. empty props
+    element.chatState = undefined as any;
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.panel-body')).toBeNull();
+
+    // 2. boot state
+    element.chatState = {
+      state: 'boot',
+      messages: [],
+      draft: '',
+      panelOpen: true,
+      unreadCount: 0,
+      isExpanded: false,
+      isMobile: false,
+      clientName: 'Support',
+      agentName: 'Sarah',
+      agentsOnline: true,
+      token: '123',
+      position: 1,
+      menuOpen: false,
+      attachOpen: false,
+      emojiOpen: false,
+      confirmBox: null,
+      reconnecting: false,
+      soundsOn: true,
+      consentDismissed: false,
+      flags: { 'widget.modernUi': true, 'attachments.enabled': true },
+    };
+    element.chatWindowConfig = { bodyBg: '#ffffff' };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.center-note')).not.toBeNull();
+
+    // 3. typing indicator, menuOpen, emojiOpen, groupStart/groupEnd with multiple messages
+    element.chatState = {
+      ...element.chatState,
+      state: 'active',
+      messages: [
+        { key: '1', senderType: 'VISITOR', body: 'Hello', created: new Date().toISOString() },
+        { key: '2', senderType: 'VISITOR', body: 'World', created: new Date().toISOString() },
+        { key: '3', senderType: 'AGENT', body: 'Hi!', created: new Date().toISOString() },
+      ],
+      typingName: 'Sarah',
+      menuOpen: true,
+      emojiOpen: true,
+      consentDismissed: true,
+    };
+    await element.updateComplete;
+
+    expect(element.shadowRoot?.querySelector('.typing-bubble')).not.toBeNull();
+    expect(element.shadowRoot?.querySelector('cw-chat-menu')).not.toBeNull();
+    expect(element.shadowRoot?.querySelector('cw-emoji-picker')).not.toBeNull();
+
+    // 4. rev update triggers scrollToBottom
+    vi.useFakeTimers();
+    element.rev = 1;
+    await element.updateComplete;
+    vi.advanceTimersByTime(100);
+    vi.useRealTimers();
+
+    // 5. offline-sent with offlineName and offlineEmail
+    (element as any).offlineName = 'John';
+    (element as any).offlineEmail = 'john@example.com';
+    element.chatState = {
+      ...element.chatState,
+      state: 'offline-sent',
+    };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.offline-done')?.textContent).toContain('John');
+
+    // 6. Welcome bgGradient, bodyBg undefined, footerBg fallback from bodyBg
+    element.chatWindowConfig = {
+      welcome: { enabled: true, bgGradient: '#000000' },
+      bodyBg: '#222222',
+      footerBg: undefined,
+    };
+    element.chatState = {
+      ...element.chatState,
+      state: 'welcome',
+      messages: undefined as any,
+    };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('cw-welcome-card')).not.toBeNull();
+
+    // 7. Active state with bodyBg and footerBg undefined
+    element.chatWindowConfig = {
+      bodyBg: undefined,
+      footerBg: undefined,
+    };
+    element.chatState = {
+      ...element.chatState,
+      state: 'active',
+      messages: [],
+      flags: undefined as any,
+    };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.messages-area')).not.toBeNull();
+
+    // 8. rev update when chatState is undefined or messages is undefined when lastCount > 0
+    (element as any).chatState = undefined;
+    element.rev = 2;
+    await element.updateComplete;
+
+    element.chatState = {
+      state: 'active',
+      messages: [{ key: 'm1', senderType: 'VISITOR', body: 'Hi', created: '' }],
+    } as any;
+    element.rev = 3;
+    await element.updateComplete;
+
+    element.chatState = {
+      state: 'active',
+      messages: [], // length = 0 (falsy number)
+    } as any;
+    element.rev = 4;
+    await element.updateComplete;
+
+    element.chatState = {
+      state: 'prechat',
+      messages: undefined, // length = undefined (falsy undefined)
+    } as any;
+    element.rev = 5;
+    await element.updateComplete;
+
+    // openFileSelector when #cw-file-input is not in DOM
+    (element as any).openFileSelector();
+
+    element.rev = 5; // same rev & same count
+    await element.updateComplete;
+  });
 });

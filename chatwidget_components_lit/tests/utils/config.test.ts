@@ -88,10 +88,39 @@ describe('utils/config.ts', () => {
     expect(configs.chatbarConfig).toEqual({ text: 'Help' });
   });
 
-  it('should return empty configs if all fetches fail', async () => {
+  it('should return empty configs if all fetches fail or return non-object JSON', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => null,
+    } as Response);
+    const configsNull = await fetchClientConfig('nonexistent');
+    expect(configsNull.bubbleConfig).toEqual({});
+
     globalThis.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
     const configs = await fetchClientConfig('nonexistent');
     expect(configs.bubbleConfig).toEqual({});
     expect(configs.chatConfig).toEqual({});
+  });
+
+  it('should resolve accentColor from chat object fallback', async () => {
+    const mockData = {
+      chat: { accentColor: '#ff0055' },
+    };
+
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => mockData,
+    } as Response);
+
+    const configs = await fetchClientConfig('test_accent');
+    expect(configs.accentColor).toBe('#ff0055');
+  });
+
+  it('handles script tag with invalid URL in getClientId', () => {
+    const script = document.createElement('script');
+    script.setAttribute('src', 'http://invalid-url-with-bad-search');
+    vi.spyOn(window, 'URL').mockImplementationOnce(() => { throw new Error('Bad URL'); });
+    document.body.appendChild(script);
+    expect(getClientId()).toBe('default');
   });
 });

@@ -8,6 +8,9 @@
  * falling back to the data-accent attribute on the widget script tag.
  */
 export function getParentTheme(): { primary: string; secondary: string } {
+  if (typeof getComputedStyle === 'undefined') {
+    return { primary: '#0b5fff', secondary: '#0b5fff' };
+  }
   const rootStyle = getComputedStyle(document.documentElement);
   const bodyStyle = document.body ? getComputedStyle(document.body) : null;
 

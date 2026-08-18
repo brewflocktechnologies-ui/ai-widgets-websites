@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { DEFAULT_TOKEN_THEME } from '../../tokens/default-theme.js';
 import {
   mergeTheme,
   sanitizeConfig,
@@ -48,13 +49,16 @@ describe('tokens/merge.ts', () => {
     expect(res.warnings.some((w) => w.includes('grad'))).toBe(true);
   });
 
-  it('handles dark overrides in mergeTheme', () => {
+  it('handles dark overrides and undefined defaults.dark in mergeTheme', () => {
     const res = mergeTheme({
       dark: {
         colors: { bg: '#000000' },
       },
     } as any);
     expect(res.theme.dark?.colors.bg).toBe('#000000');
+
+    const resUndef = mergeTheme(undefined, { ...DEFAULT_TOKEN_THEME, dark: undefined } as any);
+    expect(resUndef.theme.version).toBe('v1');
   });
 
   it('sanitizes config objects by removing CSS injection payloads and preserving primitives', () => {
