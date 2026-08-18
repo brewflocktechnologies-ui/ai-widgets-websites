@@ -17,7 +17,9 @@ import {
 
 describe('chat-store', () => {
   beforeEach(async () => {
-    globalThis.fetch = vi.fn().mockRejectedValue(new Error('No fetch in test'));
+    const mockFetch = vi.fn().mockRejectedValue(new Error('No fetch in test'));
+    window.fetch = mockFetch;
+    globalThis.fetch = mockFetch;
     await initStore();
   });
 
@@ -599,6 +601,17 @@ describe('chat-store', () => {
       expect(greetWindowStore.get().visible).toBe(true);
       vi.useRealTimers();
     });
+
+    it('applies enableWelcomeCard, enableGreetWindow, and enableInputCard overrides when store is initialized', () => {
+      updateStoreConfig({
+        enableWelcomeCard: false,
+        enableGreetWindow: false,
+        enableInputCard: false,
+      });
+      expect(chatWindowStore.get().welcome?.enabled).toBe(false);
+      expect(greetWindowStore.get().enabled).toBe(false);
+      expect(greetWindowStore.get().inputBox?.enabled).toBe(false);
+    });
   });
 
   describe('exportFullStoreConfig and injectStoreConfig', () => {
@@ -737,23 +750,43 @@ describe('chat-store', () => {
       document.documentElement.style.removeProperty('--secondary-color');
     });
 
-    it('processes chatConfig dark overrides when host is in dark mode', async () => {
-      document.documentElement.classList.add('dark');
+    it('processes chatbar with useWebsiteTheme in remote config', async () => {
+      const cs = chatStore.get();
+      cs.hasSentMessage = false;
+      cs.state = 'active';
 
+      document.documentElement.style.setProperty('--primary-color', '#ff00ff');
       globalThis.fetch = vi.fn().mockResolvedValue({
         ok: true,
         json: async () => ({
-          chatWindow: {
-            useWebsiteTheme: true,
-            dark: { visitorBubbleFontSize: '16px' },
-          },
+          chatbar: { useWebsiteTheme: true },
+          chatWindow: { welcome: { enabled: true } },
         }),
       });
 
       await initStore();
-      expect(chatWindowStore.get().visitorBubbleFontSize).toBe('16px');
 
-      document.documentElement.classList.remove('dark');
+      expect(chatbarStore.get().bgColor).toBe('#ff00ff');
+      expect(chatStore.get().state).toBe('welcome');
+
+      document.documentElement.style.removeProperty('--primary-color');
+    });
+
+    it('catches and logs warning on initStore fetch failure', async () => {
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const badResponse = {
+        ok: true,
+        json: async () => ({
+          bubble: { useWebsiteTheme: true, outlineRing: true },
+        }),
+      };
+      vi.spyOn(globalThis, 'fetch').mockResolvedValue(badResponse as Response);
+      vi.spyOn(window, 'fetch').mockResolvedValue(badResponse as Response);
+
+      await initStore();
+
+      expect(warnSpy).toHaveBeenCalledWith('initStore fetchClientConfig warning:', expect.any(Error));
+      warnSpy.mockRestore();
     });
   });
 

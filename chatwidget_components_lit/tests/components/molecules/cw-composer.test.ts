@@ -32,16 +32,15 @@ describe('CwComposer Molecule Component', () => {
   });
 
   it('handles updated draft property reset and height adjustment', async () => {
-    element.draft = 'Old draft';
-    await element.updateComplete;
-
     const textarea = element.shadowRoot?.querySelector('textarea') as HTMLTextAreaElement;
     textarea.value = 'Different text';
+    textarea.style.height = '100px';
 
-    element.draft = '';
-    await element.updateComplete;
+    (element as any).draft = '';
+    (element as any).updated(new Map([['draft', 'Old draft']]));
 
     expect(textarea.value).toBe('');
+    expect(textarea.style.height).toBe('32px');
   });
 
   it('should dispatch cw:send event when send button is clicked', async () => {

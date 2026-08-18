@@ -87,4 +87,23 @@ describe('CwGreetWindow Organism Component', () => {
     expect(element.shadowRoot?.querySelector('img')).not.toBeNull();
     expect(element.shadowRoot?.querySelector('cw-greet-input')).not.toBeNull();
   });
+
+  it('triggers transition enterMs and leaveMs callbacks on visibility toggles', async () => {
+    expect((element as any).transition.enterMs()).toBe(300);
+    expect((element as any).transition.leaveMs()).toBe(300);
+
+    vi.useFakeTimers();
+    element.visible = false;
+    await element.updateComplete;
+
+    element.visible = true;
+    await element.updateComplete;
+    vi.advanceTimersByTime(400);
+
+    element.visible = false;
+    await element.updateComplete;
+    vi.advanceTimersByTime(400);
+
+    vi.useRealTimers();
+  });
 });

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { mountChatWidget, mountChatWidgetWithToken } from '../index.js';
 
 describe('index entry point', () => {

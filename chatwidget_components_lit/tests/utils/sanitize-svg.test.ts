@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { sanitizeSvg } from '../../utils/sanitize-svg.js';
 
 describe('sanitizeSvg utility', () => {
@@ -26,10 +26,18 @@ describe('sanitizeSvg utility', () => {
     expect(cleaned).toContain('<rect');
   });
 
-  it('strips javascript: URIs in href or src attributes', () => {
-    const maliciousSvg = '<svg><a href="javascript:alert(1)"><circle cx="5" cy="5" r="5"></circle></a></svg>';
+  it('strips javascript:, data:text/html, and vbscript: URIs in href, xlink:href, src, and action attributes', () => {
+    const maliciousSvg = `
+      <svg>
+        <a href="javascript:alert(1)">
+          <use xlink:href="vbscript:msgbox(1)" src="data:text/html;base64,123" action="javascript:evil()"></use>
+        </a>
+      </svg>
+    `;
     const cleaned = sanitizeSvg(maliciousSvg);
     expect(cleaned).not.toContain('javascript:');
+    expect(cleaned).not.toContain('vbscript:');
+    expect(cleaned).not.toContain('data:text/html');
   });
 
   it('strips foreignObject and non-SVG elements', () => {
@@ -38,5 +46,31 @@ describe('sanitizeSvg utility', () => {
     expect(cleaned).not.toContain('<foreignObject');
     expect(cleaned).not.toContain('<iframe');
     expect(cleaned).not.toContain('<p');
+  });
+
+  it('handles XML parsererror by parsing HTML body fallback', () => {
+    // Unclosed tag in strict XML produces parsererror, forcing HTML body fallback
+    const malformedXmlSvg = '<svg><circle cx="5" cy="5" r="5"></svg>';
+    const cleaned = sanitizeSvg(malformedXmlSvg);
+    expect(cleaned).toContain('<svg');
+    expect(cleaned).toContain('<circle');
+
+    // Malformed string that doesn't produce an svg element in fallback
+    expect(sanitizeSvg('<parsererror></parsererror>')).toBe('');
+  });
+
+  it('returns empty string when root element is not an SVG tag', () => {
+    expect(sanitizeSvg('<g><path d="M0 0"></path></g>')).toBe('');
+  });
+
+  it('catches and handles exceptions thrown during parsing', () => {
+    const originalDOMParser = globalThis.DOMParser;
+    globalThis.DOMParser = vi.fn().mockImplementation(() => {
+      throw new Error('Parser crash');
+    });
+
+    expect(sanitizeSvg('<svg></svg>')).toBe('');
+
+    globalThis.DOMParser = originalDOMParser;
   });
 });

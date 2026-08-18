@@ -59,6 +59,11 @@ describe('CwEmojiPicker Molecule Component', () => {
     await element.updateComplete;
     btns = element.shadowRoot?.querySelectorAll('.emoji-btn');
     expect(btns?.length).toBeGreaterThan(5);
+
+    element.emojis = '   ';
+    await element.updateComplete;
+    btns = element.shadowRoot?.querySelectorAll('.emoji-btn');
+    expect(btns?.length).toBeGreaterThan(5);
   });
 
   it('handles Intl.Segmenter exception fallback', async () => {

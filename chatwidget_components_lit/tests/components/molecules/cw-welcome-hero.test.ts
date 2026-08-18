@@ -47,4 +47,15 @@ describe('CwWelcomeHero Molecule Component', () => {
     const img = element.shadowRoot?.querySelector('.logo-img');
     expect(img).not.toBeNull();
   });
+
+  it('resolves avatar string URLs cleanly', async () => {
+    element.config = {
+      avatars: [{ url: 'http://example.com/avatar-str.png', name: 'Agent' }],
+    };
+    await element.updateComplete;
+
+    const avatar = element.shadowRoot?.querySelector('cw-avatar');
+    expect(avatar).not.toBeNull();
+    expect((element as any).resolveAvatarUrl('http://example.com/direct.png')).toBe('http://example.com/direct.png');
+  });
 });

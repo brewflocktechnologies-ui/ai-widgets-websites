@@ -79,4 +79,31 @@ describe('CwGreetInput Molecule Component', () => {
     const btn = element.shadowRoot?.querySelector('cw-button');
     expect(btn).not.toBeNull();
   });
+
+  it('triggers transition enterMs and leaveMs callbacks on visibility toggles', async () => {
+    expect((element as any).transition.enterMs()).toBeGreaterThan(0);
+    expect((element as any).transition.leaveMs()).toBe(0);
+
+    vi.useFakeTimers();
+    element.config = { enabled: true, animationOpeningSec: 0.4 };
+    element.visible = false;
+    await element.updateComplete;
+
+    expect((element as any).transition.enterMs()).toBe(400);
+
+    element.visible = true;
+    await element.updateComplete;
+    vi.advanceTimersByTime(500);
+
+    element.visible = false;
+    await element.updateComplete;
+    vi.advanceTimersByTime(100);
+
+    element.config = { enabled: true }; // without animationOpeningSec
+    element.visible = true;
+    await element.updateComplete;
+    vi.advanceTimersByTime(500);
+
+    vi.useRealTimers();
+  });
 });

@@ -77,4 +77,33 @@ describe('CwChatPanel Organism Component', () => {
     const reconnecting = element.shadowRoot?.querySelector('.reconnecting');
     expect(reconnecting).not.toBeNull();
   });
+
+  it('handles focusOnOpen setTimeout and emit method', async () => {
+    expect((element as any).transition.enterMs()).toBeGreaterThan(0);
+    expect((element as any).transition.leaveMs()).toBeGreaterThan(0);
+
+    vi.useFakeTimers();
+    element.panelOpen = false;
+    await element.updateComplete;
+
+    const spy = vi.fn();
+    element.addEventListener('cw:test-event', spy);
+    (element as any).emit('cw:test-event');
+    expect(spy).toHaveBeenCalled();
+
+    (element as any).focusOnOpen();
+    vi.advanceTimersByTime(100);
+
+    // Test transition enterMs and leaveMs fallback when animationOpeningSec is undefined
+    element.chatWindowConfig = {};
+    element.panelOpen = false;
+    await element.updateComplete;
+
+    expect((element as any).transition.enterMs()).toBe(300);
+    expect((element as any).transition.leaveMs()).toBe(200);
+
+    element.panelOpen = true;
+    await element.updateComplete;
+    vi.advanceTimersByTime(500);
+  });
 });

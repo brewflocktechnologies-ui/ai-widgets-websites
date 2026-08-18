@@ -181,4 +181,17 @@ describe('CwBubble Organism Component', () => {
     await element.updateComplete;
     expect(element.shadowRoot?.querySelector('.dots-container')).toBeNull();
   });
+
+  it('renders positions bottom-left, top-right, and top-left', async () => {
+    const positions = ['bottom-left', 'top-right', 'top-left'] as const;
+    for (const pos of positions) {
+      element.config = {
+        ...element.config!,
+        position: pos,
+      };
+      await element.updateComplete;
+      const wrapper = element.shadowRoot?.querySelector('.bubble-wrapper') as HTMLElement;
+      expect(wrapper).not.toBeNull();
+    }
+  });
 });
