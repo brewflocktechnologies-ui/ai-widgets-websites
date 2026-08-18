@@ -82,14 +82,14 @@ export async function fetchClientConfig(clientId: string): Promise<ClientConfigs
   const baseUrl = getWidgetBaseUrl();
   const normalizedBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
   const candidateUrls = [
-    `${normalizedBase}public/clients/${clientId}.json`,
-    `./public/clients/${clientId}.json`,
     `${normalizedBase}clients/${clientId}.json`,
     `./clients/${clientId}.json`,
-    `${normalizedBase}public/clients/default.json`,
-    `./public/clients/default.json`,
+    `${normalizedBase}public/clients/${clientId}.json`,
+    `./public/clients/${clientId}.json`,
     `${normalizedBase}clients/default.json`,
     `./clients/default.json`,
+    `${normalizedBase}public/clients/default.json`,
+    `./public/clients/default.json`,
   ];
 
   for (const url of candidateUrls) {
