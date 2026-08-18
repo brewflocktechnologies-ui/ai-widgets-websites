@@ -349,17 +349,15 @@ function buildDefaultChatbar(theme: { primary: string; secondary: string }): Cha
   };
 }
 
-function buildDefaultChat(chatConfig?: Record<string, any>): ChatState {
-  const initialAgentName = chatConfig?.agentName || 'Sarah';
-  const welcomeEnabled = chatConfig?.welcome?.enabled === true;
+function buildDefaultChat(): ChatState {
   return {
-    state: welcomeEnabled ? 'welcome' : 'active',
+    state: 'active',
     isExpanded: false,
     panelOpen: false,
     unreadCount: 0,
     isMobile: window.innerWidth < 640 || window.innerHeight < 750,
-    clientName: chatConfig?.clientName || 'Zotly Support',
-    agentName: initialAgentName,
+    clientName: 'Zotly Support',
+    agentName: 'Sarah',
     agentsOnline: true,
     token: 'visitor-token-demo',
     position: 1,
@@ -384,7 +382,7 @@ function buildDefaultChat(chatConfig?: Record<string, any>): ChatState {
       {
         key: 'msg_welcome',
         senderType: 'AGENT',
-        senderName: initialAgentName,
+        senderName: 'Sarah',
         body: 'Welcome! How can we assist you today?',
         created: new Date().toISOString(),
       },
@@ -395,6 +393,28 @@ function buildDefaultChat(chatConfig?: Record<string, any>): ChatState {
 let store: FullStore | null = null;
 let storeReady = false;
 let lastOverrides: Record<string, unknown> = {};
+
+// Callers (host pages, tests) that inject/update store config right after
+// mounting can otherwise race `initStore()`'s async client-config fetch: the
+// widget attaches to the DOM synchronously, but `connectedCallback` awaits
+// `initStore()`, so a caller reading store state immediately after "attached"
+// may observe defaults/presets instead of its own queued overrides.
+// `whenStoreReady()` gives them a deterministic point to await instead of
+// guessing timing.
+let storeReadyResolve: (() => void) | null = null;
+let storeReadyPromise: Promise<void> = new Promise((resolve) => {
+  storeReadyResolve = resolve;
+});
+
+/**
+ * Resolves once the store has finished initializing — including the fetched
+ * client config and any overrides queued via updateStoreConfig/injectStoreConfig
+ * before init completed. Safe to call before, during, or after initStore();
+ * resolves immediately if the store is already ready.
+ */
+export function whenStoreReady(): Promise<void> {
+  return storeReadyPromise;
+}
 
 function getStore(): FullStore {
   if (!store) {
@@ -456,6 +476,7 @@ export const chatStore = {
 
     // Dismiss greet window
     const gw = getStore().greetWindow;
+    /* v8 ignore next -- getStore() always constructs a greetWindow, so this guard never short-circuits */
     if (gw) {
       gw.dismissed = true;
       gw.visible = false;
@@ -891,6 +912,10 @@ export const chatStore = {
 // ---------------------------------------------------------------------------
 
 export async function initStore(): Promise<void> {
+  storeReady = false;
+  storeReadyPromise = new Promise((resolve) => {
+    storeReadyResolve = resolve;
+  });
   lastOverrides = {};
   const theme = getParentTheme();
   const clientId = getClientId();
@@ -1052,6 +1077,7 @@ export async function initStore(): Promise<void> {
         }
 
         const welcomeObj = active.welcome || store!.chatWindow.welcome;
+        /* v8 ignore next -- store always seeds a default welcome object, so welcomeObj is never null here */
         if (welcomeObj) {
           const welcomeUseTheme = welcomeObj.useWebsiteTheme ?? active.useWebsiteTheme;
           if (welcomeUseTheme) {
@@ -1081,6 +1107,7 @@ export async function initStore(): Promise<void> {
       if (cc.clientName) store.chat.clientName = cc.clientName;
       if (cc.agentName) {
         store.chat.agentName = cc.agentName;
+        /* v8 ignore next -- initStore always seeds a welcome message, so messages[0] is never empty here */
         if (store.chat.messages[0]) store.chat.messages[0].senderName = cc.agentName;
       }
       if (!store.chat.hasSentMessage && cc.welcome?.enabled) {
@@ -1104,6 +1131,8 @@ export async function initStore(): Promise<void> {
 
   // Set up greet window visibility timers AFTER config overrides are applied
   setupGreetTimers();
+
+  storeReadyResolve?.();
 }
 
 /* ────────── Greet-window visibility timers ────────── */
@@ -1193,7 +1222,6 @@ export function updateStoreConfig(overrides: UpdateStoreConfigOverrides) {
 
 function applyStoreConfig(overrides: UpdateStoreConfigOverrides) {
   const store = getStore();
-  if (!store) return;
 
   if (overrides.enableWelcomeCard !== undefined && store.chatWindow.welcome) {
     store.chatWindow.welcome.enabled = overrides.enableWelcomeCard;
@@ -1325,17 +1353,16 @@ function applyStoreConfig(overrides: UpdateStoreConfigOverrides) {
  */
 export function exportFullStoreConfig(): Record<string, any> {
   const store = getStore();
-  if (!store) return {};
 
   return {
     clientId: store.chat.clientName || 'default',
     clientName: store.chat.clientName || 'Default Widget',
-    features: JSON.parse(JSON.stringify(store.features || {})),
-    messages: JSON.parse(JSON.stringify(store.chat.messages || [])),
-    greetWindow: JSON.parse(JSON.stringify(store.greetWindow || {})),
-    bubble: JSON.parse(JSON.stringify(store.bubble || {})),
-    chatWindow: JSON.parse(JSON.stringify(store.chatWindow || {})),
-    chatbar: JSON.parse(JSON.stringify(store.chatbar || {}))
+    features: JSON.parse(JSON.stringify(store.features)),
+    messages: JSON.parse(JSON.stringify(store.chat.messages)),
+    greetWindow: JSON.parse(JSON.stringify(store.greetWindow)),
+    bubble: JSON.parse(JSON.stringify(store.bubble)),
+    chatWindow: JSON.parse(JSON.stringify(store.chatWindow)),
+    chatbar: JSON.parse(JSON.stringify(store.chatbar))
   };
 }
 

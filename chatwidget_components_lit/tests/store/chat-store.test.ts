@@ -13,8 +13,10 @@ import {
   updateStoreConfig,
   exportFullStoreConfig,
   injectStoreConfig,
+  whenStoreReady,
   _resetStoreForTest,
 } from '../../store/chat-store.js';
+import type { Message } from '../../store/chat-store.js';
 
 describe('chat-store', () => {
   beforeEach(async () => {
@@ -989,11 +991,11 @@ describe('chat-store', () => {
       let mockFetch = vi.fn().mockResolvedValue({
         ok: true,
         json: async () => ({
-          greetWindowConfig: {
+          greetWindow: {
             useWebsiteTheme: true,
             inputBox: { layout: 'separated' },
           },
-          chatConfig: {
+          chatWindow: {
             useWebsiteTheme: true,
             dark: { headerBg: '#121212' },
           },
@@ -1002,16 +1004,18 @@ describe('chat-store', () => {
       window.fetch = mockFetch;
       globalThis.fetch = mockFetch;
       await initStore();
+      expect(greetWindowStore.get().inputBox?.buttonIconColor).toBeDefined();
+      expect(chatWindowStore.get().headerBg).toBe('#121212');
 
       // Test 2: layout = 'inline'
       mockFetch = vi.fn().mockResolvedValue({
         ok: true,
         json: async () => ({
-          greetWindowConfig: {
+          greetWindow: {
             useWebsiteTheme: true,
             inputBox: { layout: 'inline' },
           },
-          chatConfig: {
+          chatWindow: {
             useWebsiteTheme: true,
             dark: { headerBg: '#121212' },
           },
@@ -1019,6 +1023,7 @@ describe('chat-store', () => {
       });
       window.fetch = mockFetch;
       await initStore();
+      expect(greetWindowStore.get().inputBox?.buttonColor).toBeDefined();
       document.documentElement.classList.remove('dark');
     });
 
@@ -1027,27 +1032,430 @@ describe('chat-store', () => {
         ok: true,
         json: async () => ({
           accentColor: '#123456',
-          greetWindowConfig: {
-            inputBox: { layout: 'separated' },
+          greetWindow: {
+            inputBox: { layout: 'separated', buttonIconColor: '' },
           },
         }),
       });
       window.fetch = mockFetch;
       globalThis.fetch = mockFetch;
       await initStore();
+      expect(greetWindowStore.get().inputBox?.buttonIconColor).toBe('#123456');
 
       mockFetch = vi.fn().mockResolvedValue({
         ok: true,
         json: async () => ({
           accentColor: '#123456',
-          greetWindowConfig: {
-            inputBox: { layout: 'inline' },
+          greetWindow: {
+            inputBox: { layout: 'inline', buttonColor: '' },
           },
         }),
       });
       window.fetch = mockFetch;
       globalThis.fetch = mockFetch;
       await initStore();
+      expect(greetWindowStore.get().inputBox?.buttonColor).toBe('#123456');
+    });
+  });
+
+  describe('chat-store 100% coverage additions', () => {
+    it('resolves whenStoreReady after initStore completes', async () => {
+      await expect(whenStoreReady()).resolves.toBeUndefined();
+    });
+
+    it('does not send when both draft and override are empty strings', () => {
+      const cs = chatStore.get();
+      cs.draft = '';
+      const len = cs.messages.length;
+      chatStore.send();
+      chatStore.send('');
+      expect(cs.messages.length).toBe(len);
+    });
+
+    it('falls back to Sarah for typing indicator and bot reply when agentName is empty', () => {
+      vi.useFakeTimers();
+      const cs = chatStore.get();
+      cs.agentName = '';
+      cs.panelOpen = false;
+
+      chatStore.send('hello');
+      vi.advanceTimersByTime(2800);
+      expect(cs.typingName).toBe('Sarah');
+
+      vi.advanceTimersByTime(1700);
+      expect(cs.messages[cs.messages.length - 1].senderName).toBe('Sarah');
+      vi.useRealTimers();
+    });
+
+    it('uses Sarah fallback in uploadImage bot reply when agentName is empty', () => {
+      vi.useFakeTimers();
+      URL.createObjectURL = vi.fn().mockReturnValue('blob:test');
+      const cs = chatStore.get();
+      cs.agentName = '';
+      cs.panelOpen = false;
+
+      const file = new File(['data'], 'photo.png', { type: 'image/png' });
+      chatStore.uploadImage({ files: [file] } as unknown as HTMLInputElement);
+
+      vi.advanceTimersByTime(5000);
+      expect(cs.messages[cs.messages.length - 1].senderName).toBe('Sarah');
+      vi.useRealTimers();
+    });
+
+    it('uses Sarah fallback in sendCroppedImage bot reply when agentName is empty', () => {
+      vi.useFakeTimers();
+      const cs = chatStore.get();
+      cs.agentName = '';
+      cs.panelOpen = false;
+
+      chatStore.sendCroppedImage('data:image/png;base64,abc');
+
+      vi.advanceTimersByTime(5000);
+      expect(cs.messages[cs.messages.length - 1].senderName).toBe('Sarah');
+      vi.useRealTimers();
+    });
+
+    it('uses false feature fallbacks in confirmEnd and startFromWelcome when features are undefined', () => {
+      featuresStore.get().postchatEnabled = undefined as any;
+      chatStore.confirmEnd();
+      expect(chatStore.get().state).toBe('closed');
+
+      featuresStore.get().prechatEnabled = undefined as any;
+      chatStore.startFromWelcome();
+      expect(chatStore.get().state).toBe('active');
+    });
+
+    it('uses fallback names in downloadTranscript when client/agent names are missing', async () => {
+      const cs = chatStore.get();
+      cs.clientName = '';
+      cs.agentName = '';
+      cs.messages = [
+        { key: 'a', senderType: 'AGENT', senderName: 'Bob', body: 'from bob' },
+        { key: 'b', senderType: 'AGENT', body: 'no name' },
+        { key: 'c', senderType: 'VISITOR', body: 'visitor says' },
+        { key: 'd', senderType: 'AGENT', body: '' },
+      ];
+
+      let capturedBlob: Blob | undefined;
+      vi.spyOn(URL, 'createObjectURL').mockImplementation((b) => { capturedBlob = b as Blob; return 'blob:m'; });
+      vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+      const originalCreate = document.createElement.bind(document);
+      vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+        const el = originalCreate(tag);
+        if (tag === 'a') vi.spyOn(el as HTMLAnchorElement, 'click').mockImplementation(() => {});
+        return el;
+      });
+
+      chatStore.downloadTranscript();
+
+      const text = await capturedBlob!.text();
+      expect(text).toContain('Chat Transcript — Support');
+      expect(text).toContain('Agent: Agent');
+      expect(text).toContain('Bob');
+      expect(text).toContain('You');
+    });
+
+    it('handles a null messages list in downloadTranscript', async () => {
+      const cs = chatStore.get();
+      cs.messages = null as unknown as Message[];
+
+      let capturedBlob: Blob | undefined;
+      vi.spyOn(URL, 'createObjectURL').mockImplementation((b) => { capturedBlob = b as Blob; return 'blob:m'; });
+      vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+      const originalCreate = document.createElement.bind(document);
+      vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+        const el = originalCreate(tag);
+        if (tag === 'a') vi.spyOn(el as HTMLAnchorElement, 'click').mockImplementation(() => {});
+        return el;
+      });
+
+      chatStore.downloadTranscript();
+
+      const text = await capturedBlob!.text();
+      expect(text).toContain('Chat Transcript');
+    });
+
+    it('handles submitPostchat without a values payload', () => {
+      const cs = chatStore.get();
+      chatStore.submitPostchat(undefined as any);
+      expect(cs.lastFeedback).toEqual({});
+      expect(cs.panelOpen).toBe(false);
+    });
+
+    it('timeLabel falls back to now when created is missing', () => {
+      expect(chatStore.timeLabel({ key: 'x', senderType: 'AGENT', body: 'hi' })).toBeDefined();
+      expect(
+        chatStore.timeLabel({ key: 'y', senderType: 'AGENT', body: 'hi', created: new Date().toISOString() })
+      ).toBeDefined();
+    });
+
+    it('honors explicit overrides in confirmEnd and startFromWelcome', () => {
+      chatStore.confirmEnd(true);
+      expect(chatStore.get().state).toBe('postchat');
+
+      chatStore.confirmEnd(false);
+      expect(chatStore.get().state).toBe('closed');
+
+      chatStore.startFromWelcome(true);
+      expect(chatStore.get().state).toBe('prechat');
+
+      chatStore.startFromWelcome(false);
+      expect(chatStore.get().state).toBe('active');
+    });
+
+    it('processes bubble position and welcome fallback when chatWindow lacks welcome', async () => {
+      document.documentElement.style.setProperty('--primary-color', '#333333');
+      document.documentElement.style.setProperty('--secondary-color', '#333333');
+      globalThis.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          bubble: { useWebsiteTheme: true, position: 'bottom-left' },
+          chatWindow: { useWebsiteTheme: false, clientName: 'No Welcome' },
+        }),
+      });
+
+      await initStore();
+
+      expect(greetWindowStore.get().position).toBe('bottom-left');
+      const welcome = chatWindowStore.get().welcome;
+      expect(welcome).toBeDefined();
+      expect(welcome?.bgGradient).toContain('#333333');
+
+      document.documentElement.style.removeProperty('--primary-color');
+      document.documentElement.style.removeProperty('--secondary-color');
+    });
+
+    it('skips accent fallbacks when chatWindow values are already set', async () => {
+      globalThis.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          accentColor: '#ff0000',
+          chatWindow: {
+            endChatConfirmBg: '#010101',
+            welcome: { useWebsiteTheme: false, bgGradient: '', buttonIconColor: '#abcdef' },
+          },
+        }),
+      });
+
+      await initStore();
+
+      expect(chatWindowStore.get().endChatConfirmBg).toBe('#010101');
+      expect(chatWindowStore.get().welcome?.buttonIconColor).toBe('#abcdef');
+    });
+
+    it('uses default greet timings when opening delays are undefined', () => {
+      vi.useFakeTimers();
+      const gw = greetWindowStore.get();
+      gw.enabled = true;
+      gw.dismissed = false;
+      gw.visible = false;
+      chatStore.get().hasSentMessage = false;
+      (gw as any).openingTimeAfterInitialLoadSec = undefined;
+      if (gw.inputBox) {
+        (gw.inputBox as any).enabled = true;
+        (gw.inputBox as any).openingTimeAfterInitialLoadSec = undefined;
+      }
+
+      setupGreetTimers();
+
+      vi.advanceTimersByTime(2100);
+      expect(greetWindowStore.get().visible).toBe(true);
+
+      vi.advanceTimersByTime(2000);
+      expect(greetWindowStore.get().inputBox?.visible).toBe(true);
+      vi.useRealTimers();
+    });
+
+    it('injectStoreConfig tolerates missing or empty tokens', () => {
+      expect(() => injectStoreConfig(undefined as any)).not.toThrow();
+      expect(() => injectStoreConfig(null as any)).not.toThrow();
+      expect(() => injectStoreConfig({ chat: { draft: 'hello' } })).not.toThrow();
+      expect(chatStore.get().draft).toBe('hello');
+    });
+
+    it('updateStoreConfig ignores falsy or non-object overrides', () => {
+      expect(() => updateStoreConfig(undefined as any)).not.toThrow();
+      expect(() => updateStoreConfig(null as any)).not.toThrow();
+      expect(() => updateStoreConfig(42 as any)).not.toThrow();
+    });
+
+    it('queues overrides while the store is still initializing', async () => {
+      _resetStoreForTest();
+
+      let resolveFetch!: (value: unknown) => void;
+      const pendingFetch = new Promise((resolve) => { resolveFetch = resolve; });
+      globalThis.fetch = vi.fn().mockReturnValue(pendingFetch);
+
+      const initPromise = initStore();
+
+      updateStoreConfig({ bubble: { width: 77 } });
+      expect(bubbleStore.get().width).not.toBe(77);
+
+      resolveFetch({ ok: true, json: async () => ({}) });
+      await initPromise;
+
+      expect(bubbleStore.get().width).toBe(77);
+    });
+
+    it('handles falsy guards in send, dismissGreetWindow, and submit helpers', () => {
+      const gw = greetWindowStore.get();
+      (gw as any).inputBox = undefined;
+      const cs = chatStore.get();
+
+      chatStore.send('hello');
+      chatStore.dismissGreetWindow();
+      expect(gw.dismissed).toBe(true);
+
+      chatStore.submitPrechat({});
+      expect(cs.offlineName).toBe('');
+      expect(cs.offlineEmail).toBe('');
+
+      chatStore.submitOfflinePayload({});
+    });
+
+    it('handles missing messages in send delivered/read timers', () => {
+      vi.useFakeTimers();
+      const cs = chatStore.get();
+      cs.panelOpen = false;
+
+      chatStore.send('ghost');
+      const sent = cs.messages[cs.messages.length - 1];
+      cs.messages = cs.messages.filter((m) => m.key !== sent.key);
+
+      vi.advanceTimersByTime(5000);
+      expect(cs.messages.some((m) => m.senderType === 'AGENT')).toBe(true);
+      vi.useRealTimers();
+    });
+
+    it('handles missing messages in uploadImage timers and bot reply with panel open', () => {
+      vi.useFakeTimers();
+      URL.createObjectURL = vi.fn().mockReturnValue('blob:test');
+      const cs = chatStore.get();
+      cs.panelOpen = true;
+      cs.unreadCount = 0;
+
+      const file = new File(['data'], 'photo.png', { type: 'image/png' });
+      chatStore.uploadImage({ files: [file] } as unknown as HTMLInputElement);
+
+      const imgMsg = cs.messages[cs.messages.length - 1];
+      cs.messages = cs.messages.filter((m) => m.key !== imgMsg.key);
+
+      vi.advanceTimersByTime(5000);
+      expect(cs.unreadCount).toBe(0);
+      vi.useRealTimers();
+    });
+
+    it('handles missing messages in sendCroppedImage timers', () => {
+      vi.useFakeTimers();
+      const cs = chatStore.get();
+
+      chatStore.sendCroppedImage('data:image/png;base64,abc');
+      const imgMsg = cs.messages[cs.messages.length - 1];
+      cs.messages = cs.messages.filter((m) => m.key !== imgMsg.key);
+
+      vi.advanceTimersByTime(5000);
+      vi.useRealTimers();
+    });
+
+    it('covers greetWindow, bubble, chatbar, and welcome initStore edge branches', async () => {
+      // Config 1: accent path, all fallbacks already set (skip sides), card layout without offsets
+      let mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          accentColor: '#ff0000',
+          bubble: { useWebsiteTheme: false, backgroundColor: '#010101' },
+          greetWindow: {
+            useWebsiteTheme: false,
+            iconColor: '#abcdef',
+            inputBox: { layout: 'separated', buttonIconColor: '#00aa11' },
+          },
+          chatbar: { layout: 'card' },
+          chatWindow: {
+            useWebsiteTheme: false,
+            accentColor: '#111111',
+            visitorBubbleBg: '#222222',
+            headerBg: '#333333',
+            agentAvatarBg: '#444444',
+            inputFocusBorderColor: '#555555',
+            inputFocusShadow: '0 0 0 2px #666666',
+            sendButtonBgActive: '#777777',
+            poweredByColor: '#888888',
+            endChatConfirmBg: '#020202',
+          },
+        }),
+      });
+      window.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
+      await initStore();
+      expect(greetWindowStore.get().iconColor).toBe('#abcdef');
+      expect(greetWindowStore.get().inputBox?.buttonIconColor).toBe('#00aa11');
+      expect(chatbarStore.get().layout).toBe('card');
+      expect(chatWindowStore.get().endChatConfirmBg).toBe('#020202');
+      expect(chatWindowStore.get().accentColor).toBe('#111111');
+
+      // Config 2: website-theme path, no outlineRing and no greet inputBox (guard skip sides)
+      mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          bubble: { useWebsiteTheme: true },
+          greetWindow: { useWebsiteTheme: true },
+          chatWindow: { useWebsiteTheme: true },
+        }),
+      });
+      window.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
+      await initStore();
+      expect(greetWindowStore.get().iconColor).toBeDefined();
+
+      // Config 3: accent inline with buttonColor already set + welcome buttonIconColor set
+      mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          accentColor: '#00ff00',
+          greetWindow: {
+            useWebsiteTheme: false,
+            inputBox: { layout: 'inline', buttonColor: '#123456' },
+          },
+          chatWindow: {
+            useWebsiteTheme: false,
+            welcome: { useWebsiteTheme: false, bgGradient: '', buttonIconColor: '#fedcba' },
+          },
+        }),
+      });
+      window.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
+      await initStore();
+      expect(greetWindowStore.get().inputBox?.buttonColor).toBe('#123456');
+      expect(chatWindowStore.get().welcome?.buttonIconColor).toBe('#fedcba');
+
+      // Config 4: accent bubble with outlineRing color set (960 false side) and greetWindow without inputBox (985 false side)
+      mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          accentColor: '#aaaaaa',
+          bubble: { useWebsiteTheme: false, backgroundColor: '', outlineRing: { color: '#bbbbbb' } },
+          greetWindow: { useWebsiteTheme: false, iconColor: '#cccccc' },
+        }),
+      });
+      window.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
+      await initStore();
+      expect(bubbleStore.get().outlineRing?.color).toBe('#bbbbbb');
+      expect(greetWindowStore.get().iconColor).toBe('#cccccc');
+
+      // Config 5: no root accentColor (983 & 1002 else-if false sides) with chatbar bgColor present
+      mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          greetWindow: { useWebsiteTheme: false, iconColor: '#cccccc' },
+          chatbar: { useWebsiteTheme: false, bgColor: '#00ff00' },
+        }),
+      });
+      window.fetch = mockFetch;
+      globalThis.fetch = mockFetch;
+      await initStore();
+      expect(greetWindowStore.get().iconColor).toBe('#cccccc');
+      expect(chatbarStore.get().bgColor).toBe('#00ff00');
     });
   });
 });
