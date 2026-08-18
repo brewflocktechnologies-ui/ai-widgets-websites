@@ -21,10 +21,10 @@ export default defineConfig({
         'store/types.ts',
       ],
       thresholds: {
-        lines: 99.5,
-        statements: 99.5,
+        lines: 100,
+        statements: 100,
         functions: 100,
-        branches: 95,
+        branches: 100,
       },
     },
   },

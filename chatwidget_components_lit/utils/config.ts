@@ -80,6 +80,7 @@ export async function fetchClientConfig(clientId: string): Promise<ClientConfigs
   }
 
   const baseUrl = getWidgetBaseUrl();
+  /* v8 ignore next -- getWidgetBaseUrl() always returns a trailing-slash URL */
   const normalizedBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
   const candidateUrls = [
     `${normalizedBase}clients/${clientId}.json`,

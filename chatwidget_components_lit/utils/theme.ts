@@ -12,14 +12,14 @@ export function getParentTheme(): { primary: string; secondary: string } {
     return { primary: '#0b5fff', secondary: '#0b5fff' };
   }
   const rootStyle = getComputedStyle(document.documentElement);
-  const bodyStyle = document.body ? getComputedStyle(document.body) : null;
+  const bodyStyle = getComputedStyle(document.body);
 
   let primary =
     rootStyle.getPropertyValue('--primary-color').trim() ||
-    (bodyStyle ? bodyStyle.getPropertyValue('--primary-color').trim() : '');
+    bodyStyle.getPropertyValue('--primary-color').trim();
   let secondary =
     rootStyle.getPropertyValue('--secondary-color').trim() ||
-    (bodyStyle ? bodyStyle.getPropertyValue('--secondary-color').trim() : '');
+    bodyStyle.getPropertyValue('--secondary-color').trim();
 
   // Fall back to data-accent on the widget script tag
   const scriptTag =

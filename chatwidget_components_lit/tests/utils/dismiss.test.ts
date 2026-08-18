@@ -123,4 +123,50 @@ describe('utils/dismiss.ts', () => {
 
     defaultEl.controller.hostDisconnected();
   });
+
+  it('handles boolean-enabled controllers: outside dismisses, inside clicks are suppressed', async () => {
+    class BoolEnabledElement extends LitElement {
+      controller = new DismissController(this, { enabled: true });
+    }
+    customElements.define('bool-enabled-element', BoolEnabledElement);
+
+    const boolEl = new BoolEnabledElement();
+    const listener = vi.fn();
+    boolEl.addEventListener('cw:close-popups', listener);
+    document.body.appendChild(boolEl);
+    await boolEl.updateComplete;
+    await new Promise((r) => requestAnimationFrame(r));
+
+    const outside = document.createElement('div');
+    document.body.appendChild(outside);
+    outside.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true }));
+    expect(listener).toHaveBeenCalledTimes(1);
+
+    // Pointerdown INSIDE the host must NOT dismiss
+    boolEl.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true }));
+    expect(listener).toHaveBeenCalledTimes(1);
+
+    boolEl.remove();
+  });
+
+  it('defaults to enabled and the default cw:close-popups event when no options are given', async () => {
+    class NoOptionsElement extends LitElement {
+      controller = new DismissController(this);
+    }
+    customElements.define('no-options-element', NoOptionsElement);
+
+    const el = new NoOptionsElement();
+    const listener = vi.fn();
+    el.addEventListener('cw:close-popups', listener);
+    document.body.appendChild(el);
+    await el.updateComplete;
+    await new Promise((r) => requestAnimationFrame(r));
+
+    const outside = document.createElement('div');
+    document.body.appendChild(outside);
+    outside.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true }));
+    expect(listener).toHaveBeenCalledTimes(1);
+
+    el.remove();
+  });
 });

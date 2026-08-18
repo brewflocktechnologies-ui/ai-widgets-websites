@@ -123,4 +123,31 @@ describe('utils/config.ts', () => {
     document.body.appendChild(script);
     expect(getClientId()).toBe('default');
   });
+
+  it('uses empty config fallbacks and the chat fallback in preview mode', async () => {
+    delete (window as any).location;
+    (window as any).location = new URL('http://localhost/?test=true');
+
+    // Preview token missing bubble/chatWindow/chat sections → {} fallbacks
+    localStorage.setItem('zotly_temp_preview_config', JSON.stringify({ accentColor: '#123456' }));
+    let res = await fetchClientConfig('default');
+    expect(res.bubbleConfig).toEqual({});
+    expect(res.chatConfig).toEqual({});
+
+    // Preview token with only chat (chatWindow missing → chat fallback)
+    localStorage.setItem('zotly_temp_preview_config', JSON.stringify({ chat: { accentColor: '#ff0055' } }));
+    res = await fetchClientConfig('default');
+    expect(res.bubbleConfig).toEqual({});
+    expect(res.chatConfig).toEqual({ accentColor: '#ff0055' });
+  });
+
+  it('returns empty configs when every candidate fetch responds with non-ok', async () => {
+    delete (window as any).location;
+    (window as any).location = new URL('http://localhost/');
+
+    globalThis.fetch = vi.fn().mockResolvedValue({ ok: false } as Response);
+    const res = await fetchClientConfig('nonexistent');
+    expect(res.bubbleConfig).toEqual({});
+    expect(res.chatConfig).toEqual({});
+  });
 });

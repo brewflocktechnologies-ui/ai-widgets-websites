@@ -112,4 +112,23 @@ describe('CwWidgetLayout Template Component', () => {
     await element.updateComplete;
     expect(element.shadowRoot?.querySelector('cw-bubble')).not.toBeNull();
   });
+
+  it('falls back to default 16px offsets when chatcard/chatbar offsets are undefined', async () => {
+    element.activeTrigger = 'chatcard';
+    element.chatbarConfig = { enabled: true, layout: 'card' };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('cw-chatbar')).not.toBeNull();
+
+    // chatbar trigger with no barOffsetRight but an offsetRight → falls back to it
+    element.activeTrigger = 'chatbar';
+    element.chatbarConfig = { enabled: true, offsetRight: 30 };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('cw-chatbar')).not.toBeNull();
+
+    // chatbar trigger with neither barOffsetRight nor offsetRight → 16 default
+    element.activeTrigger = 'chatbar';
+    element.chatbarConfig = { enabled: true };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('cw-chatbar')).not.toBeNull();
+  });
 });

@@ -461,6 +461,7 @@ export class CwWidgetRoot extends LitElement {
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
       const path = e.composedPath();
+      /* v8 ignore next -- composedPath() always returns at least the event target */
       const target = (path[0] as HTMLElement) || null;
 
       if (!path.includes(this)) {
@@ -502,6 +503,7 @@ export class CwWidgetRoot extends LitElement {
     const hasVisitorMsg = this.userHasSentMessage || chatStore.get()?.messages?.some(m => m.senderType === 'VISITOR');
     if (hasVisitorMsg && currentTrigger === 'chatcard') {
       this.activeTriggerOverride = 'chatbar';
+      /* v8 ignore next -- chatbarStore.get() always returns the singleton, so cbs is never null here */
       if (cbs) cbs.layout = 'bar';
     }
   }

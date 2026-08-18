@@ -128,4 +128,20 @@ describe('utils/style-helpers.ts', () => {
     expect(getCompositeBackground({ gradientType: 'linear', gradientStops: [] } as any)).toBe('#0b5fff');
     expect(getChatbarBackground({ gradientEnabled: true } as any)).toBe('#007bff');
   });
+
+  it('covers remaining edge branches (invalid hex, innerShadow defaults, composite fallbacks, formatTime with date)', () => {
+    // Invalid '#'-prefixed hex → non-parsable branch falls through to the original string
+    expect(hexToRgba('#zzzzzz', 1)).toBe('#zzzzzz');
+
+    // innerShadow enabled without blur/opacity → defaults 12 / 0.25
+    expect(getInnerShadow({ innerShadow: { enabled: true } })).toBe('inset 0 6px 12px rgba(0,0,0,0.25)');
+
+    // useWebsiteTheme with no backgroundColor → default accent
+    expect(getCompositeBackground({ useWebsiteTheme: true })).toBe('#0b5fff');
+
+    // gradient without gradientStops → empty stops fallback
+    expect(getCompositeBackground({ useWebsiteTheme: false, gradientType: 'linear' })).toBe('#0b5fff');
+
+    expect(typeof formatTime('2024-01-01T00:00:00.000Z')).toBe('string');
+  });
 });

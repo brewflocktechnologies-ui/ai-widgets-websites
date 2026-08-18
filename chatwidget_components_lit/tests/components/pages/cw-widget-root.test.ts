@@ -616,4 +616,43 @@ describe('CwWidgetRoot Page Component', () => {
     await element.updateComplete;
     expect(element.shadowRoot?.querySelector('cw-widget-layout')).not.toBeNull();
   });
+
+  it('handles prechatEnabled/postchatEnabled being reset to undefined', async () => {
+    element.prechatEnabled = true;
+    element.postchatEnabled = true;
+    await element.updateComplete;
+
+    (element as any).prechatEnabled = undefined;
+    (element as any).postchatEnabled = undefined;
+    await element.updateComplete;
+  });
+
+  it('handles cw:submit-prechat and cw:submit-postchat without detail payloads', async () => {
+    element.dispatchEvent(new CustomEvent('cw:submit-prechat'));
+    await element.updateComplete;
+
+    element.dispatchEvent(new CustomEvent('cw:submit-postchat'));
+    await element.updateComplete;
+  });
+
+  it('resolves chatcard and chatbar triggers via chatbar config when triggerType is unset', async () => {
+    (element as any).activeTriggerOverride = undefined;
+    element.triggerType = undefined as any;
+
+    const cbs = chatbarStore.get();
+    cbs.enabled = true;
+    cbs.layout = 'card';
+    element.panelOpen = true;
+    await element.updateComplete;
+    window.dispatchEvent(new CustomEvent('close-contact-widget'));
+    await element.updateComplete;
+
+    cbs.layout = 'bar';
+    element.panelOpen = true;
+    await element.updateComplete;
+    window.dispatchEvent(new CustomEvent('close-contact-widget'));
+    await element.updateComplete;
+
+    chatbarStore.get().enabled = false;
+  });
 });
