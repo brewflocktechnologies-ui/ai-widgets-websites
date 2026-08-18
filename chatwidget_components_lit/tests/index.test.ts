@@ -33,13 +33,56 @@ describe('index entry point', () => {
     expect(root2).toBeDefined();
   });
 
-  it('handles DOMContentLoaded listener when document is loading', () => {
+  it('handles DOMContentLoaded listener when document is loading on module import', async () => {
     Object.defineProperty(document, 'readyState', {
       value: 'loading',
       configurable: true,
+      writable: true,
     });
 
+    const origDefine = customElements.define.bind(customElements);
+    const defineSpy = vi.spyOn(customElements, 'define').mockImplementation((name, constructor, options) => {
+      if (!customElements.get(name)) {
+        origDefine(name, constructor, options);
+      }
+    });
+
+    const addEventListenerSpy = vi.spyOn(document, 'addEventListener');
+    vi.resetModules();
+    await import('../index.js');
+
+    expect(addEventListenerSpy).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function));
+
+    // Fire the DOMContentLoaded event to execute mount()
     const event = new Event('DOMContentLoaded');
     document.dispatchEvent(event);
+
+    Object.defineProperty(document, 'readyState', {
+      value: 'complete',
+      configurable: true,
+      writable: true,
+    });
+    defineSpy.mockRestore();
+  });
+
+  it('handles environment where window is undefined', async () => {
+    const originalWindow = globalThis.window;
+    // @ts-expect-error mocking window undefined
+    delete globalThis.window;
+
+    const origDefine = customElements?.define?.bind(customElements);
+    let defineSpy: any;
+    if (customElements) {
+      defineSpy = vi.spyOn(customElements, 'define').mockImplementation((name, constructor, options) => {
+        if (!customElements.get(name)) {
+          origDefine(name, constructor, options);
+        }
+      });
+    }
+
+    vi.resetModules();
+    await import('../index.js');
+    globalThis.window = originalWindow;
+    if (defineSpy) defineSpy.mockRestore();
   });
 });

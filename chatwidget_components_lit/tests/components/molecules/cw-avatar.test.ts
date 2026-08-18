@@ -35,8 +35,17 @@ describe('CwAvatar Molecule Component', () => {
     const span = element.shadowRoot?.querySelector('.avatar-box span');
     expect(span?.textContent?.trim()).toBe('S');
 
-    const box = element.shadowRoot?.querySelector('.avatar-box') as HTMLElement;
+    let box = element.shadowRoot?.querySelector('.avatar-box') as HTMLElement;
     expect(box.getAttribute('style')).toContain('#123456');
+
+    // Empty bg and color fallback
+    element.bgColor = '';
+    element.bg = '';
+    element.textColor = '';
+    element.color = '';
+    await element.updateComplete;
+    box = element.shadowRoot?.querySelector('.avatar-box') as HTMLElement;
+    expect(box.getAttribute('style')).toContain('rgba(255,255,255,0.2)');
   });
 
   it('should render image element when src or imageUrl is provided', async () => {
@@ -49,11 +58,17 @@ describe('CwAvatar Molecule Component', () => {
     expect(img?.getAttribute('src')).toBe('https://example.com/avatar.jpg');
   });
 
-  it('should render online status dot when showOnlineDot is true', async () => {
+  it('should render online status dot when showOnlineDot is true and hide when false', async () => {
     element.showOnlineDot = true;
+    element.showOnline = true;
     await element.updateComplete;
 
-    const dot = element.shadowRoot?.querySelector('cw-status-dot');
+    let dot = element.shadowRoot?.querySelector('cw-status-dot');
     expect(dot).not.toBeNull();
+
+    element.showOnlineDot = false;
+    await element.updateComplete;
+    dot = element.shadowRoot?.querySelector('cw-status-dot');
+    expect(dot).toBeNull();
   });
 });

@@ -73,4 +73,40 @@ describe('CwButton Atom Component', () => {
       }
     }
   });
+
+  it('supports numeric and string borderRadius, styling options, and fallback ariaLabel', async () => {
+    element.variant = 'icon';
+    element.borderRadius = 12 as any;
+    element.bg = '#000000';
+    element.color = '#ffffff';
+    element.borderColor = '#ff0000';
+    element.fullWidth = true;
+    element.elevatable = true;
+    element.scalable = true;
+    element.label = '';
+    element.icon = '';
+    element.ariaLabel = null;
+    await element.updateComplete;
+
+    let btn = element.shadowRoot?.querySelector('button') as HTMLElement;
+    expect(btn.getAttribute('style')).toContain('border-radius: 12px');
+    expect(btn.getAttribute('aria-label')).toBe('button');
+    expect(btn.classList.contains('elevatable')).toBe(true);
+    expect(btn.classList.contains('scalable')).toBe(true);
+
+    // String borderRadius, empty borderRadius, and padding height auto branch
+    element.borderRadius = '20px';
+    element.padding = '8px 16px';
+    element.height = undefined;
+    await element.updateComplete;
+
+    btn = element.shadowRoot?.querySelector('button') as HTMLElement;
+    expect(btn.getAttribute('style')).toContain('border-radius: 20px');
+    expect(btn.getAttribute('style')).toContain('height: auto');
+
+    element.borderRadius = '';
+    await element.updateComplete;
+    btn = element.shadowRoot?.querySelector('button') as HTMLElement;
+    expect(btn.getAttribute('style')).not.toContain('border-radius');
+  });
 });

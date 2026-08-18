@@ -26,8 +26,7 @@ function parseEmojiInput(val: string[] | string | undefined | null): string[] {
     const segments = [...segmenter.segment(str)].map((s) => s.segment.trim()).filter(Boolean);
     if (segments.length > 0) return segments;
   } catch (e) {
-    const matches = Array.from(str).map((s) => s.trim()).filter(Boolean);
-    if (matches.length > 0) return matches;
+    return Array.from(str).map((s) => s.trim()).filter(Boolean);
   }
 
   return DEFAULT_EMOJIS;

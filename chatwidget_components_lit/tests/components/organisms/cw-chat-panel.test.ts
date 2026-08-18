@@ -106,4 +106,72 @@ describe('CwChatPanel Organism Component', () => {
     await element.updateComplete;
     vi.advanceTimersByTime(500);
   });
+
+  it('handles fixed = false, expanded layout, widgetShadow, widgetBorder, custom confirmBox properties, and state != active focusOnOpen', async () => {
+    element.fixed = false;
+    element.bottomPx = 20;
+    element.rightPx = 20;
+    element.maxHeightPx = '500px';
+    element.panelOpen = true;
+    element.chatState = {
+      ...element.chatState!,
+      state: 'welcome',
+      isExpanded: true,
+      confirmBox: {
+        message: 'Are you sure?',
+        cancelLabel: 'No',
+        confirmLabel: 'Yes',
+      },
+    };
+    element.chatWindowConfig = {
+      widgetWidth: 380,
+      expandedWidth: 500,
+      widgetHeight: 600,
+      widgetShadow: true,
+      widgetShadowBlur: 20,
+      widgetShadowColor: 'rgba(0,0,0,0.5)',
+      widgetBorderEnabled: true,
+      widgetBorderWidth: 2,
+      widgetBorderColor: '#ff0000',
+      widgetBorderRadius: 16,
+      bodyBg: '#ffffff',
+      accentColor: '#00ffff',
+      modalCardBg: '#f0f0f0',
+      modalMessageColor: '#111111',
+      modalBorderRadius: 8,
+      endChatCancelBg: '#e0e0e0',
+      endChatCancelTextColor: '#333333',
+      endChatCancelBorderColor: '#cccccc',
+      endChatConfirmBg: '#ff0000',
+      endChatConfirmTextColor: '#ffffff',
+    };
+    await element.updateComplete;
+
+    const wrapper = element.shadowRoot?.querySelector('.panel-wrapper') as HTMLElement;
+    expect(wrapper.style.position).toBe('absolute');
+
+    const dialog = element.shadowRoot?.querySelector('cw-confirm-dialog');
+    expect(dialog).not.toBeNull();
+
+    // Trigger focusOnOpen when state != 'active'
+    (element as any).focusOnOpen();
+
+    // Default fallbacks for expandedWidth, widgetShadowBlur/Color, and widgetBorderWidth/Color
+    element.chatWindowConfig = {
+      widgetShadow: true,
+      widgetBorderEnabled: true,
+      animationClosingSec: 0.1,
+      animationOpeningSec: 0.1,
+    };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.panel')).not.toBeNull();
+
+    // Leave phase (isLeaving = true & panelOpen = false aria-modal)
+    element.panelOpen = false;
+    await element.updateComplete;
+    const panel = element.shadowRoot?.querySelector('.panel');
+    if (panel) {
+      expect(panel.getAttribute('aria-modal')).toBe('false');
+    }
+  });
 });

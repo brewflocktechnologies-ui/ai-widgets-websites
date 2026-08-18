@@ -79,4 +79,67 @@ describe('CwChatHeader Organism Component', () => {
 
     expect(element.shadowRoot?.querySelector('header')).toBeNull();
   });
+
+  it('handles state = welcome with welcome.enabled = false, empty state, and agentName/clientName fallbacks', async () => {
+    // 1. state = welcome with welcome.enabled = false (falls back to active)
+    element.state = 'welcome';
+    element.config = { welcome: { enabled: false } };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('header')).not.toBeNull();
+
+    // 2. empty state, agentName fallback from config, clientName fallback
+    element.state = '' as any;
+    element.agentName = '';
+    element.clientName = '';
+    element.config = { agentName: 'SupportBot', clientName: 'HelpDesk' };
+    await element.updateComplete;
+    let title = element.shadowRoot?.querySelector('.title-text');
+    let subtitle = element.shadowRoot?.querySelector('.subtitle-text');
+    expect(title?.textContent?.trim()).toBe('HelpDesk');
+    expect(subtitle?.textContent?.trim()).toBe('SupportBot · Online');
+
+    // 3. agentName & clientName empty fallbacks
+    element.config = {};
+    await element.updateComplete;
+    title = element.shadowRoot?.querySelector('.title-text');
+    subtitle = element.shadowRoot?.querySelector('.subtitle-text');
+    expect(title?.textContent?.trim()).toBe('Support');
+    expect(subtitle?.textContent?.trim()).toBe('Online');
+  });
+
+  it('handles isExpanded true, voiceCallMaster / videoCallMaster / cw.features fallback, and header styling props', async () => {
+    element.isExpanded = true;
+    element.state = 'active';
+    element.agentName = 'Sarah';
+    element.clientName = 'Acme';
+    element.config = {
+      headerBg: '#000000',
+      headerPadding: '10px',
+      headerBorderColor: '#333333',
+      headerAvatarBg: '#111111',
+      headerAvatarColor: '#ffffff',
+      headerTitleFontSize: '16px',
+      headerSubtitleFontSize: '12px',
+      activeDot: true,
+      features: {
+        voiceCallMaster: true,
+        videoCallMaster: true,
+        closeChatVisitor: true,
+      },
+    };
+    element.features = {
+      voiceCallMaster: true,
+      videoCallMaster: true,
+    };
+    await element.updateComplete;
+
+    const expandBtn = element.shadowRoot?.querySelector('.expand-btn cw-button');
+    expect((expandBtn as any)?.label).toBe('Collapse chat');
+
+    const voiceBtn = element.shadowRoot?.querySelector('cw-button[label="Start voice call"]');
+    expect(voiceBtn).not.toBeNull();
+
+    const videoBtn = element.shadowRoot?.querySelector('cw-button[label="Start video call"]');
+    expect(videoBtn).not.toBeNull();
+  });
 });

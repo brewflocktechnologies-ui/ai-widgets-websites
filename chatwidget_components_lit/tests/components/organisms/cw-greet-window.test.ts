@@ -106,4 +106,88 @@ describe('CwGreetWindow Organism Component', () => {
 
     vi.useRealTimers();
   });
+
+  it('handles bubble/chatbar hideOnOpen branches, iconAlign positions, default fallbacks, and fixed = false', async () => {
+    // 1. chatbarConfig enabled = true & hideOnOpen = false
+    element.chatbarConfig = { enabled: true, hideOnOpen: false };
+    element.panelOpen = true;
+    element.visible = true;
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.greet-wrapper')).not.toBeNull();
+
+    // 2. bubbleConfig enabled (chatbar disabled) & hideOnOpen = false
+    element.chatbarConfig = undefined;
+    element.bubbleConfig = { hideOnOpen: false };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.greet-wrapper')).not.toBeNull();
+
+    // 3. hasSentMessage = true & dismissed = true
+    element.hasSentMessage = true;
+    await element.updateComplete;
+    expect((element as any).transition.phase).toBe('leave');
+
+    element.hasSentMessage = false;
+    element.dismissed = true;
+    await element.updateComplete;
+    expect((element as any).transition.phase).toBe('leave');
+
+    // 4. fixed = false, iconAlign left and right, imageWith width, animationOpening/ClosingSec
+    element.dismissed = false;
+    element.fixed = false;
+    element.bottomPx = 20;
+    element.rightPx = 20;
+    element.maxHeightPx = '400px';
+    element.config = {
+      enabled: true,
+      visible: true,
+      animationOpeningSec: 0.1,
+      animationClosingSec: 0.1,
+      iconAlign: 'left',
+      imageUrl: 'http://example.com/img.png',
+      imageWidth: 60,
+      imageHeight: 60,
+      imagePadding: '4px',
+      inputBox: { enabled: true, visible: false },
+    };
+    await element.updateComplete;
+
+    const wrapper = element.shadowRoot?.querySelector('.greet-wrapper') as HTMLElement;
+    expect(wrapper).not.toBeNull();
+    expect(wrapper.style.position).toBe('absolute');
+
+    // 5. iconAlign right & description without descriptionColor & image fallbacks
+    element.config = {
+      enabled: true,
+      visible: true,
+      iconAlign: 'right',
+      title: 'Hello',
+      description: 'World',
+      imageUrl: 'http://example.com/img.png',
+    };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.greet-card')).not.toBeNull();
+
+    // 6. config = undefined while transition.render = true for enter, leave, and open phases
+    element.config = undefined as any;
+    (element as any).transition._target = true;
+    (element as any).transition._render = true;
+
+    for (const phase of ['enter', 'leave', 'open'] as const) {
+      (element as any).transition._phase = phase;
+      element.requestUpdate();
+      await element.updateComplete;
+    }
+    expect(element.shadowRoot?.querySelector('.greet-wrapper')).toBeNull();
+
+    // 7. hideOnOpen fallbacks (cb/bb hideOnOpen undefined)
+    element.config = { enabled: true, visible: true };
+    element.chatbarConfig = { enabled: true };
+    element.panelOpen = true;
+    await element.updateComplete;
+
+    element.chatbarConfig = undefined;
+    element.bubbleConfig = {};
+    element.panelOpen = true;
+    await element.updateComplete;
+  });
 });

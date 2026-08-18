@@ -37,12 +37,27 @@ describe('CwTooltip Atom Component', () => {
     }
   });
 
-  it('handles arrowEnabled false and zero border width', async () => {
+  it('handles arrowEnabled false, zero border width, and position/borderColor fallbacks', async () => {
     element.text = 'Tip';
     element.visible = true;
-    element.arrowEnabled = false;
     element.borderWidth = 0;
+    element.arrowEnabled = true;
+
+    const positions = ['left', 'right', 'top', 'bottom'] as const;
+    for (const pos of positions) {
+      element.position = pos;
+      await element.updateComplete;
+      const arrow = element.shadowRoot?.querySelector('.tooltip-arrow');
+      expect(arrow).not.toBeNull();
+    }
+
+    element.arrowEnabled = false;
+    element.position = undefined as any;
+    element.borderColor = undefined as any;
     await element.updateComplete;
+
+    const box = element.shadowRoot?.querySelector('.tooltip-box');
+    expect(box).not.toBeNull();
 
     const arrow = element.shadowRoot?.querySelector('.tooltip-arrow');
     expect(arrow).toBeNull();

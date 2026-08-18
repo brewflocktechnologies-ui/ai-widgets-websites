@@ -48,6 +48,15 @@ describe('CwIcon Atom Component', () => {
     expect(customDiv?.innerHTML).not.toContain('onclick');
   });
 
+  it('falls back to named icon rendering if customSvg is invalid', async () => {
+    element.name = 'Smile';
+    element.customSvg = 'not-an-svg-string';
+    await element.updateComplete;
+
+    const svg = element.shadowRoot?.querySelector('svg');
+    expect(svg).not.toBeNull();
+  });
+
   it('renders all icon switch cases', async () => {
     const names = [
       'Star', 'Heart', 'Smile', 'Sparkles', 'MessageSquare', 'Send', 'SendFilled',

@@ -79,4 +79,47 @@ describe('CwChatForm Organism Component', () => {
       expect.objectContaining({ detail: { formId: 'prechat', values: { name: 'John Doe', email: 'john@example.com' } } })
     );
   });
+
+  it('handles handleSubmit event preventDefault, disabled state submit, error clearing on field change, and missing subtitle', async () => {
+    // 1. handleSubmit event preventDefault
+    const mockEvent = { preventDefault: vi.fn() };
+    element.values = { name: 'Jane', email: 'jane@example.com' };
+    await element.updateComplete;
+    (element as any).handleSubmit(mockEvent);
+    expect(mockEvent.preventDefault).toHaveBeenCalled();
+
+    // 2. disabled state submit
+    element.disabled = true;
+    const submitSpy = vi.fn();
+    element.addEventListener('cw:form-submit', submitSpy);
+    (element as any).handleSubmit();
+    expect(submitSpy).not.toHaveBeenCalled();
+
+    // 3. Error clearing on field change & errors prop sync & no-error field change
+    element.disabled = false;
+    element.errors = { name: 'Name error' };
+    await element.updateComplete;
+
+    const field = element.shadowRoot?.querySelector('cw-form-field') as HTMLElement;
+    // Field change when error exists (clears error)
+    field.dispatchEvent(new CustomEvent('cw:field-change', { detail: { name: 'name', value: 'Alice' } }));
+    await element.updateComplete;
+    expect((element as any).localErrors.name).toBeUndefined();
+
+    // Field change when no error exists
+    field.dispatchEvent(new CustomEvent('cw:field-change', { detail: { name: 'email', value: 'alice@example.com' } }));
+    await element.updateComplete;
+
+    // 4. Same values property set twice
+    element.values = { name: 'Alice', email: 'alice@example.com' };
+    await element.updateComplete;
+    element.values = { name: 'Alice', email: 'alice@example.com' };
+    await element.updateComplete;
+
+    // 5. Missing subtitle & fields undefined validate
+    element.schema = { id: 'nosub', title: 'No Subtitle', submitLabel: 'Go' };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.form-subtitle')).toBeNull();
+    expect((element as any).validate()).toBe(true);
+  });
 });

@@ -66,7 +66,7 @@ describe('CwEmojiPicker Molecule Component', () => {
     expect(btns?.length).toBeGreaterThan(5);
   });
 
-  it('handles Intl.Segmenter exception fallback', async () => {
+  it('handles Intl.Segmenter exception fallback and empty segmenter fallback', async () => {
     const origSegmenter = Intl.Segmenter;
     (Intl as any).Segmenter = function () {
       throw new Error('Not supported');
@@ -75,8 +75,20 @@ describe('CwEmojiPicker Molecule Component', () => {
     element.emojis = 'ABC';
     await element.updateComplete;
 
-    const btns = element.shadowRoot?.querySelectorAll('.emoji-btn');
+    let btns = element.shadowRoot?.querySelectorAll('.emoji-btn');
     expect(btns?.length).toBe(3);
+
+    (Intl as any).Segmenter = origSegmenter;
+
+    // Mock Segmenter returning empty segments to hit line 33 fallback
+    (Intl as any).Segmenter = function () {
+      return { segment: () => [] };
+    };
+
+    element.emojis = 'XYZ';
+    await element.updateComplete;
+    btns = element.shadowRoot?.querySelectorAll('.emoji-btn');
+    expect(btns?.length).toBeGreaterThan(5);
 
     (Intl as any).Segmenter = origSegmenter;
   });

@@ -81,31 +81,83 @@ describe('CwImageCropper Organism Component', () => {
     const rotateBtn = element.shadowRoot?.querySelector('cw-button[label="Rotate 90°"]') as HTMLElement;
     rotateBtn?.click();
 
-    // Shape button clicks (Square, Rounded, Circle)
+    // Shape button clicks (Square, Rounded, Circle) with updateComplete
     const squareBtn = element.shadowRoot?.querySelector('cw-button[label="⬜ Square"]') as HTMLElement;
     squareBtn?.click();
+    await element.updateComplete;
 
     const roundedBtn = element.shadowRoot?.querySelector('cw-button[label="▢ Rounded"]') as HTMLElement;
     roundedBtn?.click();
+    await element.updateComplete;
 
     const circleBtn = element.shadowRoot?.querySelector('cw-button[label="⚪ Circle"]') as HTMLElement;
     circleBtn?.click();
+    await element.updateComplete;
 
-    // Aspect ratio button clicks
+    // Aspect ratio button clicks with updateComplete
     const aspect169 = element.shadowRoot?.querySelector('cw-button[label="16:9"]') as HTMLElement;
     aspect169?.click();
+    await element.updateComplete;
 
     const aspect43 = element.shadowRoot?.querySelector('cw-button[label="4:3"]') as HTMLElement;
     aspect43?.click();
+    await element.updateComplete;
 
     const aspect11 = element.shadowRoot?.querySelector('cw-button[label="1:1"]') as HTMLElement;
     aspect11?.click();
+    await element.updateComplete;
 
-    // Directly trigger handleCrop method for reliable testing
+    // Directly trigger handleCrop method for reliable testing (circle)
     (element as any).imageObj = new Image();
     (element as any).cropShape = 'circle';
     (element as any).handleCrop();
-
     expect(cropSpy).toHaveBeenCalled();
+
+    // handleCrop with square & rounded
+    (element as any).cropShape = 'square';
+    (element as any).aspectRatio = '4:3';
+    (element as any).handleCrop();
+
+    (element as any).cropShape = 'rounded';
+    (element as any).aspectRatio = '16:9';
+    (element as any).exportSize = 0; // exportSize fallback 250
+    (element as any).handleCrop();
+  });
+
+  it('handles backdrop click, header close button, showRotate false, showAspectPills false, and fixed = false', async () => {
+    const closeSpy = vi.fn();
+    element.addEventListener('cw:close', closeSpy);
+
+    element.open = true;
+    element.fixed = false;
+    element.showRotate = false;
+    element.showAspectPills = false;
+    element.cropShape = 'rounded';
+    element.aspectRatio = '4:3';
+    await element.updateComplete;
+
+    const backdrop = element.shadowRoot?.querySelector('.modal-backdrop') as HTMLElement;
+    expect(backdrop.style.position).toBe('absolute');
+
+    // Backdrop click
+    backdrop.click();
+    expect(closeSpy).toHaveBeenCalled();
+
+    // Mousemove when isDragging is false
+    (element as any).handleMouseMove(new MouseEvent('mousemove'));
+
+    // Image load when imageSrc changes and onload callback execution
+    element.imageSrc = 'http://example.com/test.png';
+    await element.updateComplete;
+    if ((element as any).imageObj) {
+      (element as any).imageObj.onload();
+    }
+
+    // Header close button click
+    element.open = true;
+    await element.updateComplete;
+    const headerCloseBtn = element.shadowRoot?.querySelector('.header cw-button') as HTMLElement;
+    headerCloseBtn?.click();
+    expect(closeSpy).toHaveBeenCalledTimes(2);
   });
 });

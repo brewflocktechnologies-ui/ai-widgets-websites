@@ -80,6 +80,51 @@ describe('CwGreetInput Molecule Component', () => {
     expect(btn).not.toBeNull();
   });
 
+  it('handles differing buttonIconColor in separated and joined layouts, string borderRadius, and non-Enter keydown', async () => {
+    element.visible = true;
+    element.config = {
+      enabled: true,
+      layout: 'separated',
+      buttonBgColor: '#ffffff',
+      buttonIconColor: '#000000',
+      borderRadius: '18px',
+    };
+    await element.updateComplete;
+
+    let btn = element.shadowRoot?.querySelector('cw-button');
+    expect(btn).not.toBeNull();
+
+    // Joined layout with differing buttonIconColor and buttonColor
+    element.config = {
+      enabled: true,
+      layout: 'joined',
+      buttonColor: '#0000ff',
+      buttonIconColor: '#ffffff',
+      borderRadius: undefined,
+    };
+    await element.updateComplete;
+
+    btn = element.shadowRoot?.querySelector('cw-button');
+    expect(btn).not.toBeNull();
+
+    // Non-Enter keydown
+    const input = element.shadowRoot?.querySelector('input') as HTMLInputElement;
+    const spy = vi.fn();
+    element.addEventListener('cw:greet-submit', spy);
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+    expect(spy).not.toHaveBeenCalled();
+
+    // Default button color fallbacks (omitting buttonBgColor, buttonColor, accentColor)
+    element.accentColor = '';
+    element.config = { enabled: true, layout: 'separated' };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('cw-button')).not.toBeNull();
+
+    element.config = { enabled: true, layout: 'joined' };
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('cw-button')).not.toBeNull();
+  });
+
   it('triggers transition enterMs and leaveMs callbacks on visibility toggles', async () => {
     expect((element as any).transition.enterMs()).toBeGreaterThan(0);
     expect((element as any).transition.leaveMs()).toBe(0);

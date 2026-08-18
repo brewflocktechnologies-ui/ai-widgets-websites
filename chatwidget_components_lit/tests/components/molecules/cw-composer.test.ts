@@ -36,8 +36,14 @@ describe('CwComposer Molecule Component', () => {
     textarea.value = 'Different text';
     textarea.style.height = '100px';
 
+    // Truthy draft update
+    (element as any).draft = 'New draft';
+    (element as any).updated(new Map([['draft', 'Different text']]));
+    expect(textarea.value).toBe('New draft');
+
+    // Falsy draft update
     (element as any).draft = '';
-    (element as any).updated(new Map([['draft', 'Old draft']]));
+    (element as any).updated(new Map([['draft', 'New draft']]));
 
     expect(textarea.value).toBe('');
     expect(textarea.style.height).toBe('32px');
@@ -92,5 +98,40 @@ describe('CwComposer Molecule Component', () => {
 
     textarea.dispatchEvent(new Event('blur'));
     await element.updateComplete;
+  });
+
+  it('handles attachmentsEnabled false, modernUi false, empty draft send, string inputBorderRadius, and styling props', async () => {
+    element.attachmentsEnabled = false;
+    element.modernUi = false;
+    element.inputBorderRadius = '20px';
+    element.sendIconType = '';
+    element.accentColor = '#00ff00';
+    element.inputFocusBorderColor = '#ff0000';
+    element.inputFocusShadow = '0 0 5px red';
+    element.sendButtonBgActive = '#123456';
+    element.sendButtonColorActive = '#654321';
+    element.sendButtonBgInactive = '#ccc';
+    element.sendButtonColorInactive = '#999';
+    element.draft = '   ';
+    await element.updateComplete;
+
+    // Attach and Emoji buttons should not exist
+    expect(element.shadowRoot?.querySelectorAll('cw-button').length).toBe(1);
+
+    const sendSpy = vi.fn();
+    element.addEventListener('cw:send', sendSpy);
+
+    const buttons = element.shadowRoot?.querySelectorAll('cw-button');
+    buttons?.[0]?.click(); // send with empty draft
+    expect(sendSpy).not.toHaveBeenCalled();
+
+    // Set non-empty draft and focus to test active styles
+    element.draft = 'Active draft';
+    const textarea = element.shadowRoot?.querySelector('textarea') as HTMLTextAreaElement;
+    textarea.dispatchEvent(new Event('focus'));
+    await element.updateComplete;
+
+    const composerDiv = element.shadowRoot?.querySelector('.composer') as HTMLElement;
+    expect(composerDiv.getAttribute('style')).toContain('border-radius: 20px');
   });
 });

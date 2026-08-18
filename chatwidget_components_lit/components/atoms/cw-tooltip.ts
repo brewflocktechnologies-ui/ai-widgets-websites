@@ -101,7 +101,7 @@ export class CwTooltip extends LitElement {
     } else if (pos === 'top') {
       arrowPosStyle = `bottom: -${arrowSize / 2}px; left: 50%; transform: translateX(-50%) rotate(45deg);`;
       if (tBorderW > 0) arrowPosStyle += ` border-bottom: ${tBorderW}px solid ${tBorderC}; border-right: ${tBorderW}px solid ${tBorderC};`;
-    } else if (pos === 'bottom') {
+    } else {
       arrowPosStyle = `top: -${arrowSize / 2}px; left: 50%; transform: translateX(-50%) rotate(45deg);`;
       if (tBorderW > 0) arrowPosStyle += ` border-top: ${tBorderW}px solid ${tBorderC}; border-left: ${tBorderW}px solid ${tBorderC};`;
     }

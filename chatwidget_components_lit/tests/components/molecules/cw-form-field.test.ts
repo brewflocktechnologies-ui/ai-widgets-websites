@@ -87,4 +87,39 @@ describe('CwFormField Molecule Component', () => {
     expect(error).not.toBeNull();
     expect(error?.textContent).toContain('Name is required');
   });
+
+  it('handles empty field, selected select option, missing options, default input type fallback, and disabled state', async () => {
+    // 1. empty field
+    element.field = undefined as any;
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.field-container')).toBeNull();
+
+    // 2. select option with value set & no placeholder & options undefined
+    element.field = { name: 'dept', label: 'Department', type: 'select' };
+    element.value = 'sales';
+    element.disabled = true;
+    await element.updateComplete;
+
+    let select = element.shadowRoot?.querySelector('select') as HTMLSelectElement;
+    expect(select).not.toBeNull();
+    expect(select.hasAttribute('disabled')).toBe(true);
+
+    // select with placeholder and value set
+    element.field = {
+      name: 'dept',
+      label: 'Department',
+      type: 'select',
+      placeholder: 'Choose dept',
+      options: [{ label: 'Sales', value: 'sales' }, { label: 'Tech', value: 'tech' }],
+    };
+    await element.updateComplete;
+    select = element.shadowRoot?.querySelector('select') as HTMLSelectElement;
+    expect(select).not.toBeNull();
+
+    // 3. input with type undefined
+    element.field = { name: 'custom', label: 'Custom' } as any;
+    await element.updateComplete;
+    const input = element.shadowRoot?.querySelector('input') as HTMLInputElement;
+    expect(input.getAttribute('type')).toBe('text');
+  });
 });
