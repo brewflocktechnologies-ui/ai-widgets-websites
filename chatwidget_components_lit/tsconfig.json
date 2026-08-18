@@ -25,6 +25,10 @@
 
   "exclude": [
     "dist",
-    "node_modules"
+    "node_modules",
+    "tests",
+    "stories",
+    "**/*.test.ts",
+    "**/*.stories.ts"
   ]
 }

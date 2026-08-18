@@ -6,7 +6,6 @@ import {
   getBoxShadow,
   getInnerShadow,
   getCompositeBackground,
-  getBubbleBackground,
   getChatbarBackground,
   getChatbarFontSize,
   getChatbarIconWidth,
