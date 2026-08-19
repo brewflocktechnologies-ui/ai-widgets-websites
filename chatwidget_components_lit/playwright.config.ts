@@ -33,7 +33,7 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: 'npm run build && node scripts/serve-e2e.mjs',
+    command: process.env.SKIP_BUILD ? 'node scripts/serve-e2e.mjs' : 'npm run build && node scripts/serve-e2e.mjs',
     url: 'http://localhost:5173/tests/e2e/harness/host.html',
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
