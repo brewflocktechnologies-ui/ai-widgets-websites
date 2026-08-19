@@ -80,7 +80,11 @@ test.describe('User journey', () => {
     await bootWidget(page, { client: 'amber' });
     await openWidget(page);
 
-    // Dismiss via Escape (same as a visitor pressing close / outside).
+    // Dismiss via Escape (same as a visitor pressing close / outside). The
+    // widget only moves focus into the panel once the open transition finishes,
+    // and its keydown listener lives on the widget root — so wait for focus to
+    // land before pressing, or the keypress is dropped on body.
+    await expect(page.locator('.panel')).toBeFocused();
     await page.keyboard.press('Escape');
     await expect(page.locator('.zotly-widget-panel-wrapper')).toBeHidden();
 

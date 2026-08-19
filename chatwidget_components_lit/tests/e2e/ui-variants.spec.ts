@@ -126,8 +126,17 @@ test.describe('Config UI variants', () => {
     await openWidget(page);
 
     const panel = page.locator('.zotly-widget-panel-wrapper');
-    await expect(panel).toHaveCSS('width', '420px');
-    await expect(panel).toHaveCSS('height', '620px');
+    const vp = page.viewportSize();
+    if (vp && vp.width >= 480) {
+      // Desktop: the configured size applies as-is.
+      await expect(panel).toHaveCSS('width', '420px');
+      await expect(panel).toHaveCSS('height', '620px');
+    } else {
+      // Mobile: the panel is intentionally forced full-screen at the <=480px
+      // breakpoint (cw-chat-panel), so the configured px are overridden.
+      await expect(panel).toHaveCSS('width', `${vp.width}px`);
+      await expect(panel).toHaveCSS('height', `${vp.height}px`);
+    }
   });
 
   test('dark host theme applies the configured dark colors', async ({ page }) => {
