@@ -18,7 +18,7 @@
 | Check | Status | Details |
 |-------|--------|---------|
 | `strict: true` in tsconfig | ✅ Pass | Full strict mode enabled |
-| No `any` type escape hatches | ⚠️ Verify | Audit for `any` usage in store and utils — replace with proper generics |
+| No unjustified any usage | ⚠️ Verify | Audit any in store/utils and document or replace any unavoidable cases |
 | `store/types.ts` is pure types (no runtime) | ✅ Pass | 400 lines of pure interfaces/types, zero side effects |
 | Declaration files generated (`*.d.ts`) | ✅ Pass | `declaration: true` in tsconfig |
 | ES2022 target for modern syntax | ✅ Pass | Native class fields, optional chaining, nullish coalescing |

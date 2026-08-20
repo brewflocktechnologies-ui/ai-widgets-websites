@@ -1,22 +1,43 @@
 import { html } from 'lit';
 import '../../components/atoms/cw-button.js';
+import { ICON_ARG_TYPE } from '../utils/icon-options.js';
 
 export default {
   title: 'Atoms/Button',
   component: 'cw-button',
   tags: ['autodocs'],
   argTypes: {
-    variant: { control: { type: 'select', options: ['primary', 'secondary', 'ghost', 'outline', 'danger', 'icon'] } },
-    size: { control: { type: 'select', options: ['sm', 'md', 'lg'] } },
+    variant: {
+      control: { type: 'select', options: ['primary', 'secondary', 'ghost', 'outline', 'danger', 'icon'] },
+      description: 'Button visual style variant',
+    },
+    size: {
+      control: { type: 'select', options: ['xs', 'sm', 'md', 'lg'] },
+      description: 'Button size preset',
+    },
     disabled: { control: 'boolean' },
     label: { control: 'text' },
-    icon: { control: 'text' },
+    icon: ICON_ARG_TYPE,
     iconPosition: { control: { type: 'select', options: ['left', 'right', 'only'] } },
     fullWidth: { control: 'boolean' },
-    bg: { control: 'color' },
-    color: { control: 'color' },
+    bg: { control: 'color', description: 'Custom background color or CSS gradient' },
+    color: { control: 'color', description: 'Custom text color' },
   },
 };
+
+const renderButton = (args: any) => html`
+  <cw-button
+    .variant="${args.variant}"
+    .size="${args.size}"
+    .label="${args.label}"
+    .icon="${args.icon}"
+    .iconPosition="${args.iconPosition}"
+    ?disabled="${args.disabled}"
+    ?fullWidth="${args.fullWidth}"
+    .bg="${args.bg}"
+    .color="${args.color}"
+  ></cw-button>
+`;
 
 export const Primary = {
   args: {
@@ -24,17 +45,11 @@ export const Primary = {
     size: 'md',
     label: 'Start Conversation',
     icon: 'MessageCircle',
+    iconPosition: 'left',
     disabled: false,
+    fullWidth: false,
   },
-  render: (args: any) => html`
-    <cw-button
-      .variant="${args.variant}"
-      .size="${args.size}"
-      .label="${args.label}"
-      .icon="${args.icon}"
-      ?disabled="${args.disabled}"
-    ></cw-button>
-  `,
+  render: renderButton,
 };
 
 export const Secondary = {
@@ -42,16 +57,10 @@ export const Secondary = {
     variant: 'secondary',
     size: 'md',
     label: 'Cancel',
+    icon: '',
     disabled: false,
   },
-  render: (args: any) => html`
-    <cw-button
-      .variant="${args.variant}"
-      .size="${args.size}"
-      .label="${args.label}"
-      ?disabled="${args.disabled}"
-    ></cw-button>
-  `,
+  render: renderButton,
 };
 
 export const GhostIcon = {
@@ -61,14 +70,7 @@ export const GhostIcon = {
     icon: 'Maximize2',
     disabled: false,
   },
-  render: (args: any) => html`
-    <cw-button
-      .variant="${args.variant}"
-      .size="${args.size}"
-      .icon="${args.icon}"
-      ?disabled="${args.disabled}"
-    ></cw-button>
-  `,
+  render: renderButton,
 };
 
 export const Danger = {
@@ -79,15 +81,7 @@ export const Danger = {
     icon: 'Power',
     disabled: false,
   },
-  render: (args: any) => html`
-    <cw-button
-      .variant="${args.variant}"
-      .size="${args.size}"
-      .label="${args.label}"
-      .icon="${args.icon}"
-      ?disabled="${args.disabled}"
-    ></cw-button>
-  `,
+  render: renderButton,
 };
 
 export const CustomStyled = {
@@ -98,17 +92,7 @@ export const CustomStyled = {
     icon: 'Sparkles',
     bg: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
     color: '#ffffff',
-    borderRadius: '16px',
+    borderRadius: 16,
   },
-  render: (args: any) => html`
-    <cw-button
-      .variant="${args.variant}"
-      .size="${args.size}"
-      .label="${args.label}"
-      .icon="${args.icon}"
-      .bg="${args.bg}"
-      .color="${args.color}"
-      .borderRadius="${args.borderRadius}"
-    ></cw-button>
-  `,
+  render: renderButton,
 };

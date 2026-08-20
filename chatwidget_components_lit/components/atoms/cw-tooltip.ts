@@ -87,7 +87,13 @@ export class CwTooltip extends LitElement {
     const pos = this.position || 'left';
     const tBorderRadius = getTooltipBorderRadius(this.borderRadius, pos);
     const arrowSize = 8;
-    const tBorderW = this.borderWidth || 0;
+    const tPadding = typeof this.padding === 'number' ? `${this.padding}px` : (this.padding || '8px 16px');
+    const rawShadow = this.boxShadow;
+    let tBoxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+    if (rawShadow) {
+      tBoxShadow = rawShadow.includes('px') || rawShadow === 'none' ? rawShadow : `0 4px 12px ${rawShadow}`;
+    }
+    const tBorderW = Math.max(0, this.borderWidth || 0);
     const tBorderC = this.borderColor || 'transparent';
 
     let arrowPosStyle = '';
@@ -109,7 +115,7 @@ export class CwTooltip extends LitElement {
     return html`
       <div
         class="tooltip-box"
-        style="background-color: ${this.backgroundColor}; color: ${this.textColor}; font-size: ${this.fontSize}px; padding: ${this.padding}; border-radius: ${tBorderRadius}; box-shadow: ${this.boxShadow}; border: ${tBorderW}px solid ${tBorderC}"
+        style="background-color: ${this.backgroundColor}; color: ${this.textColor}; font-size: ${this.fontSize}px; padding: ${tPadding}; border-radius: ${tBorderRadius}; box-shadow: ${tBoxShadow}; border: ${tBorderW}px solid ${tBorderC}"
       >
         <span>${this.text}</span>
         ${this.arrowEnabled !== false

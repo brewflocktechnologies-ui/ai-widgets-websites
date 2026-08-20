@@ -1,12 +1,13 @@
 import { html } from 'lit';
 import '../../components/atoms/cw-menu-item.js';
+import { ICON_ARG_TYPE } from '../utils/icon-options.js';
 
 export default {
   title: 'Atoms/MenuItem',
   component: 'cw-menu-item',
   tags: ['autodocs'],
   argTypes: {
-    icon: { control: 'text' },
+    icon: ICON_ARG_TYPE,
     label: { control: 'text' },
     iconSize: { control: { type: 'number', min: 12, max: 32 } },
   },

@@ -1,49 +1,13 @@
 import { html } from 'lit';
 import '../../components/atoms/cw-icon.js';
-
-const ALL_ICONS = [
-  'MessageCircle',
-  'MessageSquare',
-  'Sparkles',
-  'Star',
-  'Heart',
-  'Smile',
-  'Send',
-  'SendFilled',
-  'ArrowUp',
-  'HelpCircle',
-  'Gift',
-  'Bell',
-  'Info',
-  'AlertCircle',
-  'Minimize2',
-  'Maximize2',
-  'Phone',
-  'Video',
-  'Power',
-  'MoreHorizontal',
-  'Close',
-  'Plus',
-  'ChevronDown',
-  'RotateCw',
-  'ChatLines',
-  'Check',
-  'DoubleCheck',
-  'Image',
-  'Camera',
-  'Download',
-  'Volume2',
-];
+import { ICON_OPTIONS, ICON_ARG_TYPE } from '../utils/icon-options.js';
 
 export default {
   title: 'Atoms/Icon',
   component: 'cw-icon',
   tags: ['autodocs'],
   argTypes: {
-    name: {
-      control: 'select',
-      options: ALL_ICONS,
-    },
+    name: ICON_ARG_TYPE,
     size: { control: 'number' },
     color: { control: 'color' },
   },
@@ -63,7 +27,7 @@ export const ConfigurableIcon = {
 export const IconGallery = {
   render: () => html`
     <div style="display: flex; flex-wrap: wrap; gap: 14px; width: 100%; max-width: 100%; box-sizing: border-box; padding: 8px 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-      ${ALL_ICONS.map(
+      ${ICON_OPTIONS.map(
         (iconName) => html`
           <div
             style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 125px; min-width: 125px; height: 110px; gap: 10px; padding: 14px 8px 12px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03); cursor: pointer; user-select: none; box-sizing: border-box; text-align: center; transition: all 0.2s ease;"

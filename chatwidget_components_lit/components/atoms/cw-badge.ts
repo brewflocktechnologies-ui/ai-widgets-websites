@@ -96,6 +96,18 @@ export class CwBadge extends LitElement {
 
     const isRelative = pos === 'relative' || pos === 'static';
 
+    const rawShadow = this.boxShadow || b.boxShadow;
+    let shadowVal = '0 1px 3px rgba(0,0,0,0.15)';
+    if (rawShadow) {
+      shadowVal = rawShadow.includes('px') || rawShadow === 'none' ? rawShadow : `0 2px 6px ${rawShadow}`;
+    }
+
+    const rawPadding = this.padding !== undefined ? this.padding : b.padding;
+    const paddingVal = rawPadding !== undefined ? (typeof rawPadding === 'number' ? `${rawPadding}px` : rawPadding) : '0 4px';
+
+    const rawRadius = this.borderRadius !== undefined ? this.borderRadius : b.borderRadius;
+    const radiusVal = rawRadius !== undefined ? (typeof rawRadius === 'number' ? `${rawRadius}px` : rawRadius) : '9999px';
+
     const styleObj: Record<string, string> = {
       position: isRelative ? pos : 'absolute',
       backgroundColor: this.backgroundColor || b.backgroundColor || 'var(--cw-error, #f43f5e)',
@@ -105,10 +117,10 @@ export class CwBadge extends LitElement {
       minWidth: `${badgeSize}px`,
       height: `${badgeSize}px`,
       border: `${this.borderWidth !== undefined ? this.borderWidth : (b.borderWidth !== undefined ? b.borderWidth : 2)}px solid ${this.borderColor || b.borderColor || '#ffffff'}`,
-      borderRadius: (this.borderRadius !== undefined ? (typeof this.borderRadius === 'number' ? `${this.borderRadius}px` : this.borderRadius) : (b.borderRadius !== undefined ? (typeof b.borderRadius === 'number' ? `${b.borderRadius}px` : b.borderRadius) : '9999px')),
+      borderRadius: radiusVal,
       fontWeight: this.fontWeight || b.fontWeight || '700',
-      boxShadow: this.boxShadow || b.boxShadow || '0 1px 3px rgba(0,0,0,0.15)',
-      padding: this.padding !== undefined ? this.padding : (b.padding !== undefined ? b.padding : '0 4px'),
+      boxShadow: shadowVal,
+      padding: paddingVal,
       zIndex: '50',
       animation: animCss,
     };
