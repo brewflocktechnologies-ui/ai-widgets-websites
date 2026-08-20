@@ -369,6 +369,7 @@ export class CwChatBody extends LitElement {
                 <input
                   type="file"
                   id="cw-file-input"
+                  aria-label="Upload photo"
                   accept="image/png,image/jpeg,image/gif,image/webp"
                   style="display: none"
                   @change="${this.handleFileSelect}"

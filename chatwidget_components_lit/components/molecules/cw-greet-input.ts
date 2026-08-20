@@ -126,6 +126,7 @@ export class CwGreetInput extends LitElement {
           >
             <input
               type="text"
+              aria-label="Message"
               .value="${this.draft}"
               placeholder="${ib.placeholder || 'Write your message...'}"
               style="color: ${ib.textColor || 'var(--cw-ink, #1e293b)'}"
@@ -162,6 +163,7 @@ export class CwGreetInput extends LitElement {
       >
         <input
           type="text"
+          aria-label="Message"
           .value="${this.draft}"
           placeholder="${ib.placeholder || 'Write your message...'}"
           style="color: ${ib.textColor || 'var(--cw-ink, #1e293b)'}"

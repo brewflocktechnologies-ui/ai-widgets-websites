@@ -369,7 +369,7 @@ export class CwImageCropper extends LitElement {
 
     return html`
       <div class="modal-backdrop" style="position: ${this.fixed ? 'fixed' : 'absolute'}; background: rgba(9, 13, 22, ${this.backdropOpacity});" @click="${(e: Event) => { if (e.target === e.currentTarget) this.closeModal(); }}">
-        <div class="cropper-card">
+        <div class="cropper-card" role="dialog" aria-modal="true" aria-label="${this.titleText}">
           <div class="header">
             <h3>${this.titleText}</h3>
             <cw-button
@@ -389,7 +389,7 @@ export class CwImageCropper extends LitElement {
             @mouseup="${this.handleMouseUp}"
             @mouseleave="${this.handleMouseUp}"
           >
-            <canvas id="crop-canvas"></canvas>
+            <canvas id="crop-canvas" role="img" aria-label="Image crop preview"></canvas>
             <div
               class="crop-guide-overlay"
               style="width: ${overlayWidth}px; height: ${overlayHeight}px; border-radius: ${borderRadiusStyle};"
@@ -400,8 +400,9 @@ export class CwImageCropper extends LitElement {
             <!-- Zoom & Rotate Row -->
             <div class="control-row">
               <div class="control-group" style="flex: 1">
-                <span>Zoom:</span>
+                <label for="zoom-slider">Zoom:</label>
                 <input
+                  id="zoom-slider"
                   type="range"
                   class="zoom-slider"
                   min="0.5"
