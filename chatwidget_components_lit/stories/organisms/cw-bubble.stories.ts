@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-bubble.js';
+import { ICON_ARG_TYPE } from '../utils/icon-options.js';
 
 /**
  * The bubble supports many independent, combinable visual features
@@ -17,13 +18,12 @@ export default {
   component: 'cw-bubble',
   tags: ['autodocs'],
   argTypes: {
-    panelOpen: { control: 'boolean' },
     unreadCount: { control: { type: 'number', min: 0, max: 99 } },
     position: { control: 'select', options: ['bottom-right', 'bottom-left', 'top-right', 'top-left'] },
     width: { control: { type: 'number', min: 40, max: 100 } },
     height: { control: { type: 'number', min: 40, max: 100 } },
     backgroundColor: { control: 'color' },
-    lucideIcon: { control: 'text' },
+    lucideIcon: ICON_ARG_TYPE,
     iconWidth: { control: { type: 'number', min: 16, max: 48 } },
     iconHeight: { control: { type: 'number', min: 16, max: 48 } },
     iconColor: { control: 'color' },
@@ -102,7 +102,6 @@ const scene = (inner: any) => html`
 
 export const ConfigurableBubble = {
   args:{
-    panelOpen:false,
     unreadCount:44,
     width:60,
     height:60,
@@ -204,7 +203,6 @@ render:(args: any) => {
     return scene(html`
       <cw-bubble
         .fixed="${false}"
-        .panelOpen="${args.panelOpen}"
         .unreadCount="${args.unreadCount}"
         .config="${config}"
       ></cw-bubble>

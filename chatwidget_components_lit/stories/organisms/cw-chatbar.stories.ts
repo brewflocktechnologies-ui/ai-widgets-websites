@@ -1,13 +1,13 @@
 import { html } from 'lit';
 import '../../components/organisms/cw-chatbar.js';
 import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from '../../config/chatbar-presets.js';
+import { ICON_ARG_TYPE } from '../utils/icon-options.js';
 
 export default {
   title: 'Organisms/Chatbar',
   component: 'cw-chatbar',
   tags: ['autodocs'],
   argTypes: {
-    panelOpen: { control: 'boolean' },
     unreadCount: { control: { type: 'number', min: 0, max: 99 } },
     layout: { control: 'select', options: ['bar', 'card'], description: 'Switch between horizontal floating bar and vertical card trigger' },
     text: { control: 'text' },
@@ -18,7 +18,7 @@ export default {
     buttonBg: { control: 'color' },
     buttonTextColor: { control: 'color' },
     textSize: { control: { type: 'number', min: 12, max: 24 } },
-    lucideIcon: { control: 'text' },
+    lucideIcon: ICON_ARG_TYPE,
     iconWidth: { control: { type: 'number', min: 14, max: 48 } },
     iconHeight: { control: { type: 'number', min: 14, max: 48 } },
     shadow: { control: 'boolean' },
@@ -27,7 +27,6 @@ export default {
 
 export const BarPreset = {
   args:{
-    panelOpen:false,
     unreadCount:1,
     layout:'bar',
     text:'Chat with us',
@@ -72,7 +71,6 @@ export const BarPreset = {
       <div style="position: relative; width: ${isCard ? '280px' : '300px'}; height: ${isCard ? '300px' : '120px'};">
         <cw-chatbar
           .fixed="${false}"
-          .panelOpen="${args.panelOpen}"
           .unreadCount="${args.unreadCount}"
           .config="${config}"
         ></cw-chatbar>
@@ -83,7 +81,6 @@ export const BarPreset = {
 
 export const CardPreset = {
   args: {
-    panelOpen: false,
     unreadCount: 0,
     layout: 'card',
     text: 'Chat with us',
@@ -128,7 +125,6 @@ export const CardPreset = {
       <div style="position: relative; width: ${isCard ? '280px' : '300px'}; height: ${isCard ? '300px' : '120px'};">
         <cw-chatbar
           .fixed="${false}"
-          .panelOpen="${args.panelOpen}"
           .unreadCount="${args.unreadCount}"
           .config="${config}"
         ></cw-chatbar>
