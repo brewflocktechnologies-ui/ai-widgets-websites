@@ -11,10 +11,11 @@ import { getParentTheme } from '../utils/theme.js';
 export function computeEffectiveChatbarConfig(
   host: Record<string, any>,
   cbs: ChatbarState = {} as ChatbarState,
-  activeTrigger: string = 'bubble'
+  activeTrigger: string = 'bubble',
+  theme?: { primary: string; secondary: string } | null
 ): ChatbarState {
   const useTheme = host.useWebsiteTheme !== undefined ? host.useWebsiteTheme : (cbs.useWebsiteTheme ?? true);
-  const pTheme = useTheme ? getParentTheme() : null;
+  const pTheme = useTheme ? (theme !== undefined ? theme : getParentTheme()) : null;
 
   const isChatbarTrigger = activeTrigger === 'chatbar' || activeTrigger === 'chatcard';
   const barRight = host.barOffsetRight !== undefined ? host.barOffsetRight : (cbs.barOffsetRight ?? cbs.offsetRight ?? 16);
@@ -71,10 +72,11 @@ export function computeEffectiveChatbarConfig(
 
 export function computeEffectiveBubbleConfig(
   host: Record<string, any>,
-  bs: BubbleState = {} as BubbleState
+  bs: BubbleState = {} as BubbleState,
+  theme?: { primary: string; secondary: string } | null
 ): BubbleState {
   const useTheme = host.useWebsiteTheme !== undefined ? host.useWebsiteTheme : (bs.useWebsiteTheme ?? true);
-  const pTheme = useTheme ? getParentTheme() : null;
+  const pTheme = useTheme ? (theme !== undefined ? theme : getParentTheme()) : null;
 
   const effectiveBg = host.bubbleBg || host.accentColor || (pTheme ? pTheme.primary : bs.backgroundColor);
   const effectiveRingColor = host.bubbleOutlineRingColor || (pTheme ? pTheme.secondary : bs.outlineRing?.color);
@@ -154,10 +156,11 @@ export function computeEffectiveBubbleConfig(
 
 export function computeEffectiveGreetWindowConfig(
   host: Record<string, any>,
-  gws: GreetWindowState = {} as GreetWindowState
+  gws: GreetWindowState = {} as GreetWindowState,
+  theme?: { primary: string; secondary: string } | null
 ): GreetWindowState {
   const useTheme = host.useWebsiteTheme !== undefined ? host.useWebsiteTheme : (gws.useWebsiteTheme ?? true);
-  const pTheme = useTheme ? getParentTheme() : null;
+  const pTheme = useTheme ? (theme !== undefined ? theme : getParentTheme()) : null;
 
   const effectiveIconColor = host.greetIconColor || host.accentColor || (pTheme ? pTheme.primary : gws.iconColor);
   const effectiveBtnColor = host.greetInputButtonColor || host.accentColor || (pTheme ? pTheme.primary : gws.inputBox?.buttonColor);
@@ -204,10 +207,11 @@ export function computeEffectiveGreetWindowConfig(
 export function computeEffectiveChatWindowConfig(
   host: Record<string, any>,
   cws: ChatWindowState = {} as ChatWindowState,
-  activeOffsetBottom: number = 12
+  activeOffsetBottom: number = 12,
+  theme?: { primary: string; secondary: string } | null
 ): ChatWindowState {
   const useTheme = host.useWebsiteTheme !== undefined ? host.useWebsiteTheme : (cws.useWebsiteTheme ?? false);
-  const pTheme = useTheme ? getParentTheme() : null;
+  const pTheme = useTheme ? (theme !== undefined ? theme : getParentTheme()) : null;
 
   const effectiveAccent = host.accentColor || (useTheme && pTheme ? pTheme.primary : (cws.accentColor || '#0b5fff'));
 

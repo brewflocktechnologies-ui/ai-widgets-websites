@@ -18,6 +18,7 @@ import {
   computeEffectiveChatWindowConfig,
   computeEffectiveFeaturesConfig,
 } from '../../tokens/merge.js';
+import { getParentTheme } from '../../utils/theme.js';
 import '../templates/cw-widget-layout.js';
 
 /**
@@ -242,12 +243,22 @@ export class CwWidgetRoot extends LitElement {
   @state() private activeTriggerOverride?: 'bubble' | 'chatbar' | 'chatcard';
   @state() private rev = 0;
 
+  /** Host-page theme (--primary/--secondary). Resolved once (or when
+   *  `useWebsiteTheme` flips) so the render path never touches the DOM —
+   *  previously every `computeEffective*` call re-ran getComputedStyle. */
+  private cachedTheme: { primary: string; secondary: string } | null = null;
+
   private unsubAll?: () => void;
   private eventListeners: Array<[string, EventListener]> = [];
 
   private toggleListener = () => this.handleToggleWidget();
   private closeListener = () => this.handleCloseWidget();
   private onKeydown = (e: KeyboardEvent) => this.handleKeydown(e);
+
+  /** Resolves the host theme on demand; null when the widget uses its own colors. */
+  private applyThemeCache() {
+    this.cachedTheme = this.useWebsiteTheme !== false ? getParentTheme() : null;
+  }
 
   async connectedCallback() {
     super.connectedCallback();
@@ -257,6 +268,7 @@ export class CwWidgetRoot extends LitElement {
     } catch (err) {
       console.warn('CwWidgetRoot initStore warning:', err);
     } finally {
+      this.applyThemeCache();
       this.unsubAll = subscribeAll(() => {
         this.rev++;
       });
@@ -286,6 +298,9 @@ export class CwWidgetRoot extends LitElement {
 
   updated(changedProperties: Map<string, any>) {
     super.updated(changedProperties);
+    if (changedProperties.has('useWebsiteTheme')) {
+      this.applyThemeCache();
+    }
     if (changedProperties.has('triggerType')) {
       this.activeTriggerOverride = undefined;
       this.userHasSentMessage = false;
@@ -567,11 +582,11 @@ export class CwWidgetRoot extends LitElement {
     const cs = chatStore.get();
 
     const activeTrigger = this.activeTriggerOverride || this.triggerType || (cbs?.enabled ? (cbs.layout === 'card' ? 'chatcard' : 'chatbar') : 'bubble');
-    const effectiveCbs = computeEffectiveChatbarConfig(this, cbs, activeTrigger);
-    const effectiveBs = computeEffectiveBubbleConfig(this, bs);
+    const effectiveCbs = computeEffectiveChatbarConfig(this, cbs, activeTrigger, this.cachedTheme);
+    const effectiveBs = computeEffectiveBubbleConfig(this, bs, this.cachedTheme);
     const activeOffsetBottom = activeTrigger === 'bubble' ? effectiveBs.offsetBottom : effectiveCbs.offsetBottom;
-    const effectiveGws = computeEffectiveGreetWindowConfig(this, gws);
-    const effectiveCws = computeEffectiveChatWindowConfig(this, cws, activeOffsetBottom);
+    const effectiveGws = computeEffectiveGreetWindowConfig(this, gws, this.cachedTheme);
+    const effectiveCws = computeEffectiveChatWindowConfig(this, cws, activeOffsetBottom, this.cachedTheme);
     const effectiveFs = computeEffectiveFeaturesConfig(this, fs);
 
     return {
@@ -608,15 +623,15 @@ export class CwWidgetRoot extends LitElement {
 
     const activeTrigger = this.activeTriggerOverride || this.triggerType || (cbs.enabled ? (cbs.layout === 'card' ? 'chatcard' : 'chatbar') : 'bubble');
 
-    const effectiveCbs = computeEffectiveChatbarConfig(this, cbs, activeTrigger);
-    const effectiveBs = computeEffectiveBubbleConfig(this, bs);
+    const effectiveCbs = computeEffectiveChatbarConfig(this, cbs, activeTrigger, this.cachedTheme);
+    const effectiveBs = computeEffectiveBubbleConfig(this, bs, this.cachedTheme);
 
     const activeOffsetBottom = activeTrigger === 'bubble'
       ? effectiveBs.offsetBottom
       : effectiveCbs.offsetBottom;
 
-    const effectiveGws = computeEffectiveGreetWindowConfig(this, gws);
-    const effectiveCws = computeEffectiveChatWindowConfig(this, cws, activeOffsetBottom);
+    const effectiveGws = computeEffectiveGreetWindowConfig(this, gws, this.cachedTheme);
+    const effectiveCws = computeEffectiveChatWindowConfig(this, cws, activeOffsetBottom, this.cachedTheme);
     const effectiveFs = computeEffectiveFeaturesConfig(this, fs);
 
     return html`
