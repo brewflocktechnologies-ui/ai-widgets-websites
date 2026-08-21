@@ -68,23 +68,35 @@ function getMessagesConfig() {
 
 // Show a single selected message config at the top of the chat window preview
 function applyMessagePreview(key) {
-  if (!window.Alpine) return;
   const arr = getMessagesConfig();
   const entry = arr.find(m => m && m.key === key) || arr.find(m => m && m.key === 'welcome') || arr[0];
   if (!entry) return;
   window.activeMessagePreviewKey = entry.key;
-  const chatStore = Alpine.store('chat');
-  if (!chatStore) return;
+
   const dropdown = document.getElementById('msg-preview-select');
   if (dropdown && dropdown.value !== entry.key) dropdown.value = entry.key;
+
   const chatConfig = window.cutomizationConfig || {};
-  const agentName = (chatConfig.chatWindow && chatConfig.chatWindow.agentName) || chatStore.agentName || 'Sarah';
+  const agentName = (chatConfig.chatWindow && chatConfig.chatWindow.agentName) || 'Sarah';
   const msg = { key: 'm1', senderType: entry.senderType, body: entry.body || '', created: new Date().toISOString() };
   if (entry.senderType === 'AGENT') msg.senderName = agentName;
-  chatStore.messages = [msg];
-  chatStore.state = 'active';
-  if (chatStore.hasSentMessage !== undefined) chatStore.hasSentMessage = false;
-  setTimeout(() => { try { if (chatStore.scrollDown) chatStore.scrollDown(); } catch (e) {} }, 60);
+
+  if (window.ChatWidgetLit && window.ChatWidgetLit.chatStore) {
+    const cs = window.ChatWidgetLit.chatStore.get();
+    if (cs) {
+      cs.messages = [msg];
+      cs.state = 'active';
+      cs.hasSentMessage = false;
+    }
+  }
+
+  if (window.Alpine && Alpine.store('chat')) {
+    const chatStore = Alpine.store('chat');
+    chatStore.messages = [msg];
+    chatStore.state = 'active';
+    if (chatStore.hasSentMessage !== undefined) chatStore.hasSentMessage = false;
+    setTimeout(() => { try { if (chatStore.scrollDown) chatStore.scrollDown(); } catch (e) {} }, 60);
+  }
 }
 
 /* ==========================================================================
@@ -238,6 +250,12 @@ function setupMessagePreviewControls() {
   dropdown.addEventListener('change', () => {
     applyMessagePreview(dropdown.value);
     // Ensure chat window panel is open when user changes dropdown selection
+    if (window.ChatWidgetLit && window.ChatWidgetLit.chatStore) {
+      const cs = window.ChatWidgetLit.chatStore.get();
+      if (cs) cs.panelOpen = true;
+      const widgetEmbed = document.querySelector('cw-widget-root');
+      if (widgetEmbed) widgetEmbed.panelOpen = true;
+    }
     if (window.Alpine && Alpine.store('chat')) {
       const widgetContainer = document.getElementById('zotly-widget-embed');
       if (widgetContainer && widgetContainer._x_dataStack && widgetContainer._x_dataStack[0]) {
@@ -880,7 +898,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const targetTab = document.getElementById(tab.dataset.tab);
       if (targetTab) targetTab.classList.add('active');
 
-      const widgetEmbed = document.getElementById('zotly-widget-embed');
+      const widgetEmbed = document.getElementById('zotly-widget-embed') || document.querySelector('cw-widget-root');
       const previewContent = document.getElementById('preview-scrollable-content');
 
       // Store original host page content if not already cached
@@ -953,6 +971,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Display chat window (active chat view) at first ONLY on Messages and Features tabs
       if (tab.dataset.tab === 'tab-messages' || tab.dataset.tab === 'tab-features') {
+        if (window.ChatWidgetLit && window.ChatWidgetLit.chatStore) {
+          const cs = window.ChatWidgetLit.chatStore.get();
+          if (cs) {
+            cs.panelOpen = true;
+            cs.state = 'active';
+          }
+          const rootEl = document.querySelector('cw-widget-root');
+          if (rootEl) rootEl.panelOpen = true;
+        }
         if (window.Alpine && Alpine.store('chat')) {
           const widgetContainer = document.getElementById('zotly-widget-embed');
           if (widgetContainer && widgetContainer._x_dataStack && widgetContainer._x_dataStack[0]) {
@@ -966,6 +993,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       } else if (tab.dataset.tab !== 'tab-forms' && tab.dataset.tab !== 'tab-notifications') {
         // Normal tabs (Appearance, Layout, Snippet, Share): work as normal with bubble/chatbar
+        if (window.ChatWidgetLit && window.ChatWidgetLit.chatStore) {
+          const cs = window.ChatWidgetLit.chatStore.get();
+          if (cs) cs.panelOpen = false;
+          const rootEl = document.querySelector('cw-widget-root');
+          if (rootEl) rootEl.panelOpen = false;
+        }
         if (window.Alpine && Alpine.store('chat')) {
           const widgetContainer = document.getElementById('zotly-widget-embed');
           if (widgetContainer && widgetContainer._x_dataStack && widgetContainer._x_dataStack[0]) {
@@ -973,10 +1006,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           }
           Alpine.store('chat').panelOpen = false;
         }
-        if (Alpine.store('bubble') && window.cutomizationConfig?.bubble) {
+        if (window.Alpine && Alpine.store('bubble') && window.cutomizationConfig?.bubble) {
           Alpine.store('bubble').hideOnOpen = window.cutomizationConfig.bubble.hideOnOpen !== false;
         }
-        if (Alpine.store('chatbar') && window.cutomizationConfig?.chatbar) {
+        if (window.Alpine && Alpine.store('chatbar') && window.cutomizationConfig?.chatbar) {
           Alpine.store('chatbar').hideOnOpen = window.cutomizationConfig.chatbar.hideOnOpen !== false;
         }
       }
@@ -1144,64 +1177,105 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 });
 
-// Bootstrap modular widget manually
-async function bootstrapWidgetPreview() {
-  // Override getWidgetBaseUrl to point to modular widget directory
-  if (window.ZotlyUtils) {
-    window.ZotlyUtils.getWidgetBaseUrl = function() {
-      return '../chatwidget_components/';
-    };
-  }
+function ensureLitPointerEvents(widgetRoot) {
+  if (!widgetRoot) return;
 
-  // Override ZotlyConfig.fetchClientConfig to return the customization's active config
-  window.ZotlyConfig.fetchClientConfig = async function() {
-    return {
-      bubbleConfig: window.cutomizationConfig.bubble || {},
-      chatConfig: window.cutomizationConfig.chatWindow || window.cutomizationConfig.chat || {},
-      chatbarConfig: window.cutomizationConfig.chatbar || {},
-      greetWindowConfig: window.cutomizationConfig.greetWindow || {}
-    };
+  const applyStyles = () => {
+    if (widgetRoot.shadowRoot) {
+      const styleId = 'cw-preview-pointer-events-fix';
+      if (!widgetRoot.shadowRoot.getElementById(styleId)) {
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.textContent = `
+          :host { pointer-events: none !important; }
+          cw-widget-layout { pointer-events: none !important; }
+        `;
+        widgetRoot.shadowRoot.appendChild(style);
+      }
+
+      const layout = widgetRoot.shadowRoot.querySelector('cw-widget-layout');
+      if (layout && layout.shadowRoot && !layout.shadowRoot.getElementById(styleId)) {
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.textContent = `
+          :host { pointer-events: none !important; }
+          cw-bubble, cw-chatbar, cw-greet-window, cw-welcome-card, cw-chat-panel {
+            pointer-events: auto !important;
+          }
+        `;
+        layout.shadowRoot.appendChild(style);
+      }
+    }
   };
 
-  // Inject widget embed markup
-  const widgetContainer = document.createElement('div');
-  widgetContainer.id = 'zotly-widget-embed';
-  widgetContainer.setAttribute('x-data', '{ openContactWidget: false }');
-  widgetContainer.setAttribute('@toggle-contact-widget.window', 'openContactWidget = !openContactWidget; $store.chat.panelOpen = openContactWidget; if (openContactWidget) { $store.chat.unreadCount = 0; }');
-  widgetContainer.setAttribute('@close-contact-widget.window', 'openContactWidget = false; $store.chat.panelOpen = false;');
+  applyStyles();
+  setTimeout(applyStyles, 100);
+  setTimeout(applyStyles, 500);
+}
 
-  widgetContainer.innerHTML = window.ZotlyChatWindowHTML + window.ZotlyWelcomeHTML + window.ZotlyBubbleHTML + window.ZotlyChatbarHTML;
-
+// Bootstrap modular widget manually using Lit Web Component
+async function bootstrapWidgetPreview() {
   const viewportWrapper = document.getElementById('preview-viewport-wrapper');
-  if (viewportWrapper) {
-    viewportWrapper.appendChild(widgetContainer);
-  } else {
-    document.body.appendChild(widgetContainer);
+  const targetContainer = viewportWrapper || document.body;
+
+  // Remove any auto-mounted widget root elements attached directly to document.body
+  document.querySelectorAll('body > cw-widget-root').forEach(el => el.remove());
+
+  let widgetRoot = targetContainer.querySelector('cw-widget-root');
+
+  if (window.ChatWidgetLit && window.ChatWidgetLit.mountChatWidgetWithToken) {
+    widgetRoot = window.ChatWidgetLit.mountChatWidgetWithToken(window.cutomizationConfig || {}, targetContainer);
+  } else if (!widgetRoot) {
+    widgetRoot = document.createElement('cw-widget-root');
+    targetContainer.appendChild(widgetRoot);
   }
 
-  // Ensure widget container is hidden if starting on Forms tab, otherwise shown
+  ensureLitPointerEvents(widgetRoot);
+
+  // Ensure widget container is hidden if starting on Forms or Notifications tab, otherwise shown
   const isFormsActive = document.querySelector('.nav-tab[data-tab="tab-forms"]')?.classList.contains('active');
-  widgetContainer.style.display = isFormsActive ? 'none' : 'block';
-
-  // Initialize Alpine Stores
-  if (window.Alpine) {
-    await window.ZotlyInitStores();
-    updateAlpineStores(window.cutomizationConfig);
-    window.Alpine.initTree(widgetContainer);
-  } else {
-    document.addEventListener('alpine:init', async () => {
-      await window.ZotlyInitStores();
-      updateAlpineStores(window.cutomizationConfig);
-      window.Alpine.initTree(widgetContainer);
-      applyMessagePreview(window.activeMessagePreviewKey || 'welcome');
-    });
+  const isNotifActive = document.querySelector('.nav-tab[data-tab="tab-notifications"]')?.classList.contains('active');
+  if (widgetRoot) {
+    widgetRoot.style.display = (isFormsActive || isNotifActive) ? 'none' : 'block';
   }
+
+  // Also support fallback Alpine Widget if window.ZotlyChatWindowHTML exists
+  if (window.ZotlyChatWindowHTML) {
+    let widgetContainer = document.getElementById('zotly-widget-embed');
+    if (!widgetContainer) {
+      widgetContainer = document.createElement('div');
+      widgetContainer.id = 'zotly-widget-embed';
+      widgetContainer.setAttribute('x-data', '{ openContactWidget: false }');
+      widgetContainer.setAttribute('@toggle-contact-widget.window', 'openContactWidget = !openContactWidget; $store.chat.panelOpen = openContactWidget; if (openContactWidget) { $store.chat.unreadCount = 0; }');
+      widgetContainer.setAttribute('@close-contact-widget.window', 'openContactWidget = false; $store.chat.panelOpen = false;');
+      widgetContainer.innerHTML = window.ZotlyChatWindowHTML + window.ZotlyWelcomeHTML + window.ZotlyBubbleHTML + window.ZotlyChatbarHTML;
+      targetContainer.appendChild(widgetContainer);
+    }
+    if (window.Alpine && window.ZotlyInitStores) {
+      await window.ZotlyInitStores();
+      window.Alpine.initTree(widgetContainer);
+    }
+  }
+
+  // Update stores with active customization config
+  updateAlpineStores(window.cutomizationConfig);
 
   // Auto open chat window active panel if starting on Messages or Features tab
   const activeTabName = document.querySelector('.nav-tab.active')?.dataset.tab;
   if (activeTabName === 'tab-messages' || activeTabName === 'tab-features') {
+    if (window.ChatWidgetLit && window.ChatWidgetLit.chatStore) {
+      const cs = window.ChatWidgetLit.chatStore.get();
+      if (cs) {
+        cs.panelOpen = true;
+        cs.state = 'active';
+      }
+    }
+    if (widgetRoot) {
+      widgetRoot.panelOpen = true;
+    }
     if (window.Alpine && Alpine.store('chat')) {
-      if (widgetContainer._x_dataStack && widgetContainer._x_dataStack[0]) {
+      const widgetContainer = document.getElementById('zotly-widget-embed');
+      if (widgetContainer && widgetContainer._x_dataStack && widgetContainer._x_dataStack[0]) {
         widgetContainer._x_dataStack[0].openContactWidget = true;
       }
       Alpine.store('chat').panelOpen = true;
@@ -1233,7 +1307,7 @@ async function selectPreset(presetName) {
 
   // Fetch JSON config
   try {
-    const res = await fetch(`../chatwidget_components/public/clients/${presetName}.json`);
+    const res = await fetch(`../chatwidget_components_lit/public/clients/${presetName}.json`);
     if (res.ok) {
       window.cutomizationConfig = await res.json();
     } else {
@@ -2048,10 +2122,33 @@ function setupJsonEditorEventListeners() {
   });
 }
 
-// Dynamic updates of the active Alpine stores
+// Dynamic updates of the active widget stores (Lit & Alpine)
 function updateAlpineStores(config) {
+  if (!config) return;
+
+  // Sync Lit Web Component Stores if available
+  if (window.ChatWidgetLit && window.ChatWidgetLit.injectStoreConfig) {
+    window.ChatWidgetLit.injectStoreConfig(config);
+    const widgetRoot = document.querySelector('#preview-viewport-wrapper cw-widget-root');
+    if (widgetRoot) {
+      ensureLitPointerEvents(widgetRoot);
+    }
+    if (window.ChatWidgetLit.greetWindowStore) {
+      const gw = window.ChatWidgetLit.greetWindowStore.get();
+      if (gw && gw.enabled) {
+        gw.visible = true;
+        gw.dismissed = false;
+        if (gw.inputBox) gw.inputBox.visible = true;
+      }
+    }
+    if (window.ChatWidgetLit.chatStore) {
+      const isMobileView = document.querySelector('.preview-panel')?.classList.contains('mode-mobile');
+      window.ChatWidgetLit.chatStore.get().isMobile = !!isMobileView;
+    }
+  }
+
   if (!window.Alpine) return;
-  const theme = window.ZotlyUtils.getParentTheme();
+  const theme = window.ZotlyUtils ? window.ZotlyUtils.getParentTheme() : { primary: '#0b5fff', secondary: '#8b5cf6' };
 
   // 1. Update Bubble Trigger Store
   if (Alpine.store('bubble') && config.bubble) {
@@ -2223,39 +2320,66 @@ function updateAlpineStores(config) {
 
 // Retrigger entrance transition for greeting card
 function retriggerGreetCard() {
-  if (!window.Alpine) return;
-  const greetStore = Alpine.store('greetWindow');
-  if (greetStore) {
-    greetStore.visible = false;
-    greetStore.dismissed = false;
-    if (greetStore.inputBox) {
-      greetStore.inputBox.visible = false;
+  if (window.ChatWidgetLit && window.ChatWidgetLit.greetWindowStore) {
+    const gw = window.ChatWidgetLit.greetWindowStore.get();
+    if (gw) {
+      gw.visible = false;
+      gw.dismissed = false;
+      if (gw.inputBox) gw.inputBox.visible = false;
+      setTimeout(() => {
+        gw.visible = true;
+        if (gw.inputBox && gw.inputBox.enabled) {
+          setTimeout(() => {
+            gw.inputBox.visible = true;
+          }, 1000);
+        }
+      }, 200);
     }
-    
-    // Briefly wait and turn visible
-    setTimeout(() => {
-      greetStore.visible = true;
-      if (greetStore.inputBox && greetStore.inputBox.enabled) {
-        setTimeout(() => {
-          greetStore.inputBox.visible = true;
-        }, 1000);
+  }
+  if (window.Alpine) {
+    const greetStore = Alpine.store('greetWindow');
+    if (greetStore) {
+      greetStore.visible = false;
+      greetStore.dismissed = false;
+      if (greetStore.inputBox) {
+        greetStore.inputBox.visible = false;
       }
-    }, 200);
+      
+      // Briefly wait and turn visible
+      setTimeout(() => {
+        greetStore.visible = true;
+        if (greetStore.inputBox && greetStore.inputBox.enabled) {
+          setTimeout(() => {
+            greetStore.inputBox.visible = true;
+          }, 1000);
+        }
+      }, 200);
+    }
   }
 }
 
 // Reset/restart conversation session simulation
 function restartChatSession() {
-  if (!window.Alpine) return;
-  const chatStore = Alpine.store('chat');
-  if (chatStore) {
-    chatStore.state = window.cutomizationConfig.chatWindow?.welcome?.enabled ? 'welcome' : 'active';
+  const welcomeEnabled = window.cutomizationConfig?.chatWindow?.welcome?.enabled;
+  if (window.ChatWidgetLit && window.ChatWidgetLit.chatStore) {
+    const cs = window.ChatWidgetLit.chatStore.get();
+    if (cs) {
+      cs.state = welcomeEnabled ? 'welcome' : 'active';
+      cs.hasSentMessage = false;
+      cs.panelOpen = false;
+    }
+    const rootEl = document.querySelector('cw-widget-root');
+    if (rootEl) rootEl.panelOpen = false;
+  }
+  if (window.Alpine && Alpine.store('chat')) {
+    const chatStore = Alpine.store('chat');
+    chatStore.state = welcomeEnabled ? 'welcome' : 'active';
     chatStore.hasSentMessage = false;
     chatStore.panelOpen = false;
-    applyMessagePreview(window.activeMessagePreviewKey || 'welcome');
-    window.dispatchEvent(new CustomEvent('close-contact-widget'));
-    retriggerGreetCard();
   }
+  applyMessagePreview(window.activeMessagePreviewKey || 'welcome');
+  window.dispatchEvent(new CustomEvent('close-contact-widget'));
+  retriggerGreetCard();
 }
 
 // Format the code in JSON Textarea editor
