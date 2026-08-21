@@ -1308,7 +1308,9 @@ async function selectPreset(presetName) {
 
   // Fetch JSON config
   try {
-    const res = await fetch(`../chatwidget_components_lit/public/clients/${presetName}.json`);
+    const presetBase =
+      (window.__CUSTOMIZATION_ASSET_BASE__ || '') + 'clients/';
+    const res = await fetch(`${presetBase}${presetName}.json`);
     if (res.ok) {
       window.cutomizationConfig = await res.json();
     } else {
