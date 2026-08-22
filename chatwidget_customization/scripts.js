@@ -1896,11 +1896,16 @@ function setupFormEventListeners() {
         jsonTextarea.value = JSON.stringify(window.cutomizationConfig, null, 2);
       }
 
-      // Update Alpine Stores
+      // Update Alpine & Lit Stores
       updateAlpineStores(window.cutomizationConfig);
       updateColorPickerStates();
       updateDisabledAccordionStates();
       if (typeof updateFeatureNestedState === 'function') updateFeatureNestedState();
+
+      // Automatically re-trigger preview if appearance delay or animation speed is modified
+      if (path.startsWith('greetWindow.')) {
+        retriggerGreetCard();
+      }
     };
 
     input.addEventListener('input', handleInput);
@@ -2323,42 +2328,91 @@ function updateAlpineStores(config) {
   }
 }
 
-// Retrigger entrance transition for greeting card
+// Retrigger entrance transition & appearance delay for greeting card
 function retriggerGreetCard() {
+  const config = window.cutomizationConfig || {};
+
+  // Parse configured appearance delay and input reveal delay in seconds
+  const greetDelaySec = Math.max(0, parseFloat(config.greetWindow?.openingTimeAfterInitialLoadSec ?? 2));
+  const inputDelaySec = Math.max(0, parseFloat(config.greetWindow?.inputBox?.openingTimeAfterInitialLoadSec ?? 4));
+
+  // 1. Lit Web Component widget re-triggering
   if (window.ChatWidgetLit && window.ChatWidgetLit.greetWindowStore) {
-    const gw = window.ChatWidgetLit.greetWindowStore.get();
+    const gwStore = window.ChatWidgetLit.greetWindowStore;
+    const gw = gwStore.get();
     if (gw) {
+      // Sync latest delay and animation configuration
+      if (config.greetWindow) {
+        if (config.greetWindow.openingTimeAfterInitialLoadSec !== undefined) {
+          gw.openingTimeAfterInitialLoadSec = config.greetWindow.openingTimeAfterInitialLoadSec;
+        }
+        if (config.greetWindow.animationOpeningSec !== undefined) {
+          gw.animationOpeningSec = config.greetWindow.animationOpeningSec;
+        }
+        if (config.greetWindow.animationClosingSec !== undefined) {
+          gw.animationClosingSec = config.greetWindow.animationClosingSec;
+        }
+        if (gw.inputBox && config.greetWindow.inputBox) {
+          if (config.greetWindow.inputBox.openingTimeAfterInitialLoadSec !== undefined) {
+            gw.inputBox.openingTimeAfterInitialLoadSec = config.greetWindow.inputBox.openingTimeAfterInitialLoadSec;
+          }
+          if (config.greetWindow.inputBox.animationOpeningSec !== undefined) {
+            gw.inputBox.animationOpeningSec = config.greetWindow.inputBox.animationOpeningSec;
+          }
+        }
+      }
+
+      // Reset visibility state
       gw.visible = false;
       gw.dismissed = false;
       if (gw.inputBox) gw.inputBox.visible = false;
-      setTimeout(() => {
-        gw.visible = true;
-        if (gw.inputBox && gw.inputBox.enabled) {
-          setTimeout(() => {
-            gw.inputBox.visible = true;
-          }, 1000);
+      if (typeof gwStore.emit === 'function') gwStore.emit('store:greetWindow');
+
+      // Clear existing timers
+      if (window._retriggerGreetTimer) clearTimeout(window._retriggerGreetTimer);
+      if (window._retriggerInputTimer) clearTimeout(window._retriggerInputTimer);
+
+      // Trigger appearance delay countdown
+      window._retriggerGreetTimer = setTimeout(() => {
+        const currentGw = gwStore.get();
+        if (currentGw) {
+          currentGw.visible = true;
+          currentGw.dismissed = false;
+          if (typeof gwStore.emit === 'function') gwStore.emit('store:greetWindow');
         }
-      }, 200);
+
+        // Trigger input card reveal delay countdown
+        if (gw.inputBox && gw.inputBox.enabled) {
+          const remainingInputDelayMs = Math.max(0, (inputDelaySec - greetDelaySec) * 1000);
+          window._retriggerInputTimer = setTimeout(() => {
+            const curGw = gwStore.get();
+            if (curGw && curGw.inputBox) {
+              curGw.inputBox.visible = true;
+              if (typeof gwStore.emit === 'function') gwStore.emit('store:greetWindow');
+            }
+          }, remainingInputDelayMs);
+        }
+      }, Math.max(50, greetDelaySec * 1000));
     }
   }
-  if (window.Alpine) {
+
+  // 2. Alpine fallback widget re-triggering
+  if (window.Alpine && Alpine.store('greetWindow')) {
     const greetStore = Alpine.store('greetWindow');
     if (greetStore) {
       greetStore.visible = false;
       greetStore.dismissed = false;
-      if (greetStore.inputBox) {
-        greetStore.inputBox.visible = false;
-      }
+      if (greetStore.inputBox) greetStore.inputBox.visible = false;
 
-      // Briefly wait and turn visible
       setTimeout(() => {
         greetStore.visible = true;
         if (greetStore.inputBox && greetStore.inputBox.enabled) {
+          const remainingInputDelayMs = Math.max(0, (inputDelaySec - greetDelaySec) * 1000);
           setTimeout(() => {
             greetStore.inputBox.visible = true;
-          }, 1000);
+          }, remainingInputDelayMs);
         }
-      }, 200);
+      }, Math.max(50, greetDelaySec * 1000));
     }
   }
 }
