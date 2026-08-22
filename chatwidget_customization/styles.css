@@ -1,4 +1,4 @@
-:root {
+.chatwidget-customization-app {
   --bg-body: #f5f6fa;
   --bg-surface: #ffffff;
   --bg-card: #f8f9fc;
@@ -47,20 +47,15 @@
   --letter-spacing-wide: 0.025em;
 }
 
-*,
-*::before,
-*::after {
+.chatwidget-customization-app *,
+.chatwidget-customization-app *::before,
+.chatwidget-customization-app *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body {
-  height: 100%;
-  overflow: hidden;
-}
-
-body {
+.chatwidget-customization-app {
   font-family: var(--font-sans);
   background: var(--bg-body);
   color: var(--text-main);
@@ -70,30 +65,35 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-::-webkit-scrollbar {
+.chatwidget-customization-app ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 
-::-webkit-scrollbar-track {
+.chatwidget-customization-app ::-webkit-scrollbar-track {
   background: transparent;
 }
 
-::-webkit-scrollbar-thumb {
+.chatwidget-customization-app ::-webkit-scrollbar-thumb {
   background: #d0d4dd;
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+.chatwidget-customization-app ::-webkit-scrollbar-thumb:hover {
   background: #b0b5c2;
 }
 
-input,
-select,
-textarea,
-button {
+.chatwidget-customization-app input,
+.chatwidget-customization-app select,
+.chatwidget-customization-app textarea,
+.chatwidget-customization-app button {
   font-family: inherit;
 }
 
@@ -109,7 +109,7 @@ button {
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
-  z-index: 10000;
+  z-index: 10;
 }
 
 .header-left {
@@ -195,7 +195,7 @@ button {
   flex-shrink: 0;
   width: 100%;
   position: relative;
-  z-index: 10000;
+  z-index: 10;
 }
 
 .nav-left-section {
@@ -1150,8 +1150,8 @@ input:checked+.slider::before {
   display: none;
 }
 
-body > cw-widget-root,
-body > #zotly-widget-embed {
+.chatwidget-customization-app > cw-widget-root,
+.chatwidget-customization-app > #zotly-widget-embed {
   display: none !important;
 }
 

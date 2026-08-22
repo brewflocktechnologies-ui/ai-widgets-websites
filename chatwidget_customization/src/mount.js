@@ -1,11 +1,11 @@
 import html from '../index.html?raw';
-import '../styles.css';
+import appStyles from '../styles.css?inline';
+import litStyles from '../../chatwidget_components_lit/public/style.css?inline';
 import scriptsSource from '../scripts.js?raw';
 
 // Origin this remote is served from (e.g. http://localhost:5001). Used so
 // preset/config fetches resolve against the remote, not the host page origin.
 const REMOTE_ORIGIN = new URL(import.meta.url).origin;
-window.__CUSTOMIZATION_ASSET_BASE__ = `${REMOTE_ORIGIN}/`;
 
 const CDN = {
   fonts:
@@ -17,95 +17,75 @@ const CDN = {
     'https://brewflocktechnologies-ui.github.io/ai-widgets-websites/dist/chat-widget.js',
 };
 
-function loadScript(src, attrs = {}) {
-  return new Promise((resolve) => {
-    if (document.querySelector(`script[data-cw="${src}"]`)) return resolve();
-    const s = document.createElement('script');
-    s.src = src;
-    s.defer = true;
-    s.setAttribute('data-cw', src);
-    Object.entries(attrs).forEach(([k, v]) => s.setAttribute(k, v));
-    s.onload = () => resolve();
-    s.onerror = () => resolve();
-    document.head.appendChild(s);
-  });
-}
-
-function loadLink(href) {
-  return new Promise((resolve) => {
-    if (document.querySelector(`link[data-cw="${href}"]`)) return resolve();
-    const l = document.createElement('link');
-    l.rel = 'stylesheet';
-    l.href = href;
-    l.setAttribute('data-cw', href);
-    l.onload = () => resolve();
-    l.onerror = () => resolve();
-    document.head.appendChild(l);
-  });
-}
-
-// The injected markup relies on inline handlers (onclick/onchange/...) that
-// execute in the global scope, so scripts.js MUST run as a classic script
-// (not an ES module) to expose its top-level functions on `window`.
-function runClassicScript(code) {
-  const s = document.createElement('script');
+function runInFrameClassic(doc, code) {
+  const s = doc.createElement('script');
   s.textContent = code;
-  document.head.appendChild(s);
-}
-
-function setTailwindConfig() {
-  window.tailwind = window.tailwind || {};
-  window.tailwind.config = {
-    darkMode: 'class',
-    theme: {
-      extend: {
-        colors: { primary: '#0b5fff' },
-      },
-    },
-  };
+  doc.head.appendChild(s);
 }
 
 /**
- * Mounts the full customization UI into `el`.
- * All assets (CSS, scripts.js, CDN deps) are pulled through this module's
- * own graph, so no root-level /scripts.js or /styles.css copies are needed.
+ * Mounts the full customization UI into `el`, entirely inside an <iframe>.
+ *
+ * Everything (project CSS, Tailwind Preflight, Alpine, fonts, lucide, the chat
+ * widget, scripts.js) runs in the iframe's own document, so nothing leaks into
+ * or overrides the host Next.js page (this fixes the sidebar's active button
+ * background turning transparent). The iframe is built from a single srcdoc
+ * document and scripts.js is executed exactly once on `load`, which avoids the
+ * double-evaluation race that happens when mount() is async under React's
+ * StrictMode (otherwise `const MSG_LABELS` etc. throw "already declared").
  */
 export async function mount(el) {
   if (!el || el.dataset.cwMounted === 'true') return;
   el.dataset.cwMounted = 'true';
 
-  el.innerHTML = html;
+  const bodyHtml = new DOMParser().parseFromString(html, 'text/html').body.innerHTML;
 
-  // Anti-flash rule for the auto-mounted body element
-  if (!document.getElementById('widget-anti-flash-style')) {
-    const style = document.createElement('style');
-    style.id = 'widget-anti-flash-style';
-    style.textContent = `
-      body > cw-widget-root { display: none !important; }
-      #preview-viewport-wrapper cw-widget-root { display: block !important; }
-    `;
-    document.head.appendChild(style);
-  }
+  const frameHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Widget Customization</title>
+  <style>${litStyles}</style>
+  <style>${appStyles}</style>
+  <link rel="stylesheet" href="${CDN.fonts}">
+  <script>window.tailwind = window.tailwind || {}; window.tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#0b5fff' } } } };</script>
+  <script src="${CDN.tailwind}"></script>
+  <script src="${CDN.lucide}"></script>
+  <script defer src="${CDN.chatWidget}"></script>
+  <script defer src="${CDN.alpine}"></script>
+</head>
+<body>
+${bodyHtml}
+</body>
+</html>`;
 
-  // CDN dependencies the injected markup relies on
-  await loadLink(CDN.fonts);
-  await loadScript(CDN.tailwind);
-  setTailwindConfig();
-  await loadScript(CDN.lucide);
-  await loadScript(CDN.chatWidget);
-  await loadScript(CDN.alpine);
+  const iframe = document.createElement('iframe');
+  iframe.className = 'cw-customization-frame';
+  iframe.setAttribute('title', 'Widget Customization');
+  iframe.style.cssText = 'width:100%;height:100%;border:0;display:block;background:#fff;';
 
-  try {
-    window.lucide && window.lucide.createIcons();
-  } catch (e) {
-    /* non-fatal */
-  }
+  iframe.onload = () => {
+    const doc = iframe.contentDocument;
+    const win = iframe.contentWindow;
+    if (!doc || !win || win.__CW_INITIALIZED__) return;
+    win.__CW_INITIALIZED__ = true;
+    win.__CUSTOMIZATION_ASSET_BASE__ = `${REMOTE_ORIGIN}/`;
 
-  // scripts.js runs as a classic script so its top-level functions
-  // (triggerNotifPreviewUpdate, updateNotifCounter, etc.) are global and the
-  // markup's inline handlers can find them. The bottom of scripts.js
-  // auto-runs initCustomizationApp() now that the DOM is present.
-  runClassicScript(scriptsSource);
+    try {
+      win.lucide && win.lucide.createIcons();
+    } catch (e) {
+      /* non-fatal */
+    }
+
+    // scripts.js runs as a classic script so its top-level functions
+    // (triggerNotifPreviewUpdate, updateNotifCounter, etc.) are global on the
+    // iframe window and the markup's inline handlers can find them.
+    runInFrameClassic(doc, scriptsSource);
+  };
+
+  iframe.srcdoc = frameHtml;
+  el.appendChild(iframe);
 }
 
 export function unmount(el) {

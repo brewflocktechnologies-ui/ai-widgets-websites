@@ -21,7 +21,14 @@ export default defineConfig({
       name: 'chatwidget_customization',
       filename: 'remoteEntry.js',
       exposes: {
-        './mount': './src/mount.js',
+        './mount': {
+          import: './src/mount.js',
+          // CSS is inlined into the iframe by mount.js, so the federation
+          // runtime must NOT inject the shared stylesheet into the host
+          // document <head> (that would leak global rules like
+          // `html, body { overflow: hidden }` into the Next.js/host page).
+          dontAppendStylesToHead: true,
+        },
       }
     })
   ],
