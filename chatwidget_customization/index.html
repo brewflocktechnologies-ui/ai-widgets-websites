@@ -40,18 +40,12 @@
   <!-- TOP HEADER -->
   <header class="app-header">
     <div class="header-left">
-      <div class="header-logo">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-      </div>
-      <div>
-        <h1 class="header-title">Chat Widget Customization</h1>
-        <p class="header-subtitle">Customize the branding and look of the customer support widget.</p>
-      </div>
+      <h1 class="header-title">Chat Widget Customization</h1>
     </div>
     <div class="header-right">
-      <button class="header-btn" id="btn-reset-chat-header" title="Reset Preview">
+      <button class="header-btn" id="btn-reset-chat-header" title="Refresh Preview">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-        Reset Preview
+        Refresh Preview
       </button>
       <button class="header-btn header-btn-primary" id="btn-save-config">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
@@ -126,31 +120,6 @@
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
           </button>
         </div>
-
-        <div class="live-preview-dropdown">
-          <button id="btn-live-preview-trigger" type="button" class="toolbar-action-btn" style="display: flex; align-items: center; gap: 6px;">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-            <span>Live Test Site</span>
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
-          <div class="dropdown-menu">
-            <a href="../clientwebsites/site-emerald.html?test=true" target="_blank" data-site="emerald" class="dropdown-item">🌿 EcoSphere (Emerald)</a>
-            <a href="../clientwebsites/site-amber.html?test=true" target="_blank" data-site="amber" class="dropdown-item">⚡ Vortex (Amber)</a>
-            <a href="../clientwebsites/site-google.html?test=true" target="_blank" data-site="google" class="dropdown-item">🔍 Search (Google)</a>
-            <a href="../clientwebsites/site-phonepe.html?test=true" target="_blank" data-site="phonepe" class="dropdown-item">📱 Pay (PhonePe)</a>
-          </div>
-        </div>
-
-        <button class="toolbar-action-btn" id="btn-retrigger-greet-toolbar" title="Re-trigger Greet Card">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-        </button>
-        <span class="preview-client-badge" id="preview-client-badge">amber</span>
       </div>
     </div>
   </nav>
@@ -190,15 +159,6 @@
               JSON
             </button>
           </div>
-        </div>
-
-        <!-- Preset Selector -->
-        <div class="section-card">
-          <div class="section-card-header">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            Preset Template
-          </div>
-          <div class="preset-grid"></div>
         </div>
 
         <!-- VISUAL EDITOR -->
@@ -3500,10 +3460,6 @@
 
             </div>
           </div>
-          <!-- Utility Helper Buttons -->
-          <button id="btn-retrigger-greet" class="btn-primary">⚡ Retrigger Greet Card</button>
-          <button id="btn-reset-chat" class="btn-secondary">↺ Restart Chat Panel Session</button>
-
         </div>
 
         <!-- JSON EDITOR -->

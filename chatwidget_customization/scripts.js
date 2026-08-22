@@ -605,42 +605,10 @@ function formatCardBorder(width, style, hexColor, opacity) {
 
 // Global customization State
 window.cutomizationConfig = {};
-const presetColors = {
-  emerald: { primary: '#059669', secondary: '#0d9488', dark: false },
-  amber: { primary: '#d97706', secondary: '#b45309', dark: false },
-  google: { primary: '#1a73e8', secondary: '#34a853', dark: false },
-  phonepe: { primary: '#5f259f', secondary: '#a855f7', dark: false },
-  default: { primary: '#0b5fff', secondary: '#22d3ee', dark: false }
-};
+
 
 // Main Initialization
 async function initCustomizationApp() {
-  // 0. Dynamically generate preset cards from configuration array
-  const presets = [
-    { id: 'default', name: 'Default Setup', color: '#0b5fff' },
-    { id: 'emerald', name: 'EcoSphere (Emerald)', color: '#059669' },
-    { id: 'amber', name: 'Vortex (Amber)', color: '#d97706' },
-    { id: 'google', name: 'Search (Google)', color: '#1a73e8' },
-    { id: 'phonepe', name: 'Pay (PhonePe)', color: '#5f259f' }
-  ];
-
-  const presetGrid = document.querySelector('.preset-grid');
-  if (presetGrid && presetGrid.children.length === 0) {
-    presets.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'preset-card';
-      card.dataset.preset = p.id;
-      card.innerHTML = `
-        <span class="preset-dot" style="background-color: ${p.color};"></span>
-        <span class="preset-name">${p.name}</span>
-      `;
-      card.addEventListener('click', () => {
-        selectPreset(p.id);
-      });
-      presetGrid.appendChild(card);
-    });
-  }
-
   // 1. Setup collapsible accordions dynamically
   document.querySelectorAll('.accordion-section').forEach((section, idx) => {
     if (section.querySelector('.accordion-collapse-wrapper')) return;
@@ -812,30 +780,6 @@ async function initCustomizationApp() {
     });
   }
 
-  // Deploy to Test Site Dropdown click listener
-  const dropdownTrigger = document.getElementById('btn-live-preview-trigger');
-  const dropdownWrapper = document.querySelector('.live-preview-dropdown');
-  if (dropdownTrigger && dropdownWrapper) {
-    dropdownTrigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdownWrapper.classList.toggle('active');
-    });
-
-    document.addEventListener('click', () => {
-      dropdownWrapper.classList.remove('active');
-    });
-
-    document.querySelectorAll('.live-preview-dropdown .dropdown-item').forEach(item => {
-      item.addEventListener('click', (e) => {
-        e.preventDefault();
-        // Save the currently active editor config to localStorage
-        localStorage.setItem('zotly_temp_preview_config', JSON.stringify(window.cutomizationConfig));
-        dropdownWrapper.classList.remove('active');
-        window.open(item.href, '_blank');
-      });
-    });
-  }
-
   // 3. Setup Welcome background gradient picker event listeners
   setupWelcomeBgPickerListeners();
 
@@ -859,10 +803,8 @@ async function initCustomizationApp() {
     visualEditorSection.style.display = 'none';
   });
 
-  // Parse preset from URL query parameter (default to 'emerald')
-  const urlParams = new URLSearchParams(window.location.search);
-  const targetPreset = urlParams.get('preset') || urlParams.get('client') || 'emerald';
-  await selectPreset(targetPreset);
+  // Load default customization config
+  await loadDefaultConfig();
 
   // Boot the chat widget preview
   await bootstrapWidgetPreview();
@@ -877,9 +819,7 @@ async function initCustomizationApp() {
   setupJsonEditorEventListeners();
 
   // Setup auxiliary buttons
-  document.getElementById('btn-retrigger-greet').addEventListener('click', retriggerGreetCard);
   document.getElementById('btn-format-json').addEventListener('click', formatRawJson);
-  document.getElementById('btn-reset-chat').addEventListener('click', restartChatSession);
 
   // Host Page Theme controls
   setupHostPageThemeControls();
@@ -1032,10 +972,10 @@ async function initCustomizationApp() {
   });
 
   // --- RESET BUTTON IN HEADER ---
-  document.getElementById('btn-reset-chat-header')?.addEventListener('click', restartChatSession);
+  document.getElementById('btn-reset-chat-header')?.addEventListener('click', refreshWidgetPreview);
 
   // --- RETRIGGER BUTTONS ---
-  document.getElementById('btn-retrigger-greet-toolbar')?.addEventListener('click', retriggerGreetCard);
+
 
   // --- COPY SNIPPET BUTTON ---
   document.getElementById('btn-copy-snippet')?.addEventListener('click', () => {
@@ -1287,41 +1227,21 @@ async function bootstrapWidgetPreview() {
   }
 }
 
-// Preset Loader
-async function selectPreset(presetName) {
-  // Update Preset Cards UI
-  document.querySelectorAll('.preset-card').forEach(card => {
-    card.classList.remove('active');
-    if (card.dataset.preset === presetName) {
-      card.classList.add('active');
-    }
-  });
-
-  // Apply Mock Host theme variables based on presets
-  const colors = presetColors[presetName] || presetColors['default'];
-  document.documentElement.style.setProperty('--primary-color', colors.primary);
-  document.documentElement.style.setProperty('--secondary-color', colors.secondary);
-
-  // Set host input indicators
-  const hostPrimaryInput = document.getElementById('host-primary-color');
-  const hostSecondaryInput = document.getElementById('host-secondary-color');
-  if (hostPrimaryInput) hostPrimaryInput.value = colors.primary;
-  if (hostSecondaryInput) hostSecondaryInput.value = colors.secondary;
-
-  // Fetch JSON config
+// Default config loader (replaces preset-based loader)
+async function loadDefaultConfig() {
+  const defaultClient = 'default';
   try {
-    const presetBase =
-      (window.__CUSTOMIZATION_ASSET_BASE__ || '') + 'clients/';
-    const res = await fetch(`${presetBase}${presetName}.json`);
+    const presetBase = (window.__CUSTOMIZATION_ASSET_BASE__ || '') + 'clients/';
+    const res = await fetch(`${presetBase}${defaultClient}.json`);
     if (res.ok) {
       window.cutomizationConfig = await res.json();
     } else {
-      throw new Error("Failed to load preset json file");
+      throw new Error("Failed to load default config");
     }
   } catch (err) {
-    console.warn("Could not load preset file, using default structure: ", err);
+    console.warn("Could not load default config, using minimal structure: ", err);
     window.cutomizationConfig = {
-      clientId: presetName,
+      clientId: defaultClient,
       clientName: "Support Team",
       greetWindow: { enabled: true, title: "Need help?", description: "Chat with us!", useWebsiteTheme: true },
       bubble: { useWebsiteTheme: true, width: 55, height: 55 },
@@ -1330,13 +1250,24 @@ async function selectPreset(presetName) {
     };
   }
 
+  // Apply Mock Host theme variables from accent color
+  const accent = window.cutomizationConfig?.accentColor;
+  if (accent) {
+    document.documentElement.style.setProperty('--primary-color', accent);
+    document.documentElement.style.setProperty('--secondary-color', accent);
+    const hostPrimaryInput = document.getElementById('host-primary-color');
+    const hostSecondaryInput = document.getElementById('host-secondary-color');
+    if (hostPrimaryInput) hostPrimaryInput.value = accent;
+    if (hostSecondaryInput) hostSecondaryInput.value = accent;
+  }
+
   // Update raw JSON textarea
   const jsonTextarea = document.getElementById('raw-json-textarea');
   if (jsonTextarea) {
     jsonTextarea.value = JSON.stringify(window.cutomizationConfig, null, 2);
   }
 
-  // Reset welcome card display tracker for preset load
+  // Reset welcome card display tracker
   window.lastWelcomeEnabled = undefined;
 
   // Populate Visual Form Controls
@@ -1346,7 +1277,6 @@ async function selectPreset(presetName) {
   if (window.Alpine) {
     updateAlpineStores(window.cutomizationConfig);
   }
-
 }
 
 // Populate visual controls from active config object
@@ -2439,6 +2369,19 @@ function restartChatSession() {
   applyMessagePreview(window.activeMessagePreviewKey || 'welcome');
   window.dispatchEvent(new CustomEvent('close-contact-widget'));
   retriggerGreetCard();
+}
+
+// Full refresh of the preview widget from the current (updated) form config
+async function refreshWidgetPreview() {
+  // Remove existing widget instances so the widget remounts fresh from current config
+  document.querySelectorAll('cw-widget-root').forEach(el => el.remove());
+  const zotly = document.getElementById('zotly-widget-embed');
+  if (zotly) zotly.remove();
+
+  // Ensure stores reflect the latest visual-form data before remount
+  if (window.Alpine) updateAlpineStores(window.cutomizationConfig);
+
+  await bootstrapWidgetPreview();
 }
 
 // Format the code in JSON Textarea editor

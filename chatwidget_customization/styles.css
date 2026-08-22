@@ -506,10 +506,10 @@ body.dark .app-header,
   color: #ffffff !important;
 }
 
-html.dark .header-title h1,
-body.dark .header-title h1,
-.dark .header-title h1,
-.chatwidget-customization-app.dark .header-title h1 {
+html.dark .header-title,
+body.dark .header-title,
+.dark .header-title,
+.chatwidget-customization-app.dark .header-title {
   color: #ffffff !important;
 }
 
@@ -730,37 +730,6 @@ body.dark input:checked + .slider,
   background-color: #2563eb !important;
 }
 
-html.dark .preset-card,
-body.dark .preset-card,
-.dark .preset-card,
-.chatwidget-customization-app.dark .preset-card {
-  background-color: #0a0a0a !important;
-  border-color: #262626 !important;
-}
-
-html.dark .preset-card:hover,
-body.dark .preset-card:hover,
-.dark .preset-card:hover,
-.chatwidget-customization-app.dark .preset-card:hover {
-  background-color: #171717 !important;
-  border-color: #404040 !important;
-}
-
-html.dark .preset-card.active,
-body.dark .preset-card.active,
-.dark .preset-card.active,
-.chatwidget-customization-app.dark .preset-card.active {
-  background-color: #171717 !important;
-  border-color: #525252 !important;
-}
-
-html.dark .preset-name,
-body.dark .preset-name,
-.dark .preset-name,
-.chatwidget-customization-app.dark .preset-name {
-  color: #ffffff !important;
-}
-
 /* 4. Preview Panel & Device Frame */
 html.dark .preview-panel,
 body.dark .preview-panel,
@@ -959,29 +928,12 @@ body.chatwidget-customization-app {
   gap: 14px;
 }
 
-.header-logo {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-md);
-  background: var(--accent-light);
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .header-title {
   font-family: var(--font-heading);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
+  font-size: 21px;
+  font-weight: 600;
   color: var(--text-main);
   line-height: var(--line-height-tight);
-}
-
-.header-subtitle {
-  font-size: var(--font-size-base);
-  color: var(--text-muted);
-  font-weight: var(--font-weight-regular);
 }
 
 .header-right {
@@ -1342,54 +1294,6 @@ body.chatwidget-customization-app {
   font-size: 13px;
   margin-bottom: 16px;
   line-height: 1.5;
-}
-
-/* ==============================
-   PRESETS
-   ============================== */
-.preset-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-
-.preset-card {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid #e2e8f0;
-  background: var(--bg-surface);
-  cursor: pointer;
-  transition: all 0.15s ease-in-out;
-}
-
-.preset-card:hover {
-  border-color: #cbd5e1;
-  background: var(--bg-hover);
-}
-
-.preset-card.active {
-  border-color: var(--accent);
-  background: var(--accent-light);
-  box-shadow: 0 0 0 1px var(--accent);
-}
-
-.preset-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.preset-name {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 /* ==============================
@@ -1906,16 +1810,6 @@ input:checked+.slider::before {
   color: var(--text-main);
 }
 
-.preview-client-badge {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 20px;
-  background: var(--accent-light);
-  color: var(--accent);
-  border: 1px solid var(--accent-border);
-}
-
 /* ==============================
    PREVIEW VIEWPORT
    ============================== */
@@ -2193,63 +2087,7 @@ body.dark #preview-scrollable-content,
   background: var(--bg-card);
 }
 
-/* Live Preview Dropdown Menu styles */
-.live-preview-dropdown {
-  position: relative;
-  display: inline-block;
-}
 
-.live-preview-dropdown .dropdown-menu {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: calc(100% + 6px);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-md);
-  z-index: 10005;
-  min-width: 190px;
-  overflow: hidden;
-  padding: 4px 0;
-}
-
-.live-preview-dropdown:hover .dropdown-menu,
-.live-preview-dropdown.active .dropdown-menu {
-  display: block;
-  animation: fadeInDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 500;
-  transition: all 0.15s ease;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-.dropdown-item:hover {
-  background: var(--accent-light);
-  color: var(--accent);
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 /* Accordion title icons styling */
 .accordion-title span {
@@ -2339,10 +2177,6 @@ body.dark #preview-scrollable-content,
 
   .tab-label-short {
     display: inline !important;
-  }
-
-  .preview-client-badge {
-    display: none;
   }
 
   .nav-live-label span {
