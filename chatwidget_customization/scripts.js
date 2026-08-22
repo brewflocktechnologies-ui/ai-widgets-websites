@@ -908,13 +908,15 @@ async function initCustomizationApp() {
       }
 
       if (tab.dataset.tab === 'tab-forms') {
-        // Hide chat widget overlay on Forms tab
+        // Show chat widget overlay on Forms tab and render the real pre-chat/post-chat form state
         if (widgetEmbed) {
-          widgetEmbed.style.display = 'none';
+          widgetEmbed.style.display = 'block';
         }
-        // Render Form preview inside preview area ONLY on forms tab
-        if (window.FormsPreview && previewContent) {
-          window.FormsPreview.renderPreChatPreview('preview-scrollable-content');
+        const postchatToggle = document.getElementById('postchat-form-toggle');
+        if (postchatToggle && postchatToggle.checked) {
+          showFormInLivePreview('postchat');
+        } else {
+          showFormInLivePreview('prechat');
         }
       } else if (tab.dataset.tab === 'tab-notifications') {
         // Hide chat widget overlay on Notifications tab
@@ -2747,14 +2749,59 @@ async function loadAndInitFormsComponent() {
     updateSubheadingCount();
   }
 
+  // Helper to trigger Pre-Chat / Post-Chat form live preview on Lit Web Component
+  window.showFormInLivePreview = function(formType) {
+    const widgetEmbed = document.getElementById('zotly-widget-embed') || document.querySelector('cw-widget-root');
+    if (widgetEmbed) {
+      widgetEmbed.style.display = 'block';
+    }
+
+    const rootEl = document.querySelector('cw-widget-root');
+    if (window.ChatWidgetLit && window.ChatWidgetLit.chatStore) {
+      const cs = window.ChatWidgetLit.chatStore.get();
+      if (cs) {
+        cs.panelOpen = true;
+        if (formType === 'postchat') {
+          cs.state = 'postchat';
+          if (rootEl) rootEl.postchatEnabled = true;
+        } else {
+          cs.state = 'prechat';
+          if (rootEl) rootEl.prechatEnabled = true;
+        }
+      }
+      if (rootEl) {
+        rootEl.panelOpen = true;
+        if (typeof rootEl.requestUpdate === 'function') rootEl.requestUpdate();
+      }
+    }
+
+    if (window.Alpine && Alpine.store('chat')) {
+      const widgetContainer = document.getElementById('zotly-widget-embed');
+      if (widgetContainer && widgetContainer._x_dataStack && widgetContainer._x_dataStack[0]) {
+        widgetContainer._x_dataStack[0].openContactWidget = true;
+      }
+      Alpine.store('chat').panelOpen = true;
+      Alpine.store('chat').state = (formType === 'postchat') ? 'postchat' : 'prechat';
+    }
+  };
+
   // Post chat form toggle select visibility & preview trigger
   const postchatToggle = document.getElementById('postchat-form-toggle');
   const postchatSelectContainer = document.getElementById('postchat-select-container');
   if (postchatToggle && postchatSelectContainer) {
     postchatToggle.addEventListener('change', () => {
       postchatSelectContainer.style.display = postchatToggle.checked ? 'block' : 'none';
-      if (isFormsTabActive() && postchatToggle.checked && window.FormsPreview) {
-        window.FormsPreview.renderPostChatPreview('preview-scrollable-content');
+      if (window.cutomizationConfig) {
+        window.cutomizationConfig.postchatEnabled = postchatToggle.checked;
+      }
+      if (isFormsTabActive()) {
+        if (postchatToggle.checked) {
+          window.showFormInLivePreview('postchat');
+        } else if (prechatToggle && prechatToggle.checked) {
+          window.showFormInLivePreview('prechat');
+        } else {
+          window.showFormInLivePreview('prechat');
+        }
       }
     });
   }
@@ -2766,17 +2813,30 @@ async function loadAndInitFormsComponent() {
     prechatToggle.addEventListener('change', () => {
       prechatSelectContainer.style.opacity = prechatToggle.checked ? '1' : '0.5';
       prechatSelectContainer.style.pointerEvents = prechatToggle.checked ? 'auto' : 'none';
-      if (isFormsTabActive() && prechatToggle.checked && window.FormsPreview) {
-        window.FormsPreview.renderPreChatPreview('preview-scrollable-content');
+      if (window.cutomizationConfig) {
+        window.cutomizationConfig.prechatEnabled = prechatToggle.checked;
+      }
+      if (isFormsTabActive()) {
+        if (prechatToggle.checked) {
+          window.showFormInLivePreview('prechat');
+        } else if (postchatToggle && postchatToggle.checked) {
+          window.showFormInLivePreview('postchat');
+        } else {
+          window.showFormInLivePreview('prechat');
+        }
       }
     });
   }
 
   // Initial render if forms tab is active on page load
-  if (isFormsTabActive() && window.FormsPreview) {
-    const widgetEmbed = document.getElementById('zotly-widget-embed');
-    if (widgetEmbed) widgetEmbed.style.display = 'none';
-    window.FormsPreview.renderPreChatPreview('preview-scrollable-content');
+  if (isFormsTabActive()) {
+    const widgetEmbed = document.getElementById('zotly-widget-embed') || document.querySelector('cw-widget-root');
+    if (widgetEmbed) widgetEmbed.style.display = 'block';
+    if (postchatToggle && postchatToggle.checked) {
+      window.showFormInLivePreview('postchat');
+    } else {
+      window.showFormInLivePreview('prechat');
+    }
   }
 
   // Form builder modal logic
