@@ -1388,7 +1388,7 @@ function syncConfigToVisualForm(config) {
   triggerNotifPreviewUpdate();
 
   // Sync Share by Link URL
-  const presetName = config.clientId || 'amber';
+  const presetName = config.clientId || 'default';
   const shareUrl = `https://brewflocktechnologies-ui.github.io/ai-widgets-websites/clientwebsites/site-${presetName}.html`;
   const shareInput = document.getElementById('share-link-input');
   const shareText = document.getElementById('share-link-url-text');

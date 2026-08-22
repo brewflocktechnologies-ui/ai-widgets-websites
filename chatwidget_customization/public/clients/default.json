@@ -1,7 +1,7 @@
 {
-  "clientId": "amber",
-  "clientName": "Vortex Studio Amber",
-  "accentColor": "#d97706",
+  "clientId": "default",
+  "clientName": "Default Setup",
+  "accentColor": "#0b5fff",
     "features": {
     "voiceCallMaster": false,
     "voiceCallAgents": false,
@@ -65,7 +65,7 @@
     "iconType": "lucide",
     "lucideIcon": "Sparkles",
     "iconSize": 52,
-    "iconColor": "#d97706",
+    "iconColor": "#0b5fff",
     "iconAnimation": "wiggle",
     "iconAnimationDuration": "2.5s",
     "title": "Hi there! 👋 Need help growing your business using AI?",
@@ -84,7 +84,7 @@
       "textColor": "#1e293b",
       "borderRadius": 24,
       "boxShadow": "0 6px 16px rgba(0,0,0,0.12)",
-      "buttonColor": "#d97706",
+      "buttonColor": "#0b5fff",
       "buttonIconColor": "#ffffff"
     }
   },
@@ -290,7 +290,7 @@
     "modalCardBg": "#ffffff",
     "modalMessageColor": "#101828",
     "modalBorderRadius": 28,
-    "endChatConfirmBg": "#d97706",
+    "endChatConfirmBg": "#0b5fff",
     "endChatConfirmTextColor": "#ffffff",
     "endChatCancelBg": "#ffffff",
     "endChatCancelTextColor": "#667085",
@@ -302,7 +302,7 @@
 
     "//_visitor_bubbles": "Text size, color, background, and padding for visitor messages",
 
-    "visitorBubbleBg": "#d97706",
+    "visitorBubbleBg": "#0b5fff",
     "visitorBubbleColor": "#ffffff",
     "visitorBubbleFontSize": "14px",
     "visitorBubblePadding": "10px 14px",
@@ -319,7 +319,7 @@
 
     "//_agent_avatar": "Agent avatar icon initials backing color and profile picture image override",
 
-    "agentAvatarBg": "#d97706",
+    "agentAvatarBg": "#0b5fff",
     "agentAvatarColor": "#ffffff",
     "agentAvatarUrl": "",
 
@@ -329,8 +329,8 @@
     "inputTextColor": "#18181b",
     "inputPlaceholderColor": "#6b7280",
     "inputBorderColor": "#d1d5db",
-    "inputFocusBorderColor": "#d97706",
-    "inputFocusShadow": "0 0 0 3px rgba(217,119,6,0.15)",
+    "inputFocusBorderColor": "#0b5fff",
+    "inputFocusShadow": "0 0 0 3px rgba(11,95,255,0.15)",
     "inputBorderRadius": "9999px",
     "inputPadding": "6px 8px",
     "inputMargin": "12px 16px",
@@ -341,7 +341,7 @@
     "attachButtonBg": "#ffffff",
     "attachButtonColor": "#6b7280",
     "emojiButtonColor": "#6b7280",
-    "sendButtonBgActive": "#d97706",
+    "sendButtonBgActive": "#0b5fff",
     "sendButtonColorActive": "#ffffff",
     "sendButtonBgInactive": "#e5e7eb",
     "sendButtonColorInactive": "#9ca3af",
@@ -355,7 +355,7 @@
     "footerPaddingBottom": "16px",
     "poweredByText": "vainateya.ai",
     "poweredByLink": "",
-    "poweredByColor": "#d97706",
+    "poweredByColor": "#0b5fff",
     "poweredByLogo": "",
     "welcome": {
       "enabled": true,
