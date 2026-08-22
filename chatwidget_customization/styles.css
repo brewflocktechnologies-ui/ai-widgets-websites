@@ -47,6 +47,836 @@
   --letter-spacing-wide: 0.025em;
 }
 
+/* ==========================================================================
+   PURE BLACK MONOCHROME DARK MODE OVERRIDES
+   ========================================================================== */
+html.dark .chatwidget-customization-app,
+body.dark .chatwidget-customization-app,
+.dark .chatwidget-customization-app,
+.dark-mode .chatwidget-customization-app,
+.chatwidget-customization-app.dark,
+.chatwidget-customization-app.dark-mode {
+  --bg-body: #000000;
+  --bg-surface: #000000;
+  --bg-card: #0a0a0a;
+  --bg-hover: #171717;
+  --border-color: #262626;
+  --border-light: #1f1f1f;
+  --text-main: #ffffff;
+  --text-secondary: #e5e5e5;
+  --text-muted: #a3a3a3;
+  --accent: #ffffff;
+  --accent-light: rgba(255, 255, 255, 0.08);
+  --accent-border: #404040;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.8);
+  color-scheme: dark;
+}
+
+/* Dark mode inputs, selects, textareas, and color pickers */
+html.dark .chatwidget-customization-app input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+html.dark .chatwidget-customization-app select,
+html.dark .chatwidget-customization-app textarea,
+body.dark .chatwidget-customization-app input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+body.dark .chatwidget-customization-app select,
+body.dark .chatwidget-customization-app textarea,
+.dark .chatwidget-customization-app input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+.dark .chatwidget-customization-app select,
+.dark .chatwidget-customization-app textarea,
+.chatwidget-customization-app.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+.chatwidget-customization-app.dark select,
+.chatwidget-customization-app.dark textarea {
+  background-color: #0a0a0a !important;
+  color: #ffffff !important;
+  border-color: #262626 !important;
+}
+
+html.dark .color-picker-wrapper,
+body.dark .color-picker-wrapper,
+.dark .color-picker-wrapper,
+.dark-mode .color-picker-wrapper,
+.chatwidget-customization-app.dark .color-picker-wrapper,
+html.dark .color-picker,
+body.dark .color-picker,
+.dark .color-picker,
+.chatwidget-customization-app.dark .color-picker {
+  background: #0a0a0a !important;
+  border: 1px solid #262626 !important;
+  color: #ffffff !important;
+}
+
+html.dark .color-picker-text,
+body.dark .color-picker-text,
+.dark .color-picker-text,
+.chatwidget-customization-app.dark .color-picker-text,
+html.dark .color-text,
+body.dark .color-text,
+.dark .color-text,
+.chatwidget-customization-app.dark .color-text {
+  color: #ffffff !important;
+  background: transparent !important;
+}
+
+html.dark .color-picker-wrapper input[type="color"]::-webkit-color-swatch,
+body.dark .color-picker-wrapper input[type="color"]::-webkit-color-swatch,
+.dark .color-picker-wrapper input[type="color"]::-webkit-color-swatch,
+.chatwidget-customization-app.dark .color-picker-wrapper input[type="color"]::-webkit-color-swatch {
+  border: 1px solid #404040 !important;
+}
+
+html.dark .theme-color-hint,
+body.dark .theme-color-hint,
+.dark .theme-color-hint,
+.dark-mode .theme-color-hint,
+.chatwidget-customization-app.dark .theme-color-hint {
+  background: #171717 !important;
+  border: 1px solid #262626 !important;
+  color: #ffffff !important;
+}
+
+html.dark .theme-color-hint:hover,
+body.dark .theme-color-hint:hover,
+.dark .theme-color-hint:hover,
+.chatwidget-customization-app.dark .theme-color-hint:hover {
+  background: #262626 !important;
+  border-color: #404040 !important;
+  color: #ffffff !important;
+}
+
+html.dark .theme-color-hint .hint-link,
+body.dark .theme-color-hint .hint-link,
+.dark .theme-color-hint .hint-link,
+.chatwidget-customization-app.dark .theme-color-hint .hint-link {
+  color: #60a5fa !important;
+}
+
+html.dark .header-btn-primary,
+body.dark .header-btn-primary,
+.dark .header-btn-primary,
+.chatwidget-customization-app.dark .header-btn-primary {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+}
+
+html.dark .header-btn-primary:hover,
+body.dark .header-btn-primary:hover,
+.dark .header-btn-primary:hover,
+.chatwidget-customization-app.dark .header-btn-primary:hover {
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+}
+
+html.dark .stepper-btn,
+body.dark .stepper-btn,
+.dark .stepper-btn,
+.chatwidget-customization-app.dark .stepper-btn {
+  background-color: #171717 !important;
+  color: #ffffff !important;
+  border-color: #262626 !important;
+}
+
+/* ==========================================================================
+   ALL-TAB DARK MODE OVERRIDES (Layout, Messages, Features, Forms, Snippet, Share, Notifications)
+   ========================================================================== */
+
+/* 1. Segmented Controls (Layout Tab, Appearance Tab) */
+html.dark .segmented-control,
+body.dark .segmented-control,
+.dark .segmented-control,
+.dark-mode .segmented-control,
+.chatwidget-customization-app.dark .segmented-control {
+  background: #0a0a0a !important;
+  border: 1px solid #262626 !important;
+}
+
+html.dark .segmented-btn,
+body.dark .segmented-btn,
+.dark .segmented-btn,
+.chatwidget-customization-app.dark .segmented-btn {
+  background: transparent !important;
+  color: #a3a3a3 !important;
+}
+
+html.dark .segmented-btn:hover,
+body.dark .segmented-btn:hover,
+.dark .segmented-btn:hover,
+.chatwidget-customization-app.dark .segmented-btn:hover {
+  color: #ffffff !important;
+}
+
+html.dark .segmented-btn.active,
+body.dark .segmented-btn.active,
+.dark .segmented-btn.active,
+.chatwidget-customization-app.dark .segmented-btn.active {
+  background: #171717 !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 2. Messages & Forms Tab Accordion Titles & Headers */
+html.dark .msg-accordion-title,
+body.dark .msg-accordion-title,
+.dark .msg-accordion-title,
+.chatwidget-customization-app.dark .msg-accordion-title,
+html.dark .form-section-title,
+body.dark .form-section-title,
+.dark .form-section-title,
+.chatwidget-customization-app.dark .form-section-title,
+html.dark .accordion-title,
+body.dark .accordion-title,
+.dark .accordion-title,
+.chatwidget-customization-app.dark .accordion-title,
+html.dark .form-config-title,
+body.dark .form-config-title,
+.dark .form-config-title,
+.chatwidget-customization-app.dark .form-config-title {
+  color: #ffffff !important;
+}
+
+html.dark .msg-accordion-desc,
+body.dark .msg-accordion-desc,
+.dark .msg-accordion-desc,
+.chatwidget-customization-app.dark .msg-accordion-desc,
+html.dark .form-section-desc,
+body.dark .form-section-desc,
+.dark .form-section-desc,
+.chatwidget-customization-app.dark .form-section-desc,
+html.dark .form-config-desc,
+body.dark .form-config-desc,
+.dark .form-config-desc,
+.chatwidget-customization-app.dark .form-config-desc {
+  color: #a3a3a3 !important;
+}
+
+html.dark .msg-icon,
+body.dark .msg-icon,
+.dark .msg-icon,
+.chatwidget-customization-app.dark .msg-icon,
+html.dark .section-badge-icon,
+body.dark .section-badge-icon,
+.dark .section-badge-icon,
+.chatwidget-customization-app.dark .section-badge-icon {
+  color: #ffffff !important;
+}
+
+/* 3. Features Tab Cards */
+html.dark .features-card,
+body.dark .features-card,
+.dark .features-card,
+.dark-mode .features-card,
+.chatwidget-customization-app.dark .features-card,
+html.dark .features-card-header,
+body.dark .features-card-header,
+.dark .features-card-header,
+.chatwidget-customization-app.dark .features-card-header,
+html.dark .features-card-body,
+body.dark .features-card-body,
+.dark .features-card-body,
+.chatwidget-customization-app.dark .features-card-body {
+  background: #0a0a0a !important;
+  border-color: #262626 !important;
+  color: #ffffff !important;
+}
+
+html.dark .features-card-header:hover,
+body.dark .features-card-header:hover,
+.dark .features-card-header:hover,
+.chatwidget-customization-app.dark .features-card-header:hover {
+  background: #171717 !important;
+}
+
+html.dark .features-card-title,
+body.dark .features-card-title,
+.dark .features-card-title,
+.chatwidget-customization-app.dark .features-card-title,
+html.dark .feature-name,
+body.dark .feature-name,
+.dark .feature-name,
+.chatwidget-customization-app.dark .feature-name {
+  color: #ffffff !important;
+}
+
+html.dark .feature-desc,
+body.dark .feature-desc,
+.dark .feature-desc,
+.chatwidget-customization-app.dark .feature-desc,
+html.dark .feature-checkbox-option,
+body.dark .feature-checkbox-option,
+.dark .feature-checkbox-option,
+.chatwidget-customization-app.dark .feature-checkbox-option {
+  color: #a3a3a3 !important;
+}
+
+html.dark .feature-icon-wrapper,
+body.dark .feature-icon-wrapper,
+.dark .feature-icon-wrapper,
+.chatwidget-customization-app.dark .feature-icon-wrapper {
+  background: #171717 !important;
+  color: #ffffff !important;
+  border-color: #262626 !important;
+}
+
+html.dark .feature-divider,
+body.dark .feature-divider,
+.dark .feature-divider,
+.chatwidget-customization-app.dark .feature-divider {
+  background: #262626 !important;
+}
+
+/* 4. Code Snippet Tab Card */
+html.dark .snippet-card-wrapper,
+body.dark .snippet-card-wrapper,
+.dark .snippet-card-wrapper,
+.dark-mode .snippet-card-wrapper,
+.chatwidget-customization-app.dark .snippet-card-wrapper {
+  background: #0a0a0a !important;
+  border-color: #262626 !important;
+  color: #ffffff !important;
+}
+
+html.dark .snippet-title,
+body.dark .snippet-title,
+.dark .snippet-title,
+.chatwidget-customization-app.dark .snippet-title,
+html.dark .snippet-instruction-text,
+body.dark .snippet-instruction-text,
+.dark .snippet-instruction-text,
+.chatwidget-customization-app.dark .snippet-instruction-text {
+  color: #ffffff !important;
+}
+
+html.dark .snippet-subtitle,
+body.dark .snippet-subtitle,
+.dark .snippet-subtitle,
+.chatwidget-customization-app.dark .snippet-subtitle {
+  color: #a3a3a3 !important;
+}
+
+html.dark .snippet-header-icon,
+body.dark .snippet-header-icon,
+.dark .snippet-header-icon,
+.chatwidget-customization-app.dark .snippet-header-icon,
+html.dark .snippet-code-icon,
+body.dark .snippet-code-icon,
+.dark .snippet-code-icon,
+.chatwidget-customization-app.dark .snippet-code-icon {
+  color: #ffffff !important;
+}
+
+html.dark .snippet-card-divider,
+body.dark .snippet-card-divider,
+.dark .snippet-card-divider,
+.chatwidget-customization-app.dark .snippet-card-divider {
+  background: #262626 !important;
+}
+
+html.dark .snippet-code-box,
+body.dark .snippet-code-box,
+.dark .snippet-code-box,
+.chatwidget-customization-app.dark .snippet-code-box {
+  background: #000000 !important;
+  border-color: #262626 !important;
+}
+
+html.dark .snippet-code-pre,
+body.dark .snippet-code-pre,
+.dark .snippet-code-pre,
+.chatwidget-customization-app.dark .snippet-code-pre {
+  color: #e5e5e5 !important;
+}
+
+html.dark .snippet-footer-item,
+body.dark .snippet-footer-item,
+.dark .snippet-footer-item,
+.chatwidget-customization-app.dark .snippet-footer-item,
+html.dark .snippet-link,
+body.dark .snippet-link,
+.dark .snippet-link,
+.chatwidget-customization-app.dark .snippet-link {
+  color: #ffffff !important;
+}
+
+/* 5. Quick Share Tab Card */
+html.dark .share-by-link-card,
+body.dark .share-by-link-card,
+.dark .share-by-link-card,
+.dark-mode .share-by-link-card,
+.chatwidget-customization-app.dark .share-by-link-card {
+  background: #0a0a0a !important;
+  border-color: #262626 !important;
+  color: #ffffff !important;
+}
+
+html.dark .share-card-title,
+body.dark .share-card-title,
+.dark .share-card-title,
+.chatwidget-customization-app.dark .share-card-title {
+  color: #ffffff !important;
+}
+
+html.dark .share-card-sub,
+body.dark .share-card-sub,
+.dark .share-card-sub,
+.chatwidget-customization-app.dark .share-card-sub {
+  color: #a3a3a3 !important;
+}
+
+html.dark .share-url-text,
+body.dark .share-url-text,
+.dark .share-url-text,
+.chatwidget-customization-app.dark .share-url-text {
+  color: #ffffff !important;
+}
+
+/* 6. Notifications Tab Config Cards */
+html.dark .notif-config-card,
+body.dark .notif-config-card,
+.dark .notif-config-card,
+.chatwidget-customization-app.dark .notif-config-card,
+html.dark .notif-preview-card,
+body.dark .notif-preview-card,
+.dark .notif-preview-card,
+.chatwidget-customization-app.dark .notif-preview-card {
+  background: #0a0a0a !important;
+  border-color: #262626 !important;
+  color: #ffffff !important;
+}
+
+html.dark .notif-label-title,
+body.dark .notif-label-title,
+.dark .notif-label-title,
+.chatwidget-customization-app.dark .notif-label-title,
+html.dark .notif-preview-title,
+body.dark .notif-preview-title,
+.dark .notif-preview-title,
+.chatwidget-customization-app.dark .notif-preview-title {
+  color: #ffffff !important;
+}
+
+html.dark .notif-label-desc,
+body.dark .notif-label-desc,
+.dark .notif-label-desc,
+.chatwidget-customization-app.dark .notif-label-desc,
+html.dark .notif-preview-desc,
+body.dark .notif-preview-desc,
+.dark .notif-preview-desc,
+.chatwidget-customization-app.dark .notif-preview-desc {
+  color: #a3a3a3 !important;
+}
+
+html.dark .chatwidget-customization-app .form-control-select,
+.dark .chatwidget-customization-app .form-control-select,
+.chatwidget-customization-app.dark .form-control-select {
+  background-color: #0a0a0a !important;
+  color: #ffffff !important;
+  border-color: #262626 !important;
+}
+
+html.dark .chatwidget-customization-app .dropdown-menu,
+.dark .chatwidget-customization-app .dropdown-menu,
+.chatwidget-customization-app.dark .dropdown-menu {
+  background-color: #0a0a0a !important;
+  border-color: #262626 !important;
+  color: #ffffff !important;
+}
+
+html.dark .chatwidget-customization-app .dropdown-item,
+.dark .chatwidget-customization-app .dropdown-item,
+.chatwidget-customization-app.dark .dropdown-item {
+  color: #e5e5e5 !important;
+}
+
+html.dark .chatwidget-customization-app .dropdown-item:hover,
+.dark .chatwidget-customization-app .dropdown-item:hover,
+.chatwidget-customization-app.dark .dropdown-item:hover {
+  background-color: #171717 !important;
+  color: #ffffff !important;
+}
+
+/* 1. Header & Navigation Sidebar */
+html.dark .app-header,
+body.dark .app-header,
+.dark .app-header,
+.dark-mode .app-header,
+.chatwidget-customization-app.dark .app-header {
+  background-color: #000000 !important;
+  border-color: #262626 !important;
+  color: #ffffff !important;
+}
+
+html.dark .header-title h1,
+body.dark .header-title h1,
+.dark .header-title h1,
+.chatwidget-customization-app.dark .header-title h1 {
+  color: #ffffff !important;
+}
+
+html.dark .app-nav-sidebar,
+body.dark .app-nav-sidebar,
+.dark .app-nav-sidebar,
+.chatwidget-customization-app.dark .app-nav-sidebar {
+  background-color: #000000 !important;
+  border-color: #262626 !important;
+}
+
+html.dark .nav-tab,
+body.dark .nav-tab,
+.dark .nav-tab,
+.chatwidget-customization-app.dark .nav-tab {
+  color: #a3a3a3 !important;
+}
+
+html.dark .nav-tab:hover,
+body.dark .nav-tab:hover,
+.dark .nav-tab:hover,
+.chatwidget-customization-app.dark .nav-tab:hover {
+  background-color: #171717 !important;
+  color: #ffffff !important;
+}
+
+html.dark .nav-tab.active,
+body.dark .nav-tab.active,
+.dark .nav-tab.active,
+.chatwidget-customization-app.dark .nav-tab.active {
+  background-color: #171717 !important;
+  color: #ffffff !important;
+  border-color: #404040 !important;
+}
+
+/* 2. Accordions, Cards, and Section Headers */
+html.dark .accordion-section,
+body.dark .accordion-section,
+.dark .accordion-section,
+.dark-mode .accordion-section,
+.chatwidget-customization-app.dark .accordion-section,
+html.dark .form-section-card,
+body.dark .form-section-card,
+.dark .form-section-card,
+.chatwidget-customization-app.dark .form-section-card,
+html.dark .msg-accordion-card,
+body.dark .msg-accordion-card,
+.dark .msg-accordion-card,
+.chatwidget-customization-app.dark .msg-accordion-card,
+html.dark .sub-accordion-card,
+body.dark .sub-accordion-card,
+.dark .sub-accordion-card,
+.chatwidget-customization-app.dark .sub-accordion-card,
+html.dark .slider-card,
+body.dark .slider-card,
+.dark .slider-card,
+.chatwidget-customization-app.dark .slider-card,
+html.dark .card-box,
+body.dark .card-box,
+.dark .card-box,
+.chatwidget-customization-app.dark .card-box {
+  background-color: #0a0a0a !important;
+  border-color: #262626 !important;
+  color: #ffffff !important;
+}
+
+html.dark .accordion-section.active,
+body.dark .accordion-section.active,
+.dark .accordion-section.active,
+.chatwidget-customization-app.dark .accordion-section.active,
+html.dark .form-section-card.active,
+body.dark .form-section-card.active,
+.dark .form-section-card.active,
+.chatwidget-customization-app.dark .form-section-card.active,
+html.dark .msg-accordion-card.active,
+body.dark .msg-accordion-card.active,
+.dark .msg-accordion-card.active,
+.chatwidget-customization-app.dark .msg-accordion-card.active {
+  border-color: #404040 !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.8) !important;
+}
+
+html.dark .accordion-header,
+body.dark .accordion-header,
+.dark .accordion-header,
+.chatwidget-customization-app.dark .accordion-header,
+html.dark .form-section-header,
+body.dark .form-section-header,
+.dark .form-section-header,
+.chatwidget-customization-app.dark .form-section-header,
+html.dark .msg-accordion-header,
+body.dark .msg-accordion-header,
+.dark .msg-accordion-header,
+.chatwidget-customization-app.dark .msg-accordion-header {
+  background-color: #0a0a0a !important;
+  color: #ffffff !important;
+}
+
+html.dark .accordion-header:hover,
+body.dark .accordion-header:hover,
+.dark .accordion-header:hover,
+.chatwidget-customization-app.dark .accordion-header:hover,
+html.dark .form-section-header:hover,
+body.dark .form-section-header:hover,
+.dark .form-section-header:hover,
+.chatwidget-customization-app.dark .form-section-header:hover {
+  background-color: #171717 !important;
+}
+
+html.dark .accordion-title,
+body.dark .accordion-title,
+.dark .accordion-title,
+.chatwidget-customization-app.dark .accordion-title,
+html.dark .setting-title,
+body.dark .setting-title,
+.dark .setting-title,
+.chatwidget-customization-app.dark .setting-title,
+html.dark .form-config-title,
+body.dark .form-config-title,
+.dark .form-config-title,
+.chatwidget-customization-app.dark .form-config-title,
+html.dark .msg-accordion-title,
+body.dark .msg-accordion-title,
+.dark .msg-accordion-title,
+.chatwidget-customization-app.dark .msg-accordion-title,
+html.dark .settings-header h2,
+body.dark .settings-header h2,
+.dark .settings-header h2,
+.chatwidget-customization-app.dark .settings-header h2 {
+  color: #ffffff !important;
+}
+
+html.dark .setting-desc,
+body.dark .setting-desc,
+.dark .setting-desc,
+.chatwidget-customization-app.dark .setting-desc,
+html.dark .form-config-desc,
+body.dark .form-config-desc,
+.dark .form-config-desc,
+.chatwidget-customization-app.dark .form-config-desc,
+html.dark .msg-accordion-desc,
+body.dark .msg-accordion-desc,
+.dark .msg-accordion-desc,
+.chatwidget-customization-app.dark .msg-accordion-desc {
+  color: #a3a3a3 !important;
+}
+
+html.dark .accordion-chevron-wrapper,
+body.dark .accordion-chevron-wrapper,
+.dark .accordion-chevron-wrapper,
+.chatwidget-customization-app.dark .accordion-chevron-wrapper,
+html.dark .sub-accordion-chevron,
+body.dark .sub-accordion-chevron,
+.dark .sub-accordion-chevron,
+.chatwidget-customization-app.dark .sub-accordion-chevron,
+html.dark .msg-chevron-icon,
+body.dark .msg-chevron-icon,
+.dark .msg-chevron-icon,
+.chatwidget-customization-app.dark .msg-chevron-icon {
+  color: #a3a3a3 !important;
+}
+
+html.dark .form-divider,
+body.dark .form-divider,
+.dark .form-divider,
+.chatwidget-customization-app.dark .form-divider {
+  border-color: #262626 !important;
+  background-color: #262626 !important;
+}
+
+/* 3. Settings Panel Container */
+html.dark .settings-panel,
+body.dark .settings-panel,
+.dark .settings-panel,
+.chatwidget-customization-app.dark .settings-panel {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #262626 !important;
+}
+
+/* 3b. Website Theme Synchronization Banner Card, Preset Cards & Switches */
+html.dark .top-theme-banner-card,
+body.dark .top-theme-banner-card,
+.dark .top-theme-banner-card,
+.dark-mode .top-theme-banner-card,
+.chatwidget-customization-app.dark .top-theme-banner-card {
+  background: #0a0a0a !important;
+  border: 1px solid #262626 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+}
+
+html.dark .top-theme-banner-card .setting-title,
+body.dark .top-theme-banner-card .setting-title,
+.dark .top-theme-banner-card .setting-title,
+.chatwidget-customization-app.dark .top-theme-banner-card .setting-title {
+  color: #ffffff !important;
+}
+
+html.dark .top-theme-banner-card .setting-desc,
+body.dark .top-theme-banner-card .setting-desc,
+.dark .top-theme-banner-card .setting-desc,
+.chatwidget-customization-app.dark .top-theme-banner-card .setting-desc {
+  color: #a3a3a3 !important;
+}
+
+html.dark .slider,
+body.dark .slider,
+.dark .slider,
+.chatwidget-customization-app.dark .slider {
+  background-color: #262626 !important;
+}
+
+html.dark input:checked + .slider,
+body.dark input:checked + .slider,
+.dark input:checked + .slider,
+.chatwidget-customization-app.dark input:checked + .slider {
+  background-color: #2563eb !important;
+}
+
+html.dark .preset-card,
+body.dark .preset-card,
+.dark .preset-card,
+.chatwidget-customization-app.dark .preset-card {
+  background-color: #0a0a0a !important;
+  border-color: #262626 !important;
+}
+
+html.dark .preset-card:hover,
+body.dark .preset-card:hover,
+.dark .preset-card:hover,
+.chatwidget-customization-app.dark .preset-card:hover {
+  background-color: #171717 !important;
+  border-color: #404040 !important;
+}
+
+html.dark .preset-card.active,
+body.dark .preset-card.active,
+.dark .preset-card.active,
+.chatwidget-customization-app.dark .preset-card.active {
+  background-color: #171717 !important;
+  border-color: #525252 !important;
+}
+
+html.dark .preset-name,
+body.dark .preset-name,
+.dark .preset-name,
+.chatwidget-customization-app.dark .preset-name {
+  color: #ffffff !important;
+}
+
+/* 4. Preview Panel & Device Frame */
+html.dark .preview-panel,
+body.dark .preview-panel,
+.dark .preview-panel,
+.chatwidget-customization-app.dark .preview-panel,
+html.dark .preview-viewport-container,
+body.dark .preview-viewport-container,
+.dark .preview-viewport-container,
+.chatwidget-customization-app.dark .preview-viewport-container {
+  background-color: var(--bg-body) !important;
+}
+
+html.dark #preview-viewport-wrapper,
+body.dark #preview-viewport-wrapper,
+.dark #preview-viewport-wrapper,
+.chatwidget-customization-app.dark #preview-viewport-wrapper {
+  background-color: var(--bg-surface) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+html.dark .mock-browser-chrome,
+body.dark .mock-browser-chrome,
+.dark .mock-browser-chrome,
+.chatwidget-customization-app.dark .mock-browser-chrome {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+}
+
+html.dark .chrome-address-bar,
+body.dark .chrome-address-bar,
+.dark .chrome-address-bar,
+.chatwidget-customization-app.dark .chrome-address-bar {
+  background-color: var(--bg-surface) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-secondary) !important;
+}
+
+html.dark .mock-header,
+body.dark .mock-header,
+.dark .mock-header,
+.chatwidget-customization-app.dark .mock-header {
+  background-color: var(--bg-surface) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-main) !important;
+}
+
+html.dark .mock-header .mock-nav a,
+body.dark .mock-header .mock-nav a,
+.dark .mock-header .mock-nav a,
+.chatwidget-customization-app.dark .mock-header .mock-nav a {
+  color: var(--text-secondary) !important;
+}
+
+html.dark .mock-hero,
+body.dark .mock-hero,
+.dark .mock-hero,
+.chatwidget-customization-app.dark .mock-hero {
+  background-color: var(--bg-body) !important;
+  color: var(--text-main) !important;
+}
+
+html.dark .mock-hero h1,
+body.dark .mock-hero h1,
+.dark .mock-hero h1,
+.chatwidget-customization-app.dark .mock-hero h1 {
+  color: var(--text-main) !important;
+}
+
+html.dark .mock-hero p,
+body.dark .mock-hero p,
+.dark .mock-hero p,
+.chatwidget-customization-app.dark .mock-hero p {
+  color: var(--text-secondary) !important;
+}
+
+html.dark .mock-feature-card,
+body.dark .mock-feature-card,
+.dark .mock-feature-card,
+.chatwidget-customization-app.dark .mock-feature-card {
+  background-color: var(--bg-surface) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-main) !important;
+}
+
+html.dark .mock-feature-card h3,
+body.dark .mock-feature-card h3,
+.dark .mock-feature-card h3,
+.chatwidget-customization-app.dark .mock-feature-card h3 {
+  color: var(--text-main) !important;
+}
+
+html.dark .mock-feature-card p,
+body.dark .mock-feature-card p,
+.dark .mock-feature-card p,
+.chatwidget-customization-app.dark .mock-feature-card p {
+  color: var(--text-muted) !important;
+}
+
+html.dark .phone-preview-card-container,
+body.dark .phone-preview-card-container,
+.dark .phone-preview-card-container,
+.chatwidget-customization-app.dark .phone-preview-card-container,
+html.dark .phone-preview-body,
+body.dark .phone-preview-body,
+.dark .phone-preview-body,
+.chatwidget-customization-app.dark .phone-preview-body,
+html.dark .notif-preview-card,
+body.dark .notif-preview-card,
+.dark .notif-preview-card,
+.chatwidget-customization-app.dark .notif-preview-card {
+  background-color: var(--bg-surface) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-main) !important;
+}
+
 html:has(body.chatwidget-customization-app),
 body.chatwidget-customization-app {
   height: 100vh;
@@ -1248,7 +2078,21 @@ cw-chat-panel {
 #preview-viewport-wrapper,
 #preview-scrollable-content,
 .preview-panel.mode-mobile #preview-viewport-wrapper {
-  background: #ffffff !important;
+  background: var(--bg-surface);
+}
+
+html.dark #preview-viewport-wrapper,
+html.dark #preview-scrollable-content,
+body.dark #preview-viewport-wrapper,
+body.dark #preview-scrollable-content,
+.dark #preview-viewport-wrapper,
+.dark #preview-scrollable-content,
+.dark-mode #preview-viewport-wrapper,
+.dark-mode #preview-scrollable-content,
+.chatwidget-customization-app.dark #preview-viewport-wrapper,
+.chatwidget-customization-app.dark #preview-scrollable-content {
+  background: #0f172a !important;
+  color: #f8fafc !important;
 }
 
 /* Accordion disabled state */

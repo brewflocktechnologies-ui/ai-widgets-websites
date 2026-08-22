@@ -64,7 +64,37 @@ export async function mount(el) {
   const iframe = document.createElement('iframe');
   iframe.className = 'cw-customization-frame';
   iframe.setAttribute('title', 'Widget Customization');
-  iframe.style.cssText = 'width:100%;height:100%;border:0;display:block;background:#fff;';
+  
+  const isHostDark = document.documentElement.classList.contains('dark') || document.body.classList.contains('dark');
+  iframe.style.cssText = `width:100%;height:100%;border:0;display:block;background:${isHostDark ? '#000000' : '#fff'};`;
+
+  const syncDarkMode = () => {
+    const isDark = document.documentElement.classList.contains('dark') || 
+                   document.body.classList.contains('dark') ||
+                   el.classList.contains('dark');
+    iframe.style.background = isDark ? '#000000' : '#fff';
+    try {
+      const doc = iframe.contentDocument;
+      const win = iframe.contentWindow;
+      if (doc && doc.documentElement) {
+        if (isDark) {
+          doc.documentElement.classList.add('dark');
+          doc.body.classList.add('dark', 'dark-mode');
+        } else {
+          doc.documentElement.classList.remove('dark');
+          doc.body.classList.remove('dark', 'dark-mode');
+        }
+      }
+      if (win && win.ChatWidgetLit && win.ChatWidgetLit.chatStore) {
+        win.ChatWidgetLit.chatStore.get().darkMode = isDark;
+      }
+      if (win && typeof win.updateAlpineStores === 'function' && win.cutomizationConfig) {
+        win.updateAlpineStores(win.cutomizationConfig);
+      }
+    } catch (e) {
+      /* cross-origin catch safety */
+    }
+  };
 
   iframe.onload = () => {
     const doc = iframe.contentDocument;
@@ -79,11 +109,22 @@ export async function mount(el) {
       /* non-fatal */
     }
 
+    // Apply dark mode to iframe document as soon as loaded
+    syncDarkMode();
+
     // scripts.js runs as a classic script so its top-level functions
     // (triggerNotifPreviewUpdate, updateNotifCounter, etc.) are global on the
     // iframe window and the markup's inline handlers can find them.
     runInFrameClassic(doc, scriptsSource);
   };
+
+  // Observe host document (Next.js <html> or <body>) for dark mode class updates
+  if (window.MutationObserver) {
+    const observer = new MutationObserver(syncDarkMode);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    el._cwDarkObserver = observer;
+  }
 
   iframe.srcdoc = frameHtml;
   el.appendChild(iframe);
@@ -91,6 +132,10 @@ export async function mount(el) {
 
 export function unmount(el) {
   if (!el) return;
+  if (el._cwDarkObserver) {
+    el._cwDarkObserver.disconnect();
+    delete el._cwDarkObserver;
+  }
   el.innerHTML = '';
   delete el.dataset.cwMounted;
 }
