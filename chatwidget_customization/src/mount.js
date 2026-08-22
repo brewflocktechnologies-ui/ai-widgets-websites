@@ -38,27 +38,28 @@ export async function mount(el) {
   if (!el || el.dataset.cwMounted === 'true') return;
   el.dataset.cwMounted = 'true';
 
-  const bodyHtml = new DOMParser().parseFromString(html, 'text/html').body.innerHTML;
+  // Parse the FULL document and rebuild only the <head> with our inlined CSS
+  // and CDN deps. The <html>/<body> elements (especially the body's
+  // `chatwidget-customization-app` class, which carries the CSS variables and
+  // `height:100vh; overflow:hidden`) MUST be preserved, otherwise the layout
+  // falls back to natural document height and the page scrolls slightly.
+  const doc = new DOMParser().parseFromString(html, 'text/html');
 
-  const frameHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Widget Customization</title>
-  <style>${litStyles}</style>
-  <style>${appStyles}</style>
-  <link rel="stylesheet" href="${CDN.fonts}">
-  <script>window.tailwind = window.tailwind || {}; window.tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#0b5fff' } } } };</script>
-  <script src="${CDN.tailwind}"></script>
-  <script src="${CDN.lucide}"></script>
-  <script defer src="${CDN.chatWidget}"></script>
-  <script defer src="${CDN.alpine}"></script>
-</head>
-<body>
-${bodyHtml}
-</body>
-</html>`;
+  doc.head.innerHTML = `
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widget Customization</title>
+    <style>${litStyles}</style>
+    <style>${appStyles}</style>
+    <link rel="stylesheet" href="${CDN.fonts}">
+    <script>window.tailwind = window.tailwind || {}; window.tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#0b5fff' } } } };</script>
+    <script src="${CDN.tailwind}"></script>
+    <script src="${CDN.lucide}"></script>
+    <script defer src="${CDN.chatWidget}"></script>
+    <script defer src="${CDN.alpine}"></script>
+  `;
+
+  const frameHtml = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
 
   const iframe = document.createElement('iframe');
   iframe.className = 'cw-customization-frame';
