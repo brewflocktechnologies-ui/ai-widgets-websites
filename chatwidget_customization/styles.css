@@ -47,6 +47,15 @@
   --letter-spacing-wide: 0.025em;
 }
 
+html:has(body.chatwidget-customization-app),
+body.chatwidget-customization-app {
+  height: 100vh;
+  max-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 .chatwidget-customization-app *,
 .chatwidget-customization-app *::before,
 .chatwidget-customization-app *::after {
@@ -66,10 +75,12 @@
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   height: 100%;
+  max-height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .chatwidget-customization-app ::-webkit-scrollbar {
@@ -308,17 +319,24 @@
 .main-layout {
   display: flex;
   flex: 1;
+  min-height: 0;
   height: calc(100vh - 73px - 48px);
+  max-height: calc(100vh - 73px - 48px);
   overflow: hidden;
+  position: relative;
 }
 
 .settings-panel {
   flex: 1;
+  min-height: 0;
+  height: 100%;
+  max-height: 100%;
   width: auto;
   overflow-y: auto;
   background: var(--bg-surface);
   border-right: 1px solid var(--border-color);
   padding: 20px 24px 24px;
+  box-sizing: border-box;
 }
 
 /* STICKY BREADCRUMB HEADER INDICATOR */
@@ -400,10 +418,15 @@
 .preview-panel {
   width: 40%;
   min-width: 300px;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   background: var(--bg-body);
   overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
 }
 
 /* ==============================
