@@ -34,7 +34,7 @@ function runInFrameClassic(doc, code) {
  * double-evaluation race that happens when mount() is async under React's
  * StrictMode (otherwise `const MSG_LABELS` etc. throw "already declared").
  */
-export async function mount(el) {
+export async function mount(el, options = {}) {
   if (!el || el.dataset.cwMounted === 'true') return;
   el.dataset.cwMounted = 'true';
 
@@ -102,6 +102,11 @@ export async function mount(el) {
     if (!doc || !win || win.__CW_INITIALIZED__) return;
     win.__CW_INITIALIZED__ = true;
     win.__CUSTOMIZATION_ASSET_BASE__ = `${REMOTE_ORIGIN}/`;
+    win.__CW_OPTIONS__ = options;
+
+    if (options && options.cdnConfig) {
+      win.cutomizationConfig = options.cdnConfig;
+    }
 
     try {
       win.lucide && win.lucide.createIcons();

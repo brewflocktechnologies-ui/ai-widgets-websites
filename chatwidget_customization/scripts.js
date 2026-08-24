@@ -81,13 +81,17 @@ function applyMessagePreview(key) {
   const msg = { key: 'm1', senderType: entry.senderType, body: entry.body || '', created: new Date().toISOString() };
   if (entry.senderType === 'AGENT') msg.senderName = agentName;
 
-  if (window.ChatWidgetLit && window.ChatWidgetLit.chatStore) {
-    const cs = window.ChatWidgetLit.chatStore.get();
-    if (cs) {
-      cs.messages = [msg];
-      cs.state = 'active';
-      cs.hasSentMessage = false;
-    }
+  // Push only the selected message into the Lit widget store and trigger a re-render.
+  // (mutating cs.messages directly does not emit 'store:chat', so the chat window
+  // would otherwise keep showing every hardcoded message from the config.)
+  if (window.ChatWidgetLit && window.ChatWidgetLit.updateStoreConfig) {
+    window.ChatWidgetLit.updateStoreConfig({
+      chat: {
+        messages: [msg],
+        state: 'active',
+        hasSentMessage: false
+      }
+    });
   }
 
   if (window.Alpine && Alpine.store('chat')) {
@@ -803,8 +807,12 @@ async function initCustomizationApp() {
     visualEditorSection.style.display = 'none';
   });
 
-  // Load default customization config
-  await loadDefaultConfig();
+  // Load customization config if not already initialized from mount options
+  if (!window.cutomizationConfig || Array.isArray(window.cutomizationConfig) || Object.keys(window.cutomizationConfig).length === 0) {
+    await loadDefaultConfig();
+  } else {
+    syncConfigToVisualForm(window.cutomizationConfig);
+  }
 
   // Boot the chat widget preview
   await bootstrapWidgetPreview();
@@ -961,14 +969,12 @@ async function initCustomizationApp() {
 
   // --- SAVE CONFIG BUTTON ---
   document.getElementById('btn-save-config')?.addEventListener('click', () => {
-    const data = JSON.stringify(window.cutomizationConfig, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${window.cutomizationConfig.clientId || 'widget'}-config.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'SAVE_WIDGET_CONFIG',
+        cdnConfig: window.cutomizationConfig
+      }, '*');
+    }
   });
 
   // --- RESET BUTTON IN HEADER ---
@@ -1118,7 +1124,36 @@ async function initCustomizationApp() {
       alert('Invalid JSON: ' + e.message);
     }
   });
+
+  // --- SIGNAL HOST THAT MFE IS FULLY READY TO RECEIVE CONFIG ---
+  // The host listens for this and immediately pushes the MongoDB config via LOAD_WIDGET_CONFIG.
+  // This avoids all timing races on page load / website switch.
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ type: 'MFE_READY' }, '*');
+  }
 };
+
+// --- POSTMESSAGE LISTENER: receive config from host page ---
+// Two message types are handled:
+//   LOAD_WIDGET_CONFIG  – host pushes cdnConfig fetched from MongoDB
+//   MFE_CONFIG_REQUEST  – host asks iframe to report its current config (used to recover after re-mount)
+window.addEventListener('message', (event) => {
+  if (!event.data) return;
+
+  if (event.data.type === 'LOAD_WIDGET_CONFIG') {
+    const cfg = event.data.cdnConfig;
+    if (!cfg || Array.isArray(cfg) || Object.keys(cfg).length === 0) return;
+
+    window.cutomizationConfig = cfg;
+    syncConfigToVisualForm(cfg);
+    updateAlpineStores(cfg);
+
+    if (window.ChatWidgetLit && window.ChatWidgetLit.injectStoreConfig) {
+      window.ChatWidgetLit.injectStoreConfig(cfg);
+    }
+    console.log('[CW] Config loaded from host/DB:', cfg.clientId || cfg.clientName || 'custom');
+  }
+});
 
 function ensureLitPointerEvents(widgetRoot) {
   if (!widgetRoot) return;
@@ -1225,29 +1260,37 @@ async function bootstrapWidgetPreview() {
       Alpine.store('chat').state = 'active';
     }
   }
+
+  // Ensure the chat-window preview shows only the selected greeting message,
+  // not every message seeded from the config (covers initial load + remounts).
+  applyMessagePreview(window.activeMessagePreviewKey || 'welcome');
 }
 
 // Default config loader (replaces preset-based loader)
 async function loadDefaultConfig() {
-  const defaultClient = 'default';
-  try {
-    const presetBase = (window.__CUSTOMIZATION_ASSET_BASE__ || '') + 'clients/';
-    const res = await fetch(`${presetBase}${defaultClient}.json`);
-    if (res.ok) {
-      window.cutomizationConfig = await res.json();
-    } else {
-      throw new Error("Failed to load default config");
+  if (window.cutomizationConfig && !Array.isArray(window.cutomizationConfig) && Object.keys(window.cutomizationConfig).length > 0) {
+    // Config already supplied via mount options from MongoDB — preserve it
+  } else {
+    const defaultClient = 'default';
+    try {
+      const presetBase = (window.__CUSTOMIZATION_ASSET_BASE__ || '') + 'clients/';
+      const res = await fetch(`${presetBase}${defaultClient}.json`);
+      if (res.ok) {
+        window.cutomizationConfig = await res.json();
+      } else {
+        throw new Error("Failed to load default config");
+      }
+    } catch (err) {
+      console.warn("Could not load default config, using minimal structure: ", err);
+      window.cutomizationConfig = {
+        clientId: defaultClient,
+        clientName: "Support Team",
+        greetWindow: { enabled: true, title: "Need help?", description: "Chat with us!", useWebsiteTheme: true },
+        bubble: { useWebsiteTheme: true, width: 55, height: 55 },
+        chatWindow: { useWebsiteTheme: true, clientName: "Support", agentName: "Agent" },
+        chatbar: { enabled: false }
+      };
     }
-  } catch (err) {
-    console.warn("Could not load default config, using minimal structure: ", err);
-    window.cutomizationConfig = {
-      clientId: defaultClient,
-      clientName: "Support Team",
-      greetWindow: { enabled: true, title: "Need help?", description: "Chat with us!", useWebsiteTheme: true },
-      bubble: { useWebsiteTheme: true, width: 55, height: 55 },
-      chatWindow: { useWebsiteTheme: true, clientName: "Support", agentName: "Agent" },
-      chatbar: { enabled: false }
-    };
   }
 
   // Apply Mock Host theme variables from accent color
@@ -1282,6 +1325,12 @@ async function loadDefaultConfig() {
 // Populate visual controls from active config object
 function syncConfigToVisualForm(config) {
   if (!config) return;
+
+  // Sync raw JSON textarea
+  const jsonTextarea = document.getElementById('raw-json-textarea');
+  if (jsonTextarea) {
+    jsonTextarea.value = JSON.stringify(config, null, 2);
+  }
 
   if (!config.features) {
     config.features = {
@@ -2747,7 +2796,7 @@ async function loadAndInitFormsComponent() {
   }
 
   // Helper to trigger Pre-Chat / Post-Chat form live preview on Lit Web Component
-  window.showFormInLivePreview = function(formType) {
+  window.showFormInLivePreview = function (formType) {
     const widgetEmbed = document.getElementById('zotly-widget-embed') || document.querySelector('cw-widget-root');
     if (widgetEmbed) {
       widgetEmbed.style.display = 'block';
