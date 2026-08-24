@@ -1153,6 +1153,12 @@ window.addEventListener('message', (event) => {
     }
     console.log('[CW] Config loaded from host/DB:', cfg.clientId || cfg.clientName || 'custom');
   }
+
+  if (event.data.type === 'RESET_WIDGET_PREVIEW') {
+    if (typeof refreshWidgetPreview === 'function') {
+      refreshWidgetPreview();
+    }
+  }
 });
 
 function ensureLitPointerEvents(widgetRoot) {

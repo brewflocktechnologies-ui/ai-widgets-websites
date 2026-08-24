@@ -1102,8 +1102,8 @@ body.chatwidget-customization-app {
   display: flex;
   flex: 1;
   min-height: 0;
-  height: calc(100vh - 73px - 48px);
-  max-height: calc(100vh - 73px - 48px);
+  height: calc(100% - 48px);
+  max-height: calc(100% - 48px);
   overflow: hidden;
   position: relative;
 }
