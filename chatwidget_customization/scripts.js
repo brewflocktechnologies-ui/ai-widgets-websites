@@ -969,10 +969,14 @@ async function initCustomizationApp() {
 
   // --- SAVE CONFIG BUTTON ---
   document.getElementById('btn-save-config')?.addEventListener('click', () => {
+    let cfg = window.cutomizationConfig;
+    while (cfg && cfg.cdnConfig && typeof cfg.cdnConfig === 'object' && !Array.isArray(cfg.cdnConfig)) {
+      cfg = cfg.cdnConfig;
+    }
     if (window.parent && window.parent !== window) {
       window.parent.postMessage({
         type: 'SAVE_WIDGET_CONFIG',
-        cdnConfig: window.cutomizationConfig
+        cdnConfig: cfg
       }, '*');
     }
   });
@@ -1141,8 +1145,15 @@ window.addEventListener('message', (event) => {
   if (!event.data) return;
 
   if (event.data.type === 'LOAD_WIDGET_CONFIG') {
-    const cfg = event.data.cdnConfig;
-    if (!cfg || Array.isArray(cfg) || Object.keys(cfg).length === 0) return;
+    let cfg = event.data.cdnConfig;
+    if (!cfg) return;
+
+    // Recursively unwrap nested cdnConfig properties
+    while (cfg && cfg.cdnConfig && typeof cfg.cdnConfig === 'object' && !Array.isArray(cfg.cdnConfig)) {
+      cfg = cfg.cdnConfig;
+    }
+
+    if (Array.isArray(cfg) || Object.keys(cfg).length === 0) return;
 
     window.cutomizationConfig = cfg;
     syncConfigToVisualForm(cfg);
@@ -1157,6 +1168,21 @@ window.addEventListener('message', (event) => {
   if (event.data.type === 'RESET_WIDGET_PREVIEW') {
     if (typeof refreshWidgetPreview === 'function') {
       refreshWidgetPreview();
+    }
+  }
+
+  // HOST toolbar "Save CDN Config" button requests current config from iframe
+  if (event.data.type === 'REQUEST_WIDGET_CONFIG') {
+    let cfg = window.cutomizationConfig;
+    // Unwrap nested cdnConfig if needed
+    while (cfg && cfg.cdnConfig && typeof cfg.cdnConfig === 'object' && !Array.isArray(cfg.cdnConfig)) {
+      cfg = cfg.cdnConfig;
+    }
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'SAVE_WIDGET_CONFIG',
+        cdnConfig: cfg
+      }, '*');
     }
   }
 });
