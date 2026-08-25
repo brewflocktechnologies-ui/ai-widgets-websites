@@ -1146,6 +1146,30 @@ function updateAddressBarDomain(domain) {
 }
 window.updateAddressBarDomain = updateAddressBarDomain;
 
+// --- GLOBAL FORM MODIFICATION DETECTOR ---
+// Notify host page ONLY when user explicitly modifies any input/setting in the customization form
+let isHydratingForm = true;
+setTimeout(() => { isHydratingForm = false; }, 1500);
+
+function getCurrentCdnConfig() {
+  let cfg = window.cutomizationConfig;
+  while (cfg && cfg.cdnConfig && typeof cfg.cdnConfig === 'object' && !Array.isArray(cfg.cdnConfig)) {
+    cfg = cfg.cdnConfig;
+  }
+  return cfg;
+}
+
+document.addEventListener('input', (e) => {
+  if (!isHydratingForm && e && e.isTrusted && window.parent && window.parent !== window) {
+    window.parent.postMessage({ type: 'WIDGET_CONFIG_CHANGED', cdnConfig: getCurrentCdnConfig() }, '*');
+  }
+});
+document.addEventListener('change', (e) => {
+  if (!isHydratingForm && e && e.isTrusted && window.parent && window.parent !== window) {
+    window.parent.postMessage({ type: 'WIDGET_CONFIG_CHANGED', cdnConfig: getCurrentCdnConfig() }, '*');
+  }
+});
+
 // --- POSTMESSAGE LISTENER: receive config from host page ---
 // Handled message types:
 //   LOAD_WIDGET_CONFIG     – host pushes cdnConfig fetched from MongoDB + domain
@@ -1161,6 +1185,9 @@ window.addEventListener('message', (event) => {
   }
 
   if (event.data.type === 'LOAD_WIDGET_CONFIG') {
+    isHydratingForm = true;
+    setTimeout(() => { isHydratingForm = false; }, 800);
+
     if (event.data.domain) {
       updateAddressBarDomain(event.data.domain);
     }
