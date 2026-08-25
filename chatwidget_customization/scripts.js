@@ -1137,14 +1137,34 @@ async function initCustomizationApp() {
   }
 };
 
+function updateAddressBarDomain(domain) {
+  if (!domain || typeof domain !== 'string') return;
+  const addressSpan = document.querySelector('#preview-address-bar-domain, .chrome-address-bar span');
+  if (addressSpan) {
+    addressSpan.textContent = domain;
+  }
+}
+window.updateAddressBarDomain = updateAddressBarDomain;
+
 // --- POSTMESSAGE LISTENER: receive config from host page ---
-// Two message types are handled:
-//   LOAD_WIDGET_CONFIG  – host pushes cdnConfig fetched from MongoDB
-//   MFE_CONFIG_REQUEST  – host asks iframe to report its current config (used to recover after re-mount)
+// Handled message types:
+//   LOAD_WIDGET_CONFIG     – host pushes cdnConfig fetched from MongoDB + domain
+//   UPDATE_PREVIEW_DOMAIN  – host pushes updated website domain URL
+//   REQUEST_WIDGET_CONFIG  – host asks iframe to report its current config
 window.addEventListener('message', (event) => {
   if (!event.data) return;
 
+  if (event.data.type === 'UPDATE_PREVIEW_DOMAIN') {
+    if (event.data.domain) {
+      updateAddressBarDomain(event.data.domain);
+    }
+  }
+
   if (event.data.type === 'LOAD_WIDGET_CONFIG') {
+    if (event.data.domain) {
+      updateAddressBarDomain(event.data.domain);
+    }
+
     let cfg = event.data.cdnConfig;
     if (!cfg) return;
 
@@ -1154,6 +1174,10 @@ window.addEventListener('message', (event) => {
     }
 
     if (Array.isArray(cfg) || Object.keys(cfg).length === 0) return;
+
+    if (cfg.domain) {
+      updateAddressBarDomain(cfg.domain);
+    }
 
     window.cutomizationConfig = cfg;
     syncConfigToVisualForm(cfg);
