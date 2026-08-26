@@ -8,6 +8,56 @@ import type {
 import { CHATBAR_BAR_PRESET, CHATBAR_CARD_PRESET } from './chatbar-presets.js';
 import { getParentTheme } from '../utils/theme.js';
 
+export function createAccentGradient(hex: string): string {
+  if (!hex || typeof hex !== 'string' || !hex.startsWith('#')) {
+    return `linear-gradient(135deg, ${hex || '#0b5fff'}, #0284c7)`;
+  }
+  let c = hex.replace('#', '');
+  if (c.length === 3) c = c.split('').map(x => x + x).join('');
+  if (c.length !== 6) return `linear-gradient(135deg, ${hex}, ${hex})`;
+
+  let r = parseInt(c.substring(0, 2), 16) / 255;
+  let g = parseInt(c.substring(2, 4), 16) / 255;
+  let b = parseInt(c.substring(4, 6), 16) / 255;
+
+  let max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0, l = (max + min) / 2;
+
+  if (max !== min) {
+    let d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+
+  let h2 = ((h * 360 + 25) % 360) / 360;
+  let s2 = Math.min(1, s * 1.05);
+  let l2 = Math.max(0.15, Math.min(0.85, l * 0.82));
+
+  const q = l2 < 0.5 ? l2 * (1 + s2) : l2 + s2 - l2 * s2;
+  const p = 2 * l2 - q;
+  const hue2rgb = (p: number, q: number, t: number) => {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1/6) return p + (q - p) * 6 * t;
+    if (t < 1/2) return q;
+    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+    return p;
+  };
+
+  const r2 = hue2rgb(p, q, h2 + 1/3);
+  const g2 = hue2rgb(p, q, h2);
+  const b2 = hue2rgb(p, q, h2 - 1/3);
+  const toHex = (x: number) => Math.round(x * 255).toString(16).padStart(2, '0');
+  const secondary = `#${toHex(r2)}${toHex(g2)}${toHex(b2)}`;
+
+  return `linear-gradient(135deg, ${hex}, ${secondary})`;
+}
+
 export function computeEffectiveChatbarConfig(
   host: Record<string, any>,
   cbs: ChatbarState = {} as ChatbarState,
@@ -225,9 +275,9 @@ export function computeEffectiveChatWindowConfig(
   const effectivePoweredByColor = host.poweredByColor || primaryColor || (useTheme && pTheme ? pTheme.primary : cws.poweredByColor) || effectiveAccent;
   const effectiveEndChatConfirmBg = host.endChatConfirmBg || primaryColor || (useTheme && pTheme ? pTheme.primary : cws.endChatConfirmBg) || effectiveAccent;
 
-  const sec = useTheme && pTheme?.secondary ? pTheme.secondary : effectiveAccent;
-  const effectiveBgGradient = host.welcomeBgGradient || (primaryColor ? `linear-gradient(135deg, ${primaryColor}, ${sec})` : (useTheme && pTheme ? `linear-gradient(135deg, ${pTheme.primary}, ${sec})` : cws.welcome?.bgGradient));
-  const effectiveWelcomeButtonIconColor = host.welcomeButtonIconColor || primaryColor || (useTheme && pTheme ? pTheme.primary : cws.welcome?.buttonIconColor) || effectiveAccent;
+  const sec = useTheme && pTheme?.secondary ? pTheme.secondary : null;
+  const effectiveBgGradient = host.welcomeBgGradient || (!useTheme ? createAccentGradient(effectiveAccent) : (useTheme && pTheme ? `linear-gradient(135deg, ${pTheme.primary}, ${sec || pTheme.primary})` : createAccentGradient(effectiveAccent)));
+  const effectiveWelcomeButtonIconColor = host.welcomeButtonIconColor || (!useTheme ? effectiveAccent : (useTheme && pTheme ? pTheme.primary : (cws.welcome?.buttonIconColor || effectiveAccent)));
 
   return {
     ...cws,
