@@ -38,3 +38,44 @@ jobs:
 
       - name: Run unit tests
         run: npm run test
+
+  build-customization:
+    name: Build widget customization
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # The customization build consumes the lit widget build
+      # (../chatwidget_components_lit/dist/chat-widget.js), so it must be
+      # built first.
+      - name: Setup Node (widget)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: chatwidget_components_lit/package-lock.json
+
+      - name: Install widget dependencies
+        working-directory: chatwidget_components_lit
+        run: npm ci
+
+      - name: Build widget (lit)
+        working-directory: chatwidget_components_lit
+        run: npm run build
+
+      - name: Setup Node (customization)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: chatwidget_customization/package-lock.json
+
+      - name: Install customization dependencies
+        working-directory: chatwidget_customization
+        run: npm ci
+
+      - name: Build widget customization
+        working-directory: chatwidget_customization
+        run: npm run build

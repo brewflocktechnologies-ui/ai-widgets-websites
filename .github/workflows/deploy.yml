@@ -34,23 +34,27 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
 
-      - name: Setup Node
+      - name: Setup Node (widget)
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
           cache-dependency-path: chatwidget_components_lit/package-lock.json
 
-      - name: Install dependencies
+      - name: Install widget dependencies
+        working-directory: chatwidget_components_lit
         run: npm ci
 
-      - name: Build widget
+      - name: Build widget (lit)
+        working-directory: chatwidget_components_lit
         run: npm run build
 
       - name: Build Storybook
+        working-directory: chatwidget_components_lit
         run: npm run build-storybook
 
       - name: Add test page
+        working-directory: chatwidget_components_lit
         run: cp test.html storybook-static/test.html
 
       - name: Add widget bundle to deployment
@@ -62,6 +66,39 @@ jobs:
         run: |
           mkdir -p storybook-static/public/clients
           cp -r public/clients/* storybook-static/public/clients/
+
+      # Build the widget customization micro-frontend. It consumes the lit
+      # widget build above (../chatwidget_components_lit/dist/chat-widget.js),
+      # so the widget build step MUST run first.
+      - name: Setup Node (customization)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: chatwidget_customization/package-lock.json
+
+      - name: Install customization dependencies
+        working-directory: chatwidget_customization
+        run: npm ci
+
+      - name: Build widget customization
+        working-directory: chatwidget_customization
+        run: npm run build
+
+      - name: Add customization build to deployment
+        working-directory: .
+        run: |
+          mkdir -p chatwidget_components_lit/storybook-static/chatwidget_customization
+          cp -r chatwidget_customization/dist/* chatwidget_components_lit/storybook-static/chatwidget_customization/
+
+      # The customization's index.html loads the widget via a relative path
+      # (../chatwidget_components_lit/dist/chat-widget.js). Mirror the lit
+      # widget build at that path so the reference resolves once deployed.
+      - name: Expose lit widget build for customization relative path
+        working-directory: .
+        run: |
+          mkdir -p chatwidget_components_lit/storybook-static/chatwidget_components_lit/dist
+          cp -r chatwidget_components_lit/dist/* chatwidget_components_lit/storybook-static/chatwidget_components_lit/dist/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
