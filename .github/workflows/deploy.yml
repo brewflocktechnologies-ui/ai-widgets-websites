@@ -81,6 +81,8 @@ jobs:
           cp -r ../chatwidget_customization/forms.html storybook-static/chatwidget_customization/ 2>/dev/null || true
           cp -r ../chatwidget_customization/scripts.js storybook-static/chatwidget_customization/ 2>/dev/null || true
           cp -r ../chatwidget_customization/styles.css storybook-static/chatwidget_customization/ 2>/dev/null || true
+          mkdir -p storybook-static/chatwidget_customization/dist
+          cp -r dist/* storybook-static/chatwidget_customization/dist/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
