@@ -1764,7 +1764,13 @@ function updateColorPickerStates() {
     if (el) el.disabled = disabled;
   }
 
-  // ---------- Bubble theme sync ----------
+  // ---------- Global Theme & Accent Sync ----------
+  const globalUseTheme = document.getElementById('global-use-theme');
+  const isGlobalOn = globalUseTheme ? globalUseTheme.checked : (window.cutomizationConfig?.useWebsiteTheme !== false);
+  const globalBanner = '#global-theme-banner';
+  applyControlState(document.getElementById('global-accent-color-pick'), document.getElementById('global-accent-color'), document.getElementById('global-accent-color-hint'), isGlobalOn, globalBanner);
+
+  const on = isGlobalOn;
   const bubbleUseTheme = document.getElementById('bubble-use-theme');
   if (bubbleUseTheme) {
     const on = bubbleUseTheme.checked;
@@ -1951,6 +1957,43 @@ function setupFormEventListeners() {
 
       // Update state
       setValueByPath(window.cutomizationConfig, path, val);
+
+      // Handle root level Website Theme & Accent Color synchronization
+      if (path === 'useWebsiteTheme') {
+        const enabled = !!val;
+        setValueByPath(window.cutomizationConfig, 'useWebsiteTheme', enabled);
+        setValueByPath(window.cutomizationConfig, 'bubble.useWebsiteTheme', enabled);
+        setValueByPath(window.cutomizationConfig, 'greetWindow.useWebsiteTheme', enabled);
+        setValueByPath(window.cutomizationConfig, 'chatbar.useWebsiteTheme', enabled);
+        setValueByPath(window.cutomizationConfig, 'chatWindow.useWebsiteTheme', enabled);
+        if (window.cutomizationConfig.chatWindow) {
+          if (!window.cutomizationConfig.chatWindow.welcome) window.cutomizationConfig.chatWindow.welcome = {};
+          window.cutomizationConfig.chatWindow.welcome.useWebsiteTheme = enabled;
+        }
+      }
+      if (path === 'accentColor') {
+        const color = val;
+        setValueByPath(window.cutomizationConfig, 'accentColor', color);
+        setValueByPath(window.cutomizationConfig, 'chatWindow.accentColor', color);
+        setValueByPath(window.cutomizationConfig, 'chatWindow.headerBg', color);
+        setValueByPath(window.cutomizationConfig, 'chatWindow.visitorBubbleBg', color);
+        setValueByPath(window.cutomizationConfig, 'chatWindow.agentAvatarBg', color);
+        setValueByPath(window.cutomizationConfig, 'chatWindow.inputFocusBorderColor', color);
+        setValueByPath(window.cutomizationConfig, 'chatWindow.sendButtonBgActive', color);
+        setValueByPath(window.cutomizationConfig, 'chatWindow.poweredByColor', color);
+        setValueByPath(window.cutomizationConfig, 'chatWindow.endChatConfirmBg', color);
+        setValueByPath(window.cutomizationConfig, 'greetWindow.iconColor', color);
+        if (window.cutomizationConfig.greetWindow && window.cutomizationConfig.greetWindow.inputBox) {
+          window.cutomizationConfig.greetWindow.inputBox.buttonColor = color;
+        }
+        setValueByPath(window.cutomizationConfig, 'bubble.backgroundColor', color);
+        setValueByPath(window.cutomizationConfig, 'chatbar.bgColor', color);
+
+        const accentPick = document.getElementById('global-accent-color-pick');
+        const accentText = document.getElementById('global-accent-color');
+        if (accentPick && accentPick.value !== color) accentPick.value = color;
+        if (accentText && accentText.value !== color) accentText.value = color;
+      }
 
       // Update JSON textarea
       const jsonTextarea = document.getElementById('raw-json-textarea');
@@ -2197,6 +2240,37 @@ function setupJsonEditorEventListeners() {
 // Dynamic updates of the active widget stores (Lit & Alpine)
 function updateAlpineStores(config) {
   if (!config) return;
+
+  // Sync root accentColor & useWebsiteTheme across sub-component state objects
+  if (config) {
+    if (config.accentColor) {
+      if (!config.chatWindow) config.chatWindow = {};
+      config.chatWindow.accentColor = config.accentColor;
+      config.chatWindow.headerBg = config.accentColor;
+      config.chatWindow.visitorBubbleBg = config.accentColor;
+      config.chatWindow.agentAvatarBg = config.accentColor;
+      config.chatWindow.inputFocusBorderColor = config.accentColor;
+      config.chatWindow.sendButtonBgActive = config.accentColor;
+      config.chatWindow.poweredByColor = config.accentColor;
+      config.chatWindow.endChatConfirmBg = config.accentColor;
+      if (!config.greetWindow) config.greetWindow = {};
+      config.greetWindow.iconColor = config.accentColor;
+      if (!config.greetWindow.inputBox) config.greetWindow.inputBox = {};
+      config.greetWindow.inputBox.buttonColor = config.accentColor;
+      if (!config.bubble) config.bubble = {};
+      config.bubble.backgroundColor = config.accentColor;
+    }
+    if (config.useWebsiteTheme !== undefined) {
+      if (!config.bubble) config.bubble = {};
+      if (!config.greetWindow) config.greetWindow = {};
+      if (!config.chatbar) config.chatbar = {};
+      if (!config.chatWindow) config.chatWindow = {};
+      config.bubble.useWebsiteTheme = config.useWebsiteTheme;
+      config.greetWindow.useWebsiteTheme = config.useWebsiteTheme;
+      config.chatbar.useWebsiteTheme = config.useWebsiteTheme;
+      config.chatWindow.useWebsiteTheme = config.useWebsiteTheme;
+    }
+  }
 
   // Sync Lit Web Component Stores if available
   if (window.ChatWidgetLit && window.ChatWidgetLit.injectStoreConfig) {

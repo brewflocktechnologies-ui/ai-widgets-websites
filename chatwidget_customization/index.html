@@ -147,6 +147,51 @@
         <!-- VISUAL EDITOR -->
         <div id="visual-editor-section">
 
+          <!-- Global Brand & Theme Controls -->
+          <div class="top-theme-banner-card global-brand-banner" id="global-theme-banner" style="margin-bottom: 20px; background: var(--bg-card, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 14px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+            <div class="setting-info" style="margin-bottom: 14px;">
+              <div class="setting-title" style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; color: var(--text-primary, #0f172a);">
+                <span class="theme-badge-icon" style="font-size: 18px;">✨</span> Global Brand & Theme Controls
+              </div>
+              <div class="setting-desc" style="font-size: 12px; color: var(--text-muted, #64748b); margin-top: 4px;">
+                Manage global website theme synchronization and root widget accent color across all components.
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <!-- 1. Single Global Website Theme Sync Toggle -->
+              <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-color, #f1f5f9);">
+                <div>
+                  <div style="font-weight: 600; font-size: 13px; color: var(--text-primary, #0f172a);">Website Theme Synchronization</div>
+                  <div style="font-size: 11px; color: var(--text-muted, #64748b);">Sync widget colors with your host website's CSS theme palette</div>
+                </div>
+                <div class="setting-control" style="width: auto;">
+                  <label class="switch">
+                    <input type="checkbox" id="global-use-theme" data-path="useWebsiteTheme" checked>
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- 2. Global Widget Accent Color Picker -->
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <div style="font-weight: 600; font-size: 13px; color: var(--text-primary, #0f172a);">Widget Accent Color</div>
+                  <div style="font-size: 11px; color: var(--text-muted, #64748b);">Primary brand highlight color for buttons, headers, and chat bubbles</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="global-accent-color-pick" value="#0b5fff"
+                      oninput="document.getElementById('global-accent-color').value = this.value; document.getElementById('global-accent-color').dispatchEvent(new Event('change'))">
+                    <input type="text" id="global-accent-color" class="color-picker-text" data-path="accentColor" value="#0b5fff">
+                  </div>
+                  <div class="theme-color-hint" id="global-accent-color-hint" style="margin-top: 4px;">
+                    <span class="hint-link">Turn off Theme Sync above to edit Accent Color ↗</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Section 2: Greet Card Configurations -->
           <div class="accordion-section" id="accordion-greet-card">
             <div class="accordion-header">
@@ -154,21 +199,7 @@
             </div>
             <div class="accordion-content">
 
-              <!-- Top Banner: Theme Sync -->
-              <div class="top-theme-banner-card" id="greet-theme-banner">
-                <div class="setting-info">
-                  <div class="setting-title" style="display: flex; align-items: center; gap: 8px;">
-                    <span class="theme-badge-icon">✨</span> Website Theme Synchronization
-                  </div>
-                  <div class="setting-desc">Automatically align greet card icon and action button colors with your site's main brand color palette.</div>
-                </div>
-                <div class="setting-control" style="width: auto;">
-                  <label class="switch">
-                    <input type="checkbox" id="greet-use-theme" data-path="greetWindow.useWebsiteTheme">
-                    <span class="slider"></span>
-                  </label>
-                </div>
-              </div>
+
 
               <!-- Section 1: Timing & Display Behavior -->
               <div class="form-section-card active">
@@ -692,21 +723,7 @@
             </div>
             <div class="accordion-content">
 
-              <!-- Top Banner: Theme Sync -->
-              <div class="top-theme-banner-card" id="bubble-theme-banner">
-                <div class="setting-info">
-                  <div class="setting-title" style="display: flex; align-items: center; gap: 8px;">
-                    <span class="theme-badge-icon">✨</span> Website Theme Synchronization
-                  </div>
-                  <div class="setting-desc">Automatically align bubble colors with your site's main brand color palette.</div>
-                </div>
-                <div class="setting-control" style="width: auto;">
-                  <label class="switch">
-                    <input type="checkbox" id="bubble-use-theme" data-path="bubble.useWebsiteTheme">
-                    <span class="slider"></span>
-                  </label>
-                </div>
-              </div>
+
 
               <!-- General Settings -->
               <div class="form-section-card active">
@@ -1554,21 +1571,7 @@
             </div>
             <div class="accordion-content">
 
-              <!-- Top Banner: Theme Sync -->
-              <div class="top-theme-banner-card" id="chatbar-theme-banner">
-                <div class="setting-info">
-                  <div class="setting-title" style="display: flex; align-items: center; gap: 8px;">
-                    <span class="theme-badge-icon">✨</span> Website Theme Synchronization
-                  </div>
-                  <div class="setting-desc">Automatically align chatbar colors with your site's main brand color palette.</div>
-                </div>
-                <div class="setting-control" style="width: auto;">
-                  <label class="switch">
-                    <input type="checkbox" id="chatbar-use-theme" data-path="chatbar.useWebsiteTheme">
-                    <span class="slider"></span>
-                  </label>
-                </div>
-              </div>
+
 
               <!-- General Settings -->
               <div class="form-section-card active">
@@ -1918,21 +1921,7 @@
             </div>
             <div class="accordion-content">
 
-              <!-- Top Banner: Theme Sync -->
-              <div class="top-theme-banner-card" id="config-theme-banner">
-                <div class="setting-info">
-                  <div class="setting-title" style="display: flex; align-items: center; gap: 8px;">
-                    <span class="theme-badge-icon">✨</span> Website Theme Synchronization
-                  </div>
-                  <div class="setting-desc">Automatically align chat window colors with your site's main brand color palette.</div>
-                </div>
-                <div class="setting-control" style="width: auto;">
-                  <label class="switch">
-                    <input type="checkbox" id="config-use-theme" data-path="chatWindow.useWebsiteTheme">
-                    <span class="slider"></span>
-                  </label>
-                </div>
-              </div>
+
 
               <!-- General Settings -->
               <div class="form-section-card active">
@@ -1968,20 +1957,7 @@
                         <input type="text" data-path="chatWindow.agentName" placeholder="Sarah">
                       </div>
                     </div>
-                    <div class="setting-row">
-                      <div class="setting-info">
-                        <div class="setting-title">Widget Accent Color</div>
-                        <div class="setting-desc">Highlight color used for buttons and interactive elements.</div>
-                      </div>
-                      <div class="setting-control">
-                        <div class="color-picker-wrapper">
-                          <input type="color" id="config-accent-color-pick" value="#0b5fff"
-                            oninput="document.getElementById('config-accent-color').value = this.value; document.getElementById('config-accent-color').dispatchEvent(new Event('change'))">
-                          <input type="text" id="config-accent-color" class="color-picker-text" data-path="chatWindow.accentColor">
-                        </div>
-                        <div class="theme-color-hint" id="config-accent-color-hint"><span class="hint-link">Click to disable Theme Sync & edit color ↗</span></div>
-                      </div>
-                    </div>
+
                     <div class="setting-row">
                       <div class="setting-info">
                         <div class="setting-title">Window Size (Width x Height)</div>
