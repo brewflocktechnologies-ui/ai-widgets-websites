@@ -148,67 +148,71 @@
         <div id="visual-editor-section">
 
           <!-- Global Brand & Theme Controls -->
-          <div class="top-theme-banner-card global-brand-banner" id="global-theme-banner" style="margin-bottom: 20px; background: var(--bg-card, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 14px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
-            <div class="setting-info" style="margin-bottom: 14px;">
-              <div class="setting-title" style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; color: var(--text-primary, #0f172a);">
-                <span class="theme-badge-icon" style="font-size: 18px;">✨</span> Global Brand & Theme Controls
-              </div>
-              <div class="setting-desc" style="font-size: 12px; color: var(--text-muted, #64748b); margin-top: 4px;">
-                Manage global website theme synchronization and root widget accent color across all components.
+          <div class="accordion-section active" id="global-theme-banner" style="margin-bottom: 20px;">
+            <div class="accordion-header">
+              <div class="accordion-title">
+                <span>✨</span> Global Brand & Theme Controls
               </div>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 14px;">
-              <!-- 1. Single Global Website Theme Sync Toggle -->
-              <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-color, #f1f5f9);">
-                <div>
-                  <div style="font-weight: 600; font-size: 13px; color: var(--text-primary, #0f172a);">Website Theme Synchronization</div>
-                  <div style="font-size: 11px; color: var(--text-muted, #64748b);">Sync widget colors with your host website's CSS theme palette</div>
-                </div>
-                <div class="setting-control" style="width: auto;">
-                  <label class="switch">
-                    <input type="checkbox" id="global-use-theme" data-path="useWebsiteTheme" checked>
-                    <span class="slider"></span>
-                  </label>
+            <div class="accordion-content">
+              <div class="setting-info" style="margin-bottom: 14px;">
+                <div class="setting-desc" style="font-size: 12px; margin-top: 4px;">
+                  Manage global website theme synchronization, brand title, primary agent name, and root widget accent color across all components.
                 </div>
               </div>
-
-              <!-- 2. Global Widget Accent Color Picker -->
-              <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-color, #f1f5f9);">
-                <div>
-                  <div style="font-weight: 600; font-size: 13px; color: var(--text-primary, #0f172a);">Widget Accent Color</div>
-                  <div style="font-size: 11px; color: var(--text-muted, #64748b);">Primary brand highlight color for buttons, headers, and chat bubbles</div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                  <div class="color-picker-wrapper">
-                    <input type="color" id="global-accent-color-pick" value="#0b5fff"
-                      oninput="document.getElementById('global-accent-color').value = this.value; document.getElementById('global-accent-color').dispatchEvent(new Event('change'))">
-                    <input type="text" id="global-accent-color" class="color-picker-text" data-path="accentColor" value="#0b5fff">
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                <!-- 1. Single Global Website Theme Sync Toggle -->
+                <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.1));">
+                  <div>
+                    <div style="font-weight: 600; font-size: 13px; color: var(--text-main);">Website Theme Synchronization</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Sync widget colors with your host website's CSS theme palette</div>
                   </div>
-                  <div class="theme-color-hint" id="global-accent-color-hint" style="margin-top: 4px;">
-                    <span class="hint-link">Turn off Theme Sync above to edit Accent Color ↗</span>
+                  <div class="setting-control" style="width: auto;">
+                    <label class="switch">
+                      <input type="checkbox" id="global-use-theme" data-path="useWebsiteTheme" checked>
+                      <span class="slider"></span>
+                    </label>
                   </div>
                 </div>
-              </div>
 
-              <!-- 3. Widget Client / Brand Name -->
-              <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-color, #f1f5f9);">
-                <div>
-                  <div style="font-weight: 600; font-size: 13px; color: var(--text-primary, #0f172a);">Client / Brand Name</div>
-                  <div style="font-size: 11px; color: var(--text-muted, #64748b);">Brand name displayed as main title in the chat header</div>
+                <!-- 2. Global Widget Accent Color Picker -->
+                <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.1));">
+                  <div>
+                    <div style="font-weight: 600; font-size: 13px; color: var(--text-main);">Widget Accent Color</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Primary brand highlight color for buttons, headers, and chat bubbles</div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                    <div class="color-picker-wrapper">
+                      <input type="color" id="global-accent-color-pick" value="#0b5fff"
+                        oninput="document.getElementById('global-accent-color').value = this.value; document.getElementById('global-accent-color').dispatchEvent(new Event('change'))">
+                      <input type="text" id="global-accent-color" class="color-picker-text" data-path="accentColor" value="#0b5fff">
+                    </div>
+                    <div class="theme-color-hint" id="global-accent-color-hint" style="margin-top: 4px;">
+                      <span class="hint-link">Turn off Theme Sync above to edit Accent Color ↗</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="setting-control" style="width: 220px;">
-                  <input type="text" id="global-client-name" data-path="clientName" placeholder="Brewflock" style="width: 100%;">
-                </div>
-              </div>
 
-              <!-- 4. Primary Agent Name -->
-              <div style="display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                  <div style="font-weight: 600; font-size: 13px; color: var(--text-primary, #0f172a);">Primary Agent Name</div>
-                  <div style="font-size: 11px; color: var(--text-muted, #64748b);">Display name of the support agent in the chat header subtitle</div>
+                <!-- 3. Widget Client / Brand Name -->
+                <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.1));">
+                  <div>
+                    <div style="font-weight: 600; font-size: 13px; color: var(--text-main);">Client / Brand Name</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Brand name displayed as main title in the chat header</div>
+                  </div>
+                  <div class="setting-control" style="width: 220px;">
+                    <input type="text" id="global-client-name" data-path="clientName" placeholder="Brewflock" style="width: 100%;">
+                  </div>
                 </div>
-                <div class="setting-control" style="width: 220px;">
-                  <input type="text" id="global-agent-name" data-path="agentName" placeholder="Support Agent" style="width: 100%;">
+
+                <!-- 4. Primary Agent Name -->
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <div style="font-weight: 600; font-size: 13px; color: var(--text-main);">Primary Agent Name</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Display name of the support agent in the chat header subtitle</div>
+                  </div>
+                  <div class="setting-control" style="width: 220px;">
+                    <input type="text" id="global-agent-name" data-path="agentName" placeholder="Support Agent" style="width: 100%;">
+                  </div>
                 </div>
               </div>
             </div>

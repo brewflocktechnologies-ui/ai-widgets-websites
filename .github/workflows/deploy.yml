@@ -52,36 +52,66 @@ jobs:
           npm run build
 
       - name: Add test page
-        run: cp test.html storybook-static/test.html
+        run: |
+          cp test.html storybook-static/test.html
 
       - name: Add widget bundle to deployment
         run: |
           mkdir -p storybook-static/dist
           cp -r dist/* storybook-static/dist/
+
           mkdir -p storybook-static/chatwidget_components_lit/dist
           cp -r dist/* storybook-static/chatwidget_components_lit/dist/
 
       - name: Add public client configurations
         run: |
           mkdir -p storybook-static/public/clients
-          cp -r public/clients/* storybook-static/public/clients/
+
+          if [ -d "public/clients" ]; then
+            cp -r public/clients/* storybook-static/public/clients/ 2>/dev/null || true
+          fi
 
       - name: Add widget customization app to deployment
         run: |
           mkdir -p storybook-static/chatwidget_customization
-          cp -r ../chatwidget_customization/index.html storybook-static/chatwidget_customization/
-          cp -r ../chatwidget_customization/forms.html storybook-static/chatwidget_customization/ 2>/dev/null || true
-          cp -r ../chatwidget_customization/scripts.js storybook-static/chatwidget_customization/ 2>/dev/null || true
-          cp -r ../chatwidget_customization/styles.css storybook-static/chatwidget_customization/ 2>/dev/null || true
+
+          cp ../chatwidget_customization/index.html \
+            storybook-static/chatwidget_customization/
+
+          cp ../chatwidget_customization/forms.html \
+            storybook-static/chatwidget_customization/ 2>/dev/null || true
+
+          cp ../chatwidget_customization/scripts.js \
+            storybook-static/chatwidget_customization/ 2>/dev/null || true
+
+          cp ../chatwidget_customization/styles.css \
+            storybook-static/chatwidget_customization/ 2>/dev/null || true
+
           if [ -d "../chatwidget_customization/public" ]; then
             mkdir -p storybook-static/chatwidget_customization/public
-            cp -r ../chatwidget_customization/public/* storybook-static/chatwidget_customization/public/ 2>/dev/null || true
+            cp -r ../chatwidget_customization/public/* \
+              storybook-static/chatwidget_customization/public/ \
+              2>/dev/null || true
           fi
+
           if [ -d "../chatwidget_customization/dist" ]; then
-            cp -r ../chatwidget_customization/dist/* storybook-static/chatwidget_customization/
+            cp -r ../chatwidget_customization/dist/* \
+              storybook-static/chatwidget_customization/
           fi
+
           mkdir -p storybook-static/chatwidget_customization/dist
-          cp -r dist/* storybook-static/chatwidget_customization/dist/
+          cp -r dist/* \
+            storybook-static/chatwidget_customization/dist/
+
+      - name: Add client websites to deployment
+        run: |
+          mkdir -p storybook-static/clientwebsites
+
+          if [ -d "../clientwebsites" ]; then
+            cp -r ../clientwebsites/* \
+              storybook-static/clientwebsites/ \
+              2>/dev/null || true
+          fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
@@ -91,9 +121,11 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     needs: build
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
 
     steps:
