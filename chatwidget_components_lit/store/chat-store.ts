@@ -1110,6 +1110,22 @@ export async function initStore(): Promise<void> {
         /* v8 ignore next -- initStore always seeds a welcome message, so messages[0] is never empty here */
         if (store.chat.messages[0]) store.chat.messages[0].senderName = cc.agentName;
       }
+      const rawAny = rawConfig as any;
+      if (Array.isArray(rawAny.messages) && rawAny.messages.length > 0) {
+        const activeKey = (typeof window !== 'undefined' && (window as any).activeMessagePreviewKey) || 'welcome';
+        const welcomeItem = rawAny.messages.find((m: any) => m && m.key === activeKey) ||
+                            rawAny.messages.find((m: any) => m && m.key === 'welcome') ||
+                            rawAny.messages[0];
+        if (welcomeItem) {
+          store.chat.messages = [{
+            key: welcomeItem.key || 'welcome',
+            senderType: welcomeItem.senderType || 'AGENT',
+            senderName: store.chat.agentName || rawAny.agentName || 'Sarah',
+            body: welcomeItem.body || '',
+            created: new Date().toISOString()
+          }];
+        }
+      }
       if (!store.chat.hasSentMessage && cc.welcome?.enabled) {
         store.chat.state = 'welcome';
       }
@@ -1302,6 +1318,21 @@ function applyStoreConfig(overrides: UpdateStoreConfigOverrides) {
   }
 
   if (overrides.chat && typeof overrides.chat === 'object') {
+    if (Array.isArray(overrides.chat.messages) && overrides.chat.messages.length > 1) {
+      const activeKey = (typeof window !== 'undefined' && (window as any).activeMessagePreviewKey) || 'welcome';
+      const welcomeItem = overrides.chat.messages.find((m: any) => m && m.key === activeKey) ||
+                          overrides.chat.messages.find((m: any) => m && m.key === 'welcome') ||
+                          overrides.chat.messages[0];
+      if (welcomeItem) {
+        overrides.chat.messages = [{
+          key: welcomeItem.key || 'welcome',
+          senderType: welcomeItem.senderType || 'AGENT',
+          senderName: store.chat.agentName || 'Sarah',
+          body: welcomeItem.body || '',
+          created: new Date().toISOString()
+        }];
+      }
+    }
     Object.assign(store.chat, overrides.chat);
     emit('store:chat');
   }
@@ -1378,6 +1409,23 @@ export function injectStoreConfig(token: Record<string, any>): void {
     emit('store:features');
   }
 
+  let processedMessages = token.messages;
+  if (Array.isArray(token.messages) && token.messages.length > 1) {
+    const activeKey = (typeof window !== 'undefined' && (window as any).activeMessagePreviewKey) || 'welcome';
+    const welcomeItem = token.messages.find((m: any) => m && m.key === activeKey) ||
+                        token.messages.find((m: any) => m && m.key === 'welcome') ||
+                        token.messages[0];
+    if (welcomeItem) {
+      processedMessages = [{
+        key: welcomeItem.key || 'welcome',
+        senderType: welcomeItem.senderType || 'AGENT',
+        senderName: token.agentName || store?.chat.agentName || 'Sarah',
+        body: welcomeItem.body || '',
+        created: new Date().toISOString()
+      }];
+    }
+  }
+
   const overrides: UpdateStoreConfigOverrides = {
     bubble: token.bubble || {},
     chatbar: token.chatbar || {},
@@ -1385,7 +1433,7 @@ export function injectStoreConfig(token: Record<string, any>): void {
     chatWindow: token.chatWindow || token.chatConfig || {},
     chat: {
       ...(token.chat || {}),
-      ...(token.messages ? { messages: token.messages } : {}),
+      ...(processedMessages ? { messages: processedMessages } : {}),
       ...(token.clientName ? { clientName: token.clientName } : {}),
       ...(token.agentName ? { agentName: token.agentName } : {})
     }

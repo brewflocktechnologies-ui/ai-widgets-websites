@@ -127,7 +127,7 @@ function applyMessagePreview(key) {
   if (dropdown && dropdown.value !== entry.key) dropdown.value = entry.key;
 
   const chatConfig = window.cutomizationConfig || {};
-  const agentName = (chatConfig.chatWindow && chatConfig.chatWindow.agentName) || 'Sarah';
+  const agentName = chatConfig.agentName || (chatConfig.chatWindow && chatConfig.chatWindow.agentName) || 'Sarah';
   const msg = { key: 'm1', senderType: entry.senderType, body: entry.body || '', created: new Date().toISOString() };
   if (entry.senderType === 'AGENT') msg.senderName = agentName;
 
