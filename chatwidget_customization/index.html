@@ -173,7 +173,7 @@
               </div>
 
               <!-- 2. Global Widget Accent Color Picker -->
-              <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-color, #f1f5f9);">
                 <div>
                   <div style="font-weight: 600; font-size: 13px; color: var(--text-primary, #0f172a);">Widget Accent Color</div>
                   <div style="font-size: 11px; color: var(--text-muted, #64748b);">Primary brand highlight color for buttons, headers, and chat bubbles</div>
@@ -187,6 +187,28 @@
                   <div class="theme-color-hint" id="global-accent-color-hint" style="margin-top: 4px;">
                     <span class="hint-link">Turn off Theme Sync above to edit Accent Color ↗</span>
                   </div>
+                </div>
+              </div>
+
+              <!-- 3. Widget Client / Brand Name -->
+              <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-color, #f1f5f9);">
+                <div>
+                  <div style="font-weight: 600; font-size: 13px; color: var(--text-primary, #0f172a);">Client / Brand Name</div>
+                  <div style="font-size: 11px; color: var(--text-muted, #64748b);">Brand name displayed as main title in the chat header</div>
+                </div>
+                <div class="setting-control" style="width: 220px;">
+                  <input type="text" id="global-client-name" data-path="clientName" placeholder="Brewflock" style="width: 100%;">
+                </div>
+              </div>
+
+              <!-- 4. Primary Agent Name -->
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <div style="font-weight: 600; font-size: 13px; color: var(--text-primary, #0f172a);">Primary Agent Name</div>
+                  <div style="font-size: 11px; color: var(--text-muted, #64748b);">Display name of the support agent in the chat header subtitle</div>
+                </div>
+                <div class="setting-control" style="width: 220px;">
+                  <input type="text" id="global-agent-name" data-path="agentName" placeholder="Support Agent" style="width: 100%;">
                 </div>
               </div>
             </div>
@@ -1945,7 +1967,7 @@
                         <div class="setting-desc">Brand name displayed in the chat header.</div>
                       </div>
                       <div class="setting-control">
-                        <input type="text" data-path="chatWindow.clientName" placeholder="Zotly Support">
+                        <input type="text" data-path="clientName" placeholder="Brewflock">
                       </div>
                     </div>
                     <div class="setting-row">
@@ -1954,7 +1976,7 @@
                         <div class="setting-desc">Display name of the default support agent.</div>
                       </div>
                       <div class="setting-control">
-                        <input type="text" data-path="chatWindow.agentName" placeholder="Sarah">
+                        <input type="text" data-path="agentName" placeholder="Support Agent">
                       </div>
                     </div>
 

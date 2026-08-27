@@ -1416,11 +1416,16 @@ async function loadDefaultConfig() {
     } catch (err) {
       console.warn("Could not load default config, using minimal structure: ", err);
       window.cutomizationConfig = {
-        clientId: defaultClient,
-        clientName: "Support Team",
+        name: "Brewflock",
+        configname: "Brewflock",
+        clientId: defaultClient || "friday",
+        clientName: "Brewflock",
+        agentName: "Support Agent",
+        features: {},
+        messages: [],
         greetWindow: { enabled: true, title: "Need help?", description: "Chat with us!", useWebsiteTheme: true },
         bubble: { useWebsiteTheme: true, width: 55, height: 55 },
-        chatWindow: { useWebsiteTheme: true, clientName: "Support", agentName: "Agent" },
+        chatWindow: { useWebsiteTheme: true },
         chatbar: { enabled: false }
       };
     }
@@ -2048,6 +2053,26 @@ function setupFormEventListeners() {
         const accentText = document.getElementById('global-accent-color');
         if (accentPick && accentPick.value !== color) accentPick.value = color;
         if (accentText && accentText.value !== color) accentText.value = color;
+      }
+
+      // Handle Client Name & Agent Name synchronization at root level
+      if (path === 'clientName' || path === 'chatWindow.clientName') {
+        window.cutomizationConfig.clientName = val;
+        if (window.cutomizationConfig.chatWindow) {
+          delete window.cutomizationConfig.chatWindow.clientName;
+        }
+        document.querySelectorAll('[data-path="clientName"], [data-path="chatWindow.clientName"]').forEach(inp => {
+          if (inp !== input && inp.value !== val) inp.value = val;
+        });
+      }
+      if (path === 'agentName' || path === 'chatWindow.agentName') {
+        window.cutomizationConfig.agentName = val;
+        if (window.cutomizationConfig.chatWindow) {
+          delete window.cutomizationConfig.chatWindow.agentName;
+        }
+        document.querySelectorAll('[data-path="agentName"], [data-path="chatWindow.agentName"]').forEach(inp => {
+          if (inp !== input && inp.value !== val) inp.value = val;
+        });
       }
 
       // Update JSON textarea
