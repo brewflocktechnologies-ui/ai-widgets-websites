@@ -406,6 +406,9 @@ let storeReadyPromise: Promise<void> = new Promise((resolve) => {
   storeReadyResolve = resolve;
 });
 
+let hasInjectedCustomConfig = false;
+let activeInjectedChatWindowConfig: Record<string, any> = {};
+
 /**
  * Resolves once the store has finished initializing — including the fetched
  * client config and any overrides queued via updateStoreConfig/injectStoreConfig
@@ -1023,24 +1026,31 @@ export async function initStore(): Promise<void> {
 
       function applyTheme() {
         const isDark = isHostDark();
-        const active = JSON.parse(JSON.stringify(cc)) as Record<string, any>;
+        const effectiveChatConfig = {
+          ...(store?.chatWindow || {}),
+          ...cc,
+          ...activeInjectedChatWindowConfig,
+        };
+        const active = JSON.parse(JSON.stringify(effectiveChatConfig)) as Record<string, any>;
 
-        if (active.useWebsiteTheme) {
-          active.accentColor = theme.primary;
-          active.visitorBubbleBg = theme.primary;
-          active.visitorBubbleColor = '#ffffff';
-          active.headerBg = theme.primary;
-          active.headerTextColor = '#ffffff';
-          active.headerAvatarBg = 'rgba(255,255,255,0.2)';
-          active.headerAvatarColor = '#ffffff';
-          active.agentAvatarBg = theme.primary;
-          active.agentAvatarColor = '#ffffff';
-          active.inputFocusBorderColor = theme.primary;
-          active.inputFocusShadow = `0 0 0 2px ${theme.primary}26`;
-          active.sendButtonBgActive = theme.primary;
-          active.poweredByColor = theme.primary;
-          active.endChatConfirmBg = theme.primary;
-          active.endChatConfirmTextColor = '#ffffff';
+        const useWebTheme = cc.useWebsiteTheme ?? (rootAccentColor ? false : active.useWebsiteTheme);
+
+        if (useWebTheme && !hasInjectedCustomConfig) {
+          active.accentColor = active.accentColor || theme.primary;
+          active.visitorBubbleBg = active.visitorBubbleBg || theme.primary;
+          active.visitorBubbleColor = active.visitorBubbleColor || '#ffffff';
+          active.headerBg = active.headerBg || theme.primary;
+          active.headerTextColor = active.headerTextColor || '#ffffff';
+          active.headerAvatarBg = active.headerAvatarBg || 'rgba(255,255,255,0.2)';
+          active.headerAvatarColor = active.headerAvatarColor || '#ffffff';
+          active.agentAvatarBg = active.agentAvatarBg || theme.primary;
+          active.agentAvatarColor = active.agentAvatarColor || '#ffffff';
+          active.inputFocusBorderColor = active.inputFocusBorderColor || theme.primary;
+          active.inputFocusShadow = active.inputFocusShadow || `0 0 0 2px ${theme.primary}26`;
+          active.sendButtonBgActive = active.sendButtonBgActive || theme.primary;
+          active.poweredByColor = active.poweredByColor || theme.primary;
+          active.endChatConfirmBg = active.endChatConfirmBg || theme.primary;
+          active.endChatConfirmTextColor = active.endChatConfirmTextColor || '#ffffff';
 
           if (isDark) {
             active.bodyBg = 'var(--cw-bg)';
@@ -1062,28 +1072,24 @@ export async function initStore(): Promise<void> {
             active.endChatCancelBorderColor = 'var(--cw-border)';
           }
         } else if (rootAccentColor) {
-          // No per-section override and no website-theme detection: fall back
-          // to the shared root-level accentColor instead of the hardcoded
-          // default, without clobbering any color the JSON set explicitly.
-          if (!active.accentColor) active.accentColor = rootAccentColor;
-          if (!active.visitorBubbleBg) active.visitorBubbleBg = rootAccentColor;
-          if (!active.headerBg) active.headerBg = rootAccentColor;
-          if (!active.agentAvatarBg) active.agentAvatarBg = rootAccentColor;
-          if (!active.inputFocusBorderColor) active.inputFocusBorderColor = rootAccentColor;
-          if (!active.inputFocusShadow) active.inputFocusShadow = `0 0 0 2px ${rootAccentColor}26`;
-          if (!active.sendButtonBgActive) active.sendButtonBgActive = rootAccentColor;
-          if (!active.poweredByColor) active.poweredByColor = rootAccentColor;
-          if (!active.endChatConfirmBg) active.endChatConfirmBg = rootAccentColor;
+          if (!cc.accentColor) active.accentColor = rootAccentColor;
+          if (!cc.visitorBubbleBg) active.visitorBubbleBg = rootAccentColor;
+          if (!cc.headerBg) active.headerBg = rootAccentColor;
+          if (!cc.agentAvatarBg) active.agentAvatarBg = rootAccentColor;
+          if (!cc.inputFocusBorderColor) active.inputFocusBorderColor = rootAccentColor;
+          if (!cc.inputFocusShadow) active.inputFocusShadow = `0 0 0 2px ${rootAccentColor}26`;
+          if (!cc.sendButtonBgActive) active.sendButtonBgActive = rootAccentColor;
+          if (!cc.poweredByColor) active.poweredByColor = rootAccentColor;
+          if (!cc.endChatConfirmBg) active.endChatConfirmBg = rootAccentColor;
         }
 
         const welcomeObj = active.welcome || store!.chatWindow.welcome;
-        /* v8 ignore next -- store always seeds a default welcome object, so welcomeObj is never null here */
         if (welcomeObj) {
-          const welcomeUseTheme = welcomeObj.useWebsiteTheme ?? active.useWebsiteTheme;
-          if (welcomeUseTheme) {
+          const welcomeUseTheme = welcomeObj.useWebsiteTheme ?? (useWebTheme && !hasInjectedCustomConfig);
+          if (welcomeUseTheme && !welcomeObj.bgGradient) {
             const sec = theme.secondary && theme.secondary !== theme.primary ? theme.secondary : theme.primary;
             welcomeObj.bgGradient = `linear-gradient(135deg, ${theme.primary}, ${sec})`;
-            welcomeObj.buttonIconColor = theme.primary;
+            welcomeObj.buttonIconColor = welcomeObj.buttonIconColor || theme.primary;
             active.welcome = welcomeObj;
           } else if (rootAccentColor && !welcomeObj.bgGradient) {
             welcomeObj.bgGradient = `linear-gradient(135deg, ${rootAccentColor}, ${rootAccentColor})`;
@@ -1126,7 +1132,7 @@ export async function initStore(): Promise<void> {
           }];
         }
       }
-      if (!store.chat.hasSentMessage && cc.welcome?.enabled) {
+      if (!store.chat.hasSentMessage && (store.chatWindow.welcome?.enabled !== false || cc.welcome?.enabled !== false)) {
         store.chat.state = 'welcome';
       }
       emit('store:chat');
@@ -1314,6 +1320,10 @@ function applyStoreConfig(overrides: UpdateStoreConfigOverrides) {
     }
     const { welcome, ...rest } = overrides.chatWindow;
     Object.assign(store.chatWindow, rest);
+    if (store.chatWindow.welcome?.enabled !== false && !store.chat.hasSentMessage) {
+      store.chat.state = 'welcome';
+      emit('store:chat');
+    }
     emit('store:chatWindow');
   }
 
@@ -1402,11 +1412,25 @@ export function exportFullStoreConfig(): Record<string, any> {
  */
 export function injectStoreConfig(token: Record<string, any>): void {
   if (!token || typeof token !== 'object') return;
+  hasInjectedCustomConfig = true;
 
   const store = getStore();
   if (token.features && store) {
     Object.assign(store.features, token.features);
     emit('store:features');
+  }
+
+  const chatWinObj = token.chatWindow || token.chatConfig || {};
+  if (Object.keys(chatWinObj).length > 0 || token.accentColor || token.welcome) {
+    const mergedChatWin = {
+      ...(token.accentColor ? { accentColor: token.accentColor } : {}),
+      ...(token.welcome ? { welcome: token.welcome } : {}),
+      ...chatWinObj
+    };
+    activeInjectedChatWindowConfig = {
+      ...activeInjectedChatWindowConfig,
+      ...mergedChatWin
+    };
   }
 
   let processedMessages = token.messages;
@@ -1430,7 +1454,10 @@ export function injectStoreConfig(token: Record<string, any>): void {
     bubble: token.bubble || {},
     chatbar: token.chatbar || {},
     greetWindow: token.greetWindow || {},
-    chatWindow: token.chatWindow || token.chatConfig || {},
+    chatWindow: {
+      ...(token.welcome ? { welcome: token.welcome } : {}),
+      ...(token.chatWindow || token.chatConfig || {})
+    },
     chat: {
       ...(token.chat || {}),
       ...(processedMessages ? { messages: processedMessages } : {}),
@@ -1444,6 +1471,8 @@ export function injectStoreConfig(token: Record<string, any>): void {
 
 export function _resetStoreForTest(): void {
   store = null;
+  hasInjectedCustomConfig = false;
+  activeInjectedChatWindowConfig = {};
 }
 
 
