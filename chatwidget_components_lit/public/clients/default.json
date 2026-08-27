@@ -1,6 +1,7 @@
 {
-  "clientId": "amber",
-  "clientName": "Vortex Studio Amber",
+  "clientId": "friday",
+  "clientName": "Brewflock",
+  "agentName": "Support Agent",
   "accentColor": "#d97706",
     "features": {
     "voiceCallMaster": false,
@@ -234,8 +235,6 @@
     "offsetBottom": null,
     "animationOpeningSec": 0.3,
     "animationClosingSec": 0.2,
-    "clientName": "Vortex Studio Support",
-    "agentName": "Alex (Vortex)",
 
     "//_dimensions": "Dimensions of the chat widget window",
 

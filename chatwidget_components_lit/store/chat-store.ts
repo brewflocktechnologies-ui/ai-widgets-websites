@@ -1386,7 +1386,8 @@ export function injectStoreConfig(token: Record<string, any>): void {
     chat: {
       ...(token.chat || {}),
       ...(token.messages ? { messages: token.messages } : {}),
-      ...(token.clientName ? { clientName: token.clientName } : {})
+      ...(token.clientName ? { clientName: token.clientName } : {}),
+      ...(token.agentName ? { agentName: token.agentName } : {})
     }
   };
 
