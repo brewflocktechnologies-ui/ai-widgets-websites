@@ -3,6 +3,74 @@
    Handles visual forms, raw JSON editor, Alpine store syncing & presets
    ========================================================================== */
 
+// --- POSTMESSAGE ORIGIN VALIDATION (security) ---
+// All cross-frame messaging with the host goes through the CWCore messaging
+// policy (src/core.js, loaded before this script in both the standalone page
+// and the federation mount). The srcdoc mount iframe inherits the host page's
+// origin, so window.origin is the trust anchor; an explicit allowlist can be
+// supplied via window.CW_TRUSTED_ORIGINS (set by mount.js) or ?hostOrigin=.
+// A malicious framing page must not be able to inject config into the widget
+// or exfiltrate the widget's config.
+function getConfiguredTrustedOrigins() {
+  const list = [];
+  const fromGlobal = window.CW_TRUSTED_ORIGINS;
+  if (Array.isArray(fromGlobal)) {
+    list.push(...fromGlobal);
+  } else if (typeof fromGlobal === 'string' && fromGlobal) {
+    list.push(fromGlobal);
+  }
+  const fromQuery = new URLSearchParams(window.location.search).get('hostOrigin');
+  if (fromQuery) list.push(fromQuery);
+  return list.filter(Boolean);
+}
+
+const __cwMessagingPolicy = window.CWCore
+  ? window.CWCore.createMessagingPolicy({
+      selfOrigin: window.origin,
+      configuredOrigins: getConfiguredTrustedOrigins()
+    })
+  : /* fail closed if core.js did not load: accept nothing, send nothing */ {
+      isTrustedEvent: () => false,
+      confirmOrigin: () => {},
+      targetOrigin: () => null
+    };
+if (!window.CWCore) {
+  console.error('[CW] src/core.js not loaded — cross-frame messaging disabled.');
+}
+
+function confirmTrustedOrigin(origin) {
+  __cwMessagingPolicy.confirmOrigin(origin);
+}
+
+function isTrustedMessageEvent(event) {
+  return __cwMessagingPolicy.isTrustedEvent(event, window.parent);
+}
+
+// Post a message to the parent using the strictest safe target origin.
+function postToTrustedParent(message) {
+  if (!window.parent || window.parent === window) return;
+  const target = __cwMessagingPolicy.targetOrigin();
+  if (!target) return;
+  window.parent.postMessage(message, target);
+}
+
+// --- INLINE-HANDLER GLOBALS ---
+// index.html wires some controls through inline on*="..." attributes, which
+// resolve names in the GLOBAL scope. In the federation mount scripts.js runs
+// as a classic script (top-level functions are global), but the standalone
+// page loads it as a module (they are not) — so every function referenced by
+// an inline handler must be exported to window explicitly. Function
+// declarations hoist, so this block can live above the definitions.
+window.toggleNotifCard = toggleNotifCard;
+window.updateNotifCounter = updateNotifCounter;
+window.adjustNotifStepper = adjustNotifStepper;
+window.selectNotifPromptStyle = selectNotifPromptStyle;
+window.selectNotifPresetIcon = selectNotifPresetIcon;
+window.handleNotifIconUpload = handleNotifIconUpload;
+window.triggerNotifPreviewUpdate = triggerNotifPreviewUpdate;
+window.toggleFormSectionCard = toggleFormSectionCard;
+window.toggleFeaturesCard = toggleFeaturesCard;
+
 // Helper to access and set nested object properties by dot-notation path
 function getValueByPath(obj, path) {
   if (!obj || !path) return undefined;
@@ -297,9 +365,11 @@ function setupMessagePreviewControls() {
   const dropdown = document.getElementById('msg-preview-select');
   if (!dropdown) return;
   const arr = getMessagesConfig();
+  // Message keys/labels originate from config (a trust boundary) — escape them.
+  const esc = window.CWCore ? window.CWCore.escapeHtml : encodeURIComponent;
   dropdown.innerHTML = arr.map(m => {
     const label = MSG_LABELS[m.key] || m.key;
-    return '<option value="' + m.key + '">' + label + '</option>';
+    return '<option value="' + esc(m.key) + '">' + esc(label) + '</option>';
   }).join('');
   dropdown.addEventListener('change', () => {
     applyMessagePreview(dropdown.value);
@@ -843,19 +913,21 @@ async function initCustomizationApp() {
   const visualEditorSection = document.getElementById('visual-editor-section');
   const jsonEditorSection = document.getElementById('json-editor-section');
 
-  tabFormBtn.addEventListener('click', () => {
-    tabFormBtn.classList.add('active');
-    tabJsonBtn.classList.remove('active');
-    visualEditorSection.style.display = 'block';
-    jsonEditorSection.style.display = 'none';
-  });
+  if (tabFormBtn && tabJsonBtn && visualEditorSection && jsonEditorSection) {
+    tabFormBtn.addEventListener('click', () => {
+      tabFormBtn.classList.add('active');
+      tabJsonBtn.classList.remove('active');
+      visualEditorSection.style.display = 'block';
+      jsonEditorSection.style.display = 'none';
+    });
 
-  tabJsonBtn.addEventListener('click', () => {
-    tabJsonBtn.classList.add('active');
-    tabFormBtn.classList.remove('active');
-    jsonEditorSection.style.display = 'block';
-    visualEditorSection.style.display = 'none';
-  });
+    tabJsonBtn.addEventListener('click', () => {
+      tabJsonBtn.classList.add('active');
+      tabFormBtn.classList.remove('active');
+      jsonEditorSection.style.display = 'block';
+      visualEditorSection.style.display = 'none';
+    });
+  }
 
   // Load customization config if not already initialized from mount options
   if (!window.cutomizationConfig || Array.isArray(window.cutomizationConfig) || Object.keys(window.cutomizationConfig).length === 0) {
@@ -877,7 +949,7 @@ async function initCustomizationApp() {
   setupJsonEditorEventListeners();
 
   // Setup auxiliary buttons
-  document.getElementById('btn-format-json').addEventListener('click', formatRawJson);
+  document.getElementById('btn-format-json')?.addEventListener('click', formatRawJson);
 
   // Host Page Theme controls
   setupHostPageThemeControls();
@@ -1023,12 +1095,10 @@ async function initCustomizationApp() {
     while (cfg && cfg.cdnConfig && typeof cfg.cdnConfig === 'object' && !Array.isArray(cfg.cdnConfig)) {
       cfg = cfg.cdnConfig;
     }
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({
-        type: 'SAVE_WIDGET_CONFIG',
-        cdnConfig: cfg
-      }, '*');
-    }
+    postToTrustedParent({
+      type: 'SAVE_WIDGET_CONFIG',
+      cdnConfig: cfg
+    });
   });
 
   // --- RESET BUTTON IN HEADER ---
@@ -1166,13 +1236,23 @@ async function initCustomizationApp() {
     const ta = document.getElementById('raw-json-textarea');
     if (!ta) return;
     try {
-      window.cutomizationConfig = JSON.parse(ta.value);
+      const parsed = JSON.parse(ta.value);
+      // Structural validation before the config reaches global state (and,
+      // via the host, the database).
+      const check = window.CWCore
+        ? window.CWCore.validateWidgetConfig(parsed)
+        : { ok: true, errors: [] };
+      if (!check.ok) {
+        alert('Invalid config: ' + check.errors.join('; '));
+        return;
+      }
+      window.cutomizationConfig = parsed;
       syncConfigToVisualForm(window.cutomizationConfig);
       updateAlpineStores(window.cutomizationConfig);
       const js = document.getElementById('json-status');
       if (js) {
         js.className = 'json-status valid';
-        js.innerHTML = '✓ JSON changes applied successfully.';
+        js.textContent = '✓ JSON changes applied successfully.';
       }
     } catch (e) {
       alert('Invalid JSON: ' + e.message);
@@ -1183,7 +1263,7 @@ async function initCustomizationApp() {
   // The host listens for this and immediately pushes the MongoDB config via LOAD_WIDGET_CONFIG.
   // This avoids all timing races on page load / website switch.
   if (window.parent && window.parent !== window) {
-    window.parent.postMessage({ type: 'MFE_READY' }, '*');
+    postToTrustedParent({ type: 'MFE_READY' });
   }
 };
 
@@ -1210,81 +1290,71 @@ function getCurrentCdnConfig() {
 }
 
 document.addEventListener('input', (e) => {
-  if (!isHydratingForm && e && e.isTrusted && window.parent && window.parent !== window) {
-    window.parent.postMessage({ type: 'WIDGET_CONFIG_CHANGED', cdnConfig: getCurrentCdnConfig() }, '*');
+  if (!isHydratingForm && e && e.isTrusted) {
+    postToTrustedParent({ type: 'WIDGET_CONFIG_CHANGED', cdnConfig: getCurrentCdnConfig() });
   }
 });
 document.addEventListener('change', (e) => {
-  if (!isHydratingForm && e && e.isTrusted && window.parent && window.parent !== window) {
-    window.parent.postMessage({ type: 'WIDGET_CONFIG_CHANGED', cdnConfig: getCurrentCdnConfig() }, '*');
+  if (!isHydratingForm && e && e.isTrusted) {
+    postToTrustedParent({ type: 'WIDGET_CONFIG_CHANGED', cdnConfig: getCurrentCdnConfig() });
   }
 });
 
 // --- POSTMESSAGE LISTENER: receive config from host page ---
-// Handled message types:
+// Handled message types (routing, trust and validation live in CWCore so they
+// are unit-tested; only the DOM/store side effects are defined here):
 //   LOAD_WIDGET_CONFIG     – host pushes cdnConfig fetched from MongoDB + domain
 //   UPDATE_PREVIEW_DOMAIN  – host pushes updated website domain URL
+//   RESET_WIDGET_PREVIEW   – host asks iframe to reset the preview
 //   REQUEST_WIDGET_CONFIG  – host asks iframe to report its current config
-window.addEventListener('message', (event) => {
-  if (!event.data) return;
-
-  if (event.data.type === 'UPDATE_PREVIEW_DOMAIN') {
-    if (event.data.domain) {
-      updateAddressBarDomain(event.data.domain);
-    }
-  }
-
-  if (event.data.type === 'LOAD_WIDGET_CONFIG') {
+const __cwHostMessageActions = {
+  updateDomain(domain) {
+    updateAddressBarDomain(domain);
+  },
+  applyConfig(cfg) {
     isHydratingForm = true;
     setTimeout(() => { isHydratingForm = false; }, 800);
-
-    if (event.data.domain) {
-      updateAddressBarDomain(event.data.domain);
-    }
-
-    let cfg = event.data.cdnConfig;
-    if (!cfg) return;
-
-    // Recursively unwrap nested cdnConfig properties
-    while (cfg && cfg.cdnConfig && typeof cfg.cdnConfig === 'object' && !Array.isArray(cfg.cdnConfig)) {
-      cfg = cfg.cdnConfig;
-    }
-
-    if (Array.isArray(cfg) || Object.keys(cfg).length === 0) return;
 
     if (cfg.domain) {
       updateAddressBarDomain(cfg.domain);
     }
 
     window.cutomizationConfig = cfg;
-    syncConfigToVisualForm(cfg);
-    updateAlpineStores(cfg);
-
-    if (window.ChatWidgetLit && window.ChatWidgetLit.injectStoreConfig) {
-      window.ChatWidgetLit.injectStoreConfig(cfg);
+    // A partial preview-sync failure must not kill the message listener.
+    try {
+      syncConfigToVisualForm(cfg);
+      updateAlpineStores(cfg);
+      if (window.ChatWidgetLit && window.ChatWidgetLit.injectStoreConfig) {
+        window.ChatWidgetLit.injectStoreConfig(cfg);
+      }
+    } catch (err) {
+      console.warn('[CW] Preview sync failed for host config:', err);
     }
-    console.log('[CW] Config loaded from host/DB:', cfg.clientId || cfg.clientName || 'custom');
-  }
-
-  if (event.data.type === 'RESET_WIDGET_PREVIEW') {
+  },
+  resetPreview() {
     if (typeof refreshWidgetPreview === 'function') {
       refreshWidgetPreview();
     }
-  }
-
+  },
   // HOST toolbar "Save CDN Config" button requests current config from iframe
-  if (event.data.type === 'REQUEST_WIDGET_CONFIG') {
-    let cfg = window.cutomizationConfig;
-    // Unwrap nested cdnConfig if needed
-    while (cfg && cfg.cdnConfig && typeof cfg.cdnConfig === 'object' && !Array.isArray(cfg.cdnConfig)) {
-      cfg = cfg.cdnConfig;
-    }
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({
-        type: 'SAVE_WIDGET_CONFIG',
-        cdnConfig: cfg
-      }, '*');
-    }
+  sendConfig() {
+    const cfg = window.CWCore
+      ? window.CWCore.unwrapCdnConfig(window.cutomizationConfig)
+      : window.cutomizationConfig;
+    postToTrustedParent({
+      type: 'SAVE_WIDGET_CONFIG',
+      cdnConfig: cfg
+    });
+  }
+};
+
+window.addEventListener('message', (event) => {
+  if (!event || !event.data || !window.CWCore) return;
+  const outcome = window.CWCore.processHostMessage(
+    event, __cwMessagingPolicy, window.parent, __cwHostMessageActions
+  );
+  if (outcome && outcome.indexOf('rejected:') === 0) {
+    console.warn('[CW] Host message rejected (' + outcome + ') from origin:', event.origin);
   }
 });
 
@@ -2296,10 +2366,21 @@ function setupJsonEditorEventListeners() {
     try {
       const parsed = JSON.parse(jsonTextarea.value);
 
+      // Structural validation before the config reaches global state.
+      const check = window.CWCore
+        ? window.CWCore.validateWidgetConfig(parsed)
+        : { ok: true, errors: [] };
+      if (!check.ok) {
+        jsonTextarea.classList.add('invalid');
+        jsonStatus.className = 'json-status invalid';
+        jsonStatus.textContent = '✗ Invalid config: ' + check.errors.join('; ');
+        return;
+      }
+
       // Mark as valid
       jsonTextarea.classList.remove('invalid');
       jsonStatus.className = 'json-status valid';
-      jsonStatus.innerHTML = '✓ Valid JSON config. Live updates active.';
+      jsonStatus.textContent = '✓ Valid JSON config. Live updates active.';
 
       window.cutomizationConfig = parsed;
 
@@ -2309,10 +2390,10 @@ function setupJsonEditorEventListeners() {
       // Update Alpine Stores
       updateAlpineStores(window.cutomizationConfig);
     } catch (err) {
-      // Mark as invalid
+      // Mark as invalid (err.message must never be interpolated as HTML)
       jsonTextarea.classList.add('invalid');
       jsonStatus.className = 'json-status invalid';
-      jsonStatus.innerHTML = '✗ Invalid JSON format: ' + err.message;
+      jsonStatus.textContent = '✗ Invalid JSON format: ' + err.message;
     }
   });
 }
@@ -2997,7 +3078,7 @@ async function loadAndInitFormsComponent() {
         formsContainer.innerHTML = await response.text();
       }
     } catch (err) {
-      console.log('Using pre-rendered/embedded forms template fallback:', err);
+      // Expected offline/standalone fallback — the embedded template is used.
     }
   }
 

@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   unit:
-    name: Unit tests
+    name: Unit tests (widget)
     runs-on: ubuntu-latest
 
     defaults:
@@ -38,3 +38,31 @@ jobs:
 
       - name: Run unit tests
         run: npm run test
+
+  customization:
+    name: Unit tests (customization)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: chatwidget_customization
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: chatwidget_customization/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm run test
+
+      - name: Build check
+        run: npm run build

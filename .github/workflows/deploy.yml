@@ -38,17 +38,21 @@ jobs:
       - name: Install dependencies (lit)
         run: npm ci
 
+      - name: Run unit tests (lit) — deploy gate
+        run: npm run test
+
       - name: Build widget (lit)
         run: npm run build
 
       - name: Build Storybook (lit)
         run: npm run build-storybook
 
-      - name: Install & build customization app
+      - name: Install, test & build customization app
         run: |
           cd ../chatwidget_customization
-          npm ci || npm install
+          npm ci
           npm install @rollup/rollup-linux-x64-gnu --no-save
+          npm run test
           npm run build
 
       - name: Add test page
@@ -66,11 +70,10 @@ jobs:
       - name: Add public client configurations
         run: |
           mkdir -p storybook-static/public/clients
+          cp -r public/clients/* storybook-static/public/clients/
 
-          if [ -d "public/clients" ]; then
-            cp -r public/clients/* storybook-static/public/clients/ 2>/dev/null || true
-          fi
-
+      # A missing file must FAIL the deploy, not silently ship a broken app —
+      # no `|| true` on any of these copies.
       - name: Add widget customization app to deployment
         run: |
           mkdir -p storybook-static/chatwidget_customization
@@ -79,25 +82,25 @@ jobs:
             storybook-static/chatwidget_customization/
 
           cp ../chatwidget_customization/forms.html \
-            storybook-static/chatwidget_customization/ 2>/dev/null || true
+            storybook-static/chatwidget_customization/
 
           cp ../chatwidget_customization/scripts.js \
-            storybook-static/chatwidget_customization/ 2>/dev/null || true
+            storybook-static/chatwidget_customization/
 
           cp ../chatwidget_customization/styles.css \
-            storybook-static/chatwidget_customization/ 2>/dev/null || true
+            storybook-static/chatwidget_customization/
 
-          if [ -d "../chatwidget_customization/public" ]; then
-            mkdir -p storybook-static/chatwidget_customization/public
-            cp -r ../chatwidget_customization/public/* \
-              storybook-static/chatwidget_customization/public/ \
-              2>/dev/null || true
-          fi
+          # src/core.js is loaded at runtime by index.html and is not bundled.
+          mkdir -p storybook-static/chatwidget_customization/src
+          cp -r ../chatwidget_customization/src/* \
+            storybook-static/chatwidget_customization/src/
 
-          if [ -d "../chatwidget_customization/dist" ]; then
-            cp -r ../chatwidget_customization/dist/* \
-              storybook-static/chatwidget_customization/
-          fi
+          mkdir -p storybook-static/chatwidget_customization/public
+          cp -r ../chatwidget_customization/public/* \
+            storybook-static/chatwidget_customization/public/
+
+          cp -r ../chatwidget_customization/dist/* \
+            storybook-static/chatwidget_customization/
 
           mkdir -p storybook-static/chatwidget_customization/dist
           cp -r dist/* \
@@ -106,12 +109,7 @@ jobs:
       - name: Add client websites to deployment
         run: |
           mkdir -p storybook-static/clientwebsites
-
-          if [ -d "../clientwebsites" ]; then
-            cp -r ../clientwebsites/* \
-              storybook-static/clientwebsites/ \
-              2>/dev/null || true
-          fi
+          cp -r ../clientwebsites/* storybook-static/clientwebsites/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

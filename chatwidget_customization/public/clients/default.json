@@ -1,7 +1,8 @@
 {
-  "clientId": "default",
-  "clientName": "Default Setup",
-  "accentColor": "#0b5fff",
+  "clientId": "friday",
+  "clientName": "Brewflock",
+  "agentName": "Support Agent",
+  "accentColor": "#d97706",
     "features": {
     "voiceCallMaster": false,
     "voiceCallAgents": false,
@@ -65,7 +66,7 @@
     "iconType": "lucide",
     "lucideIcon": "Sparkles",
     "iconSize": 52,
-    "iconColor": "#0b5fff",
+    "iconColor": "#d97706",
     "iconAnimation": "wiggle",
     "iconAnimationDuration": "2.5s",
     "title": "Hi there! 👋 Need help growing your business using AI?",
@@ -84,7 +85,7 @@
       "textColor": "#1e293b",
       "borderRadius": 24,
       "boxShadow": "0 6px 16px rgba(0,0,0,0.12)",
-      "buttonColor": "#0b5fff",
+      "buttonColor": "#d97706",
       "buttonIconColor": "#ffffff"
     }
   },
@@ -234,8 +235,6 @@
     "offsetBottom": null,
     "animationOpeningSec": 0.3,
     "animationClosingSec": 0.2,
-    "clientName": "Vortex Studio Support",
-    "agentName": "Alex (Vortex)",
 
     "//_dimensions": "Dimensions of the chat widget window",
 
@@ -290,7 +289,7 @@
     "modalCardBg": "#ffffff",
     "modalMessageColor": "#101828",
     "modalBorderRadius": 28,
-    "endChatConfirmBg": "#0b5fff",
+    "endChatConfirmBg": "#d97706",
     "endChatConfirmTextColor": "#ffffff",
     "endChatCancelBg": "#ffffff",
     "endChatCancelTextColor": "#667085",
@@ -302,7 +301,7 @@
 
     "//_visitor_bubbles": "Text size, color, background, and padding for visitor messages",
 
-    "visitorBubbleBg": "#0b5fff",
+    "visitorBubbleBg": "#d97706",
     "visitorBubbleColor": "#ffffff",
     "visitorBubbleFontSize": "14px",
     "visitorBubblePadding": "10px 14px",
@@ -319,7 +318,7 @@
 
     "//_agent_avatar": "Agent avatar icon initials backing color and profile picture image override",
 
-    "agentAvatarBg": "#0b5fff",
+    "agentAvatarBg": "#d97706",
     "agentAvatarColor": "#ffffff",
     "agentAvatarUrl": "",
 
@@ -329,8 +328,8 @@
     "inputTextColor": "#18181b",
     "inputPlaceholderColor": "#6b7280",
     "inputBorderColor": "#d1d5db",
-    "inputFocusBorderColor": "#0b5fff",
-    "inputFocusShadow": "0 0 0 3px rgba(11,95,255,0.15)",
+    "inputFocusBorderColor": "#d97706",
+    "inputFocusShadow": "0 0 0 3px rgba(217,119,6,0.15)",
     "inputBorderRadius": "9999px",
     "inputPadding": "6px 8px",
     "inputMargin": "12px 16px",
@@ -341,7 +340,7 @@
     "attachButtonBg": "#ffffff",
     "attachButtonColor": "#6b7280",
     "emojiButtonColor": "#6b7280",
-    "sendButtonBgActive": "#0b5fff",
+    "sendButtonBgActive": "#d97706",
     "sendButtonColorActive": "#ffffff",
     "sendButtonBgInactive": "#e5e7eb",
     "sendButtonColorInactive": "#9ca3af",
@@ -355,7 +354,7 @@
     "footerPaddingBottom": "16px",
     "poweredByText": "vainateya.ai",
     "poweredByLink": "",
-    "poweredByColor": "#0b5fff",
+    "poweredByColor": "#d97706",
     "poweredByLogo": "",
     "welcome": {
       "enabled": true,

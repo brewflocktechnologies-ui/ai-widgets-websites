@@ -1,6 +1,7 @@
 import html from '../index.html?raw';
 import appStyles from '../styles.css?inline';
 import litStyles from '../../chatwidget_components_lit/public/style.css?inline';
+import coreSource from './core.js?raw';
 import scriptsSource from '../scripts.js?raw';
 
 // Origin this remote is served from (e.g. http://localhost:5001). Used so
@@ -117,9 +118,16 @@ export async function mount(el, options = {}) {
     // Apply dark mode to iframe document as soon as loaded
     syncDarkMode();
 
+    // Cross-frame messaging trust: the mount iframe only ever talks to the
+    // page that embeds it, so pin the allowlist to the host's own origin.
+    win.CW_TRUSTED_ORIGINS = [window.location.origin];
+
     // scripts.js runs as a classic script so its top-level functions
     // (triggerNotifPreviewUpdate, updateNotifCounter, etc.) are global on the
     // iframe window and the markup's inline handlers can find them.
+    // core.js (CWCore: messaging policy, config validation, escaping) must be
+    // evaluated first — scripts.js fails closed without it.
+    runInFrameClassic(doc, coreSource);
     runInFrameClassic(doc, scriptsSource);
   };
 

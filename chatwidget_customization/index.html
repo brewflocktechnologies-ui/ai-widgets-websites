@@ -29,9 +29,10 @@
   </script>
 
   <script src="../chatwidget_components_lit/dist/chat-widget.js" onerror="this.onerror=null;this.src='../dist/chat-widget.js';" defer></script>
-  <script src="../chatwidget_components/previews/forms_preview.js" defer></script>
 
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <!-- core.js must load (classic, synchronous) before the deferred scripts.js module -->
+  <script src="src/core.js"></script>
   <script src="scripts.js" type="module"></script>
 </head>
 
