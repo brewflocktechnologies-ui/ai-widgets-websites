@@ -276,7 +276,15 @@ export function computeEffectiveChatWindowConfig(
   const effectiveEndChatConfirmBg = host.endChatConfirmBg || primaryColor || (useTheme && pTheme ? pTheme.primary : cws.endChatConfirmBg) || effectiveAccent;
 
   const sec = useTheme && pTheme?.secondary ? pTheme.secondary : null;
-  const effectiveBgGradient = host.welcomeBgGradient || (!useTheme ? createAccentGradient(effectiveAccent) : (useTheme && pTheme ? `linear-gradient(135deg, ${pTheme.primary}, ${sec || pTheme.primary})` : createAccentGradient(effectiveAccent)));
+  // Prioritise: explicit host attr > DB-stored gradient (cws.welcome.bgGradient) > computed from theme.
+  // Using cws.welcome?.bgGradient as a stable fallback prevents scroll-triggered getParentTheme()
+  // re-computations from causing color shifts on the welcome card.
+  const effectiveBgGradient =
+    host.welcomeBgGradient ||
+    cws.welcome?.bgGradient ||
+    (useTheme && pTheme
+      ? `linear-gradient(135deg, ${pTheme.primary}, ${sec || pTheme.primary})`
+      : createAccentGradient(effectiveAccent));
   const effectiveWelcomeButtonIconColor = host.welcomeButtonIconColor || (!useTheme ? effectiveAccent : (useTheme && pTheme ? pTheme.primary : (cws.welcome?.buttonIconColor || effectiveAccent)));
 
   return {
