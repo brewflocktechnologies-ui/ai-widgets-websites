@@ -4169,5 +4169,299 @@ body.dark #preview-scrollable-content,
   margin: 24px 0;
 }
 
+/* ==========================================================================
+   DARK MODE: MESSAGES TAB + NOTIFICATIONS TAB
+   Fixes visible light-on-dark issues for section headers and inner content.
+   ========================================================================== */
+
+/* --- Messages tab: titles, description & header icon --- */
+html.dark .msg-title,
+body.dark .msg-title,
+.dark .msg-title,
+.chatwidget-customization-app.dark .msg-title {
+  color: #ffffff !important;
+}
+
+html.dark .msg-desc,
+body.dark .msg-desc,
+.dark .msg-desc,
+.chatwidget-customization-app.dark .msg-desc {
+  color: #a3a3a3 !important;
+}
+
+html.dark .msg-header-icon,
+body.dark .msg-header-icon,
+.dark .msg-header-icon,
+.chatwidget-customization-app.dark .msg-header-icon {
+  color: #94a3b8 !important;
+}
+
+/* Messages tab: header hover (was turning white) */
+html.dark .msg-accordion-header:hover,
+body.dark .msg-accordion-header:hover,
+.dark .msg-accordion-header:hover,
+.chatwidget-customization-app.dark .msg-accordion-header:hover {
+  background-color: #171717 !important;
+}
+
+/* Messages tab: input box wrapper (was light purple/white on dark) */
+html.dark .msg-input-box-wrapper,
+body.dark .msg-input-box-wrapper,
+.dark .msg-input-box-wrapper,
+.chatwidget-customization-app.dark .msg-input-box-wrapper {
+  background-color: #0a0a0a !important;
+  border-color: #262626 !important;
+}
+
+html.dark .msg-input-box-wrapper:focus-within,
+body.dark .msg-input-box-wrapper:focus-within,
+.dark .msg-input-box-wrapper:focus-within,
+.chatwidget-customization-app.dark .msg-input-box-wrapper:focus-within {
+  background-color: #0a0a0a !important;
+  border-color: #404040 !important;
+}
+
+/* Messages tab: toolbar buttons & counter */
+html.dark .msg-tool-btn,
+body.dark .msg-tool-btn,
+.dark .msg-tool-btn,
+.chatwidget-customization-app.dark .msg-tool-btn {
+  color: #a3a3a3 !important;
+}
+
+html.dark .msg-tool-btn:hover,
+body.dark .msg-tool-btn:hover,
+.dark .msg-tool-btn:hover,
+.chatwidget-customization-app.dark .msg-tool-btn:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark .msg-char-counter,
+body.dark .msg-char-counter,
+.dark .msg-char-counter,
+.chatwidget-customization-app.dark .msg-char-counter {
+  color: #a3a3a3 !important;
+}
+
+/* --- Notifications tab: description text --- */
+html.dark .notif-sub-desc,
+body.dark .notif-sub-desc,
+.dark .notif-sub-desc,
+.chatwidget-customization-app.dark .notif-sub-desc {
+  color: #a3a3a3 !important;
+}
+
+/* --- Notifications tab: icon picker (upload + preset boxes) --- */
+html.dark .notif-upload-box,
+body.dark .notif-upload-box,
+.dark .notif-upload-box,
+.chatwidget-customization-app.dark .notif-upload-box {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  border-color: #0b5fff !important;
+}
+
+html.dark .notif-upload-box:hover,
+body.dark .notif-upload-box:hover,
+.dark .notif-upload-box:hover,
+.chatwidget-customization-app.dark .notif-upload-box:hover {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: #0b5fff !important;
+}
+
+html.dark .notif-preset-icon-box,
+body.dark .notif-preset-icon-box,
+.dark .notif-preset-icon-box,
+.chatwidget-customization-app.dark .notif-preset-icon-box {
+  background-color: #0a0a0a !important;
+  border-color: #262626 !important;
+}
+
+html.dark .notif-preset-icon-box.active,
+body.dark .notif-preset-icon-box.active,
+.dark .notif-preset-icon-box.active,
+.chatwidget-customization-app.dark .notif-preset-icon-box.active {
+  background-color: #0a0a0a !important;
+  border-color: #0b5fff !important;
+  box-shadow: 0 2px 8px rgba(11, 95, 255, 0.25) !important;
+}
+
+/* --- Notifications tab: stepper (delay / re-prompt) --- */
+html.dark .stepper-input-container,
+body.dark .stepper-input-container,
+.dark .stepper-input-container,
+.chatwidget-customization-app.dark .stepper-input-container {
+  background-color: #0a0a0a !important;
+  border-color: #262626 !important;
+}
+
+html.dark .stepper-btn,
+body.dark .stepper-btn,
+.dark .stepper-btn,
+.chatwidget-customization-app.dark .stepper-btn {
+  background-color: #171717 !important;
+  color: #e5e5e5 !important;
+}
+
+html.dark .stepper-btn:hover,
+body.dark .stepper-btn:hover,
+.dark .stepper-btn:hover,
+.chatwidget-customization-app.dark .stepper-btn:hover {
+  background-color: #262626 !important;
+}
+
+/* --- Notifications tab: select arrow --- */
+html.dark .select-wrapper-clean .select-arrow-icon,
+body.dark .select-wrapper-clean .select-arrow-icon,
+.dark .select-wrapper-clean .select-arrow-icon,
+.chatwidget-customization-app.dark .select-wrapper-clean .select-arrow-icon {
+  color: #a3a3a3 !important;
+}
+
+/* --- Notifications tab: prompt style cards + thumbnail mock --- */
+html.dark .notif-style-card,
+body.dark .notif-style-card,
+.dark .notif-style-card,
+.chatwidget-customization-app.dark .notif-style-card {
+  background-color: #0a0a0a !important;
+  border-color: #262626 !important;
+}
+
+html.dark .notif-style-card:hover,
+body.dark .notif-style-card:hover,
+.dark .notif-style-card:hover,
+.chatwidget-customization-app.dark .notif-style-card:hover {
+  border-color: #404040 !important;
+}
+
+html.dark .notif-style-card.active,
+body.dark .notif-style-card.active,
+.dark .notif-style-card.active,
+.chatwidget-customization-app.dark .notif-style-card.active {
+  border-color: #0b5fff !important;
+  box-shadow: 0 4px 14px rgba(11, 95, 255, 0.25) !important;
+}
+
+html.dark .style-card-thumb,
+body.dark .style-card-thumb,
+.dark .style-card-thumb,
+.chatwidget-customization-app.dark .style-card-thumb {
+  background-color: #171717 !important;
+}
+
+html.dark .thumb-box1-inner,
+body.dark .thumb-box1-inner,
+.dark .thumb-box1-inner,
+.chatwidget-customization-app.dark .thumb-box1-inner {
+  background-color: #0a0a0a !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+}
+
+html.dark .thumb-icon-side,
+body.dark .thumb-icon-side,
+.dark .thumb-icon-side,
+.chatwidget-customization-app.dark .thumb-icon-side {
+  background-color: #404040 !important;
+}
+
+html.dark .thumb-line,
+body.dark .thumb-line,
+.dark .thumb-line,
+.chatwidget-customization-app.dark .thumb-line {
+  background-color: #262626 !important;
+}
+
+/* --- Messages tab: form/feature text labels (were dark text on dark bg) --- */
+html.dark .form-label-title,
+body.dark .form-label-title,
+.dark .form-label-title,
+.chatwidget-customization-app.dark .form-label-title {
+  color: #ffffff !important;
+}
+
+html.dark .form-field-subtext,
+body.dark .form-field-subtext,
+.dark .form-field-subtext,
+.chatwidget-customization-app.dark .form-field-subtext {
+  color: #a3a3a3 !important;
+}
+
+html.dark .checkbox-title,
+body.dark .checkbox-title,
+.dark .checkbox-title,
+.chatwidget-customization-app.dark .checkbox-title {
+  color: #ffffff !important;
+}
+
+html.dark .checkbox-desc,
+body.dark .checkbox-desc,
+.dark .checkbox-desc,
+.chatwidget-customization-app.dark .checkbox-desc {
+  color: #a3a3a3 !important;
+}
+
+/* ==========================================================================
+   DARK MODE: NOTIFICATION LIVE PREVIEW
+   The preview host toggles `.dark-mode` (not `.dark`), so the existing
+   `.dark` overrides don't reach it. Fix the white preview background.
+   ========================================================================== */
+html.dark .notif-preview-overlay,
+body.dark .notif-preview-overlay,
+.dark .notif-preview-overlay,
+.dark-mode .notif-preview-overlay,
+.chatwidget-customization-app.dark .notif-preview-overlay,
+.chatwidget-customization-app.dark-mode .notif-preview-overlay {
+  background: #0a0a0a !important;
+}
+
+html.dark .notif-preview-card,
+body.dark .notif-preview-card,
+.dark .notif-preview-card,
+.dark-mode .notif-preview-card,
+.chatwidget-customization-app.dark .notif-preview-card,
+.chatwidget-customization-app.dark-mode .notif-preview-card {
+  background: #171717 !important;
+  border: 1px solid #262626 !important;
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.6), 0 8px 16px -4px rgba(0, 0, 0, 0.5) !important;
+  color: #ffffff !important;
+}
+
+html.dark .notif-preview-title,
+body.dark .notif-preview-title,
+.dark .notif-preview-title,
+.dark-mode .notif-preview-title,
+.chatwidget-customization-app.dark .notif-preview-title,
+.chatwidget-customization-app.dark-mode .notif-preview-title {
+  color: #ffffff !important;
+}
+
+html.dark .notif-preview-desc,
+body.dark .notif-preview-desc,
+.dark .notif-preview-desc,
+.dark-mode .notif-preview-desc,
+.chatwidget-customization-app.dark .notif-preview-desc,
+.chatwidget-customization-app.dark-mode .notif-preview-desc {
+  color: #a3a3a3 !important;
+}
+
+html.dark .notif-btn-cancel,
+body.dark .notif-btn-cancel,
+.dark .notif-btn-cancel,
+.dark-mode .notif-btn-cancel,
+.chatwidget-customization-app.dark .notif-btn-cancel,
+.chatwidget-customization-app.dark-mode .notif-btn-cancel {
+  background: #262626 !important;
+  color: #e5e5e5 !important;
+}
+
+html.dark .notif-btn-cancel:hover,
+body.dark .notif-btn-cancel:hover,
+.dark .notif-btn-cancel:hover,
+.dark-mode .notif-btn-cancel:hover,
+.chatwidget-customization-app.dark .notif-btn-cancel:hover,
+.chatwidget-customization-app.dark-mode .notif-btn-cancel:hover {
+  background: #333333 !important;
+}
+
 
 
