@@ -17,5 +17,9 @@
     "happy-dom": "^20.11.2",
     "vite": "^5.4.2",
     "vitest": "^4.1.10"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "*",
+    "@rollup/rollup-win32-x64-msvc": "*"
   }
 }
