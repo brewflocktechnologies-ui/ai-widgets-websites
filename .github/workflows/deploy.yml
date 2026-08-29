@@ -50,8 +50,7 @@ jobs:
       - name: Install, test & build customization app
         run: |
           cd ../chatwidget_customization
-          npm ci
-          npm install @rollup/rollup-linux-x64-gnu --no-save
+          npm install
           npm run test
           npm run build
 
